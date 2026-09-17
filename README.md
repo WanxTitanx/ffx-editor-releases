@@ -8,7 +8,7 @@
 
 [![Version](https://img.shields.io/badge/version-2.244.2.2-informational)](https://github.com/WanxTitanx/ffx-editor-releases/releases/latest)
 [![Status](https://img.shields.io/badge/status-BETA-red)](#beta-status)
-![License](https://img.shields.io/badge/license-proprietary-lightgrey)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-Windows%20x64%20%C2%B7%20Linux%20x64-blue)](#requirements)
 [![Game](https://img.shields.io/badge/game-FFX%20HD%20Remaster%20(Steam)-green)](https://store.steampowered.com/app/359870/)
 [![.NET](https://img.shields.io/badge/.NET-8.0%20self--contained-purple)](https://dotnet.microsoft.com/download/dotnet/8.0)
