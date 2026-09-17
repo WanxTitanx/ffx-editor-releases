@@ -8,12 +8,12 @@
 
 [![Version](https://img.shields.io/badge/version-2.244.2.2-informational)](https://github.com/WanxTitanx/ffx-editor-releases/releases/latest)
 [![Status](https://img.shields.io/badge/status-BETA-red)](#beta-status)
-[![License](https://img.shields.io/badge/license-proprietary-lightgrey)]()
-[![Platform](https://img.shields.io/badge/platform-Windows%20x64%20%C2%B7%20Linux%20x64-blue)]()
-[![Game](https://img.shields.io/badge/game-FFX%20HD%20Remaster%20(Steam)-green)]()
-[![.NET](https://img.shields.io/badge/.NET-8.0%20self--contained-purple)]()
-[![UI](https://img.shields.io/badge/UI-Avalonia%2011.2.3-blueviolet)]()
-[![i18n](https://img.shields.io/badge/i18n-9%20languages-orange)]()
+![License](https://img.shields.io/badge/license-proprietary-lightgrey)
+[![Platform](https://img.shields.io/badge/platform-Windows%20x64%20%C2%B7%20Linux%20x64-blue)](#requirements)
+[![Game](https://img.shields.io/badge/game-FFX%20HD%20Remaster%20(Steam)-green)](https://store.steampowered.com/app/359870/)
+[![.NET](https://img.shields.io/badge/.NET-8.0%20self--contained-purple)](https://dotnet.microsoft.com/download/dotnet/8.0)
+[![UI](https://img.shields.io/badge/UI-Avalonia%2011.2.3-blueviolet)](https://avaloniaui.net/)
+![i18n](https://img.shields.io/badge/i18n-9%20languages-orange)
 
 </div>
 
