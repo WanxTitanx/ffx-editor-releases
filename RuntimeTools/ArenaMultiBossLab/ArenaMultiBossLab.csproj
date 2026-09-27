@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>ArenaMultiBossLab</AssemblyName>
+    <RootNamespace>ArenaMultiBossLab</RootNamespace>
+  </PropertyGroup>
+
+  <!--
+    Arena+ Multi Dark Aeon authoring CLI.
+    Links the proven dependency-free writers (slot-only chunk2 + position-only chunk3 + monLive grow)
+    so each recipe runs through the EXACT same byte-safe path the FFXProjectEditor UI uses.
+
+    Plan ref: .cursor/plans/arena_plus_multi_dark_aeon_*.plan.md
+    Dossier:  docs/reverse/FFX_ARENA_PLUS_MULTI_DARK_AEON_AUTHORING_DOSSIER_2026-06-16.md
+  -->
+  <!-- i18n (v2.234.3.0): linked FfxLib sources use FFXProjectEditor.Resources (Strings); ship the
+       generated accessor + neutral resx so the links compile with identical lookups. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Resources\Strings.cs" Link="Strings.cs" />
+    <EmbeddedResource Include="..\..\FFXProjectEditor\Resources\Strings.resx" LogicalName="FFXProjectEditor.Resources.Strings.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\Battle_File.cs" Link="Battle_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\FormationSlotWriter.cs" Link="FormationSlotWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Dictionaries\Monster_Dictionary.cs" Link="Monster_Dictionary.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaAnchors_File.cs" Link="BattleArenaAnchors_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaPositionWriter.cs" Link="BattleArenaPositionWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaGrowWriter.cs" Link="BattleArenaGrowWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleChunk0GraftWriter.cs" Link="BattleChunk0GraftWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleCameraAeonWidenWriter.cs" Link="BattleCameraAeonWidenWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleCameraSetup_File.cs" Link="BattleCameraSetup_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiScript_File.cs" Link="AiScript_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiTargetNames.cs" Link="AiTargetNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiChrPropertyNames.cs" Link="AiChrPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMotionPropertyNames.cs" Link="AiMotionPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMovePropertyNames.cs" Link="AiMovePropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiSaveDataVariableNames.cs" Link="AiSaveDataVariableNames.cs" />
+  </ItemGroup>
+
+  <!-- Bundle the recipe JSONs alongside the binary so the lab finds them in any CWD. -->
+  <ItemGroup>
+    <None Include="recipes\*.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

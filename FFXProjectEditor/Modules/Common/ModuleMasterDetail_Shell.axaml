@@ -1,0 +1,105 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1280"
+             d:DesignHeight="720"
+             x:Class="FFXProjectEditor.Modules.Common.ModuleMasterDetail_Shell">
+
+	<!-- ===== Shell de master-detail (Camada 4 do plano de overhaul).
+	     Substitui o Expander nativo do Avalonia por um Grid + Button toggle custom.
+	     Motivo: o template do Expander com ExpandDirection="Left" impoe padding interno,
+	     header toggle button, bordas e sizing minimo que tornam impossivel colapsar
+	     para menos de ~50-60px. O Grid + Button da controle pixel-perfect:
+	       - Colapsado: rail de 26px com apenas um chevron
+	       - Expandido: painel denso de 180px + rail de 26px
+
+	     Propriedades (StyledProperty):
+	       - MasterHeader: conteudo do topo do painel master (titulo, descricao, filtro)
+	       - MasterList: a lista/ListBox em si
+	       - Detail: o conteudo da direita
+	       - IsMasterExpanded: estado colapsado/aberto (TwoWay; persistir no modulo se quiser)
+	       - MasterHeaderLabel: eyebrow do topo (mantido p/ compat; nao renderizado no rail)
+	-->
+
+	<Grid ColumnDefinitions="Auto,*">
+
+		<!-- ===== Coluna MASTER: conteudo (condicional) + rail de toggle (sempre) ===== -->
+		<Grid Grid.Column="0" ColumnDefinitions="Auto,Auto">
+
+			<!-- Conteudo expandido: painel denso ~260px -->
+			<Border Grid.Column="0"
+			        Width="260"
+			        VerticalAlignment="Stretch"
+			        Classes="cardSoft"
+			        CornerRadius="{DynamicResource RadiusMd}"
+			        Padding="{DynamicResource SpacingSm}"
+			        IsVisible="{Binding IsMasterExpanded, RelativeSource={RelativeSource AncestorType=common:ModuleMasterDetail_Shell}}">
+				<Grid RowDefinitions="Auto,*">
+					<ContentControl Grid.Row="0"
+					                Margin="0,12,0,8"
+					                Content="{Binding MasterHeader, RelativeSource={RelativeSource AncestorType=common:ModuleMasterDetail_Shell}}" />
+					<ContentControl Grid.Row="1"
+					                MinHeight="0"
+					                VerticalAlignment="Stretch"
+					                Content="{Binding MasterList, RelativeSource={RelativeSource AncestorType=common:ModuleMasterDetail_Shell}}" />
+				</Grid>
+			</Border>
+
+			<!-- Rail de toggle: ultra-fino (26px), sempre visivel, so chevron -->
+			<Border Grid.Column="1"
+			        Width="26"
+			        MinWidth="26"
+			        MaxWidth="26"
+			        VerticalAlignment="Stretch"
+			        Margin="2,0,6,0"
+			        Background="{DynamicResource PanelDeepBrush}"
+			        BorderBrush="{DynamicResource PanelStrokeBrush}"
+			        BorderThickness="1,0,1,0"
+			        CornerRadius="3">
+				<Button Name="MasterToggle"
+				        Padding="0"
+				        MinWidth="0"
+				        MinHeight="0"
+				        BorderThickness="0"
+				        Background="Transparent"
+				        HorizontalAlignment="Stretch"
+				        VerticalAlignment="Stretch"
+				        Click="ToggleMaster_Click"
+				        AutomationProperties.Name="Toggle master panel"
+				        ToolTip.Tip="{x:Static res:Strings.U_toggle_command_list_6d340832}">
+					<Grid>
+						<!-- Colapsado: chevron aponta para a direita (expandir) -->
+						<Path Data="M 0,0 L 6,7 L 0,14"
+						      Stroke="{DynamicResource TextMutedBrush}"
+						      StrokeThickness="2"
+						      StrokeLineCap="Round"
+						      StrokeJoin="Round"
+						      HorizontalAlignment="Center"
+						      VerticalAlignment="Center"
+						      IsVisible="{Binding !IsMasterExpanded, RelativeSource={RelativeSource AncestorType=common:ModuleMasterDetail_Shell}}" />
+						<!-- Expandido: chevron aponta para a esquerda (colapsar) -->
+						<Path Data="M 6,0 L 0,7 L 6,14"
+						      Stroke="{DynamicResource TextMutedBrush}"
+						      StrokeThickness="2"
+						      StrokeLineCap="Round"
+						      StrokeJoin="Round"
+						      HorizontalAlignment="Center"
+						      VerticalAlignment="Center"
+						      IsVisible="{Binding IsMasterExpanded, RelativeSource={RelativeSource AncestorType=common:ModuleMasterDetail_Shell}}" />
+					</Grid>
+				</Button>
+			</Border>
+		</Grid>
+
+		<!-- ===== Painel DETAIL (direita) ===== -->
+		<Panel Grid.Column="1">
+			<ContentControl MinHeight="0"
+			                VerticalAlignment="Stretch"
+			                Content="{Binding Detail, RelativeSource={RelativeSource AncestorType=common:ModuleMasterDetail_Shell}}" />
+		</Panel>
+	</Grid>
+</UserControl>

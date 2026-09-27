@@ -1,0 +1,168 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1400"
+             d:DesignHeight="900"
+             x:Class="FFXProjectEditor.Modules.Extras.Ps2KnowledgeHub_Control">
+
+	<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+	<Grid RowDefinitions="Auto,Auto,*" Margin="16">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*" MinWidth="280" MaxWidth="460" />
+			<ColumnDefinition Width="5*" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.ColumnSpan="2" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_ps2_knowledge_a117246f}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_read_only_product_shell_d1d27b97}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,12">
+			<StackPanel Spacing="10">
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_source_roots_e7ce85a2}" />
+					<Button Classes="secondaryAction" Grid.Column="1" Click="Button_Refresh">Refresh</Button>
+				</Grid>
+				<ItemsControl ItemsSource="{Binding SourceRoots}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<Grid ColumnDefinitions="*,Auto">
+									<StackPanel Spacing="4">
+										<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" Text="{Binding Role}" TextWrapping="Wrap" />
+										<TextBlock Text="{Binding ResolvedPath}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" Text="{Binding StatusSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+									<Button Grid.Column="1"
+									        Margin="12,0,0,0"
+									        Classes="secondaryAction"
+									        Content="{x:Static res:Strings.U_open_cf9b7706}"
+									        Tag="{Binding ResolvedPath}"
+									        Click="Button_OpenRoot"
+									        IsEnabled="{Binding Exists}" />
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="10">
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_shared_extras_contracts_63bb1516}" />
+				<ItemsControl ItemsSource="{Binding FrameworkContracts}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Text="{Binding Status}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding DependencyClass}" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+
+				<TextBlock Classes="cardTitle" Margin="0,12,0,0" Text="{x:Static res:Strings.U_unified_promotion_wave_4cee81f7}" />
+				<TextBlock Classes="muted"
+				           Text="{x:Static res:Strings.U_one_front_five_landing_zones_manual_port_where_r_a2060586}"
+				           TextWrapping="Wrap" />
+				<ItemsControl ItemsSource="{Binding PromotionWave}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Text="{Binding Status}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding LandingZone}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonGuardrail}" Margin="0,4,0,0" />
+									<TextBlock Text="{Binding Guardrail}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="2" Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+			<StackPanel Spacing="10">
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_family_registry_a23c5430}" />
+				<ListBox ItemsSource="{Binding FamilySurfaces}"
+				         SelectedItem="{Binding SelectedFamily, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Text="{Binding Status}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding BadgeSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="2" Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Spacing="12">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_surface_5511edff}" />
+					<TextBlock Classes="cardTitle" Text="{Binding SelectedFamilyTitle}" />
+					<TextBlock Text="{Binding SelectedFamilyStatus}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding SelectedFamilyMode}" TextWrapping="Wrap" />
+					<TextBlock Text="{Binding SelectedFamilySummary}" TextWrapping="Wrap" />
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_badges_2c578dc8}" />
+							<TextBlock Text="{Binding SelectedFamilyBadgeSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_reader_dependencies_1509d891}" />
+							<TextBlock Text="{Binding SelectedFamilyReaderDependencies}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_shared_shell_dependencies_1127306e}" />
+							<TextBlock Text="{Binding SelectedFamilySharedDependencies}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_allowed_now_57bcf6ed}" />
+							<TextBlock Text="{Binding SelectedFamilyAllowedNow}" TextWrapping="Wrap" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_blocked_now_716bf8a3}" Margin="0,8,0,0" />
+							<TextBlock Text="{Binding SelectedFamilyBlockedNow}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_provenance_dd35a816}" />
+							<TextBlock Text="{Binding SelectedFamilyProvenanceSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+	</ScrollViewer>
+</UserControl>

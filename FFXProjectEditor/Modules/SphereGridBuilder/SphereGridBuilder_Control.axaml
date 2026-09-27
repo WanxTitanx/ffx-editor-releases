@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1300"
+             d:DesignHeight="900"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.Modules.SphereGridBuilder.SphereGridBuilder_Control">
+
+	<!-- Jarvis-UI (Sprint D 2026-06-20, OPT-D1): responsividade do v1 form. As 3 colunas (Add Cluster /
+	     Add Node / Add Link e a fila Clusters/Nodes/Links) são WrapPanel — cada Border tem largura mínima e
+	     quebra sozinha quando a janela estreita, sem precisar de Setter em ColumnDefinitions (que não é
+	     AvaloniaProperty). Em wide ficam lado a lado; em narrow empilham. -->
+	<UserControl.Styles>
+		<Style Selector="WrapPanel.builderCols3 > Border">
+			<Setter Property="Margin" Value="0,0,6,6" />
+		</Style>
+	</UserControl.Styles>
+
+	<ScrollViewer>
+		<StackPanel Spacing="12" Margin="16">
+			<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+				<StackPanel Spacing="6">
+					<WrapPanel>
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_sphere_grid_builder_from_scratch_v1_ff69e992}" VerticalAlignment="Center" />
+						<ctrl:CapabilityBadge Name="BuilderCapabilityBadge" VerticalAlignment="Center" Margin="8,0,0,0" />
+					</WrapPanel>
+					<Grid ColumnDefinitions="Auto,*">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_grid_e4e845b5}" VerticalAlignment="Center" Margin="0,0,8,0" />
+						<TextBox Grid.Column="1" Text="{Binding GridName, Mode=TwoWay}" Watermark="{x:Static res:Strings.U_nome_do_grid_0de8be2b}" />
+					</Grid>
+					<TextBlock Classes="muted" Text="{Binding HeaderNote}" TextWrapping="Wrap" />
+					<TextBlock FontWeight="SemiBold" Text="{Binding CountsSummary}" />
+				</StackPanel>
+			</Border>
+
+			<WrapPanel Classes="builderCols3">
+				<Border Classes="card" Padding="{DynamicResource SpacingMd}" Width="320">
+					<StackPanel Spacing="6">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_1_add_cluster_d417cb50}" />
+						<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_regiao_circulo_posx_posy_inteiros_b50d675c}" TextWrapping="Wrap" />
+						<TextBox Text="{Binding ClusterPosX, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonPosX}" />
+						<TextBox Text="{Binding ClusterPosY, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonPosY}" />
+						<TextBox Text="{Binding ClusterRadius, Mode=TwoWay}" Watermark="{x:Static res:Strings.U_radiustype_0_23db69c6}" />
+						<Button Classes="secondaryAction" HorizontalAlignment="Stretch" Click="Button_AddCluster">+ Cluster</Button>
+					</StackPanel>
+				</Border>
+				<Border Classes="card" Padding="{DynamicResource SpacingMd}" Width="320">
+					<StackPanel Spacing="6">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_2_add_node_f7d9aa50}" />
+						<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_slot_de_esfera_cluster_indice_do_cluster_content_ede72b9e}" TextWrapping="Wrap" />
+						<TextBox Text="{Binding NodePosX, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonPosX}" />
+						<TextBox Text="{Binding NodePosY, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonPosY}" />
+						<TextBox Text="{Binding NodeCluster, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonClusterIdx}" />
+						<TextBox Text="{Binding NodeContent, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonContentFfEmpty}" />
+						<Button Classes="secondaryAction" HorizontalAlignment="Stretch" Click="Button_AddNode">+ Node</Button>
+					</StackPanel>
+				</Border>
+				<Border Classes="card" Padding="{DynamicResource SpacingMd}" Width="320">
+					<StackPanel Spacing="6">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_3_add_link_d297a3fd}" />
+						<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_conexao_entre_nos_anchor_ffff_reto_ou_um_no_de_c_4dec4d69}" TextWrapping="Wrap" />
+						<TextBox Text="{Binding LinkNode1, Mode=TwoWay}" Watermark="{x:Static res:Strings.U_node1_idx_a028a0c3}" />
+						<TextBox Text="{Binding LinkNode2, Mode=TwoWay}" Watermark="{x:Static res:Strings.U_node2_idx_15d49502}" />
+						<TextBox Text="{Binding LinkAnchor, Mode=TwoWay}" Watermark="{x:Static res:Strings.U_anchor_ffff_reto_09926947}" />
+						<Button Classes="secondaryAction" HorizontalAlignment="Stretch" Click="Button_AddLink">+ Link</Button>
+					</StackPanel>
+				</Border>
+			</WrapPanel>
+
+			<WrapPanel Classes="builderCols3">
+				<Border Classes="card" Padding="{DynamicResource SpacingSm}" Width="320">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_clusters_f1524b9d}" />
+						<ScrollViewer MaxHeight="220">
+							<ItemsControl ItemsSource="{Binding ClusterRows}">
+								<ItemsControl.ItemTemplate><DataTemplate>
+									<TextBlock Text="{Binding}" FontFamily="Cascadia Mono,Consolas,Monospace" FontSize="11" />
+								</DataTemplate></ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</StackPanel>
+				</Border>
+				<Border Classes="card" Padding="{DynamicResource SpacingSm}" Width="320">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_nodes_9e325452}" />
+						<ScrollViewer MaxHeight="220">
+							<ItemsControl ItemsSource="{Binding NodeRows}">
+								<ItemsControl.ItemTemplate><DataTemplate>
+									<TextBlock Text="{Binding}" FontFamily="Cascadia Mono,Consolas,Monospace" FontSize="11" />
+								</DataTemplate></ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</StackPanel>
+				</Border>
+				<Border Classes="card" Padding="{DynamicResource SpacingSm}" Width="320">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_links_014bcd65}" />
+						<ScrollViewer MaxHeight="220">
+							<ItemsControl ItemsSource="{Binding LinkRows}">
+								<ItemsControl.ItemTemplate><DataTemplate>
+									<TextBlock Text="{Binding}" FontFamily="Cascadia Mono,Consolas,Monospace" FontSize="11" />
+								</DataTemplate></ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</StackPanel>
+				</Border>
+			</WrapPanel>
+
+			<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+				<StackPanel Spacing="8">
+					<WrapPanel>
+						<Button Classes="secondaryAction" Margin="0,0,8,8" Click="Button_Validate">Validate</Button>
+						<Button Classes="primaryAction" Margin="0,0,8,8" Click="Button_BuildAndSave">Build &amp; Save (.dat)</Button>
+						<Button Classes="secondaryAction" Margin="0,0,8,8" Name="Button_ReviewDiff" Click="Button_ReviewDiff_Click" AutomationProperties.Name="Review Diff">🔍 Diff</Button>
+					</WrapPanel>
+					<TextBlock Text="{Binding ValidationSummary}" TextWrapping="Wrap" />
+					<TextBlock Foreground="{DynamicResource WarningBrush}" Text="{Binding SaveSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+			</Border>
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>

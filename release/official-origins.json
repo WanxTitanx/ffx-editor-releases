@@ -1,0 +1,8 @@
+{
+  "$comment": "FFX Mod Studio — origins oficiais e trust roots do feed studio-*. Fonte: plano §4.4.4. Apenas origins HTTPS, sem path/query/userinfo/wildcard. NÃO é fallback de trust: o feed usa somente canonicalSiteOrigin. .com.br é a entrada brasileira, não segunda trust root de atualização.",
+  "schemaVersion": 1,
+  "canonicalSiteOrigin": "https://ffxmodstudio.com",
+  "brazilSiteOrigin": "https://ffxmodstudio.com.br",
+  "studioReleaseApiOrigin": "https://ffxmodstudio.com",
+  "studioReleasePathTemplate": "/api/releases/studio/{channel}"
+}

@@ -1,0 +1,272 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:FFXProjectEditor.Modules.AuroraChamber"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1420"
+             d:DesignHeight="820"
+             x:Class="FFXProjectEditor.Modules.AuroraChamber.AuroraChamber_Control">
+
+	<UserControl.Resources>
+		<local:AuroraBadgeColorConverter x:Key="BadgeColor" />
+	</UserControl.Resources>
+
+	<Grid ColumnDefinitions="Auto,3*">
+
+		<!-- LEFT: DASHBOARD de mapas (picker com badges — sem parede de texto) -->
+		<Border Grid.Column="0" MinWidth="300" MaxWidth="480" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_aurora_mapas_de_batalha_c10010d4}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_scene_picker_5d917ed7}" />
+					<WrapPanel>
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_Refresh" Content="{x:Static res:Strings.U_re_scan_b0ba4a7b}" />
+						<Button Margin="0,0,8,8" Classes="primaryAction" Click="Button_MountAll" IsEnabled="{Binding CanMountScenes}" Content="{x:Static res:Strings.U_mount_missing_6d7d85c9}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_RemountAll" IsEnabled="{Binding CanMountScenes}" Content="{x:Static res:Strings.U_remount_all_19334d1d}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction"
+						        ToolTip.Tip="{Binding HonestyBanner}"
+						        ToolTip.Placement="Right"
+						        FontWeight="Bold">?</Button>
+					</WrapPanel>
+					<TextBlock Classes="muted" Text="{Binding CatalogSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<TextBox Grid.Row="1"
+				         Margin="0,0,0,12"
+				         Watermark="{x:Static res:Strings.U_filtrar_por_cena_area_ou_map_ex_azit03_zzzz00_ma_b2ab27dc}"
+				         Text="{Binding FilterText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="2"
+				         ItemsSource="{Binding Scenes}"
+				         SelectedItem="{Binding SelectedScene, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,8" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+							<!-- Lista em TEXTO CORRIDO (plano UI/UX: badges prejudicavam a leitura; dados técnicos legíveis) -->
+							<StackPanel Spacing="2">
+								<TextBlock FontSize="15" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+								<TextBlock Classes="muted" FontSize="11" Text="{Binding Summary}" />
+								<TextBlock Classes="muted" FontSize="10.5" FontFamily="Consolas,Menlo,monospace"
+								           Text="{Binding DetailSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<!-- RIGHT: card do lugar (escuro, premium) + AÇÕES num único lugar + detalhes técnicos -->
+		<ScrollViewer Grid.Column="1" Margin="18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+
+				<!-- Card escuro premium -->
+				<Border Padding="22" Background="#16121F" BorderBrush="#2E2444" BorderThickness="1" CornerRadius="14">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Foreground="#8FA8C8" Text="{x:Static res:Strings.U_lugar_selecionado_c73fd3d6}" />
+						<TextBlock FontSize="30" FontWeight="Bold" Foreground="White" Text="{Binding SceneHeader}" />
+						<TextBlock Foreground="#C9C2DA" Text="{Binding SceneDetail}" TextWrapping="Wrap" />
+
+						<!-- AÇÕES: ÚNICO LUGAR (sem duplicação) -->
+						<StackPanel Margin="0,10,0,0" Spacing="10">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Foreground="#8FA8C8" Text="{x:Static res:Strings.U_visualizacao_2668df93}" />
+								<WrapPanel>
+									<Button Margin="0,0,8,4" Classes="primaryAction" Click="Button_Render" IsEnabled="{Binding !IsRendering}" Content="{x:Static res:Strings.U_open_editviewer_2833b766}" />
+									<Button Margin="0,0,8,4" Classes="primaryAction" Click="Button_OpenBattle3D" IsEnabled="{Binding CanOpenBattlePreview}" ToolTip.Tip="{x:Static res:Strings.U_Au_PreviewLimits}" Content="{x:Static res:Strings.U_open_realgame_dd017543}" />
+								</WrapPanel>
+							</StackPanel>
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Foreground="#8FA8C8" Text="{x:Static res:Strings.U_edicao_0c4a8a0e}" />
+								<WrapPanel>
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_SaveDraggedPositions" Content="{x:Static res:Strings.U_save_positions_6ebb985d}" />
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_AddMonster" Content="{x:Static res:Strings.U_add_monster_c6e5aa66}" />
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_RemoveMonster" Content="{x:Static res:Strings.U_remove_monster_0a19bb7a}" />
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_ExportAnchors" Content="{x:Static res:Strings.U_export_anchors_fb527012}" />
+								</WrapPanel>
+							</StackPanel>
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Foreground="#7A8AA0" Text="{x:Static res:Strings.U_sessao_de10fc0c}" />
+								<WrapPanel>
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_RestoreBattle3D" Content="{x:Static res:Strings.U_restore_realgame_572d0208}" />
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_ReloadBattle" Content="{x:Static res:Strings.U_reload_battle_ac3d513b}" />
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_ReloadScene" IsEnabled="{Binding !IsRendering}" Content="{x:Static res:Strings.U_re_export_and_open_6d89033e}" />
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_RemountScene" IsEnabled="{Binding CanRemountScene}" Content="{x:Static res:Strings.U_remount_scene_a1eedb97}" />
+									<Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_OpenSceneFolder" Content="{x:Static res:Strings.U_export_folder_914f0f5c}" />
+								</WrapPanel>
+							</StackPanel>
+						</StackPanel>
+
+						<TextBlock Foreground="#9BE29B" Text="{Binding RenderStatus}" TextWrapping="Wrap" />
+						<TextBlock Foreground="#8FD3E8" Text="{Binding DragSaveStatus}" TextWrapping="Wrap" />
+						<TextBlock Foreground="#C9B8E6" Text="{Binding Battle3DStatus}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- Coordinates -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_coordenadas_chunk3_ancoras_dos_atores_7dbe167c}" />
+						<TextBlock FontWeight="SemiBold" Text="{Binding BattleSummary}" TextWrapping="Wrap" />
+
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_battles_do_map_encountertable_btl_ac6dbbdc}" />
+						<ListBox MaxHeight="150"
+						         ItemsSource="{Binding Battles}"
+						         SelectedItem="{Binding SelectedBattle, Mode=TwoWay}">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock FontWeight="SemiBold" Text="{Binding}" />
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+
+						<TextBlock Classes="muted" Text="{Binding AnchorsSummary}" TextWrapping="Wrap" />
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingSm}">
+							<ListBox MaxHeight="260" ItemsSource="{Binding Anchors}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid ColumnDefinitions="Auto,44,*" Margin="0,1">
+											<TextBlock Grid.Column="0" MinWidth="160" Text="{Binding RoleLabel}" />
+											<TextBlock Grid.Column="1" Classes="muted" Text="{Binding IndexLabel}" />
+											<TextBlock Grid.Column="2" FontFamily="Consolas,Menlo,monospace" Text="{Binding CoordLabel}" />
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Border>
+						<TextBlock FontWeight="SemiBold" Text="{Binding AuthorStatus}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- Camera (camReq cuts in chunk0 ATEL) -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_camera_cortes_camreq_chunk0_atel_d11f00d1}" />
+						<TextBlock Classes="muted" Text="{Binding CameraSummary}" TextWrapping="Wrap" />
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingSm}">
+							<ListBox MaxHeight="300" ItemsSource="{Binding CameraShots}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid ColumnDefinitions="Auto,Auto,*,Auto,*" Margin="0,2" VerticalAlignment="Center">
+											<TextBlock Grid.Column="0" MinWidth="150" FontFamily="Consolas,Menlo,monospace" VerticalAlignment="Center" Text="{Binding Header}" />
+											<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Margin="6,0,4,0" Text="{x:Static res:Strings.U_shot_bfe6177c}" />
+											<TextBox Grid.Column="2" MinWidth="70" Text="{Binding ShotText, Mode=TwoWay}" IsEnabled="{Binding Editable}" />
+											<TextBlock Grid.Column="3" Classes="muted" VerticalAlignment="Center" Margin="10,0,4,0" Text="{x:Static res:Strings.CommonTarget}" />
+											<TextBox Grid.Column="4" MinWidth="90" Text="{Binding TargetText, Mode=TwoWay}" IsEnabled="{Binding Editable}" />
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Border>
+
+						<StackPanel Orientation="Horizontal" Spacing="10">
+							<Button Classes="primaryAction" Click="Button_SaveCamera" Content="{x:Static res:Strings.U_save_camera_717dbfa4}" />
+						</StackPanel>
+						<TextBlock FontWeight="SemiBold" Text="{Binding CameraStatus}" TextWrapping="Wrap" />
+
+						<TextBlock Classes="sectionLabel" Margin="0,10,0,0" Text="{x:Static res:Strings.U_parametros_de_camera_angulo_distancia_posicao_ro_a57816ed}" />
+						<TextBlock Classes="muted" Text="{Binding CameraParamsSummary}" TextWrapping="Wrap" />
+						<WrapPanel>
+							<ComboBox MinWidth="160" MaxWidth="240" Margin="0,0,8,8" ItemsSource="{Binding CameraRoleFilters}" SelectedItem="{Binding CameraRoleFilter, Mode=TwoWay}" />
+							<TextBox MinWidth="240" MaxWidth="360" Margin="0,0,8,8" Watermark="{x:Static res:Strings.U_buscar_tipo_f_idx_valor_b4464f9d}" Text="{Binding CameraKnobSearch, Mode=TwoWay}" />
+						</WrapPanel>
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingSm}">
+							<ListBox MaxHeight="320" ItemsSource="{Binding CameraKnobs}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid ColumnDefinitions="*,130" Margin="0,2" VerticalAlignment="Center">
+											<TextBlock Grid.Column="0" FontFamily="Consolas,Menlo,monospace" VerticalAlignment="Center" Text="{Binding Header}" />
+											<TextBox Grid.Column="1" Text="{Binding ValueText, Mode=TwoWay}" />
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Border>
+						<StackPanel Orientation="Horizontal" Spacing="10">
+							<Button Classes="primaryAction" Click="Button_SaveCameraFloats" Content="{x:Static res:Strings.U_save_camera_params_cfac02c7}" />
+						</StackPanel>
+						<TextBlock FontWeight="SemiBold" Text="{Binding CameraParamsStatus}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- Opener (Seymour / shell) -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_opener_seymour_shell_protect_antes_da_party_agir_caaa68ee}" />
+						<TextBlock Classes="muted" Text="{Binding OpenerSummary}" TextWrapping="Wrap" />
+						<ItemsControl ItemsSource="{Binding OpenerRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Classes="cardSoft" Padding="10" Margin="0,0,0,6">
+										<Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="0,2">
+											<TextBlock Grid.Column="0" MinWidth="150" FontWeight="SemiBold" Text="{Binding TargetDisplay}" />
+											<TextBlock Grid.Column="1" MinWidth="110" FontFamily="Consolas,Menlo,monospace" Text="{Binding FieldName}" />
+											<TextBlock Grid.Column="2" MinWidth="30" Text="{Binding Operation}" />
+											<TextBlock Grid.Column="3" MinWidth="40" Text="{Binding Value}" />
+											<TextBlock Grid.Column="4" Classes="muted" Text="{Binding SourceOffset, StringFormat='0x{0:X}'}" />
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						<TextBlock Classes="muted" Text="{Binding OpenerGuardrail}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- 👥 Hidden companion activation / summon-handoff (m213 lane) -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_hidden_companion_activation_summon_handoff_744f6f30}" />
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationBattleToken}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationCoverage}" TextWrapping="Wrap" />
+						<ItemsControl ItemsSource="{Binding CompanionActivationRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Classes="cardSoft" Padding="10" Margin="0,0,0,6">
+										<StackPanel Spacing="4">
+											<Grid ColumnDefinitions="Auto,*" Margin="0,2">
+												<TextBlock Grid.Column="0" MinWidth="150" FontWeight="SemiBold" Text="{Binding SlotLabel}" />
+												<TextBlock Grid.Column="1" Text="{Binding MonsterLabel}" />
+											</Grid>
+											<Grid ColumnDefinitions="Auto,Auto,*" Margin="0,2">
+												<TextBlock Grid.Column="0" MinWidth="120" FontFamily="Consolas,Menlo,monospace" Text="{Binding HostActionLabel}" />
+												<TextBlock Grid.Column="1" MinWidth="90" Classes="muted" Text="{Binding HostActionOffsetHex}" />
+												<TextBlock Grid.Column="2" Text="{Binding HiddenStatusLabel}" />
+											</Grid>
+											<TextBlock Classes="muted" Text="{Binding HiddenBattleIdsLabel}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding EvidenceLabel}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationGuardrail}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- RT2 honest frontier -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_fronteira_rt2_in_game_nao_promovido_70aa8a7c}" />
+						<TextBlock Classes="muted" Text="{Binding Rt2PendingSummary}" TextWrapping="Wrap" />
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingSm}">
+							<ListBox MaxHeight="180" ItemsSource="{Binding Rt2Checklist}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Classes="muted" Text="{Binding}" TextWrapping="Wrap" />
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Border>
+					</StackPanel>
+				</Border>
+
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

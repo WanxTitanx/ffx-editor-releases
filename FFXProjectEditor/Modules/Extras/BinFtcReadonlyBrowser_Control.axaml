@@ -1,0 +1,168 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1500"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.BinFtcReadonlyBrowser_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*" MinWidth="240" />
+			<ColumnDefinition Width="4*" MinWidth="320" />
+			<ColumnDefinition Width="6*" MinWidth="320" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.ColumnSpan="3" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_bin_ftc_atlas_c4083d7f}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_bin_ftc_readonly_browser_fb68674d}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_buckets_4334d460}" />
+					<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+				</Grid>
+				<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,10">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSourceRoot}" />
+						<TextBlock Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding OverviewSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+				<ListBox Grid.Row="2"
+				         ItemsSource="{Binding Buckets}"
+				         SelectedItem="{Binding SelectedBucket, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Bucket}" />
+									<TextBlock Text="{Binding Count}" />
+									<TextBlock Classes="muted" Text="{Binding EvidenceLabel}" />
+									<TextBlock Classes="muted" Text="{Binding SensitivityLabel}" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+			<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_files_6ce6c512}" />
+					<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenRoot">Open Root</Button>
+				</Grid>
+				<TextBlock Grid.Row="1" Margin="0,10,0,0" Classes="muted" Text="{Binding SelectedBucketSummary}" TextWrapping="Wrap" />
+				<TextBox Grid.Row="2" Margin="0,10,0,0" Watermark="{x:Static res:Strings.U_search_name_path_bucket_or_signature_1ae29f8e}"
+				         Text="{Binding SearchText, Mode=TwoWay}" />
+
+				<Grid Grid.Row="3" ColumnDefinitions="*,*" Margin="0,10,0,4">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_root_e96857c5}" />
+						<ComboBox ItemsSource="{Binding RootOptions}" SelectedItem="{Binding SelectedRootFilter, Mode=TwoWay}" />
+					</StackPanel>
+					<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_class_41ff354b}" />
+						<ComboBox ItemsSource="{Binding ClassOptions}" SelectedItem="{Binding SelectedClassFilter, Mode=TwoWay}" />
+					</StackPanel>
+				</Grid>
+
+				<Grid Grid.Row="4" ColumnDefinitions="*,*" Margin="0,0,0,10">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonExtension}" />
+						<ComboBox ItemsSource="{Binding ExtensionOptions}" SelectedItem="{Binding SelectedExtensionFilter, Mode=TwoWay}" />
+					</StackPanel>
+					<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_sensitivity_031cfc25}" />
+						<ComboBox ItemsSource="{Binding SensitivityOptions}" SelectedItem="{Binding SelectedSensitivityFilter, Mode=TwoWay}" />
+					</StackPanel>
+				</Grid>
+
+				<ListBox Grid.Row="5"
+				         ItemsSource="{Binding Files}"
+				         SelectedItem="{Binding SelectedFile, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+									<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+									<TextBlock Text="{Binding Bucket}" />
+									<TextBlock Classes="muted" Text="{Binding SizeSummary}" />
+									<TextBlock Classes="muted" Text="{Binding FtcMagic}" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="2" Classes="card" Padding="{DynamicResource SpacingLg}">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Spacing="12">
+					<Grid ColumnDefinitions="*,Auto">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_file_d1b30715}" />
+							<TextBlock Classes="cardTitle" Text="{Binding SelectedFileName}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedFilePath}" TextWrapping="Wrap" />
+						</StackPanel>
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenFile">Open File</Button>
+					</Grid>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_class_bucket_e523a79a}" />
+							<TextBlock Text="{Binding SelectedFileClass}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedFileBucket}" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_signature_group_6627818e}" Margin="0,8,0,0" />
+							<TextBlock Classes="muted" Text="{Binding SelectedSignatureGroup}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_evidence_sensitivity_f803cfd9}" />
+							<TextBlock Text="{Binding SelectedFileEvidence}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedFileSensitivity}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedFileWarnings}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_header_0x00_0x10_90ebca11}" />
+							<TextBlock Text="{Binding SelectedFileHeader}" TextWrapping="Wrap" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_paired_sidecar_45028c7a}" Margin="0,8,0,0" />
+							<TextBlock Text="{Binding SelectedFileSidecar}" TextWrapping="Wrap" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ftc_header_inspector_77567213}" Margin="0,8,0,0" />
+							<TextBlock Text="{Binding SelectedFtcHeaderInspector}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_first_64_dwords_u32_le_4c478a2d}" />
+							<TextBlock Text="{Binding SelectedFileDwords}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_binsidecargraph_e3a61ef9}" />
+							<TextBlock Text="{Binding SelectedSidecarGraph}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</UserControl>

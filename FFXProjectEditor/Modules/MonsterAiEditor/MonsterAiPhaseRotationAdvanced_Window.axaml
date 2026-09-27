@@ -1,0 +1,1294 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d" d:DesignWidth="1240" d:DesignHeight="820" x:Class="FFXProjectEditor.MonsterAiPhaseRotationAdvanced_Window" Title="{x:Static res:Strings.U_WinPhaseRotationAdvanced}" Width="1240" Height="820" MinWidth="760" MinHeight="560" xmlns:res="clr-namespace:FFXProjectEditor.Resources">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        <DataTemplate x:Key="RouteCardTemplate">
+            <Expander Margin="0,0,0,8" IsExpanded="{Binding IsExpanded, Mode=TwoWay}">
+                <Expander.Header>
+                    <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                        <StackPanel Spacing="6">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                                <ItemsControl Grid.Column="1" Margin="8,0,0,0" ItemsSource="{Binding Badges}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="7,2" Margin="2,0" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="5">
+                                                <TextBlock FontSize="12" Text="{Binding}" TextWrapping="Wrap" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Grid>
+                            <TextBlock Classes="muted" Text="{Binding Subtitle}" TextWrapping="Wrap" />
+                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                                <StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,5,3" Spacing="2">
+                                    <TextBlock Classes="sectionLabel" Text="{Binding HowChosen.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding HowChosen.Summary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="0" Grid.Column="1" Margin="5,0,0,3" Spacing="2">
+                                    <TextBlock Classes="sectionLabel" Text="{Binding WhatItDoes.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding WhatItDoes.Summary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,3,5,0" Spacing="2">
+                                    <TextBlock Classes="sectionLabel" Text="{Binding HowItTargets.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding HowItTargets.Summary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <StackPanel Grid.Row="1" Grid.Column="1" Margin="5,3,0,0" Spacing="2">
+                                    <TextBlock Classes="sectionLabel" Text="{Binding HowItLeavesState.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding HowItLeavesState.Summary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </Expander.Header>
+                <Border Margin="0,6,0,0" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                    <StackPanel Spacing="8">
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="sectionLabel" Text="{Binding HowChosen.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                            <TextBlock Classes="muted" Text="{Binding HowChosen.Details}" TextWrapping="Wrap" IsVisible="{Binding HowChosen.HasDetails}" />
+                        </StackPanel>
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="sectionLabel" Text="{Binding WhatItDoes.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                            <TextBlock Classes="muted" Text="{Binding WhatItDoes.Details}" TextWrapping="Wrap" IsVisible="{Binding WhatItDoes.HasDetails}" />
+                        </StackPanel>
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="sectionLabel" Text="{Binding HowItTargets.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                            <TextBlock Classes="muted" Text="{Binding HowItTargets.Details}" TextWrapping="Wrap" IsVisible="{Binding HowItTargets.HasDetails}" />
+                        </StackPanel>
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="sectionLabel" Text="{Binding HowItLeavesState.Title}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                            <TextBlock Classes="muted" Text="{Binding HowItLeavesState.Details}" TextWrapping="Wrap" IsVisible="{Binding HowItLeavesState.HasDetails}" />
+                        </StackPanel>
+                        <TextBlock Classes="muted" Text="{Binding Footer}" TextWrapping="Wrap" />
+                        <Button HorizontalAlignment="Left" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenIndirectEditor}" Tag="{Binding IndirectUnitId}" Content="{x:Static res:Strings.U_abrir_esta_familia_indireta_d55a8880}" />
+                    </StackPanel>
+                </Border>
+            </Expander>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedDetailRowTemplate">
+            <Grid>
+                <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                    <StackPanel Spacing="4">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Spacing="2">
+                                <TextBlock FontWeight="SemiBold" Text="{Binding Label}" TextWrapping="Wrap" />
+                                <TextBlock Classes="sectionLabel" Text="{Binding VariableName}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="1" Classes="muted" Margin="10,0,0,0" Text="{Binding OffsetSummary}" VerticalAlignment="Top" TextWrapping="Wrap" />
+                        </Grid>
+                        <TextBlock Text="{Binding ValueSummary}" TextWrapping="Wrap" />
+                        <TextBlock Classes="muted" Text="{Binding DetailSummary}" TextWrapping="Wrap" IsVisible="{Binding HasDetailSummary}" />
+                    </StackPanel>
+                </Border>
+                <Border Margin="0,0,0,8" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="2" CornerRadius="7" IsVisible="{Binding IsFocusTarget}" />
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedVariableFocusRowTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="4">
+                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                        <TextBlock Classes="sectionLabel" Text="{Binding ValueSummary}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                        <TextBlock Classes="muted" Text="{Binding DependencySummary}" TextWrapping="Wrap" IsVisible="{Binding HasDependencySummary}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8" HorizontalAlignment="Right">
+                        <TextBlock Classes="muted" HorizontalAlignment="Right" Text="{Binding OffsetSummary}" TextWrapping="Wrap" />
+                        <Button Classes="secondaryAction accentProtect" HorizontalAlignment="Right" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenEditor}" Tag="{Binding EditorLaunchContext}" Content="{x:Static res:Strings.U_editar_esta_rota_722d114c}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedPhaseMapCardTemplate">
+            <Border Padding="12" Margin="0,0,0,8" Background="{DynamicResource PanelAltBrush}" CornerRadius="8">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="{Binding DisplayTitle}" TextWrapping="Wrap" FontSize="16" FontWeight="SemiBold" />
+                    <TextBlock Text="{Binding AuthoringStatus}" TextWrapping="Wrap" Classes="muted" />
+                    <TextBlock Text="{Binding GuardSummary}" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding ActionSummary}" TextWrapping="Wrap" Classes="muted" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedRouteConsumerTemplate">
+            <Border Margin="0,0,10,8" Padding="10" MinWidth="220" MaxWidth="250" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="4">
+                    <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                    <TextBlock Classes="sectionLabel" Text="{Binding PayloadSummary}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding TargetSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding CallSummary}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedFluxThresholdTemplate">
+            <Button Margin="0,0,0,8" Padding="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" Click="Button_OpenAdvancedFluxThresholdEditor" Tag="{Binding}">
+                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                    <StackPanel Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Spacing="2">
+                                <TextBlock FontWeight="SemiBold" Text="{Binding VariableName}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <TextBlock Grid.Column="1" Classes="muted" Margin="10,0,0,0" Text="{Binding SiteSummary}" VerticalAlignment="Top" TextWrapping="Wrap" />
+                        </Grid>
+                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonRawFormulaIr}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                        <TextBlock FontFamily="Cascadia Mono,Consolas,Monospace" Text="{Binding RawFormulaSummary}" TextWrapping="Wrap" />
+                        <TextBlock Classes="muted" Text="{Binding ComparisonSummary}" TextWrapping="Wrap" />
+                        <TextBlock Classes="muted" Text="{Binding FollowUpSummary}" TextWrapping="Wrap" />
+                        <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                            <StackPanel Spacing="6">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_threshold_raw_44072f0d}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <TextBlock FontWeight="SemiBold" Text="{Binding CurrentThresholdSummary}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding WriterSummary}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{x:Static res:Strings.U_clique_para_abrir_o_editor_raw_desta_chain_6faf228b}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedAnimaOdThresholdEvidenceTemplate">
+            <Border Padding="16" Background="{DynamicResource PanelAltBrush}" CornerRadius="8">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="{Binding RoleLabel}" TextWrapping="Wrap" FontWeight="SemiBold" FontSize="16" />
+                    <TextBlock Text="{Binding CurrentThresholdSummary}" TextWrapping="Wrap" />
+                    <TextBlock Text="{x:Static res:Strings.AiAdvancedOverdriveHint}" TextWrapping="Wrap" Classes="muted" />
+                    <TextBlock Text="{x:Static res:Strings.AiAdvancedOverdriveMaximum}" TextWrapping="Wrap" />
+                    <TextBox Text="{Binding MaximumText, Mode=TwoWay}" Watermark="100" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedOverdriveMaximum}" />
+                    <Button Content="{x:Static res:Strings.ActionSave}" HorizontalAlignment="Left" Classes="primaryAction" Click="Button_ApplyAdvancedAnimaOdThreshold" Tag="{Binding}" />
+                    <Expander Header="{x:Static res:Strings.AiAdvancedEvidence}">
+                        <TextBlock Text="{Binding WriterSummary}" TextWrapping="Wrap" Classes="muted" />
+                    </Expander>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedOmnisClusterEvidenceTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="6">
+                    <TextBlock FontWeight="SemiBold" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding BeatName}" TextWrapping="Wrap" />
+                    <TextBlock FontWeight="SemiBold" Text="{Binding CurrentCommandSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding WriterSummary}" TextWrapping="Wrap" />
+                    <TextBox Margin="0,4,0,0" Text="{Binding CommandText}" Watermark="{x:Static res:Strings.CommonCommandHex}" AutomationProperties.Name="{x:Static res:Strings.CommonCommandHex}" />
+                    <Button Margin="0,4,0,0" Classes="secondaryAction accentProtect" Click="Button_ApplyAdvancedOmnisCluster" Tag="{Binding}" Content="{x:Static res:Strings.U_aplicar_patch_raw_do_omnis_01a452c3}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedMortibodyAccumulatorEvidenceTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="6">
+                    <TextBlock FontWeight="SemiBold" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding VariableName}" TextWrapping="Wrap" />
+                    <TextBlock FontWeight="SemiBold" Text="{Binding CurrentScoreSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding WriterSummary}" TextWrapping="Wrap" />
+                    <TextBox Margin="0,4,0,0" Text="{Binding ScoreText}" Watermark="{x:Static res:Strings.U_score_489f4877}" AutomationProperties.Name="{x:Static res:Strings.U_score_489f4877}" />
+                    <Button Margin="0,4,0,0" Classes="secondaryAction accentProtect" Click="Button_ApplyAdvancedMortibodyAccumulator" Tag="{Binding}" Content="{x:Static res:Strings.U_aplicar_patch_raw_do_mortibody_63daf6be}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedMortiorchisCompanionEvidenceTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="6">
+                    <TextBlock FontWeight="SemiBold" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding BeatName}" TextWrapping="Wrap" />
+                    <TextBlock FontWeight="SemiBold" Text="{Binding CurrentCommandSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding WriterSummary}" TextWrapping="Wrap" />
+                    <TextBox Margin="0,4,0,0" Text="{Binding CommandText}" Watermark="{x:Static res:Strings.CommonCommandHex}" AutomationProperties.Name="{x:Static res:Strings.CommonCommandHex}" />
+                    <Button Margin="0,4,0,0" Classes="secondaryAction accentProtect" Click="Button_ApplyAdvancedMortiorchisCompanion" Tag="{Binding}" Content="{x:Static res:Strings.U_aplicar_patch_raw_do_mortiorchis_95ab5a10}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedReactiveSensorEvidenceTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="6">
+                    <TextBlock FontWeight="SemiBold" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding VariableName}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding PropertyName}" TextWrapping="Wrap" />
+                    <TextBlock FontWeight="SemiBold" Text="{Binding CurrentStateSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding WriterSummary}" TextWrapping="Wrap" />
+                    <TextBox Margin="0,4,0,0" Text="{Binding StateText}" Watermark="{x:Static res:Strings.U_state_value_b6c697dd}" AutomationProperties.Name="{x:Static res:Strings.U_state_value_b6c697dd}" />
+                    <Button Margin="0,4,0,0" Classes="secondaryAction accentProtect" Click="Button_ApplyAdvancedReactiveSensor" Tag="{Binding}" Content="{x:Static res:Strings.U_aplicar_patch_raw_do_sensor_reativo_cb3a9651}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedRoundScriptedBossEvidenceTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="6">
+                    <TextBlock FontWeight="SemiBold" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding BeatName}" TextWrapping="Wrap" />
+                    <TextBlock FontWeight="SemiBold" Text="{Binding CurrentCommandSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding WriterSummary}" TextWrapping="Wrap" />
+                    <TextBox Margin="0,4,0,0" Text="{Binding CommandText}" Watermark="{x:Static res:Strings.CommonCommandHex}" AutomationProperties.Name="{x:Static res:Strings.CommonCommandHex}" />
+                    <Button Margin="0,4,0,0" Classes="secondaryAction accentProtect" Click="Button_ApplyAdvancedRoundScriptedBoss" Tag="{Binding}" Content="{x:Static res:Strings.U_aplicar_patch_raw_do_m238_dfa6495d}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedCompanionPackageTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="4">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock FontWeight="SemiBold" Text="{Binding BattleId}" TextWrapping="Wrap" />
+                        <Border Grid.Column="1" Padding="8,3" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="6">
+                            <TextBlock FontSize="12" FontWeight="SemiBold" Text="{Binding StatusLabel}" TextWrapping="Wrap" />
+                        </Border>
+                    </Grid>
+                    <TextBlock Classes="muted" Text="{Binding HumanSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding CoverageLabel}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedCompanionRowTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="4">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock FontWeight="SemiBold" Text="{Binding SlotLabel}" TextWrapping="Wrap" />
+                        <TextBlock Grid.Column="1" Classes="muted" Margin="10,0,0,0" Text="{Binding HostActionOffsetHex}" VerticalAlignment="Top" TextWrapping="Wrap" />
+                    </Grid>
+                    <TextBlock Classes="sectionLabel" Text="{Binding MonsterLabel}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding HostActionLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding HiddenStatusLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding EvidenceLabel}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedAnimaPayloadTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="4">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock FontWeight="SemiBold" Text="{Binding PayloadSummary}" TextWrapping="Wrap" />
+                        <TextBlock Grid.Column="1" Classes="muted" Margin="10,0,0,0" Text="{Binding OffsetSummary}" VerticalAlignment="Top" TextWrapping="Wrap" />
+                    </Grid>
+                    <TextBlock Classes="sectionLabel" Text="{Binding SlotLabel}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding DetailSummary}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="AdvancedFamilySurfaceRowTemplate">
+            <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                <StackPanel Spacing="6">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="2">
+                            <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                            <TextBlock Classes="sectionLabel" Text="{Binding Subtitle}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <TextBlock Grid.Column="1" Classes="muted" Margin="10,0,0,0" Text="{Binding OffsetSummary}" VerticalAlignment="Top" TextWrapping="Wrap" />
+                    </Grid>
+                    <TextBlock Classes="muted" Text="{Binding DetailSummary}" TextWrapping="Wrap" />
+                    <Button HorizontalAlignment="Left" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenEditor}" Tag="{Binding LaunchContext}" Content="{Binding OpenButtonLabel}" />
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+            </ResourceDictionary>
+    </Window.Resources>
+    <Window.Styles>
+        <Style Selector="TextBlock.muted">
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="MinHeight" Value="36" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="MinHeight" Value="36" />
+        </Style>
+        <Style Selector="ListBoxItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="12,10" />
+        </Style>
+    </Window.Styles>
+    <Grid Margin="16" RowDefinitions="Auto,*,Auto">
+        <Border Padding="16" Classes="card">
+            <StackPanel Spacing="8">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="4">
+                        <TextBlock Text="{x:Static res:Strings.AiAdvancedTitle}" TextWrapping="Wrap" FontSize="21" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding AdvancedWorkspaceMonster}" TextWrapping="Wrap" Classes="muted" />
+                    </StackPanel>
+                    <Button Grid.Column="1" Content="{x:Static res:Strings.CommonReaudit}" Classes="secondaryAction" Click="Button_RefreshPhaseRotationAudit" Margin="16,0,0,0" />
+                </Grid>
+                <TextBlock Text="{Binding AdvancedCoverageSummary}" TextWrapping="Wrap" Classes="muted" />
+            </StackPanel>
+        </Border>
+        <TabControl Grid.Row="1" SelectedIndex="{Binding AdvancedWorkspaceTabIndex, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedNavigation}">
+            <TabItem Header="{x:Static res:Strings.AiAdvancedRoutes}">
+                <Grid ColumnDefinitions="0.8*,1.5*" Margin="0,12,0,0">
+                    <Border Grid.Column="0" Padding="16" Classes="card">
+                        <Grid RowDefinitions="Auto,Auto,*,Auto">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{x:Static res:Strings.AiAdvancedRoutes}" TextWrapping="Wrap" FontSize="16" FontWeight="SemiBold" />
+                                <TextBlock Text="{x:Static res:Strings.AiAdvancedRoutesHint}" TextWrapping="Wrap" Classes="muted" />
+                            </StackPanel>
+                            <TextBox Grid.Row="1" Margin="0,12,0,12" x:Name="AdvancedRouteSearch" Text="{Binding AdvancedRouteQuery, Mode=TwoWay}" Watermark="{x:Static res:Strings.AiAdvancedSearchExample}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedSearchRoutes}" />
+                            <ListBox AutoScrollToSelectedItem="False" ItemsSource="{Binding AdvancedFilteredPhaseUnits}" SelectedItem="{Binding SelectedAdvancedPhaseUnit, Mode=TwoWay}" ItemTemplate="{StaticResource AdvancedPhaseMapCardTemplate}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedRoutes}" Grid.Row="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                            <StackPanel Spacing="12" Grid.Row="3">
+                                <TextBlock Text="{Binding AdvancedRouteSearchSummary}" TextWrapping="Wrap" Classes="muted" />
+                                <TextBlock Text="{Binding AdvancedRouteEmptySummary}" TextWrapping="Wrap" Classes="muted" IsVisible="{Binding HasNoAdvancedRouteMatches}" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Grid.Column="1">
+                        <StackPanel Spacing="12">
+                            <Border Classes="card" Padding="20" Margin="16,0,0,0">
+                                <StackPanel Spacing="12" IsVisible="{Binding HasSelectedAdvancedPhaseUnit}">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{Binding SelectedAdvancedPhaseUnit.DisplayTitle}" TextWrapping="Wrap" FontSize="21" FontWeight="SemiBold" />
+                                        <TextBlock Text="{Binding SelectedAdvancedPhaseUnit.AuthoringStatus}" TextWrapping="Wrap" Classes="muted" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{x:Static res:Strings.AiAdvancedWhen}" TextWrapping="Wrap" Classes="muted" />
+                                        <TextBlock Text="{Binding SelectedAdvancedPhaseUnit.GuardSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{x:Static res:Strings.AiAdvancedActions}" TextWrapping="Wrap" Classes="muted" />
+                                        <TextBlock Text="{Binding SelectedAdvancedPhaseUnit.ActionSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{x:Static res:Strings.AiAdvancedTargets}" TextWrapping="Wrap" Classes="muted" />
+                                        <TextBlock Text="{Binding SelectedAdvancedPhaseUnit.FriendlyTargetSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Text="{x:Static res:Strings.AiAdvancedThen}" TextWrapping="Wrap" Classes="muted" />
+                                        <TextBlock Text="{Binding SelectedAdvancedPhaseUnit.NextStateSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <WrapPanel>
+                                        <Button Content="{x:Static res:Strings.AiAdvancedEditCondition}" Classes="secondaryAction" Click="Button_OpenAdvancedNativeCondition" IsVisible="{Binding CanEditSelectedAdvancedNativeCondition}" Margin="0,0,8,8" />
+                                        <Button Content="{x:Static res:Strings.U_trocar_habilidade_a398c40f}" Classes="secondaryAction" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenSelectedAdvancedPayloadEditor}" Tag="{Binding SelectedAdvancedPayloadLaunchContext}" Margin="0,0,8,8" />
+                                        <Button Content="{x:Static res:Strings.U_trocar_alvo_812abb3b}" Classes="secondaryAction" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenSelectedAdvancedTargetEditor}" Tag="{Binding SelectedAdvancedTargetLaunchContext}" Margin="0,0,8,8" />
+                                        <Button Content="{x:Static res:Strings.U_trocar_proximo_passo_29bd9a52}" Classes="secondaryAction" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenSelectedAdvancedNextStateEditor}" Tag="{Binding SelectedAdvancedNextStateLaunchContext}" Margin="0,0,8,8" />
+                                    </WrapPanel>
+                                    <Expander Header="{x:Static res:Strings.AiAdvancedCoverageTitle}">
+                                        <TextBlock Text="{Binding SelectedAdvancedPhaseUnit.EditabilitySummary}" TextWrapping="Wrap" Classes="muted" />
+                                    </Expander>
+                                    <Expander Header="{x:Static res:Strings.AiAdvancedTechnicalDetails}">
+                                        <Border Padding="0">
+                                            <StackPanel Spacing="12">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <StackPanel Spacing="3">
+                                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAdvancedSelectedRoute}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.AiAdvancedSelectedRouteHint}" />
+                                                    </StackPanel>
+                                                    <Border Grid.Column="1" Padding="8,3" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="6">
+                                                        <TextBlock FontSize="12" FontWeight="SemiBold" Text="{x:Static res:Strings.AiAdvancedNativeBehavior}" TextWrapping="Wrap" />
+                                                    </Border>
+                                                </Grid>
+                                                <StackPanel Spacing="10" IsVisible="{Binding HasSelectedAdvancedPhaseUnit}">
+                                                    <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8">
+                                                        <StackPanel Spacing="8">
+                                                            <TextBlock Classes="sectionLabel" Text="{Binding AdvancedFocusHeroKicker}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                            <TextBlock FontWeight="SemiBold" FontSize="21" Text="{Binding AdvancedFocusHeroTitle}" TextWrapping="Wrap" />
+                                                            <TextBlock Classes="muted" Text="{Binding AdvancedFocusHeroSummary}" TextWrapping="Wrap" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                    <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" ToolTip.Tip="{x:Static res:Strings.U_leitura_honesta_resumo_estrutural_do_que_esta_ro_0f000389}">
+                                                        <StackPanel Spacing="6">
+                                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAdvancedCoverageTitle}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                            <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedFocusHonestSummary}" TextWrapping="Wrap" />
+                                                            <Border Padding="8,6" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="6">
+                                                                <TextBlock FontWeight="SemiBold" Text="{Binding AdvancedFocusPreviewBar}" TextWrapping="Wrap" />
+                                                            </Border>
+                                                        </StackPanel>
+                                                    </Border>
+                                                    <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8">
+                                                        <StackPanel Spacing="8">
+                                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_fluxo_rapido_desta_rota_99ba9842}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                            <TextBlock FontWeight="SemiBold" Text="{Binding AdvancedAuthoringPlanTitle}" TextWrapping="Wrap" />
+                                                            <TextBlock Classes="muted" Text="{Binding AdvancedAuthoringPlanSummary}" TextWrapping="Wrap" />
+                                                            <TextBlock Classes="muted" Text="{Binding AdvancedAuthoringPlanHint}" TextWrapping="Wrap" />
+                                                            <WrapPanel Margin="0,4,0,0">
+                                                                <Button Margin="0,0,8,8" Classes="primaryAction" Click="Button_CloneAdvancedPhaseUnitRoute" IsVisible="{Binding CanCloneSelectedAdvancedPhaseUnit}" Content="{x:Static res:Strings.CommonCloneNewRoute}" />
+                                                                <Button Margin="0,0,8,8" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenSelectedAdvancedPayloadEditor}" Tag="{Binding SelectedAdvancedPayloadLaunchContext}" Content="{x:Static res:Strings.U_trocar_habilidade_a398c40f}" />
+                                                                <Button Margin="0,0,8,8" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenSelectedAdvancedTargetEditor}" Tag="{Binding SelectedAdvancedTargetLaunchContext}" Content="{x:Static res:Strings.U_trocar_alvo_812abb3b}" />
+                                                                <Button Margin="0,0,8,8" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenSelectedAdvancedNextStateEditor}" Tag="{Binding SelectedAdvancedNextStateLaunchContext}" Content="{x:Static res:Strings.U_trocar_proximo_passo_29bd9a52}" />
+                                                            </WrapPanel>
+                                                            <TextBlock Classes="muted" Text="{x:Static res:Strings.U_cada_atalho_abre_so_o_recorte_pedido_use_abrir_e_6fe9a110}" TextWrapping="Wrap" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                    <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" ToolTip.Tip="{x:Static res:Strings.U_guard_condicao_estrutural_que_escolhe_esta_rota__bc1e0c4d}">
+                                                        <StackPanel Spacing="6">
+                                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_guard_relacao_com_a_var_escolhida_6a65e571}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                            <TextBlock FontWeight="SemiBold" Text="{Binding SelectedAdvancedPhaseUnit.GuardSummary}" TextWrapping="Wrap" />
+                                                            <TextBlock Classes="muted" Text="{Binding SelectedAdvancedPhaseUnit.SelectedVariableRoleSummary}" TextWrapping="Wrap" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                                                        <Button Grid.Row="0" Grid.Column="0" Padding="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" Click="Button_OpenAdvancedPhaseUnitEditor" IsEnabled="{Binding CanOpenSelectedAdvancedPayloadCard}" Tag="{Binding SelectedAdvancedPayloadCardTarget}" ToolTip.Tip="{x:Static res:Strings.U_payload_a_habilidade_comando_que_esta_rota_prepa_6b9e2d81}">
+                                                            <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                                <StackPanel Spacing="6">
+                                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_payload_c30415ea}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                    <TextBlock Classes="muted" Text="{Binding AdvancedSelectedPayloadActionSummary}" TextWrapping="Wrap" />
+                                                                    <ItemsControl ItemsSource="{Binding SelectedAdvancedPhaseUnit.CommandSlots}" ItemTemplate="{StaticResource AdvancedDetailRowTemplate}" />
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Button>
+                                                        <Button Grid.Row="0" Grid.Column="1" Margin="10,0,0,0" Padding="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" Click="Button_OpenAdvancedPhaseUnitEditor" IsEnabled="{Binding CanOpenSelectedAdvancedTargetCard}" Tag="{Binding SelectedAdvancedTargetCardTarget}" ToolTip.Tip="{x:Static res:Strings.U_alvo_quem_recebe_a_habilidade_desta_rota_se_houv_4bbf3180}">
+                                                            <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                                <StackPanel Spacing="6">
+                                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_alvo_58a82deb}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                    <TextBlock Classes="muted" Text="{Binding AdvancedSelectedTargetActionSummary}" TextWrapping="Wrap" />
+                                                                    <ItemsControl ItemsSource="{Binding SelectedAdvancedPhaseUnit.TargetSlots}" ItemTemplate="{StaticResource AdvancedDetailRowTemplate}" />
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Button>
+                                                        <Button Grid.Row="1" Grid.Column="0" Margin="0,10,0,0" Padding="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" Click="Button_OpenAdvancedPhaseUnitEditor" IsEnabled="{Binding CanOpenSelectedAdvancedConsumerCard}" Tag="{Binding SelectedAdvancedConsumerCardTarget}" ToolTip.Tip="{x:Static res:Strings.U_consumers_os_pontos_que_consomem_payload_alvo_e__14389a3e}">
+                                                            <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                                <StackPanel Spacing="6">
+                                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_consumers_ba38ef71}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                    <TextBlock Classes="muted" Text="{Binding AdvancedSelectedConsumersActionSummary}" TextWrapping="Wrap" />
+                                                                    <ItemsControl ItemsSource="{Binding SelectedAdvancedPhaseUnit.ConsumerRows}" ItemTemplate="{StaticResource AdvancedDetailRowTemplate}" />
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Button>
+                                                        <Button Grid.Row="1" Grid.Column="1" Margin="10,10,0,0" Padding="0" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" Click="Button_OpenAdvancedPhaseUnitEditor" IsEnabled="{Binding CanOpenSelectedAdvancedNextStateCard}" Tag="{Binding SelectedAdvancedNextStateCardTarget}" ToolTip.Tip="{x:Static res:Strings.U_next_state_o_proximo_estado_valor_que_esta_rota__20dca0c5}">
+                                                            <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                                <StackPanel Spacing="6">
+                                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_next_state_2f63e57e}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                    <TextBlock Classes="muted" Text="{Binding AdvancedSelectedNextStateActionSummary}" TextWrapping="Wrap" />
+                                                                    <TextBlock FontWeight="SemiBold" Text="{Binding SelectedAdvancedPhaseUnit.NextStateSummary}" TextWrapping="Wrap" />
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Button>
+                                                    </Grid>
+                                                    <Border Padding="12" Margin="0,10,0,0" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" ToolTip.Tip="{x:Static res:Strings.U_bundle_desta_rota_camada_autoral_extra_por_consu_ca328a3c}" IsVisible="{Binding HasAdvancedRouteBundle}">
+                                                        <StackPanel Spacing="10">
+                                                            <StackPanel Spacing="3">
+                                                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_bundle_desta_rota_2b6f3c23}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                <TextBlock FontWeight="SemiBold" Text="{Binding AdvancedRouteBundleSummary}" TextWrapping="Wrap" />
+                                                                <TextBlock Classes="muted" Text="{Binding AdvancedRouteBundlePreview}" TextWrapping="Wrap" />
+                                                                <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedRouteBundleHonestSummary}" TextWrapping="Wrap" />
+                                                            </StackPanel>
+                                                            <ListBox AutoScrollToSelectedItem="False" ItemsSource="{Binding AdvancedRouteConsumers}" SelectedItem="{Binding SelectedAdvancedRouteConsumer, Mode=TwoWay}" MaxHeight="220" ItemTemplate="{StaticResource AdvancedRouteConsumerTemplate}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedActions}">
+                                                                <ListBox.ItemsPanel>
+                                                                    <ItemsPanelTemplate>
+                                                                        <WrapPanel />
+                                                                    </ItemsPanelTemplate>
+                                                                </ListBox.ItemsPanel>
+                                                            </ListBox>
+                                                            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
+                                                                <Border Grid.Column="0" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" ToolTip.Tip="{x:Static res:Strings.U_encadear_segundo_cast_adiciona_uma_segunda_habil_6b52ff39}">
+                                                                    <StackPanel Spacing="8">
+                                                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_encadear_segundo_cast_9eed3764}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                        <TextBlock Classes="muted" Text="{x:Static res:Strings.U_escolha_a_habilidade_extra_que_entra_logo_depois_c5957af9}" TextWrapping="Wrap" />
+                                                                        <ComboBox ItemsSource="{Binding AutomationAbilityOptions}" SelectedItem="{Binding SelectedAdvancedRouteSecondAbility, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedActions}" />
+                                                                        <Button Classes="primaryAction" Click="Button_ApplyAdvancedRouteSecondCast" IsEnabled="{Binding CanApplyAdvancedRouteSecondCast}" Content="{x:Static res:Strings.U_encadear_segundo_cast_nesta_rota_1cbd643f}" />
+                                                                    </StackPanel>
+                                                                </Border>
+                                                                <Border Grid.Column="1" Margin="10,0,0,0" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" ToolTip.Tip="{x:Static res:Strings.U_forbidden_rite_nesta_rota_injeta_o_status_proibi_7266c949}">
+                                                                    <StackPanel Spacing="8">
+                                                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_forbidden_rite_nesta_rota_52ac5374}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                        <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{x:Static res:Strings.U_este_rite_entra_so_no_consumer_escolhido_use_mes_4330a350}" TextWrapping="Wrap" />
+                                                                        <ComboBox ItemsSource="{Binding ForbiddenRiteTargets}" SelectedItem="{Binding SelectedAdvancedRouteForbiddenTarget, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" />
+                                                                        <ComboBox ItemsSource="{Binding ForbiddenStatusPresets}" SelectedItem="{Binding SelectedAdvancedRouteForbiddenStatus, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedStatusEffect}" />
+                                                                        <TextBox Text="{Binding AdvancedRouteForbiddenValue, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonValue}" FontFamily="Cascadia Mono,Consolas,Monospace" AutomationProperties.Name="{x:Static res:Strings.CommonValue}" />
+                                                                        <Button Classes="secondaryAction accentForbidden" Click="Button_ApplyAdvancedRouteForbiddenRite" IsEnabled="{Binding CanApplyAdvancedRouteForbiddenRite}" Content="{x:Static res:Strings.U_aplicar_forbidden_rite_nesta_rota_6d7ede8e}" />
+                                                                    </StackPanel>
+                                                                </Border>
+                                                            </Grid>
+                                                            <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" ToolTip.Tip="{x:Static res:Strings.U_status_do_bundle_feedback_do_que_o_overlay_por_r_dd9fc98b}">
+                                                                <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedRouteBundleStatus}" TextWrapping="Wrap" />
+                                                            </Border>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </StackPanel>
+                                                <StackPanel Spacing="8" IsVisible="{Binding ShowAdvancedPhaseUnitSelectionPlaceholder}">
+                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_sem_rota_selecionada_1ece8888}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                    <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{x:Static res:Strings.AiAdvancedChooseRoute}" />
+                                                    <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AdvancedPhaseModeSummary}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </Border>
+                                    </Expander>
+                                </StackPanel>
+                            </Border>
+                            <TextBlock Text="{x:Static res:Strings.AiAdvancedChooseRoute}" TextWrapping="Wrap" Classes="muted" IsVisible="{Binding ShowAdvancedPhaseUnitSelectionPlaceholder}" />
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
+            <TabItem Header="{x:Static res:Strings.AiAdvancedSpecial}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="12" Margin="0,12,0,0">
+                        <TextBlock Text="{x:Static res:Strings.AiAdvancedSpecialHint}" TextWrapping="Wrap" Classes="muted" />
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedSeymourHandoff}">
+                            <StackPanel Spacing="10">
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Text="{x:Static res:Strings.AiAdvancedSeymourHandoff}" TextWrapping="Wrap" />
+                                <TextBlock Text="{x:Static res:Strings.AiAdvancedSeymourFlow}" TextWrapping="Wrap" />
+                                <TextBlock Text="{x:Static res:Strings.AiAdvancedSeymourFormula}" TextWrapping="Wrap" Classes="muted" />
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <TextBlock Text="{x:Static res:Strings.AiAdvancedSeymourFirst}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                                    <TextBox Name="AdvancedSeymourFirst" Grid.Column="1" Width="80" Margin="8,0,0,4" Text="{Binding AdvancedSeymourHandoff.First, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedSeymourFirst}" />
+                                    <TextBlock Grid.Row="1" Text="{x:Static res:Strings.AiAdvancedSeymourSecond}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                                    <TextBox Name="AdvancedSeymourSecond" Grid.Row="1" Grid.Column="1" Width="80" Margin="8,0,0,4" Text="{Binding AdvancedSeymourHandoff.Second, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedSeymourSecond}" />
+                                    <TextBlock Grid.Row="2" Text="{x:Static res:Strings.AiAdvancedSeymourThird}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                                    <TextBox Name="AdvancedSeymourThird" Grid.Row="2" Grid.Column="1" Width="80" Margin="8,0,0,0" Text="{Binding AdvancedSeymourHandoff.Third, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedSeymourThird}" />
+                                </Grid>
+                                <TextBlock Text="{x:Static res:Strings.AiAdvancedSeymourRange}" TextWrapping="Wrap" Classes="muted" />
+                                <Button Name="AdvancedSeymourApply" Classes="primaryAction" Click="Button_ApplyAdvancedSeymourHandoff" Tag="{Binding AdvancedSeymourHandoff}" IsEnabled="{Binding HasAdvancedSeymourHandoff}" Content="{x:Static res:Strings.AiAdvancedSeymourApply}" />
+                                <TextBlock Text="{Binding AdvancedSeymourHandoffStatus}" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding AdvancedSeymourHandoff.Location}" Classes="muted" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedSceneCalls}">
+                            <StackPanel Spacing="10">
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Text="{x:Static res:Strings.AiAdvancedScenes}" TextWrapping="Wrap" />
+                                <TextBlock Text="{x:Static res:Strings.AiAdvancedScenesHint}" TextWrapping="Wrap" Classes="muted" />
+                                <Button Content="{x:Static res:Strings.AiAdvancedSceneFile}" Click="Button_LoadAdvancedSceneEncounter" />
+                                <TextBlock Text="{Binding AdvancedBattleSceneEncounter}" TextWrapping="Wrap" />
+                                <StackPanel Spacing="8" IsVisible="{Binding HasAdvancedBattleScenes}">
+                                    <TextBlock Text="{x:Static res:Strings.AiAdvancedSceneCall}" />
+                                    <ComboBox ItemsSource="{Binding AdvancedBattleScenes}" SelectedItem="{Binding SelectedAdvancedBattleScene, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedSceneCall}">
+                                        <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Summary}" /></DataTemplate></ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <TextBlock Text="{x:Static res:Strings.AiAdvancedSceneDestination}" />
+                                    <ComboBox ItemsSource="{Binding AdvancedBattleSceneOptions}" SelectedItem="{Binding SelectedAdvancedBattleSceneOption, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedSceneDestination}">
+                                        <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Summary}" /></DataTemplate></ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <Button Classes="primaryAction" Content="{x:Static res:Strings.AiAdvancedSceneApply}" Click="Button_ApplyAdvancedBattleScene" IsEnabled="{Binding CanApplyAdvancedBattleScene}" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding AdvancedBattleSceneStatus}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedFluxFamilySurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_flux_host_companion_pair_m142_5ec9f4be}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{x:Static res:Strings.U_o_lane_do_flux_agora_separa_explicitamente_o_bea_a9a700cf}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_host_beat_do_seymour_flux_c3c16e97}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding AdvancedFluxHostBeatSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_companion_follow_up_do_mortiorchis_a08fd7a1}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding AdvancedFluxCompanionFollowUpSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_thresholds_nativos_raw_07b69f6a}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Text="{Binding AdvancedFluxWriterScopeSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedFluxThresholdEvidence}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAdvancedFluxThresholds}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedFluxThresholdSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedFluxThresholdHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedFluxThresholdApplySummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedFluxThresholdRows}" ItemTemplate="{StaticResource AdvancedFluxThresholdTemplate}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedAnimaSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAdvancedAnimaActions}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedAnimaSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedAnimaHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedAnimaCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedAnimaPayloadRows}" ItemTemplate="{StaticResource AdvancedAnimaPayloadTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenAdvancedAnimaPayloadEditor}" Tag="{Binding AdvancedAnimaPayloadLaunchContext}" Content="{x:Static res:Strings.AiAdvancedEditActions}" />
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedPhaseUnitEditor" IsVisible="{Binding CanOpenAdvancedAnimaTargetEditor}" Tag="{Binding AdvancedAnimaTargetLaunchContext}" Content="{x:Static res:Strings.U_abrir_popup_de_alvo_f748b747}" />
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="anima-payload-picker" Content="{x:Static res:Strings.U_abrir_popup_dedicado_da_anima_c8c05a90}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedAnimaApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedAnimaOdThresholdEvidence}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAdvancedOverdriveMaximum}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedAnimaOdThresholdApplySummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedAnimaOdThresholdRows}" ItemTemplate="{StaticResource AdvancedAnimaOdThresholdEvidenceTemplate}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedElementalClusterSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_elemental_cluster_m131_c8bc5c00}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedElementalClusterSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedElementalClusterHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedElementalClusterCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedElementalClusterRows}" ItemTemplate="{StaticResource AdvancedFamilySurfaceRowTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="elemental-cluster" Content="{x:Static res:Strings.U_abrir_popup_dedicado_do_omnis_26fa2842}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedElementalClusterApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedOmnisClusterEvidence}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_writer_narrow_cluster_elemental_do_omnis_064c9954}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedOmnisClusterWriterApplySummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ListBox ItemsSource="{Binding AdvancedOmnisClusterEvidenceRows}" ItemTemplate="{StaticResource AdvancedOmnisClusterEvidenceTemplate}" MaxHeight="480" AutoScrollToSelectedItem="False" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedActions}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedMortiorchisSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_companion_contextual_m143_0836e19e}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedMortiorchisSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedMortiorchisHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedMortiorchisCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedMortiorchisRows}" ItemTemplate="{StaticResource AdvancedFamilySurfaceRowTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="mortiorchis-companion" Content="{x:Static res:Strings.U_abrir_popup_dedicado_do_mortiorchis_8e976996}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedMortiorchisApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedMortiorchisCompanionEvidence}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_writer_narrow_companion_do_mortiorchis_7968b004}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedMortiorchisCompanionWriterApplySummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ListBox ItemsSource="{Binding AdvancedMortiorchisCompanionEvidenceRows}" ItemTemplate="{StaticResource AdvancedMortiorchisCompanionEvidenceTemplate}" MaxHeight="480" AutoScrollToSelectedItem="False" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedActions}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedSupportAccumulatorSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_support_accumulator_m127_f308a75e}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedSupportAccumulatorSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedSupportAccumulatorHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedSupportAccumulatorCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedSupportAccumulatorRows}" ItemTemplate="{StaticResource AdvancedFamilySurfaceRowTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="support-accumulator" Content="{x:Static res:Strings.U_abrir_popup_dedicado_do_mortibody_c03badbe}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedSupportAccumulatorApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedMortibodyAccumulatorEvidence}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_writer_narrow_acumuladores_do_mortibody_cf340b6a}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedMortibodyAccumulatorWriterApplySummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedMortibodyAccumulatorEvidenceRows}" ItemTemplate="{StaticResource AdvancedMortibodyAccumulatorEvidenceTemplate}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedRoundScriptedBossSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_round_scripted_boss_m238_2afa4b98}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedRoundScriptedBossSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedRoundScriptedBossHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedRoundScriptedBossCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedRoundScriptedBossRows}" ItemTemplate="{StaticResource AdvancedFamilySurfaceRowTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="round-scripted-boss" Content="{x:Static res:Strings.U_abrir_popup_dedicado_do_m238_9e972a13}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedRoundScriptedBossApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedRoundScriptedBossEvidence}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_writer_narrow_round_scripted_boss_m238_4249cf90}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedRoundScriptedBossWriterApplySummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedRoundScriptedBossEvidenceRows}" ItemTemplate="{StaticResource AdvancedRoundScriptedBossEvidenceTemplate}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedReactiveSensorSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_reactive_sensor_9c37c3db}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedReactiveSensorSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedReactiveSensorHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedReactiveSensorCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedReactiveSensorRows}" ItemTemplate="{StaticResource AdvancedFamilySurfaceRowTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="reactive-sensor" Content="{x:Static res:Strings.U_abrir_popup_dedicado_do_sensor_ce73f7f9}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedReactiveSensorApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedReactiveSensorEvidence}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_writer_narrow_sensor_reativo_e78d4c32}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedReactiveSensorWriterApplySummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedReactiveSensorEvidenceRows}" ItemTemplate="{StaticResource AdvancedReactiveSensorEvidenceTemplate}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedTonberryCameraRoutingSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_tonberry_camera_routing_m223_m224_e7501db8}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedTonberryCameraRoutingSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedTonberryCameraRoutingHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedTonberryCameraRoutingCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedTonberryCameraRoutingRows}" ItemTemplate="{StaticResource AdvancedFamilySurfaceRowTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="tonberry-camera-routing" Content="{x:Static res:Strings.U_abrir_popup_dedicado_dos_tonberries_6ddb8bf7}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedTonberryCameraRoutingApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedEncounterAppearSurface}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_encounter_keyed_appear_disable_m211_d2affeed}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedEncounterAppearSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedEncounterAppearHonestSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{Binding AdvancedEncounterAppearCoverage}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ItemsControl ItemsSource="{Binding AdvancedEncounterAppearRows}" ItemTemplate="{StaticResource AdvancedFamilySurfaceRowTemplate}" />
+                                <WrapPanel>
+                                    <Button Margin="0,4,8,0" Classes="secondaryAction" Click="Button_OpenAdvancedFamilySurfaceEditor" Tag="encounter-keyed-appear-disable" Content="{x:Static res:Strings.U_abrir_popup_dedicado_do_m211_6df89a85}" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding AdvancedEncounterAppearApplySummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedCompanionActivationPackages}">
+                            <StackPanel Spacing="10">
+                                <StackPanel Spacing="3">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_summon_handoff_appear_m213_lane_6e31744f}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_m213_entra_aqui_como_pacote_battle_backed_narrow_84231926}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <ListBox AutoScrollToSelectedItem="False" ItemsSource="{Binding AdvancedCompanionActivationPackages}" SelectedItem="{Binding SelectedAdvancedCompanionActivationPackage, Mode=TwoWay}" MaxHeight="220" ItemTemplate="{StaticResource AdvancedCompanionPackageTemplate}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedCompanions}" />
+                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                    <StackPanel Spacing="6">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding AdvancedCompanionActivationDetailTitle}" TextWrapping="Wrap" />
+                                            <TextBlock Grid.Column="1" Classes="muted" Margin="10,0,0,0" Text="{Binding SelectedAdvancedCompanionActivationPackage.WriterPolicy}" TextWrapping="Wrap" />
+                                        </Grid>
+                                        <TextBlock Text="{Binding AdvancedCompanionActivationSummary}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" Text="{Binding AdvancedCompanionActivationCoverage}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding AdvancedCompanionActivationGuardrail}" TextWrapping="Wrap" />
+                                        <ItemsControl ItemsSource="{Binding AdvancedCompanionActivationRows}" ItemTemplate="{StaticResource AdvancedCompanionRowTemplate}" />
+                                        <TextBlock Classes="muted" Text="{Binding SelectedAdvancedCompanionActivationPackage.NotesSummary}" TextWrapping="Wrap" />
+                                        <WrapPanel>
+                                            <Button Margin="0,4,8,0" Classes="secondaryAction accentProtect" Click="Button_OpenAdvancedCompanionActivationEditor" IsVisible="{Binding CanOpenAdvancedCompanionActivationEditor}" Tag="{Binding SelectedAdvancedCompanionActivationPackage}" Content="{x:Static res:Strings.U_abrir_popup_deste_package_64f678b8}" />
+                                        </WrapPanel>
+                                        <TextBlock Classes="muted" Text="{Binding AdvancedCompanionActivationApplySummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="{x:Static res:Strings.AiAdvancedVariables}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="12" Margin="0,12,0,0">
+                        <TextBlock Text="{x:Static res:Strings.AiAdvancedVariablesHint}" TextWrapping="Wrap" Classes="muted" />
+                        <Border Padding="16" Classes="card">
+                            <StackPanel Spacing="12">
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Text="{x:Static res:Strings.AiAdvancedNativeConditions}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{x:Static res:Strings.AiAdvancedNativeConditionHint}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding AdvancedNativeConditionCoverage}" TextWrapping="Wrap" />
+                                <ComboBox ItemsSource="{Binding AdvancedNativeConditions}" SelectedItem="{Binding SelectedAdvancedNativeCondition, Mode=TwoWay}" IsVisible="{Binding HasAdvancedNativeConditions}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedNativeConditions}">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <StackPanel Spacing="8" IsVisible="{Binding HasAdvancedNativeCondition}">
+                                    <TextBlock Classes="muted" Text="{Binding SelectedAdvancedNativeCondition.Location}" TextWrapping="Wrap" />
+                                    <WrapPanel>
+                                        <StackPanel Spacing="4" Margin="0,0,12,8">
+                                            <TextBlock Text="{x:Static res:Strings.AiAdvancedComparison}" />
+                                            <ComboBox ItemsSource="{Binding AdvancedNativeOperators}" SelectedItem="{Binding AdvancedNativeConditionOperator, Mode=TwoWay}" MinWidth="150" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedComparison}" />
+                                        </StackPanel>
+                                        <StackPanel Spacing="4" Margin="0,0,12,8">
+                                            <TextBlock Text="{x:Static res:Strings.AiAdvancedConditionValue}" />
+                                            <TextBox Text="{Binding AdvancedNativeConditionValue, Mode=TwoWay}" MinWidth="150" Watermark="0" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedConditionValue}" />
+                                        </StackPanel>
+                                    </WrapPanel>
+                                    <Button Content="{x:Static res:Strings.AiAdvancedSaveCondition}" Click="Button_ApplyAdvancedNativeCondition" Classes="primaryAction" HorizontalAlignment="Left" />
+                                </StackPanel>
+                                <TextBlock Text="{Binding AdvancedNativeConditionStatus}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" IsVisible="{Binding HasAdvancedExpressions}">
+                            <StackPanel Spacing="10">
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Text="{x:Static res:Strings.AiAdvancedExpressions}" TextWrapping="Wrap" />
+                                <TextBlock Text="{x:Static res:Strings.AiAdvancedExpressionsHint}" TextWrapping="Wrap" Classes="muted" />
+                                <ComboBox ItemsSource="{Binding AdvancedExpressions}" SelectedItem="{Binding SelectedAdvancedExpression, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedExpressions}">
+                                    <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Summary}" TextWrapping="Wrap" /></DataTemplate></ComboBox.ItemTemplate>
+                                </ComboBox>
+                                <TextBlock Text="{Binding SelectedAdvancedExpression.Location}" TextWrapping="Wrap" Classes="muted" />
+                                <StackPanel Spacing="8" IsVisible="{Binding HasAdvancedExpressionLiteral}">
+                                    <TextBlock Text="{x:Static res:Strings.AiAdvancedExpressionLiteral}" TextWrapping="Wrap" />
+                                    <ComboBox ItemsSource="{Binding AdvancedExpressionLiterals}" SelectedItem="{Binding SelectedAdvancedExpressionLiteral, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedExpressionLiteral}">
+                                        <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Summary}" /></DataTemplate></ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <TextBox Text="{Binding AdvancedExpressionValue, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedConditionValue}" />
+                                </StackPanel>
+                                <StackPanel Spacing="8" IsVisible="{Binding HasAdvancedExpressionOperator}">
+                                    <TextBlock Text="{x:Static res:Strings.AiAdvancedExpressionOperator}" TextWrapping="Wrap" />
+                                    <ComboBox ItemsSource="{Binding AdvancedExpressionOperators}" SelectedItem="{Binding SelectedAdvancedExpressionOperator, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedExpressionOperator}">
+                                        <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Summary}" /></DataTemplate></ComboBox.ItemTemplate>
+                                    </ComboBox>
+                                    <ComboBox ItemsSource="{Binding AdvancedExpressionOperatorChoices}" SelectedItem="{Binding AdvancedExpressionOperatorValue, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedExpressionOperator}" />
+                                </StackPanel>
+                                <Button Classes="primaryAction" Content="{x:Static res:Strings.AiAdvancedExpressionApply}" Click="Button_ApplyAdvancedExpression" IsEnabled="{Binding CanApplyAdvancedExpression}" />
+                                <TextBlock Text="{Binding AdvancedExpressionStatus}" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" />
+                            </StackPanel>
+                        </Border>
+                        <Grid ColumnDefinitions="*,Auto,Auto">
+                            <StackPanel Spacing="3">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_privs_e_battlevars_f011eff0}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_escolha_a_var_que_quer_usar_como_eixo_o_foco_aba_92b07b8e}" />
+                            </StackPanel>
+                            <Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanCreatePhasePrivateVarLab}" Click="Button_CreateFreePrivateVarLab" Content="{x:Static res:Strings.CommonPlusPrivateVar}" />
+                            <Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_RefreshPhaseRotationAudit" Content="{x:Static res:Strings.CommonReaudit}" />
+                        </Grid>
+                        <ListBox AutoScrollToSelectedItem="False" MinHeight="280" MaxHeight="360" ItemsSource="{Binding PhaseVariableAudits}" SelectedItem="{Binding SelectedPhaseVariableAudit, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedVariables}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <StackPanel Spacing="4">
+                                                <TextBlock FontWeight="SemiBold" Text="{Binding VariableName}" TextWrapping="Wrap" />
+                                                <TextBlock Classes="sectionLabel" Text="{Binding AliasLabel}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                <TextBlock Classes="muted" Text="{Binding EvidenceSummary}" TextWrapping="Wrap" />
+                                                <TextBlock Classes="muted" Text="{Binding FlowSummary}" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="5" HorizontalAlignment="Right">
+                                                <Border Padding="7,3" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="6">
+                                                    <TextBlock FontWeight="SemiBold" FontSize="12" Text="{Binding Badge}" TextWrapping="Wrap" />
+                                                </Border>
+                                                <TextBlock Classes="sectionLabel" HorizontalAlignment="Right" Text="{Binding StorageLabel}" TextWrapping="Wrap" />
+                                                <TextBlock Classes="muted" HorizontalAlignment="Right" Text="{Binding OffsetSummary}" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                            <StackPanel Spacing="6">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_var_selecionada_27399f44}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <TextBlock FontWeight="SemiBold" Text="{Binding SelectedPhaseVariableAudit.VariableName}" TextWrapping="Wrap" />
+                                <TextBlock Classes="sectionLabel" Text="{Binding SelectedPhaseVariableAudit.VariableIdLabel}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.ActualVariableIdLabel}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.IndexLabel}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.StorageLabel}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.WorkerCoverageSummary}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.Recommendation}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonVarAlias}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <TextBox Watermark="{x:Static res:Strings.CommonExCounterHit}" Text="{Binding PhaseVarAliasInput, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonExCounterHit}" />
+                                    <Button Grid.Column="1" Margin="8,0,0,0" Classes="primaryAction" IsEnabled="{Binding CanSavePhaseVarAlias}" Click="Button_SavePhaseVarAlias" Content="{x:Static res:Strings.ActionSave}" />
+                                    <Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanSavePhaseVarAlias}" Click="Button_ClearPhaseVarAlias" Content="{x:Static res:Strings.CommonClear}" />
+                                </Grid>
+                                <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseVarAliasSummary}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonAuthorTemplateId}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <TextBox Watermark="{x:Static res:Strings.CommonEx6Or0x64}" Text="{Binding PhaseVarAuthoringIndexInput, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonEx6Or0x64}" />
+                                    <Button Grid.Column="1" Margin="8,0,0,0" Classes="primaryAction" IsEnabled="{Binding CanSavePhaseVarAuthoringIndex}" Click="Button_SavePhaseVarAuthoringIndex" Content="{x:Static res:Strings.ActionSave}" />
+                                    <Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanSavePhaseVarAuthoringIndex}" Click="Button_ClearPhaseVarAuthoringIndex" Content="{x:Static res:Strings.CommonUseReal}" />
+                                </Grid>
+                                <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseVarAuthoringIndexSummary}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_foco_da_var_selecionada_0fdb3e2e}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AdvancedVariableFocusSummary}" />
+                                <ListBox AutoScrollToSelectedItem="False" ItemsSource="{Binding AdvancedVariableFocusRows}" SelectedItem="{Binding SelectedAdvancedVariableFocusRow, Mode=TwoWay}" MaxHeight="340" IsVisible="{Binding HasAdvancedVariableFocusRows}" ItemTemplate="{StaticResource AdvancedVariableFocusRowTemplate}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedVariableUses}" />
+                                <TextBlock Classes="muted" TextWrapping="Wrap" IsVisible="{Binding ShowAdvancedVariableFocusPlaceholder}" Text="{Binding AdvancedVariableFocusSummary}" />
+                            </StackPanel>
+                        </Border>
+                        <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8" ToolTip.Tip="{x:Static res:Strings.U_familia_complexa_em_foco_o_tipo_de_pacote_detect_447f8b1f}" IsVisible="{Binding HasSelectedAdvancedPhaseUnit}">
+                            <StackPanel Spacing="10">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <StackPanel Spacing="3">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_familia_editabilidade_925b1410}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding SelectedAdvancedPhaseUnit.FamilyLabel}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                    <Border Grid.Column="1" Padding="8,3" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="6">
+                                        <TextBlock FontSize="12" FontWeight="SemiBold" Text="{Binding SelectedAdvancedPhaseUnit.CapabilityLabel}" TextWrapping="Wrap" />
+                                    </Border>
+                                </Grid>
+                                <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedAdvancedPhaseUnit.FamilySummary}" />
+                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" IsVisible="{Binding HasActiveFocus}">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Spacing="2">
+                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_active_focus_d59334a6}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding ActiveFocusSummary}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <Button Grid.Column="1" Classes="secondaryAction" Content="{x:Static res:Strings.U_clear_focus_91699d35}" Click="Button_ClearAdvancedFocus" Margin="10,0,0,0" VerticalAlignment="Top" />
+                                    </Grid>
+                                </Border>
+                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_o_que_ja_edita_hoje_ef8a805d}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedAdvancedPhaseUnit.EditabilitySummary}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_condicoes_thresholds_7d06d272}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" Text="{Binding SelectedAdvancedPhaseUnit.ConditionEditingSummary}" />
+                                        <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" IsVisible="{Binding SelectedAdvancedPhaseUnit.HasThresholdSummary}" Text="{Binding SelectedAdvancedPhaseUnit.ThresholdSummary}" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="{x:Static res:Strings.AiAdvancedDraft}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="12" Margin="0,12,0,0">
+                        <TextBlock Text="{x:Static res:Strings.AiAdvancedDraftHint}" TextWrapping="Wrap" Classes="muted" />
+                        <Expander Header="{x:Static res:Strings.AiAdvancedConditions}" IsExpanded="False">
+                            <Border Padding="12" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8">
+                                <StackPanel Spacing="10">
+                                    <StackPanel Spacing="3">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_regra_de_ativacao_do_draft_f19b1273}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_aqui_a_condicao_entra_como_parte_do_fluxo_da_rot_779af16a}" />
+                                    </StackPanel>
+                                    <WrapPanel>
+                                        <Button Margin="0,0,8,8" Classes="primaryAction" Click="Button_AddPhaseConditionClause" Content="{x:Static res:Strings.CommonPlusCondition}" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding CanRemovePhaseConditionClause}" Click="Button_RemovePhaseConditionClause" Content="{x:Static res:Strings.CommonRemove}" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_ClearPhaseConditionClauses" Content="{x:Static res:Strings.CommonClearLower}" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_ValidatePhaseMultivarCondition" Content="{x:Static res:Strings.U_validar_ced1293d}" />
+                                        <Button Margin="0,0,8,8" Classes="primaryAction" Click="Button_AssignPhaseConditionToSelectedStep" Content="{x:Static res:Strings.U_aplicar_no_draft_9ea77f4a}" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction accentProtect" IsVisible="{Binding CanSeedPhaseConditionFromAdvancedFocus}" Click="Button_SeedPhaseConditionFromAdvancedFocus" Content="{x:Static res:Strings.U_usar_guard_desta_rota_5f0f6047}" />
+                                    </WrapPanel>
+                                    <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_draft_editavel_desta_rota_66dc5b68}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding AdvancedDraftSelectionSummary}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AdvancedDraftSelectionDetail}" />
+                                            <WrapPanel>
+                                                <Button Margin="0,0,8,8" Classes="secondaryAction accentProtect" Click="Button_AddAdvancedCommonPhaseDraft" Content="{x:Static res:Strings.CommonPlusCommonPhase}" />
+                                                <Button Margin="0,0,8,8" Classes="secondaryAction accentProtect" IsEnabled="{Binding CanAddPhaseFinalStep}" Click="Button_AddAdvancedFinalPhaseDraft" Content="{x:Static res:Strings.CommonPlusLastPhase}" />
+                                                <Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding CanRemovePhaseDraftStep}" Click="Button_RemoveAdvancedSelectedPhaseDraft" Content="{x:Static res:Strings.CommonRemovePhase}" />
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </Border>
+                                    <ListBox AutoScrollToSelectedItem="False" MinHeight="52" MaxHeight="260" ItemsSource="{Binding PhaseConditionClauses}" SelectedItem="{Binding SelectedPhaseConditionClause, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedConditions}">
+                                        <ListBox.ItemsPanel>
+                                            <ItemsPanelTemplate>
+                                                <WrapPanel />
+                                            </ItemsPanelTemplate>
+                                        </ListBox.ItemsPanel>
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Margin="0,0,10,8" Padding="{DynamicResource SpacingSm}" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                    <StackPanel Spacing="6">
+                                                        <TextBlock Classes="sectionLabel" Text="{Binding Label}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                        <WrapPanel>
+                                                            <ComboBox Width="72" Margin="0,0,8,8" ItemsSource="{Binding JoinOptions}" SelectedItem="{Binding Join, Mode=TwoWay}" IsEnabled="{Binding JoinEnabled}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedConditionJoin}" />
+                                                            <ComboBox Width="212" Margin="0,0,8,8" ItemsSource="{Binding VariableOptions}" SelectedItem="{Binding SelectedVariable, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedVariables}" />
+                                                            <ComboBox Width="72" Margin="0,0,8,8" ItemsSource="{Binding OperatorOptions}" SelectedItem="{Binding Operator, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedComparison}" />
+                                                            <TextBox Width="86" Margin="0,0,8,8" Text="{Binding Value, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" Watermark="0" AutomationProperties.Name="0" />
+                                                        </WrapPanel>
+                                                    </StackPanel>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHumanPreview}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding PhaseConditionPreview}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonShortTechnicalValidation}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseConditionTechnicalSummary}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_como_isso_conversa_com_a_rota_em_foco_eded3a7a}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AdvancedConditionContextSummary}" />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </Expander>
+                        <Border Padding="{DynamicResource SpacingMd}" Classes="card">
+                            <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                                <StackPanel Spacing="12">
+                                    <StackPanel Spacing="3">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAdvancedDraft}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.AiAdvancedDraftHint}" />
+                                        <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding PhaseDraftCounterSummary}" />
+                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AdvancedDraftSelectionDetail}" />
+                                    </StackPanel>
+                                    <WrapPanel>
+                                        <Button Margin="0,0,8,4" Classes="primaryAction" Click="Button_AddAdvancedCommonPhaseDraft" Content="{x:Static res:Strings.CommonPlusCommonPhase}" />
+                                        <Button Margin="0,0,8,4" Classes="secondaryAction" IsEnabled="{Binding CanAddPhaseFinalStep}" Click="Button_AddAdvancedFinalPhaseDraft" Content="{x:Static res:Strings.CommonPlusLastPhase}" />
+                                        <Button Classes="secondaryAction" IsEnabled="{Binding CanRemovePhaseDraftStep}" Click="Button_RemoveAdvancedSelectedPhaseDraft" Content="{x:Static res:Strings.CommonRemovePhase}" Margin="0,0,8,4" />
+                                    </WrapPanel>
+                                </StackPanel>
+                                <ListBox AutoScrollToSelectedItem="False" Grid.Row="1" Margin="0,12,0,0" ItemsSource="{Binding PhaseDraftSteps}" SelectedItem="{Binding SelectedPhaseDraftStep, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedDraft}">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,10,8" Padding="{DynamicResource SpacingMd}" MinWidth="190" MaxWidth="245" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                <StackPanel Spacing="4">
+                                                    <TextBlock Classes="sectionLabel" Text="{Binding StepLabel}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                    <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                                                    <TextBlock Classes="sectionLabel" Text="{Binding CounterRuleSummary}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                    <TextBlock Classes="muted" Text="{Binding AdvanceRuleSummary}" TextWrapping="Wrap" />
+                                                    <TextBlock Classes="muted" Text="{Binding Subtitle}" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Border Grid.Row="1" Margin="0,12,0,0" Padding="14" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" IsVisible="{Binding IsCommonPhaseDraftEmpty}">
+                                    <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_nenhuma_fase_montada_a_leitura_estrutural_acima__67790fd9}" />
+                                </Border>
+                                <Grid Grid.Row="2" ColumnDefinitions="*" Margin="0,8,0,0" RowDefinitions="Auto,Auto">
+                                    <Border Padding="{DynamicResource SpacingMd}" Margin="0,0,0,16" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" Grid.Column="0" Grid.Row="0">
+                                        <StackPanel Spacing="0">
+                                            <StackPanel Spacing="8" VerticalAlignment="Top" IsVisible="{Binding ShowPhaseDraftSelectionPlaceholder}">
+                                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSelectionEditor}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{x:Static res:Strings.CommonSelectSimplePhase}" />
+                                                <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_no_avancado_este_editor_comum_convive_com_a_rota_47ab5694}" />
+                                            </StackPanel>
+                                            <StackPanel Spacing="9" IsVisible="{Binding ShowDirectPhaseDraftEditor}">
+                                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEditSelectedPhase}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.CommonCategoryLower}" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" />
+                                                    <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding AutomationAbilityCategories}" SelectedItem="{Binding SelectedAbilityCategory, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonCategory}" />
+                                                </Grid>
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <TextBox Watermark="{x:Static res:Strings.CommonSearchAbilityByHex}" Text="{Binding AbilitySearch, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonSearchAbilityByHex}" />
+                                                    <TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding AbilityFilterSummary}" TextWrapping="Wrap" />
+                                                </Grid>
+                                                <ComboBox HorizontalAlignment="Stretch" MaxDropDownHeight="320" ItemsSource="{Binding PhaseAbilityOptions}" SelectedItem="{Binding SelectedPhaseAbility, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedActions}">
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Display}" TextWrapping="Wrap" />
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.CommonPhaseTrigger}" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" />
+                                                    <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding PhaseTriggerOptions}" SelectedItem="{Binding SelectedPhaseDraftStep.SelectedTriggerOption, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonPhaseTrigger}">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+                                                </Grid>
+                                                <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedPhaseDraftStep.TriggerSummary}" />
+                                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                    <StackPanel Spacing="8">
+                                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonAbilityPhaseCondition}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                        <TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding SelectedPhaseDraftStep.GuardModeSummary}" />
+                                                        <Grid ColumnDefinitions="*,72,95,Auto,Auto">
+                                                            <ComboBox ItemsSource="{Binding PhaseVariableAudits}" SelectedItem="{Binding SelectedPhaseStepGuardVariableAudit, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedVariables}" />
+                                                            <ComboBox Grid.Column="1" Margin="8,0,0,0" ItemsSource="{Binding PhaseConditionOperators}" SelectedItem="{Binding PhaseStepGuardOperator, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedComparison}" />
+                                                            <TextBox Grid.Column="2" Margin="8,0,0,0" Text="{Binding PhaseStepGuardValue, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" Watermark="0" AutomationProperties.Name="0" />
+                                                            <Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_ApplySimplePhaseCondition" Content="{x:Static res:Strings.CommonUseCondition}" />
+                                                            <Button Grid.Column="4" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_ClearSimplePhaseCondition" Content="{x:Static res:Strings.CommonUseFallback}" />
+                                                        </Grid>
+                                                        <TextBlock TextWrapping="Wrap" Text="{Binding PhaseStepGuardPreview}" />
+                                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseStepGuardTechnicalSummary}" />
+                                                    </StackPanel>
+                                                </Border>
+                                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                    <StackPanel Spacing="8">
+                                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonExtraAbilityCondition}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                        <Grid ColumnDefinitions="Auto,80,Auto,*">
+                                                            <CheckBox Content="{x:Static res:Strings.CommonRequireHpLess}" IsChecked="{Binding SelectedPhaseDraftStep.UseHpBelowGuard, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonRequireHpLess}" />
+                                                            <TextBox Grid.Column="1" Margin="8,0,0,0" Text="{Binding SelectedPhaseDraftStep.HpBelowPercentText, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" Watermark="50" AutomationProperties.Name="50" />
+                                                            <TextBlock Grid.Column="2" Classes="muted" VerticalAlignment="Center" Margin="6,0,0,0" Text="%" TextWrapping="Wrap" />
+                                                            <TextBlock Grid.Column="3" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedPhaseDraftStep.HpGuardSummary}" />
+                                                        </Grid>
+                                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_use_o_construtor_multivar_livre_do_avancado_para_faebd11c}" />
+                                                    </StackPanel>
+                                                </Border>
+                                                <Grid ColumnDefinitions="Auto,*">
+                                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.CommonNewAbilityTarget}" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" />
+                                                    <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" ItemsSource="{Binding AuthoringTargetOptions}" SelectedItem="{Binding SelectedPhaseDraftStep.SelectedTarget, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" />
+                                                </Grid>
+                                                <Grid ColumnDefinitions="Auto,Auto,80,*">
+                                                    <CheckBox Content="{x:Static res:Strings.CommonMaybe}" IsChecked="{Binding SelectedPhaseDraftStep.UseChance, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonMaybe}" />
+                                                    <TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Margin="10,0,6,0" Text="{x:Static res:Strings.CommonChance1In}" TextWrapping="Wrap" />
+                                                    <TextBox Grid.Column="2" Text="{Binding SelectedPhaseDraftStep.ChanceKText, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" Watermark="2" AutomationProperties.Name="2" />
+                                                    <TextBlock Grid.Column="3" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0" TextWrapping="Wrap" Text="{Binding SelectedPhaseDraftStep.ChanceSummary}" />
+                                                </Grid>
+                                                <CheckBox Content="{x:Static res:Strings.CommonStopIfPhaseRuns}" IsChecked="{Binding SelectedPhaseDraftStep.StopHere, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonStopIfPhaseRuns}" />
+                                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                    <StackPanel Spacing="8">
+                                                        <CheckBox Content="{x:Static res:Strings.CommonForbiddenRiteAfter}" IsChecked="{Binding SelectedPhaseDraftStep.UseForbiddenRite, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonForbiddenRiteAfter}" />
+                                                        <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,90">
+                                                            <TextBlock Classes="muted" Text="{x:Static res:Strings.CommonTargetLower}" VerticalAlignment="Center" Margin="0,0,8,0" TextWrapping="Wrap" />
+                                                            <ComboBox Grid.Column="1" ItemsSource="{Binding PhaseForbiddenRiteTargets}" SelectedItem="{Binding SelectedPhaseDraftStep.ForbiddenTarget, Mode=TwoWay}" IsEnabled="{Binding SelectedPhaseDraftStep.UseForbiddenRite}" AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" />
+                                                            <TextBlock Grid.Column="2" Classes="muted" Text="{x:Static res:Strings.CommonStatusLower}" VerticalAlignment="Center" Margin="10,0,8,0" TextWrapping="Wrap" />
+                                                            <ComboBox Grid.Column="3" ItemsSource="{Binding ForbiddenStatusPresets}" SelectedItem="{Binding SelectedPhaseDraftStep.ForbiddenStatus, Mode=TwoWay}" IsEnabled="{Binding SelectedPhaseDraftStep.UseForbiddenRite}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedStatusEffect}">
+                                                                <ComboBox.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock Text="{Binding Display}" TextWrapping="Wrap" />
+                                                                    </DataTemplate>
+                                                                </ComboBox.ItemTemplate>
+                                                            </ComboBox>
+                                                            <TextBlock Grid.Column="4" Classes="muted" Text="{x:Static res:Strings.CommonValue}" VerticalAlignment="Center" Margin="10,0,8,0" TextWrapping="Wrap" />
+                                                            <TextBox Grid.Column="5" Text="{Binding SelectedPhaseDraftStep.ForbiddenValue, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" IsEnabled="{Binding SelectedPhaseDraftStep.UseForbiddenRite}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedConditionValue}" />
+                                                        </Grid>
+                                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedPhaseDraftStep.ForbiddenRiteSummary}" />
+                                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_isto_continua_adicionando_writechrproperty_depoi_fa28750a}" />
+                                                    </StackPanel>
+                                                </Border>
+                                                <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                    <StackPanel Spacing="8">
+                                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPhaseVarChanges}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                        <Grid ColumnDefinitions="Auto,*,Auto,70,Auto,70,Auto,Auto">
+                                                            <TextBlock Classes="muted" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonVar}" TextWrapping="Wrap" />
+                                                            <ComboBox Grid.Column="1" Margin="8,0" ItemsSource="{Binding PhaseVariableAudits}" SelectedItem="{Binding SelectedPhaseAdvanceVariableAudit, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedVariables}" />
+                                                            <TextBlock Grid.Column="2" Classes="muted" VerticalAlignment="Center" Text="+" TextWrapping="Wrap" />
+                                                            <TextBox Grid.Column="3" Text="{Binding PhaseAdvanceMin, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedMinimum}" />
+                                                            <TextBlock Grid.Column="4" Classes="muted" VerticalAlignment="Center" Margin="8,0" Text="{x:Static res:Strings.CommonUpToPlus}" TextWrapping="Wrap" />
+                                                            <TextBox Grid.Column="5" Text="{Binding PhaseAdvanceMax, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedMaximum}" />
+                                                            <Button Grid.Column="6" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_AddPhaseVarAdvance" Content="{x:Static res:Strings.CommonPlusAdvance}" />
+                                                            <Button Grid.Column="7" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_AddPhaseVarReset" Content="{x:Static res:Strings.CommonResetToZero}" />
+                                                        </Grid>
+                                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseAdvanceTargetSummary}" />
+                                                        <ListBox AutoScrollToSelectedItem="False" MinHeight="40" MaxHeight="120" ItemsSource="{Binding SelectedPhaseDraftStep.VarAdvances}" SelectedItem="{Binding SelectedPhaseVarAdvance, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonPhaseVarChanges}">
+                                                            <ListBox.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" />
+                                                                </DataTemplate>
+                                                            </ListBox.ItemTemplate>
+                                                        </ListBox>
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                            <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_opcional_cada_fase_pode_subir_ou_resetar_nenhuma_2229239a}" />
+                                                            <Button Grid.Column="1" Classes="secondaryAction" IsEnabled="{Binding CanRemovePhaseVarAdvance}" Click="Button_RemovePhaseVarAdvance" Content="{x:Static res:Strings.CommonRemoveAdvance}" />
+                                                        </Grid>
+                                                    </StackPanel>
+                                                </Border>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Grid.Column="0" Padding="{DynamicResource SpacingMd}" Margin="0,0,0,16" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" Grid.Row="1">
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHumanPreview}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                            <TextBlock TextWrapping="Wrap" Text="{Binding PhaseRotationPreview}" />
+                                            <TextBlock Classes="muted" TextWrapping="Wrap" Text="{x:Static res:Strings.U_writer_v1_dentro_do_avancado_guarda_a_fase_por_c_925d2d9a}" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="{x:Static res:Strings.AiAdvancedEvidence}">
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                    <StackPanel Spacing="12" Margin="0,12,0,0">
+                        <TextBlock Text="{x:Static res:Strings.AiAdvancedEvidenceHint}" TextWrapping="Wrap" Classes="muted" />
+                        <Border Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" ToolTip.Tip="{x:Static res:Strings.U_notas_honestas_limites_reais_desta_familia_indir_d07ea3a7}" IsVisible="{Binding HasSelectedAdvancedPhaseUnit}">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAdvancedCoverageTitle}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding SelectedAdvancedPhaseUnit.NotesSummary}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" Text="{x:Static res:Strings.U_a_autoria_segura_atual_cobre_clone_estrutural_de_fd54b400}" />
+                            </StackPanel>
+                        </Border>
+                        <Expander Header="{x:Static res:Strings.U_leituras_auxiliares_e_evidencias_54550694}" IsExpanded="True" HorizontalAlignment="Stretch">
+                            <StackPanel Spacing="12">
+                                <Border Padding="{DynamicResource SpacingMd}" Classes="card">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseVariableEvidenceSummary}" />
+                                        <ListBox AutoScrollToSelectedItem="False" ItemsSource="{Binding PhaseVariableEvidenceBlocks}" MinHeight="72" AutomationProperties.Name="{x:Static res:Strings.AiAdvancedEvidence}">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Margin="0,0,0,8" Padding="{DynamicResource SpacingMd}" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+                                                        <Grid ColumnDefinitions="*,Auto">
+                                                            <StackPanel Spacing="4">
+                                                                <TextBlock FontWeight="SemiBold" Text="{Binding HookLabel}" TextWrapping="Wrap" />
+                                                                <TextBlock Classes="sectionLabel" Text="{Binding GuardSummary}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                <TextBlock Text="{Binding EffectSummary}" TextWrapping="Wrap" IsVisible="{Binding HasEffectSummary}" />
+                                                                <StackPanel Spacing="2" IsVisible="{Binding HasWriteSummary}">
+                                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWriteChangeState}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                    <TextBlock Text="{Binding WriteSummary}" TextWrapping="Wrap" />
+                                                                </StackPanel>
+                                                                <StackPanel Spacing="2" IsVisible="{Binding HasConsumerSummary}">
+                                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonConsumedBy}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                    <TextBlock Text="{Binding ConsumerSummary}" TextWrapping="Wrap" />
+                                                                </StackPanel>
+                                                                <StackPanel Spacing="2" IsVisible="{Binding HasNextStateSummary}">
+                                                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonNextStatePt}" Foreground="{DynamicResource TextPrimaryBrush}" TextWrapping="Wrap" />
+                                                                    <TextBlock Text="{Binding NextStateSummary}" TextWrapping="Wrap" />
+                                                                </StackPanel>
+                                                                <TextBlock Classes="muted" Text="{Binding OffsetSummary}" TextWrapping="Wrap" />
+                                                                <TextBlock Classes="muted" Text="{Binding TechnicalSummary}" TextWrapping="Wrap" />
+                                                            </StackPanel>
+                                                            <Border Grid.Column="1" Margin="10,0,0,0" Padding="7,3" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="6" VerticalAlignment="Top">
+                                                                <TextBlock FontSize="12" FontWeight="SemiBold" Text="{Binding Badge}" TextWrapping="Wrap" />
+                                                            </Border>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </StackPanel>
+                                </Border>
+                                <ItemsControl ItemTemplate="{StaticResource RouteCardTemplate}" ItemsSource="{Binding PhaseConditionPreviewRouteCards}" />
+                                <ItemsControl ItemTemplate="{StaticResource RouteCardTemplate}" ItemsSource="{Binding PhaseVariableEvidenceRouteCards}" />
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+        <Border Grid.Row="2" Padding="12" Margin="0,12,0,0" Classes="card">
+            <StackPanel Spacing="8">
+                <TextBlock Text="{Binding AdvancedWorkspaceFeedback}" TextWrapping="Wrap" Classes="muted" IsVisible="{Binding HasAdvancedWorkspaceFeedback}" AutomationProperties.LiveSetting="Polite" />
+                <TextBlock Text="{Binding PhaseRotationApplySummary}" TextWrapping="Wrap" Classes="muted" IsVisible="{Binding IsAdvancedDraftTab}" />
+                <WrapPanel HorizontalAlignment="Right">
+                    <Button Content="{x:Static res:Strings.AiAdvancedApplyDraft}" Classes="primaryAction" Click="Button_ApplyPhaseRotationDraft" IsVisible="{Binding IsAdvancedDraftTab}" IsEnabled="{Binding CanApplyAdvancedDraft}" Margin="0,0,8,4" />
+                    <StackPanel Orientation="Horizontal" IsVisible="{Binding IsAdvancedRoutesTab}">
+                        <Button Content="{x:Static res:Strings.AiAdvancedCloneRoute}" Classes="secondaryAction" Click="Button_CloneAdvancedPhaseUnitRoute" IsEnabled="{Binding CanCloneSelectedAdvancedPhaseUnit}" Margin="0,0,8,4" />
+                        <Button Content="{x:Static res:Strings.AiAdvancedEditRoute}" Classes="primaryAction" Click="Button_OpenAdvancedPhaseUnitEditor" Tag="{Binding SelectedAdvancedPhaseUnit.UnitId}" IsEnabled="{Binding CanEditAdvancedRoute}" Margin="0,0,8,4" />
+                    </StackPanel>
+                    <Button Content="{x:Static res:Strings.CommonClose}" Classes="secondaryAction" Click="Button_Close" Margin="0,0,0,4" />
+                </WrapPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

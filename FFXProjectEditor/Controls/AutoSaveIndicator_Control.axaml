@@ -1,0 +1,20 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             x:Class="FFXProjectEditor.AutoSaveIndicator_Control"
+             mc:Ignorable="d"
+             d:DesignWidth="180"
+             d:DesignHeight="48">
+	<Border Name="RootBorder" Classes="autosaveChip" IsVisible="False">
+		<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+			<Border Classes="autosaveOrb">
+				<Image Name="IndicatorImage" Width="28" Height="28" Stretch="Uniform" />
+			</Border>
+			<TextBlock Name="IndicatorText"
+			           Classes="autosaveLabel"
+			           VerticalAlignment="Center"
+			           Text="Auto-save" />
+		</StackPanel>
+	</Border>
+</UserControl>

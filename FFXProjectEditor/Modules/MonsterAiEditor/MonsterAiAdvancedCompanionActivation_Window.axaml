@@ -1,0 +1,183 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="960"
+        d:DesignHeight="760"
+        x:Class="FFXProjectEditor.MonsterAiAdvancedCompanionActivation_Window"
+        Title="Editor battle-backed do m213"
+        Width="960"
+        Height="760"
+        MinWidth="820"
+        MinHeight="620">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,*,Auto">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_ai_m213_summon_handoff_appear_d27a26d1}" />
+					<TextBlock Classes="cardTitle" Text="{Binding BattleId}" />
+					<TextBlock Classes="muted" Text="{Binding BattleTokenLabel}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding FormationSummary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding CoverageLabel}" TextWrapping="Wrap" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Margin="0,14,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="12">
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonHonestRead}"
+							           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<TextBlock Text="{Binding HumanSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding Guardrail}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding WriterPolicy}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentCycleFillBrush}"
+					        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_escopo_do_writer_2f2f10b8}"
+							           Foreground="{DynamicResource AccentCycleBorderBrush}" />
+							<TextBlock TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_este_popup_mexe_apenas_nos_dois_companions_prese_6c2772d3}" />
+						</StackPanel>
+					</Border>
+
+					<Grid ColumnDefinitions="*,*" IsEnabled="{Binding CanEditPackage}">
+						<Border Grid.Column="0"
+						        Padding="{DynamicResource SpacingMd}"
+						        Background="{DynamicResource AccentShellFillBrush}"
+						        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+						        BorderThickness="1"
+						        CornerRadius="7">
+							<StackPanel Spacing="8">
+								<TextBlock Classes="sectionLabel"
+								           Text="{x:Static res:Strings.U_companion_slot1_monster_01_1e20f17a}"
+								           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+								<TextBlock Classes="muted" Text="{Binding Slot1CurrentLabel}" TextWrapping="Wrap" />
+								<ComboBox ItemsSource="{Binding CompanionOptions}"
+								          SelectedItem="{Binding SelectedSlot1Monster, Mode=TwoWay}"
+								          MaxDropDownHeight="320">
+									<ComboBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding Display}" TextWrapping="Wrap" />
+										</DataTemplate>
+									</ComboBox.ItemTemplate>
+								</ComboBox>
+							</StackPanel>
+						</Border>
+
+						<Border Grid.Column="1"
+						        Margin="10,0,0,0"
+						        Padding="{DynamicResource SpacingMd}"
+						        Background="{DynamicResource AccentShellFillBrush}"
+						        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+						        BorderThickness="1"
+						        CornerRadius="7">
+							<StackPanel Spacing="8">
+								<TextBlock Classes="sectionLabel"
+								           Text="{x:Static res:Strings.U_companion_slot2_monster_02_7ba86bfa}"
+								           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+								<TextBlock Classes="muted" Text="{Binding Slot2CurrentLabel}" TextWrapping="Wrap" />
+								<ComboBox ItemsSource="{Binding CompanionOptions}"
+								          SelectedItem="{Binding SelectedSlot2Monster, Mode=TwoWay}"
+								          MaxDropDownHeight="320">
+									<ComboBox.ItemTemplate>
+										<DataTemplate>
+											<TextBlock Text="{Binding Display}" TextWrapping="Wrap" />
+										</DataTemplate>
+									</ComboBox.ItemTemplate>
+								</ComboBox>
+							</StackPanel>
+						</Border>
+					</Grid>
+
+					<TextBlock Classes="muted"
+					           IsVisible="{Binding ShowReadOnlyWarning}"
+					           Text="{x:Static res:Strings.U_este_package_nao_fechou_o_host_battle_reconhecid_b569241f}"
+					           TextWrapping="Wrap" />
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentShellFillBrush}"
+					        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="7">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonPreviewApply}"
+							           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBox Text="{Binding PreviewSummary}"
+							         IsReadOnly="True"
+							         AcceptsReturn="True"
+							         TextWrapping="Wrap"
+							         MinHeight="90"
+							         FontFamily="Cascadia Mono,Consolas,Monospace" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentExperimentalFillBrush}"
+					        BorderBrush="{DynamicResource AccentExperimentalBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_notas_do_package_69f539f9}"
+							           Foreground="{DynamicResource AccentExperimentalBorderBrush}" />
+							<TextBlock Classes="muted"
+							           Foreground="{DynamicResource AccentExperimentalForegroundBrush}"
+							           Text="{Binding NotesSummary}"
+							           TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AdvancedCompanionActivationApplySummary}" />
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+		<Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="*,Auto,Auto">
+			<TextBlock Classes="muted"
+			           VerticalAlignment="Center"
+			           Text="{x:Static res:Strings.U_writer_battle_backed_m213_companion_slots_da_for_d0f67308}" />
+			<Button Grid.Column="1"
+			        Margin="12,0,8,0"
+			        Classes="secondaryAction accentProtect"
+			        Click="Button_Apply"
+			        IsEnabled="{Binding CanApply}"
+			        Content="{x:Static res:Strings.U_aplicar_companions_8e6d74f1}" />
+			<Button Grid.Column="2"
+			        Classes="secondaryAction"
+			        Click="Button_Close"
+			        Content="{x:Static res:Strings.CommonClose}" />
+		</Grid>
+	</Grid>
+</Window>

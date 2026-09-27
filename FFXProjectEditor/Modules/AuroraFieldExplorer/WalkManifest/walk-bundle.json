@@ -1,0 +1,59 @@
+{
+    "schemaVersion":  1,
+    "source":  "field-scout",
+    "publishedAt":  "2026-07-16T19:08:03.5697665-03:00",
+    "sessionPath": null,
+    "workRoot": null,
+    "fieldCount":  4,
+    "stats":  {
+                  "sceneNodesPlaced":  0,
+                  "chestSpawns":  0,
+                  "chrSpawns":  63,
+                  "npcSpawns":  63,
+                  "triggerSpawns":  0,
+                  "playerTraceSamples":  1,
+                  "exportsCopied":  0
+              },
+    "fields":  [
+                   {
+                       "areaPath":  "map/guad/guad00",
+                       "shard":  "fields/guad_guad00.json",
+                       "sceneNodeCount":  0,
+                       "chestCount":  0,
+                       "chrSpawnCount":  0,
+                       "npcSpawnCount":  0,
+                       "triggerSpawnCount":  0,
+                       "mapExportPresent":  true
+                   },
+                   {
+                       "areaPath":  "map/kami/kami00",
+                       "shard":  "fields/kami_kami00.json",
+                       "sceneNodeCount":  0,
+                       "chestCount":  0,
+                       "chrSpawnCount":  0,
+                       "npcSpawnCount":  0,
+                       "triggerSpawnCount":  0,
+                       "mapExportPresent":  true
+                   },
+                   {
+                       "areaPath":  "map/titl/titl00",
+                       "shard":  "fields/titl_titl00.json",
+                       "sceneNodeCount":  0,
+                       "chestCount":  0,
+                       "chrSpawnCount":  0,
+                       "npcSpawnCount":  0,
+                       "triggerSpawnCount":  0,
+                       "mapExportPresent":  true
+                   },
+                   {
+                       "areaPath":  "map/titl/titl02",
+                       "shard":  "fields/titl_titl02.json",
+                       "sceneNodeCount":  0,
+                       "chestCount":  0,
+                       "chrSpawnCount":  0,
+                       "npcSpawnCount":  0,
+                       "triggerSpawnCount":  0,
+                       "mapExportPresent":  true
+                   }
+               ]
+}

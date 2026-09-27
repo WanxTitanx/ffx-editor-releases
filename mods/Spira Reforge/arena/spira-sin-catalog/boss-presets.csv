@@ -1,0 +1,10 @@
+# Boss-only SIN presets — NOT in the universal RNG pool. When Modo SIN is ON and the boss slot is infected,
+# assignment is FIXED (no random). Author per fight; can use richer primitives than universal retrocompat rules.
+#
+# id,name,maturity,threat,primitives,summary,legacy_proto_id
+# BOSS-m121,Spherimorph Sin Skin,design,3,ELEMENT + BUFF,Elemental mirror shell — TBD Macalania pilot,
+BOSS-GUADO-001,Botânico Guado,design,3,STATUS + BUFF + MACALANIA,Guado ranged support — Confusion volley on party + Haste self. Macalania Woods thematic: guardians of the temple path. AoE confusion pressure forces item/turn economy. T3 — packs pair, never solo.,
+BOSS-SEYMOUR-001,Seymour Maligno,design,4,MC + REFLECT + MACALANIA,Seymour — Macalania Temple. Multi-element magic (Fira/Thundara) + Reflect on self + Dispel on party. Thaumaturge pattern: spell rotation with Reflect uptime. T4 — reduced from the old T6 draft.,
+BOSS-SEYMOUR-FLUX-001,Seymour Flux,design,6,MC + REFLECT + GAGAZET,Seymour Flux — Mt. Gagazet. Separate T6 draft; retains the higher threat formerly shared with Seymour Maligno.,
+BOSS-SPECTRAL-KEEPER-001,Spectral Keeper,design,6,ZANARKAND + T6-PLACEHOLDER,Spectral Keeper — Zanarkand Dome. T6 boss placeholder; encounter-specific mechanics TBD.,
+BOSS-YUNALESCA-001,Yunalesca,design,7,ZANARKAND + T7-PLACEHOLDER,Yunalesca — Zanarkand Dome. T7 boss placeholder; three-phase mechanics TBD.,

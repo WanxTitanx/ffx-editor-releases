@@ -1,0 +1,236 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1280"
+             d:DesignHeight="860"
+             x:Class="FFXProjectEditor.SaveEditorCharacter_Control">
+
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Jarvis-UI (Sprint C 2026-06-20, OPT-C2): coluna master (Party/Aeons) agora num Expander
+             colapsável (ExpandDirection="Left", default expandido), mesmo padrão do MonsterAiEditor —
+             recolher devolve largura pras colunas densas de Stats/Abilities. -->
+        <Expander Grid.Column="0" IsExpanded="True" ExpandDirection="Left"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0" Margin="0,0,14,0">
+            <Expander.Header>
+                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPartyAeons}" />
+            </Expander.Header>
+            <Border Padding="14" Classes="card" MinWidth="260" MaxWidth="320">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPartyAeons}" />
+                    <TextBlock Classes="muted" Text="{Binding FileLabel}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" Text="{Binding FormatLabel}" />
+                    <ListBox ItemsSource="{Binding Characters}"
+                             SelectedItem="{Binding SelectedCharacter, Mode=TwoWay}"
+                             MinHeight="520">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Spacing="2" Margin="0,4">
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding Label}" />
+                                    <TextBlock Classes="muted" FontSize="11"
+                                               Text="{Binding Name, StringFormat='Name: {0}'}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </StackPanel>
+            </Border>
+        </Expander>
+
+        <ScrollViewer Grid.Column="1" HorizontalScrollBarVisibility="Disabled">
+            <StackPanel Spacing="12" IsEnabled="{Binding HasSession}">
+                <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                    <StackPanel Spacing="10">
+                        <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="Auto,Auto">
+                            <TextBlock Grid.Row="0" Grid.Column="0" Classes="sectionLabel" Text="{x:Static res:Strings.CommonCharacter}" />
+                            <ComboBox Grid.Row="1" Grid.Column="0" Margin="0,0,8,0"
+                                      ItemsSource="{Binding CharacterEditor.CharacterLabels}"
+                                      SelectedIndex="{Binding CharacterEditor.SelectedCharacterIndex, Mode=TwoWay}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Classes="sectionLabel" Text="{x:Static res:Strings.CommonName}" />
+                            <TextBox Grid.Row="1" Grid.Column="1" Margin="0,0,8,0" Text="{Binding CharacterEditor.Name, Mode=TwoWay}" />
+                            <TextBlock Grid.Row="0" Grid.Column="2" Classes="sectionLabel" Text="{x:Static res:Strings.U_activation_b9d36218}" />
+                            <ComboBox Grid.Row="1" Grid.Column="2" Margin="0,0,8,0"
+                                      ItemsSource="{Binding CharacterEditor.ActivationLabels}"
+                                      SelectedIndex="{Binding CharacterEditor.ActivationIndex, Mode=TwoWay}" />
+                            <TextBlock Grid.Row="0" Grid.Column="3" Classes="sectionLabel" Text="{x:Static res:Strings.U_overdrive_mode_569fabe9}" />
+                            <ComboBox Grid.Row="1" Grid.Column="3"
+                                      ItemsSource="{Binding CharacterEditor.OverdriveModeLabels}"
+                                      SelectedIndex="{Binding CharacterEditor.OverdriveModeIndex, Mode=TwoWay}" />
+                        </Grid>
+                        <WrapPanel>
+                            <Button Classes="secondaryAction" Margin="2" Click="BatchPerChar_Click" Tag="43">Get all OD modes</Button>
+                            <Button Classes="secondaryAction" Margin="2" Click="BatchPerChar_Click" Tag="44">Max stats</Button>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <Grid ColumnDefinitions="280,*,320">
+                    <StackPanel Grid.Column="0" Spacing="12" Margin="0,0,12,0">
+                        <Border Padding="14" Classes="card">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_party_60b18fc8}" />
+                                <ItemsControl ItemsSource="{Binding CharacterEditor.PartySlots}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid ColumnDefinitions="Auto,*" Margin="0,3">
+                                                <TextBlock VerticalAlignment="Center" MinWidth="48" Text="{Binding Label}" />
+                                                <ComboBox Grid.Column="1"
+                                                          ItemsSource="{Binding MemberLabels}"
+                                                          SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Padding="14" Classes="card" MaxHeight="360">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_overdrive_modes_df049e6a}" />
+                                <ScrollViewer MaxHeight="300">
+                                    <ItemsControl ItemsSource="{Binding CharacterEditor.OverdriveModes}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid ColumnDefinitions="*,70" Margin="0,2">
+                                                    <CheckBox Content="{Binding Label}" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+                                                    <TextBox Grid.Column="1" Watermark="{x:Static res:Strings.U_count_66e12969}"
+                                                             Text="{Binding Count, Mode=TwoWay}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Padding="14" Classes="card">
+                            <StackPanel Spacing="6">
+                                <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_all_characters_ffda5fdb}" />
+                                <WrapPanel>
+                                    <Button Classes="secondaryAction" Margin="2" Click="Batch_Click" Tag="7">Max all stats</Button>
+                                    <Button Classes="secondaryAction" Margin="2" Click="Batch_Click" Tag="8">Get all abilities</Button>
+                                    <Button Classes="secondaryAction" Margin="2" Click="Batch_Click" Tag="4">Get all overdrives</Button>
+                                    <Button Classes="secondaryAction" Margin="2" Click="Batch_Click" Tag="42">Get all OD modes</Button>
+                                    <Button Classes="secondaryAction" Margin="2" Click="Batch_Click" Tag="6">Remove from party</Button>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <Border Grid.Column="1" Padding="14" Classes="card" Margin="0,0,12,0">
+                        <StackPanel Spacing="10">
+                            <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.CommonStats}" />
+                            <Grid ColumnDefinitions="*,*">
+                                <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
+                                    <TextBlock Text="{x:Static res:Strings.CommonCurrentHp}" />
+                                    <TextBox Text="{Binding CharacterEditor.CurrentHp, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.CommonBaseHp}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseHp, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_strength_c345433c}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseStrength, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_magic_29e444c2}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseMagic, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_agility_c08caea2}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseAgility, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_evasion_52322dbe}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseEvasion, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_sphere_level_e32bf513}" />
+                                    <Grid ColumnDefinitions="*,Auto,*">
+                                        <TextBox Grid.Column="0" Text="{Binding CharacterEditor.SphereLevel, Mode=TwoWay}" />
+                                        <TextBlock Grid.Column="1" Margin="6,0" VerticalAlignment="Center" Text="/" />
+                                        <TextBox Grid.Column="2" Text="{Binding CharacterEditor.SphereLevelMax, Mode=TwoWay}" />
+                                    </Grid>
+                                    <TextBlock Text="{x:Static res:Strings.U_overdrive_gauge_c93e67fc}" />
+                                    <Grid ColumnDefinitions="*,Auto,*">
+                                        <TextBox Grid.Column="0" Text="{Binding CharacterEditor.OverdriveGauge, Mode=TwoWay}" />
+                                        <TextBlock Grid.Column="1" Margin="6,0" VerticalAlignment="Center" Text="/" />
+                                        <TextBox Grid.Column="2" Text="{Binding CharacterEditor.OverdriveGaugeMax, Mode=TwoWay}" />
+                                    </Grid>
+                                    <TextBlock Text="{x:Static res:Strings.U_poison_damage_1891528c}" />
+                                    <TextBox Text="{Binding CharacterEditor.PoisonDamagePercent, Mode=TwoWay}" />
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Spacing="6">
+                                    <TextBlock Text="{x:Static res:Strings.CommonCurrentMp}" />
+                                    <TextBox Text="{Binding CharacterEditor.CurrentMp, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.CommonBaseMp}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseMp, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_defense_d5d582e0}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseDefense, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_m_defense_1f9bfc3d}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseMagicDefense, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_luck_ccc00a40}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseLuck, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_base_accuracy_37c77db7}" />
+                                    <TextBox Text="{Binding CharacterEditor.BaseAccuracy, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_ability_points_040dbf1c}" />
+                                    <TextBox Text="{Binding CharacterEditor.AbilityPoints, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_enemies_defeated_8ba65ce8}" />
+                                    <TextBox Text="{Binding CharacterEditor.EnemiesDefeated, Mode=TwoWay}" />
+                                    <TextBlock Text="{x:Static res:Strings.U_affection_pc_e7eb0b29}" IsVisible="{Binding CharacterEditor.ShowAffection}" />
+                                    <TextBox Text="{Binding CharacterEditor.Affection, Mode=TwoWay}"
+                                             IsVisible="{Binding CharacterEditor.ShowAffection}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Padding="14" Classes="card" MaxHeight="620">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.TermAbilities}" />
+                            <ScrollViewer MaxHeight="500">
+                                <ItemsControl ItemsSource="{Binding CharacterEditor.Abilities}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Content="{Binding Label}" IsChecked="{Binding IsSet, Mode=TwoWay}" Margin="0,1" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                            <WrapPanel>
+                                <Button Classes="secondaryAction" Margin="2" Click="BatchPerChar_Click" Tag="1">Get all</Button>
+                                <Button Classes="secondaryAction" Margin="2" Click="BatchPerChar_Click" Tag="10">Remove all</Button>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*">
+                    <Border Grid.Column="0" Padding="14" Classes="card" MaxHeight="280" Margin="0,0,12,0">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_overdrives_all_a1e94b9b}" />
+                            <ScrollViewer MaxHeight="220">
+                                <ItemsControl ItemsSource="{Binding CharacterEditor.Overdrives}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Content="{Binding Label}" IsChecked="{Binding IsSet, Mode=TwoWay}" Margin="0,1" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1" Padding="14" Classes="card" MaxHeight="280">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_special_abilities_all_09070ceb}" />
+                            <ScrollViewer MaxHeight="220">
+                                <ItemsControl ItemsSource="{Binding CharacterEditor.SpecialAbilities}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <CheckBox Content="{Binding Label}" IsChecked="{Binding IsSet, Mode=TwoWay}" Margin="0,1" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <Button Classes="primaryAction" Click="Button_Apply">Apply character to buffer</Button>
+                </StackPanel>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

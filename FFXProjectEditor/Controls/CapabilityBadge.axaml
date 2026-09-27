@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="40"
+             x:Class="FFXProjectEditor.Controls.CapabilityBadge">
+	<UserControl.Styles>
+		<Style Selector="Border.badge">
+			<Setter Property="CornerRadius" Value="4" />
+			<Setter Property="Padding" Value="6,2,8,2" />
+			<Setter Property="BorderThickness" Value="1" />
+		</Style>
+		<!-- Evidence Colors -->
+		<Style Selector="Border.production">
+			<Setter Property="Background" Value="#142B24" />
+			<Setter Property="BorderBrush" Value="#2E7D63" />
+		</Style>
+		<Style Selector="Border.partial">
+			<Setter Property="Background" Value="#2B2514" />
+			<Setter Property="BorderBrush" Value="#8C7326" />
+		</Style>
+		<Style Selector="Border.needstesting">
+			<Setter Property="Background" Value="#2B1A14" />
+			<Setter Property="BorderBrush" Value="#8C4A26" />
+		</Style>
+		<Style Selector="Border.blocked">
+			<Setter Property="Background" Value="#2B1417" />
+			<Setter Property="BorderBrush" Value="#8C2633" />
+		</Style>
+		<Style Selector="Border.research">
+			<Setter Property="Background" Value="#1E142B" />
+			<Setter Property="BorderBrush" Value="#5C268C" />
+		</Style>
+	</UserControl.Styles>
+
+	<StackPanel Orientation="Horizontal" Spacing="6">
+		<Border Name="BadgeBorder" Classes="badge production">
+			<StackPanel Orientation="Horizontal" Spacing="4">
+				<TextBlock Name="IconText" Text="✓" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" VerticalAlignment="Center" FontWeight="Bold" />
+				<TextBlock Name="BadgeText" Text="{x:Static res:Strings.U_CapProduction}" Foreground="{DynamicResource TextPrimaryBrush}" FontSize="11" VerticalAlignment="Center" FontWeight="SemiBold" />
+			</StackPanel>
+		</Border>
+		<Border Name="ModeBorder" Background="#15212C" BorderBrush="#264052" BorderThickness="1" CornerRadius="4" Padding="6,2">
+			<TextBlock Name="ModeText" Text="Offline Writer" Foreground="{DynamicResource TextMutedBrush}" FontSize="10" VerticalAlignment="Center" />
+		</Border>
+	</StackPanel>
+</UserControl>

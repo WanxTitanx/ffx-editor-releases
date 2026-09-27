@@ -1,0 +1,120 @@
+{
+  "$comment": "FFX Mod Studio NoClip runtime contract. Code/wasm is bundled and hash-pinned; copyrighted game data is never bundled and is exposed only from a user-selected local extraction after capability validation.",
+  "schemaVersion": 2,
+  "state": "BUNDLED_RUNTIME_VERIFIED_LOCAL_DATA_REQUIRED",
+  "classification": {
+    "evidenceStatus": "VERIFIED_PASS_RUNTIME",
+    "gateStatus": "CAPABILITY_GATED",
+    "gameDataStatus": "USER_PROVIDED_LOCAL_ONLY"
+  },
+  "upstream": {
+    "repo": "https://github.com/magcius/noclip.website",
+    "snapshotName": "39605028765aa2cfaf2cea175f01f3a77cd99c2e",
+    "commitCryptographicallyVerified": false,
+    "license": "MIT",
+    "licenseCoversGameData": false
+  },
+  "studioBuild": {
+    "sourceDirectoryHadGitMetadata": false,
+    "command": "PUBLIC_STORAGE_URL=/data npm run build",
+    "assetPrefix": "/noclip/",
+    "outputRoot": "ExternalLibs/NoclipViewer/dist-ffxstudio",
+    "forbiddenRuntimeOrigins": [
+      "z.noclip.website",
+      "unpkg.com",
+      "cdn.jsdelivr.net"
+    ],
+    "forbiddenRuntimeOriginMatches": 0,
+    "files": [
+      {
+        "path": ".htaccess",
+        "bytes": 31,
+        "sha256": "06a5ec4763cd8d40237bdf460b614c30b0aad2de8923a1c092b00828da62ee70"
+      },
+      {
+        "path": "basis_transcoder.wasm",
+        "bytes": 366243,
+        "sha256": "ab29be36fe606519f8705b52c1f42286a60b8160ea807e079aa205e1db8df1e9"
+      },
+      {
+        "path": "embed.html",
+        "bytes": 5109,
+        "sha256": "bb86b736c341c0bbb73e48ea1428e5009c24a98daafd828b927a8d21b59aba46"
+      },
+      {
+        "path": "index.html",
+        "bytes": 192093,
+        "sha256": "5e656b445f321dc6002cde1f1ba6577bd7185ed0a6cbf09f1ce292bbbd1d74f8"
+      },
+      {
+        "path": "static/image/logo.3e3276e8.png",
+        "bytes": 4942,
+        "sha256": "f638444287413e085b7e6a4bb2ca555cfc7fb71a01bf1fb6f1a5c90218661627"
+      },
+      {
+        "path": "static/js/461.18e06f8b.js",
+        "bytes": 7509649,
+        "sha256": "69ce9c0ee6e4af5c1d93ae30b1808a5902658cbc7f5fc6e8c86cd93bc4ea2128"
+      },
+      {
+        "path": "static/js/461.18e06f8b.js.LICENSE.txt",
+        "bytes": 2129,
+        "sha256": "5dabd9744230e46013519bc224f5a150d37f7aaa9f122379fdb4f4496c612cca"
+      },
+      {
+        "path": "static/js/863.6a594d03.js",
+        "bytes": 169833,
+        "sha256": "9c80234544cee0ac0f1beb4105392df4564aeee76b71591c9cd77ae7dfe6d05b"
+      },
+      {
+        "path": "static/js/863.6a594d03.js.LICENSE.txt",
+        "bytes": 1231,
+        "sha256": "40fbbafeb06e3d2a926802b77805a6c55a30ed061806b15c6fd714b3cfb46c53"
+      },
+      {
+        "path": "static/js/async/342.d4851840.js",
+        "bytes": 2364,
+        "sha256": "381fe3923b3fe21819812c8188a712aaff5370dc153a4ea7189fd933281af72d"
+      },
+      {
+        "path": "static/js/async/444.8ff21570.js",
+        "bytes": 779394,
+        "sha256": "068d260093f520499b6311e769d0bf4268ce1c67e746f3759ced251aead39c98"
+      },
+      {
+        "path": "static/js/basis_transcoder.wasm",
+        "bytes": 366243,
+        "sha256": "ab29be36fe606519f8705b52c1f42286a60b8160ea807e079aa205e1db8df1e9"
+      },
+      {
+        "path": "static/js/embed.91889cfc.js",
+        "bytes": 3231,
+        "sha256": "ec749ea694551237c5c1e0cda1027e5f8b167f75d82c2abe851b5f931beb9ff7"
+      },
+      {
+        "path": "static/js/index.c43db11b.js",
+        "bytes": 3231,
+        "sha256": "13c420e31f5fae7fec4b9d358cb2b5a6fb372d3706597a40bdaf74636e0615ca"
+      },
+      {
+        "path": "static/js/librw.wasm",
+        "bytes": 177396,
+        "sha256": "eb317a2b6a54a9d61509218efb678f6936bb3f6efa55fa79ff8414a7630ae6f0"
+      },
+      {
+        "path": "static/wasm/842c4eb8.module.wasm",
+        "bytes": 3127614,
+        "sha256": "e0af5ad758b4ac1ba130fb296ab7080865a339489aa9b4e7294d8682de8dc345"
+      }
+    ]
+  },
+  "dataCapability": {
+    "packageContainsGameData": false,
+    "route": "/data/",
+    "source": "user-selected local FFX extraction",
+    "validator": "FFXProjectEditor.Modules.Common.ViewerHub.NoclipDataCapability",
+    "repair": false,
+    "networkRepair": false,
+    "junctionRepair": false
+  }
+}

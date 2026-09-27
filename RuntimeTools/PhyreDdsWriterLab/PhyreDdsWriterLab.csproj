@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Tier-1 round-trip primitive: a SYMMETRIC .dds.phyre writer.
+       The repo READS .dds.phyre byte-exact (FFXProjectEditor/FfxLib/Ps3/Ps3MagicTextureReader.cs);
+       this lab is the missing WRITE half so an edited texture can land in-game via the
+       External File Loader. System.*-only (no Avalonia) so it builds/runs headless.
+       Decode ground truth: docs/history/PS3DATA_DDS_PHYRE_DECODE_2026-06-01.md
+                            work/ps3data_agents/Extract-DdsPhyre.ps1 -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PhyreDdsWriterLab</AssemblyName>
+    <RootNamespace>PhyreDdsWriterLab</RootNamespace>
+  </PropertyGroup>
+
+</Project>

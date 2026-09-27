@@ -1,0 +1,197 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1440"
+             d:DesignHeight="780"
+             x:Class="FFXProjectEditor.MonsterAiExplorer_Control">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*" MinWidth="260" MaxWidth="380" />
+			<ColumnDefinition Width="4*" MinWidth="320" MaxWidth="480" />
+			<ColumnDefinition Width="6*" MinWidth="320" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.Column="0" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ai_corpus_cc10cd20}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_monster_ai_explorer_a32888b0}" />
+					<TextBlock Classes="muted"
+					           Text="{x:Static res:Strings.U_parser_corpus_bridge_for_monster_ai_script_code__a155bf22}"
+					           TextWrapping="Wrap" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,14" Spacing="10">
+					<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					<TextBox Watermark="{x:Static res:Strings.U_filter_by_monster_id_name_path_command_or_script_05b65368}"
+					         Text="{Binding FilterText, Mode=TwoWay}" />
+					<TextBlock Classes="muted" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<ListBox Grid.Row="2"
+				         ItemsSource="{Binding DisplayedMonsters}"
+				         SelectedItem="{Binding SelectedMonster, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding ContextSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Column="1" Margin="18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+			<StackPanel Spacing="14">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSelectedMonsterAi}" />
+					<TextBlock Classes="cardTitle" Text="{Binding SelectedMonster.Title}" />
+					<TextBlock Classes="muted" Text="{Binding SelectedMonsterSummary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding SelectedMonsterScope}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_overview_0efc2e6b}" />
+						<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedOverviewSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding SelectedScriptSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_forced_action_7e141948}" />
+						<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedForcedActionSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ability_list_72c2d34f}" />
+						<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedAbilityListSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_localized_98120b83}" />
+						<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedLocalizedSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_command_references_2391f3e4}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedReferenceSummary}" TextWrapping="Wrap" />
+						<ItemsControl ItemsSource="{Binding SelectedReferences}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,8" Padding="10" Classes="card">
+										<StackPanel Spacing="2">
+											<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+											<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+		<ScrollViewer Grid.Column="2" Margin="0,18,18,18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_script_surface_fb62a5bd}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedMonster.Record.DisplayTitle}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedScriptSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_script_code_7974df60}" />
+						<TextBox Text="{Binding SelectedScriptCode}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="NoWrap"
+						         MinHeight="320"
+						         FontFamily="Cascadia Mono,Consolas,Monospace" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_workers_variables_b91e9011}" />
+						<TextBox Text="{Binding SelectedWorkersAndVariables}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="NoWrap"
+						         MinHeight="220"
+						         FontFamily="Cascadia Mono,Consolas,Monospace" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_stats_cb8fe49f}" />
+						<TextBox Text="{Binding SelectedStatsText}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="Wrap"
+						         MinHeight="180" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_loot_12b49954}" />
+						<TextBox Text="{Binding SelectedLootText}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="Wrap"
+						         MinHeight="220" />
+					</StackPanel>
+				</Border>
+
+				<Grid ColumnDefinitions="*,*">
+					<Border Grid.Column="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_sensor_text_f072b03d}" />
+							<TextBox Text="{Binding SelectedSensorText}"
+							         IsReadOnly="True"
+							         AcceptsReturn="True"
+							         TextWrapping="Wrap"
+							         MinHeight="140" />
+						</StackPanel>
+					</Border>
+
+					<Border Grid.Column="1" Margin="14,0,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_scan_text_a6c9c1b1}" />
+							<TextBox Text="{Binding SelectedScanText}"
+							         IsReadOnly="True"
+							         AcceptsReturn="True"
+							         TextWrapping="Wrap"
+							         MinHeight="140" />
+						</StackPanel>
+					</Border>
+				</Grid>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

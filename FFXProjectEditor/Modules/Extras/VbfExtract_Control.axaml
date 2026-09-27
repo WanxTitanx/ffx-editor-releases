@@ -1,0 +1,119 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="860"
+             x:Class="FFXProjectEditor.Modules.Extras.VbfExtract_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_vbf_extract_57328ec8}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_ffx_archive_extractor_defe7519}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" Text="{Binding BoundarySummary}" TextWrapping="Wrap" />
+				<TextBlock FontWeight="SemiBold" Text="{Binding StatusText}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Grid Grid.Row="1" ColumnDefinitions="420,*">
+			<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_archive_presets_e22e80e8}" />
+						<Grid ColumnDefinitions="*,*,*">
+							<Button Classes="secondaryAction" Click="Button_DetectFfx">FFX_Data</Button>
+							<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_DetectFfx2">FFX2_Data</Button>
+							<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_DetectMetaMenu">metamenu</Button>
+						</Grid>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_current_probe_54cf864a}" />
+								<TextBlock Text="{Binding ProbeSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="vbfextract.exe" />
+							<TextBox Text="{Binding ToolPath, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Classes="muted" Text="{Binding ToolExists, StringFormat='Exists: {0}'}" />
+								<Button Grid.Column="1" Classes="secondaryAction" Click="Button_BrowseTool">Browse</Button>
+							</Grid>
+						</StackPanel>
+
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_vbf_archive_25d64a1d}" />
+							<TextBox Text="{Binding VbfPath, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Classes="muted" Text="{Binding VbfExists, StringFormat='Exists: {0}'}" />
+								<Button Grid.Column="1" Classes="secondaryAction" Click="Button_BrowseVbf">Browse</Button>
+							</Grid>
+						</StackPanel>
+
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_filename_dictionary_ae65077e}" />
+							<TextBox Text="{Binding DictionaryPath, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Classes="muted" Text="{Binding DictionaryExists, StringFormat='Exists: {0}'}" />
+								<Button Grid.Column="1" Classes="secondaryAction" Click="Button_BrowseDictionary">Browse</Button>
+							</Grid>
+						</StackPanel>
+
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_output_root_3d8e2dec}" />
+							<TextBox Text="{Binding OutputRoot, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Classes="muted" Text="{Binding OutputRootExists, StringFormat='Exists: {0}'}" />
+								<Button Grid.Column="1" Classes="secondaryAction" Click="Button_BrowseOutput">Browse</Button>
+							</Grid>
+						</StackPanel>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_command_8901895f}" />
+								<TextBlock Text="{Binding CommandPreview}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Grid ColumnDefinitions="*,Auto,Auto">
+							<Button Classes="secondaryAction" Click="Button_RefreshProbe">Refresh Probe</Button>
+							<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanCancel}" Click="Button_Cancel">Cancel</Button>
+							<Button Grid.Column="2" Margin="8,0,0,0" IsEnabled="{Binding ReadyToExtract}" Click="Button_Extract">Extract Only</Button>
+						</Grid>
+
+						<Button Classes="secondaryAction" Click="Button_OpenOutput">Open Output</Button>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+
+			<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+				<Grid RowDefinitions="Auto,Auto,*">
+					<StackPanel Spacing="6">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extraction_log_e02fcdab}" />
+						<TextBlock Classes="cardTitle" Text="{Binding SelectedArchiveLabel}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_use_this_only_to_create_update_the_local_extract_d8271587}"
+						           TextWrapping="Wrap" />
+					</StackPanel>
+
+					<Border Grid.Row="1" Classes="cardSoft" Padding="{DynamicResource SpacingMd}" Margin="0,12,0,12">
+						<TextBlock Text="{x:Static res:Strings.U_no_vbf_repack_path_is_exposed_here_that_is_inten_0ed57fda}" TextWrapping="Wrap" />
+					</Border>
+
+					<TextBox Grid.Row="2"
+					         Text="{Binding LogText}"
+					         AcceptsReturn="True"
+					         IsReadOnly="True"
+					         TextWrapping="NoWrap"
+					         ScrollViewer.HorizontalScrollBarVisibility="Auto"
+					         ScrollViewer.VerticalScrollBarVisibility="Auto" />
+				</Grid>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

@@ -1,0 +1,427 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+        xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+        mc:Ignorable="d"
+        d:DesignWidth="1600"
+        d:DesignHeight="980"
+        x:Class="FFXProjectEditor.Main_Window"
+        Title="Spira Reforge Studio"
+        Icon="/Assets/SpiraReforgeStudio.ico"
+        Width="1600"
+        Height="980"
+        MinWidth="1000"
+        MinHeight="620"
+        rsp:Responsive.Breakpoints="True">
+
+		<Window.Styles>
+			<!-- Responsividade (Jarvis-UI): em telas pequenas o IconRail recolhe para o drawer overlay
+			     flutuante (reabre pelo botão "≡" no header, ou pelo atalho Ctrl+B).
+			     "Border#IconRailCol" fica oculto em narrow; o "Button#RailDrawerToggle" aparece no lugar.
+			     O estado real de visibilidade (narrow + toggle manual) é governado em code-behind. -->
+			<Style Selector="Window.narrow Border#IconRailCol">
+				<Setter Property="IsVisible" Value="False" />
+			</Style>
+		</Window.Styles>
+
+	<Grid Margin="10" RowDefinitions="Auto,*,Auto">
+		<!-- ===== Camada 7 (overhaul de UI): header de 1 linha, ~40px de altura. Título + workspace badge
+			     + ícones à direita (music popover, hook status, settings). Substitui o card inchado. ===== -->
+		<Border Grid.Row="0" Margin="0,0,0,8" Padding="14,8" Classes="card" CornerRadius="{DynamicResource RadiusMd}">
+			<Border.Background>
+				<LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+					<GradientStop Color="{DynamicResource PanelDeepColor}" Offset="0" />
+					<GradientStop Color="{DynamicResource PanelDeeperColor}" Offset="0.58" />
+					<GradientStop Color="{DynamicResource HeroAccentColor}" Offset="1" />
+				</LinearGradientBrush>
+			</Border.Background>
+			<Grid ColumnDefinitions="Auto,*,Auto">
+				<!-- Esquerda: título + tagline + drawer toggle (visível quando rail oculto) -->
+				<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+					<!-- Drawer toggle (Jarvis-UI, audit 2026-06-19): só visível em narrow OU após toggle manual Ctrl+B.
+					     Reabre o IconRailCol que foi escondido pelo estilo Window.narrow. -->
+					<Button Name="RailDrawerToggle"
+					        Classes="railIcon"
+					        Width="34" Height="34"
+					        Click="Button_ToggleIconRail"
+					        ToolTip.Tip="{x:Static res:Strings.RailDrawerToggle}"
+					        AutomationProperties.Name="Toggle navigation rail"
+					        IsVisible="False">
+						<PathIcon Data="{DynamicResource IconMap}" Width="16" Height="16" />
+					</Button>
+					<TextBlock Text="{x:Static res:Strings.U_ffx_mod_studio_35490cae}" FontSize="15" FontWeight="Bold" VerticalAlignment="Center" />
+					<TextBlock Classes="muted"
+					           FontSize="10"
+					           VerticalAlignment="Center"
+					           Text="{x:Static res:Strings.MainWinTagline}" />
+				</StackPanel>
+
+				<!-- Centro: dois seletores separados — pasta do JOGO (FFX.exe) e workspace master.
+				     Os badges mostram o leaf resolvido quando a pasta está definida. -->
+				<StackPanel Grid.Column="1"
+				            Orientation="Horizontal"
+				            Spacing="8"
+				            Margin="14,0,0,0"
+				            HorizontalAlignment="Center"
+				            VerticalAlignment="Center">
+					<Button Classes="secondaryAction"
+					        Padding="10,4"
+					        VerticalAlignment="Center"
+					        Click="Button_GamePath"
+					        ToolTip.Tip="{Binding GameRootTooltip}"
+					        AutomationProperties.Name="{x:Static res:Strings.GameBadgeOpen}">
+						<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+							<PathIcon Data="{DynamicResource IconBattle}" Width="13" Height="13" />
+							<TextBlock Classes="muted" FontSize="11" MaxWidth="180"
+							           TextTrimming="CharacterEllipsis"
+							           VerticalAlignment="Center"
+							           Text="{Binding GameRootBadgeLabel}" />
+						</StackPanel>
+					</Button>
+					<Button Classes="secondaryAction"
+					        Padding="10,4"
+					        VerticalAlignment="Center"
+					        Click="Button_ProjectPath"
+					        ToolTip.Tip="{Binding ProjectPath}"
+					        AutomationProperties.Name="{x:Static res:Strings.DashboardCtaOpenWorkspace}"
+					        DragDrop.AllowDrop="True">
+						<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+							<PathIcon Data="{DynamicResource IconFolder}" Width="13" Height="13" />
+							<TextBlock Classes="muted" FontSize="11" MaxWidth="180"
+							           TextTrimming="CharacterEllipsis"
+							           VerticalAlignment="Center"
+							           Text="{Binding WorkspaceBadgeLabel}" />
+						</StackPanel>
+					</Button>
+				</StackPanel>
+
+				<!-- Direita: ícones (music popover · hook · root · FX) -->
+				<StackPanel Grid.Column="2"
+				            Margin="12,0,0,0"
+				            Orientation="Horizontal"
+				            Spacing="4"
+				            HorizontalAlignment="Right"
+				            VerticalAlignment="Center">
+					<!-- Music popover com volume sliders -->
+					<Button Classes="railIcon" Width="34" Height="34"
+					        ToolTip.Tip="{x:Static res:Strings.MainWinMusicFxPreview}"
+					        AutomationProperties.Name="{x:Static res:Strings.MainWinMusicFxPreview}">
+						<PathIcon Data="{DynamicResource IconMusic}" Width="16" Height="16" />
+						<Button.Flyout>
+							<Flyout Placement="BottomEdgeAlignedRight">
+								<Border Classes="cardSoft" Padding="12" MinWidth="360" MaxWidth="400">
+									<ScrollViewer MaxHeight="520"
+									              HorizontalScrollBarVisibility="Disabled"
+									              VerticalScrollBarVisibility="Auto">
+									<StackPanel Margin="0,0,6,0" Spacing="10">
+										<StackPanel Spacing="4">
+											<Grid ColumnDefinitions="Auto,6,*,6,Auto">
+												<TextBlock Classes="sectionLabel" VerticalAlignment="Center" Text="{x:Static res:Strings.MainWinMusic}" />
+												<Slider Grid.Column="2" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1"
+												        Value="{Binding AudioService.VolumeMusic, Mode=TwoWay}" />
+												<TextBlock Grid.Column="4" Classes="muted" TextAlignment="Right" MinWidth="36"
+												           Text="{Binding AudioService.VolumeMusic, StringFormat={}{0:P0}}" />
+											</Grid>
+											<CheckBox IsChecked="{Binding AudioService.MusicEnabled}"
+											          Content="{x:Static res:Strings.MainWinEnableMusic}" />
+										</StackPanel>
+
+										<StackPanel Spacing="4">
+											<Grid ColumnDefinitions="Auto,6,*,6,Auto">
+												<TextBlock Classes="sectionLabel" VerticalAlignment="Center" Text="{x:Static res:Strings.MainWinSoundFx}" />
+												<Slider Grid.Column="2" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1"
+												        Value="{Binding AudioService.VolumeFx, Mode=TwoWay}" />
+												<TextBlock Grid.Column="4" Classes="muted" TextAlignment="Right" MinWidth="36"
+												           Text="{Binding AudioService.VolumeFx, StringFormat={}{0:P0}}" />
+											</Grid>
+											<CheckBox IsChecked="{Binding AudioService.SoundEffectsEnabled}"
+											          Content="{x:Static res:Strings.MainWinEnableFx}" />
+										</StackPanel>
+
+										<StackPanel Spacing="4">
+											<Grid ColumnDefinitions="Auto,6,*,6,Auto">
+												<TextBlock Classes="sectionLabel" VerticalAlignment="Center" Text="{x:Static res:Strings.MainWinPreview}" />
+												<Slider Grid.Column="2" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1"
+												        Value="{Binding AudioService.VolumePreview, Mode=TwoWay}" />
+												<TextBlock Grid.Column="4" Classes="muted" TextAlignment="Right" MinWidth="36"
+												           Text="{Binding AudioService.VolumePreview, StringFormat={}{0:P0}}" />
+											</Grid>
+										</StackPanel>
+
+										<Separator />
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.MainWinTrackScroll}" />
+										<ListBox MinWidth="190" MaxHeight="160"
+										         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+										         ScrollViewer.VerticalScrollBarVisibility="Visible"
+										         ItemsSource="{Binding AudioService.MusicTrackOptions}"
+										         SelectedItem="{Binding AudioService.SelectedMusicTrack, Mode=TwoWay}">
+											<ListBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding DisplayName}" Padding="4,2" />
+												</DataTemplate>
+											</ListBox.ItemTemplate>
+										</ListBox>
+										<Button Classes="primaryAction" Click="Button_PreviewMusic"
+										        HorizontalAlignment="Stretch" Margin="0,4,0,2">
+											<StackPanel Orientation="Horizontal" Spacing="4">
+												<TextBlock Text="▶" />
+												<TextBlock Text="{x:Static res:Strings.MainWinPreviewTrack}" />
+											</StackPanel>
+										</Button>
+
+										<Separator />
+										<Expander Header="{x:Static res:Strings.AudioImportTitle}">
+											<StackPanel Margin="0,8,0,0" Spacing="8">
+												<TextBlock Classes="muted"
+												           MaxWidth="350"
+												           TextWrapping="Wrap"
+												           Text="{x:Static res:Strings.AudioImportDescription}" />
+												<CheckBox IsChecked="{Binding AudioService.AutoMusicImportEnabled, Mode=TwoWay}">
+													<TextBlock MaxWidth="330"
+													           TextWrapping="Wrap"
+													           Text="{x:Static res:Strings.AudioAutoImportToggle}" />
+												</CheckBox>
+												<TextBlock Classes="sectionLabel"
+												           Text="{x:Static res:Strings.AudioImportTrackListLabel}" />
+												<ItemsControl ItemsSource="{Binding AudioService.GameMusicImport.Tracks}">
+														<ItemsControl.ItemTemplate>
+															<DataTemplate>
+																<CheckBox Margin="0,1"
+																          IsChecked="{Binding IsSelected, Mode=TwoWay}"
+																          Content="{Binding SelectionLabel}" />
+															</DataTemplate>
+														</ItemsControl.ItemTemplate>
+												</ItemsControl>
+												<TextBlock Classes="muted"
+												           FontSize="10"
+												           MaxWidth="350"
+												           TextWrapping="Wrap"
+												           Text="{x:Static res:Strings.AudioImportLocalOnlyNote}" />
+												<CheckBox IsChecked="{Binding AudioService.GameMusicImport.UserConfirmedOwnershipAndLocalUse, Mode=TwoWay}">
+													<TextBlock MaxWidth="330"
+													           TextWrapping="Wrap"
+													           Text="{x:Static res:Strings.AudioImportConsent}" />
+												</CheckBox>
+												<Button Classes="primaryAction"
+												        HorizontalAlignment="Stretch"
+												        IsEnabled="{Binding AudioService.GameMusicImport.CanImport}"
+												        Click="Button_ImportGameMusic"
+												        AutomationProperties.Name="{x:Static res:Strings.AudioImportChooseFsb}">
+													<TextBlock TextAlignment="Center"
+													           TextWrapping="Wrap"
+													           Text="{x:Static res:Strings.AudioImportChooseFsb}" />
+												</Button>
+												<ProgressBar Minimum="0"
+												             Maximum="100"
+												             Height="5"
+												             IsVisible="{Binding AudioService.GameMusicImport.IsBusy}"
+												             Value="{Binding AudioService.GameMusicImport.ProgressPercent}" />
+												<TextBlock Classes="muted"
+												           MaxWidth="350"
+												           TextWrapping="Wrap"
+												           Text="{Binding AudioService.GameMusicImport.StatusMessage}" />
+											</StackPanel>
+										</Expander>
+									</StackPanel>
+									</ScrollViewer>
+								</Border>
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+					<!-- Experimental features gate (Jarvis-UI): AI Assistant opt-in, OFF por padrão.
+					     Vida própria do lado do music pra poder sumir inteiro depois sem tocar o resto. -->
+					<Button Classes="railIcon" Width="34" Height="34"
+					        ToolTip.Tip="{x:Static res:Strings.AiAssistant_EnableTitle}"
+					        AutomationProperties.Name="{x:Static res:Strings.AiAssistant_EnableTitle}">
+						<PathIcon Data="{DynamicResource IconMagicEffect}" Width="16" Height="16" />
+						<Button.Flyout>
+							<Flyout Placement="BottomEdgeAlignedRight">
+								<Border Classes="cardSoft" Padding="12" MinWidth="280" MaxWidth="320">
+									<StackPanel Spacing="8">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAssistant_EnableTitle}" />
+										<CheckBox IsChecked="{Binding AiAssistantEnabled, Mode=TwoWay}">
+											<TextBlock Text="{x:Static res:Strings.AiAssistant_EnableLabel}" />
+										</CheckBox>
+										<TextBlock Classes="muted" FontSize="10" MaxWidth="290" TextWrapping="Wrap"
+										           Text="{x:Static res:Strings.AiAssistant_EnableHint}" />
+									</StackPanel>
+								</Border>
+							</Flyout>
+						</Button.Flyout>
+					</Button>
+					<!-- Hook status (verde/cinza conforme IsAlive) -->
+					<Border Width="34" Height="34" CornerRadius="{DynamicResource RadiusSm}"
+					        VerticalAlignment="Center"
+					        Background="{DynamicResource PanelAltBrush}"
+					        BorderBrush="{Binding HookStatusBrush}"
+					        BorderThickness="1"
+					        ToolTip.Tip="{Binding HookStatusTooltip}">
+						<PathIcon Data="{DynamicResource IconAnchor}" Width="14" Height="14"
+						          HorizontalAlignment="Center"
+						          VerticalAlignment="Center"
+						          Foreground="{Binding HookStatusBrush}" />
+					</Border>
+					<!-- Language selector (v2.208.0.0, Jarvis-CLINE): PT/EN persistido; troca reinicia o app -->
+					<Button Classes="railIcon" Width="34" Height="34" Name="Button_Language"
+					        ToolTip.Tip="{x:Static res:Strings.LangSelector}"
+					        AutomationProperties.Name="{x:Static res:Strings.LangSelector}">
+						<TextBlock Name="LangButtonText" Text="PT" FontSize="12" FontWeight="Bold"
+						           HorizontalAlignment="Center" VerticalAlignment="Center" />
+						<Button.Flyout>
+							<MenuFlyout>
+								<MenuItem Header="{x:Static res:Strings.LangPortuguese}" Click="MenuItem_Language_Pt_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangEnglish}" Click="MenuItem_Language_En_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangSpanish}" Click="MenuItem_Language_Es_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangFrench}" Click="MenuItem_Language_Fr_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangGerman}" Click="MenuItem_Language_De_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangItalian}" Click="MenuItem_Language_It_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangJapanese}" Click="MenuItem_Language_Ja_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangKorean}" Click="MenuItem_Language_Ko_Click" />
+								<MenuItem Header="{x:Static res:Strings.LangChinese}" Click="MenuItem_Language_Zh_Click" />
+								<Separator />
+								<MenuItem Header="{x:Static res:Strings.U_open_debug_log_e2cc1b2a}" Click="MenuItem_OpenDebugLog_Click" />
+							</MenuFlyout>
+						</Button.Flyout>
+					</Button>
+					<!-- Theme toggle: Dark Studio ↔ High Contrast WCAG -->
+					<Button Classes="railIcon" Width="34" Height="34"
+					        Name="Button_ThemeToggle"
+					        Click="Button_ThemeToggle_Click"
+					        ToolTip.Tip="{x:Static res:Strings.MainWinThemeToggle}"
+					        AutomationProperties.Name="Toggle theme">
+						<TextBlock Text="🌗" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" />
+					</Button>
+					<!-- Settings (ffx_ps2 root) -->
+					<Button Classes="railIcon" Width="34" Height="34"
+					        Click="Button_SetFfxPs2Root"
+					        ToolTip.Tip="{x:Static res:Strings.MainWinSetFfxPs2Root}"
+					        AutomationProperties.Name="{x:Static res:Strings.MainWinSetFfxPs2Root}">
+						<PathIcon Data="{DynamicResource IconSettings}" Width="16" Height="16" />
+					</Button>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+			<!-- ===== Icon Rail (Camada 2): substitui a sidebar de 240-300px por uma faixa fina de ~56px.
+			     Cada ícone = um GRUPO; o MenuFlyout mostra os itens do grupo e chama os mesmos MenuItem_*
+			     de antes (zero mudança nos handlers). Em telas narrow (Window.narrow) este Border some. -->
+			<Border Grid.Column="0" Name="IconRailCol" Width="60" Margin="0,0,10,0"
+			        Classes="card" Padding="6" CornerRadius="14">
+				<DockPanel LastChildFill="True">
+					<!-- Workspace (rodapé do rail): hover mostra o path, clique abre o picker, drag-drop aceita pasta. -->
+					<Button DockPanel.Dock="Bottom" Classes="railIcon" Click="Button_ProjectPath"
+					        ToolTip.Tip="{Binding ProjectPath}"
+					        AutomationProperties.Name="{x:Static res:Strings.RailWorkspaceFolder}"
+					        DragDrop.AllowDrop="True">
+						<PathIcon Data="{DynamicResource IconFolder}" Width="20" Height="20" />
+					</Button>
+
+					<!-- ===== v2.160.0.0 (Jarvis-UI §16): IconRail gerado do ModuleRegistry em code-behind.
+				     Cada módulo = 1 ícone dedicado; clique direto chama Dispatch(id). Zero MenuFlyout.
+				     A geração vive em Main_Window.BuildIconRail() e popula RailStack por cluster,
+				     com Borders 1px como separadores (não flyouts). ===== -->
+					<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Hidden">
+						<StackPanel Name="RailStack" Spacing="4" HorizontalAlignment="Center" />
+					</ScrollViewer>
+				</DockPanel>
+			</Border>
+
+			<Grid Grid.Column="1" Margin="0,0,0,0">
+				<Border Classes="card" Padding="0" ClipToBounds="True">
+					<ContentControl Name="ContentFrame" />
+				</Border>
+			</Grid>
+		</Grid>
+
+		<!-- ===== Camada 9 (overhaul de UI): footer → status bar de 1 linha, modelo IDE.
+		     Project · Hook · Módulo atual · Modo (writer/readonly). Tagline saiu do cromado. ===== -->
+		<Border Grid.Row="2" Margin="0,8,0,0" Padding="14,5" Height="28"
+		        Classes="card" CornerRadius="{DynamicResource RadiusSm}"
+		        Background="{DynamicResource PanelDeepColor}">
+			<Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto">
+				<!-- Project ✓ -->
+				<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.FooterProject}" VerticalAlignment="Center" />
+					<TextBlock VerticalAlignment="Center"
+					           FontSize="11" FontWeight="SemiBold"
+					           Foreground="{Binding ProjectStatusForeground}"
+					           Text="{Binding ProjectStatusGlyph}" />
+				</StackPanel>
+				<!-- Hook ✓ -->
+				<StackPanel Grid.Column="1" Margin="16,0,0,0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.FooterHook}" VerticalAlignment="Center" />
+					<TextBlock VerticalAlignment="Center"
+					           FontSize="11" FontWeight="SemiBold"
+					           Foreground="{Binding HookStatusForeground}"
+					           Text="{Binding HookStatusGlyph}" />
+				</StackPanel>
+				<!-- Módulo atual -->
+				<StackPanel Grid.Column="2" Margin="16,0,0,0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<TextBlock Classes="muted" FontSize="11" Text="·" VerticalAlignment="Center" />
+					<TextBlock VerticalAlignment="Center"
+					           FontSize="11" FontWeight="SemiBold"
+					           Text="{Binding CurrentModuleTitle}" />
+				</StackPanel>
+				<!-- Modo -->
+				<StackPanel Grid.Column="3" Margin="16,0,0,0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+					<TextBlock Classes="muted" FontSize="11" Text="·" VerticalAlignment="Center" />
+					<TextBlock Classes="muted" FontSize="11"
+					           VerticalAlignment="Center"
+					           Text="{Binding CurrentModuleMode}" />
+				</StackPanel>
+				<!-- Workspace path (Jarvis-UI, audit 2026-06-19): coluna * preenchida + auto à direita
+				     pra completar o footer (antes eram colunas mortas). Trunca à direita se for longo. -->
+				<TextBlock Grid.Column="5"
+				           Margin="16,0,0,0"
+				           Classes="muted"
+				           FontSize="11"
+			           VerticalAlignment="Center"
+			           TextTrimming="CharacterEllipsis"
+			           ToolTip.Tip="{Binding ProjectPath}"
+			           Text="{Binding WorkspaceBadgeLabel}" />
+			</Grid>
+		</Border>
+
+		<!-- P0-A & Walkthrough 3: Gaveta de Revisão de Alterações (Change Review / Session Bar) -->
+		<ctrl:ChangeSetDrawer Name="ChangeSetDrawerControl" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,24,32" Width="680" IsVisible="False" />
+
+		<!-- ===== Drawer overlay (P0-4, Jarvis-UI, audit 2026-06-19; refatorado v2.160.0.0 §16):
+		     Em modo narrow o IconRailCol é escondido pelo estilo Window.narrow; antes deste
+		     Popup, clicar no botão "≡" ou Ctrl+B não fazia nada visível (a navegação sumia).
+		     Agora o ToggleIconRail() abre este Popup em narrow (e continua togglando o Border
+		     inline em wide).
+
+		     §16 (2026-06-20): drawer virou GRID DE ÍCONES (não mais lista textual de nomes) —
+		     um ícone por módulo, clique direto. A descoberta textual completa vive no Dashboard
+		     (§17, home com todos os módulos + descrição). Popup populado em code-behind por
+		     BuildRailDrawer() a partir do ModuleRegistry (mesma fonte do rail inline). ===== -->
+		<Popup Name="RailDrawer"
+		       IsLightDismissEnabled="True"
+		       PlacementMode="BottomEdgeAlignedLeft"
+		       HorizontalOffset="6"
+		       VerticalOffset="6"
+		       Topmost="True"
+		       IsOpen="False">
+			<Border MinWidth="240" MaxWidth="320" Padding="{DynamicResource SpacingSm}" Classes="card" CornerRadius="{DynamicResource RadiusLg}">
+				<ScrollViewer MaxHeight="600" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+					<WrapPanel Name="RailDrawerGrid" Orientation="Horizontal" ItemWidth="56" />
+				</ScrollViewer>
+			</Border>
+		</Popup>
+
+		<!-- Jarvis-UI Fase D §D5 (v2.161.0.0): Command Palette Ctrl+K.
+		     Central fuzzy-search overlay for the release-approved public module catalog.
+		     Enter/Click → DispatchRequested → Dispatch(id) + fecha. Esc/light-dismiss → fecha.
+		     Ctrl+K toggle. O conteúdo é instanciado em code-behind (ToggleCommandPalette). -->
+		<Popup Name="CommandPalette"
+		       IsLightDismissEnabled="True"
+		       PlacementMode="Center"
+		       Topmost="True"
+		       IsOpen="False" />
+	</Grid>
+
+</Window>

@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             x:Class="FFXProjectEditor.CommandPalette_Popup"
+             Focusable="True">
+
+	<!-- Jarvis-UI Fase D §D5 (v2.161.0.0): Command Palette Ctrl+K.
+	     v2.162.7.0: altura fixa no card (Popup + Grid * = 0px sem constraint) + ListBox selecionável. -->
+
+	<Border Width="520" Height="520" Padding="0" Classes="card" CornerRadius="{DynamicResource RadiusLg}"
+			Background="{DynamicResource PanelDeepBrush}"
+			BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1"
+			BoxShadow="0 18 48 0 #80000000">
+		<Grid RowDefinitions="Auto,*,Auto">
+
+			<Border Grid.Row="0" Padding="16,12" Classes="heroGradient" CornerRadius="12,12,0,0">
+				<DockPanel>
+					<PathIcon Width="18" Height="18" Margin="0,0,10,0"
+							  Data="{StaticResource IconSearch}"
+							  Foreground="{DynamicResource AccentForegroundBrush}" />
+					<TextBlock Classes="sectionLabel" FontSize="13"
+							   Foreground="{DynamicResource AccentForegroundBrush}"
+							   Text="{x:Static res:Strings.U_command_palette_5843727a}" />
+				</DockPanel>
+			</Border>
+
+			<TextBox Name="SearchBox"
+					 Grid.Row="0"
+					 Margin="16,52,16,8"
+					 Watermark="{x:Static res:Strings.RailSearchPlaceholder}"
+					 Classes="reveal"
+					 TextChanged="SearchBox_TextChanged"
+					 KeyDown="SearchBox_KeyDown" />
+
+			<Grid Grid.Row="1" Margin="8,0,8,4" RowDefinitions="*,Auto">
+				<ListBox Name="ResultsList"
+						 Grid.Row="0"
+						 ItemsSource="{Binding Results}"
+						 Background="Transparent"
+						 BorderThickness="0"
+						 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+						 SelectionChanged="ResultsList_SelectionChanged">
+					<ListBox.Styles>
+						<Style Selector="ListBoxItem">
+							<Setter Property="Padding" Value="0" />
+							<Setter Property="Margin" Value="0,0,0,2" />
+							<Setter Property="Background" Value="Transparent" />
+							<Setter Property="BorderThickness" Value="0" />
+						</Style>
+						<Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+							<Setter Property="Background" Value="{DynamicResource PanelAltBrush}" />
+						</Style>
+						<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+							<Setter Property="Background" Value="{DynamicResource PanelBrush}" />
+						</Style>
+					</ListBox.Styles>
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="paletteRow" Padding="12,10" CornerRadius="{DynamicResource RadiusSm}"
+									Background="Transparent"
+									BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1"
+									PointerReleased="Result_PointerReleased"
+									Cursor="Hand">
+								<DockPanel>
+									<PathIcon Width="18" Height="18" Margin="0,0,12,0"
+											  VerticalAlignment="Center"
+											  Data="{Binding IconGeometry}"
+											  Foreground="{DynamicResource AccentForegroundBrush}" />
+									<StackPanel>
+										<TextBlock FontWeight="SemiBold" FontSize="13" Text="{Binding Title}" />
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding Description}"
+												   TextTrimming="CharacterEllipsis" MaxLines="2" />
+									</StackPanel>
+								</DockPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+				<TextBlock Name="EmptyHint"
+						   Grid.Row="1"
+						   Margin="8,6,8,0"
+						   Classes="muted"
+						   FontSize="12"
+						   HorizontalAlignment="Center"
+						   IsVisible="False"
+						   Text="{x:Static res:Strings.PaletteEmpty}" />
+			</Grid>
+
+			<Border Grid.Row="2" Padding="16,8" Classes="panelAlt" CornerRadius="0,0,12,12">
+				<TextBlock Classes="muted" FontSize="11"
+						   Text="{x:Static res:Strings.U_navigate_enter_open_esc_close_ctrl_k_toggle_e94e0d00}" />
+			</Border>
+
+		</Grid>
+	</Border>
+</UserControl>

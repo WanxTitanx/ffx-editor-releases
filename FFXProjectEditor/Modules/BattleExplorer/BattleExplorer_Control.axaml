@@ -1,0 +1,434 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="760"
+             x:Class="FFXProjectEditor.BattleExplorer_Control">
+
+	<Grid ColumnDefinitions="Auto,*">
+		<Border Grid.Column="0" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card"
+				MinWidth="300" MaxWidth="420" HorizontalAlignment="Stretch">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_battle_files_7dd76769}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_battle_explorer_990d9d5e}" />
+					<TextBlock Classes="muted" Text="{x:Static res:Strings.U_formation_authoring_chunk_inspection_and_encount_25a6a5e8}" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,14" Spacing="10">
+					<Grid ColumnDefinitions="*,Auto">
+						<TextBox Watermark="{x:Static res:Strings.U_filter_by_battle_id_or_monster_label_62c73673}"
+								 Text="{Binding FilterText}"
+								 TextChanged="Filter_Changed" />
+						<Button Grid.Column="1" Margin="10,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					</Grid>
+					<TextBlock Classes="muted" Text="{Binding LoadSummary}" />
+					<TextBlock Classes="muted" Text="{Binding VisibleBattleCount, StringFormat='Visible battles: {0}'}" />
+				</StackPanel>
+
+				<ListBox Grid.Row="2"
+						 Name="BattleList"
+						 ItemsSource="{Binding DisplayedBattles}"
+						 SelectionMode="Single"
+						 SelectionChanged="ListBox_SelectionChanged">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="6">
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding BattleId}" />
+									<TextBlock Classes="muted" Text="{Binding FormationLabel}" />
+									<TextBlock Classes="sectionLabel" Text="{Binding MetadataLabel}" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<ScrollViewer Grid.Column="1" Margin="18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_encounter_authoring_surface_e9b67cc5}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedBattleId}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedBattleLabel}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedBattlePath}" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding SelectedBattleHasParseError}">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_parse_warning_50f69b32}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_this_battle_file_did_not_parse_cleanly_cbc3ead5}" />
+						<TextBlock Text="{Binding SelectedParseError}" Foreground="{DynamicResource DangerBrush}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Grid ColumnDefinitions="*,*">
+					<Border Grid.Column="0" Margin="0,0,14,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="10">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_structure_9482c5d5}" />
+							<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_binary_summary_7a44e6e4}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedStructureSummary}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedScriptSummary}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedTextSummary}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedAreaSummary}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedFlagsSummary}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedUnknownSummary}" />
+						</StackPanel>
+					</Border>
+
+					<Border Grid.Column="1" Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="10">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_encounter_footprint_77acd1a4}" />
+							<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_encounter_table_references_580c2daf}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedEncounterSummary}" />
+
+							<ScrollViewer MaxHeight="240" HorizontalScrollBarVisibility="Disabled">
+								<ItemsControl ItemsSource="{Binding EncounterReferences}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+												<StackPanel Spacing="4">
+													<TextBlock FontWeight="SemiBold" Text="{Binding Map}" />
+													<TextBlock Classes="muted" Text="{Binding TableLabel}" />
+													<TextBlock Classes="muted" Text="{Binding GroupLabel}" />
+													<TextBlock Classes="muted" Text="{Binding BattlefieldLabel}" />
+													<TextBlock Classes="muted" Text="{Binding DangerLabel}" />
+													<TextBlock Classes="sectionLabel" Text="{Binding WeightLabel}" />
+												</StackPanel>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+						</StackPanel>
+					</Border>
+				</Grid>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_encounter_opener_ctb_seed_e05456a1}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_chunk0_hookstart_initial_ctb_wiring_0e2f5668}" />
+						<TextBlock Classes="muted" Text="{Binding OpenerSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding OpenerFormationMapping}" TextWrapping="Wrap" />
+
+						<ItemsControl ItemsSource="{Binding OpenerWrites}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+										<Grid ColumnDefinitions="170,130,50,50,*">
+											<TextBlock FontWeight="SemiBold" Text="{Binding TargetDisplay}" />
+											<TextBlock Grid.Column="1" FontFamily="Consolas,Menlo,monospace" Text="{Binding FieldName}" />
+											<TextBlock Grid.Column="2" Text="{Binding Operation}" />
+											<TextBlock Grid.Column="3" Text="{Binding Value}" />
+											<TextBlock Grid.Column="4" Classes="muted" Text="{Binding SourceOffset, StringFormat='0x{0:X}'}" />
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<TextBlock Classes="muted" Text="{Binding OpenerGuardrail}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_hidden_companion_activation_79bcd1ca}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_summon_handoff_appear_m213_lane_fdabb2d7}" />
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationBattleToken}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationCoverage}" TextWrapping="Wrap" />
+
+						<ItemsControl ItemsSource="{Binding CompanionActivationRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+										<StackPanel Spacing="4">
+											<Grid ColumnDefinitions="170,*">
+												<TextBlock FontWeight="SemiBold" Text="{Binding SlotLabel}" />
+												<TextBlock Grid.Column="1" Text="{Binding MonsterLabel}" TextWrapping="Wrap" />
+											</Grid>
+											<Grid ColumnDefinitions="130,90,*">
+												<TextBlock FontFamily="Consolas,Menlo,monospace" Text="{Binding HostActionLabel}" />
+												<TextBlock Grid.Column="1" Classes="muted" Text="{Binding HostActionOffsetHex}" />
+												<TextBlock Grid.Column="2" Text="{Binding HiddenStatusLabel}" TextWrapping="Wrap" />
+											</Grid>
+											<TextBlock Classes="muted" Text="{Binding HiddenBattleIdsLabel}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding EvidenceLabel}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<TextBlock Classes="muted" Text="{Binding CompanionActivationGuardrail}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_formation_editor_d89e57f8}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_initial_monster_slots_6396a790}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedFormationEditorSummary}" />
+						<TextBlock Foreground="{DynamicResource AccentBrush}" Text="{Binding FormationSlotUsageSummary}" />
+						<TextBlock IsVisible="{Binding HasEditableFormation}" Text="{Binding FormationEditSession.SessionSummary}" FontWeight="SemiBold" />
+						<TextBlock IsVisible="{Binding HasEditableFormation}" Classes="muted" Text="{Binding FormationEditSession.BehaviorSummary}" TextWrapping="Wrap" />
+
+						<Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto" IsVisible="{Binding HasEditableFormation}">
+							<TextBlock VerticalAlignment="Center" Classes="muted" Text="{Binding SelectedFormationDiffSummary}" />
+							<core:AutoSaveIndicator_Control Grid.Column="1"
+							                               Margin="12,0,0,0"
+							                               VerticalAlignment="Center"
+							                               Session="{Binding FormationEditSession}" />
+							<CheckBox Grid.Column="2"
+									  Margin="12,0,0,0"
+									  VerticalAlignment="Center"
+									  IsChecked="{Binding FormationEditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+							<Button Grid.Column="3"
+									Margin="12,0,0,0"
+									Classes="secondaryAction"
+									IsEnabled="{Binding FormationEditSession.CanUndo}"
+									Click="Button_UndoFormation">Undo</Button>
+							<Button Grid.Column="4"
+									Margin="12,0,0,0"
+									Classes="secondaryAction"
+									IsEnabled="{Binding FormationEditSession.HasPendingChanges}"
+									Click="Button_ResetFormation">Discard</Button>
+							<Button Grid.Column="5"
+									Margin="12,0,0,0"
+									IsEnabled="{Binding FormationEditSession.HasPendingChanges}"
+									Click="Button_SaveFormation">Save Formation</Button>
+						</Grid>
+
+						<Border Padding="14" Classes="cardSoft" IsVisible="{Binding HasEditableFormation}">
+							<StackPanel Spacing="10">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_formation_clipboard_df4c2b94}" />
+								<TextBlock Classes="muted" Text="{Binding FormationClipboardSummary}" />
+								<TextBlock Classes="muted" Text="{Binding FormationCloneSummary}" />
+								<Grid ColumnDefinitions="Auto,Auto,*,Auto">
+									<Button Classes="secondaryAction"
+											IsEnabled="{Binding CanCopyFormation}"
+											Click="Button_CopyFormation">Copy Current</Button>
+									<Button Grid.Column="1"
+											Margin="12,0,0,0"
+											Classes="secondaryAction"
+											IsEnabled="{Binding CanPasteFormation}"
+											Click="Button_PasteFormation">Paste Clipboard</Button>
+									<ComboBox Grid.Column="2"
+											  Margin="12,0,0,0"
+											  HorizontalAlignment="Stretch"
+											  ItemsSource="{Binding CloneSourceBattleOptions}"
+											  SelectedItem="{Binding SelectedCloneSourceBattle, Mode=TwoWay}"
+											  MinWidth="220">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Spacing="2">
+													<TextBlock Text="{Binding BattleId}" FontWeight="SemiBold" />
+													<TextBlock Classes="muted" Text="{Binding FormationLabel}" />
+												</StackPanel>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<Button Grid.Column="3"
+											Margin="12,0,0,0"
+											IsEnabled="{Binding CanCloneFormationFromSource}"
+											Click="Button_CloneFormation">Clone From Battle</Button>
+								</Grid>
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_clipboard_and_clone_both_operate_only_on_the_pro_2b6bb938}" />
+							</StackPanel>
+						</Border>
+
+						<Border Padding="14" Classes="cardSoft" IsVisible="{Binding HasEditableFormation}">
+							<StackPanel Spacing="10">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_quick_add_56f5f830}" />
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_use_this_when_you_want_to_stuff_more_monsters_in_931c52a1}" />
+								<Grid ColumnDefinitions="*,Auto,Auto">
+									<ComboBox ItemsSource="{Binding MonsterOptions}"
+											  HorizontalAlignment="Stretch"
+											  SelectedItem="{Binding SelectedQuickAddMonster, Mode=TwoWay}"
+											  MinWidth="220">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding DisplayName}" />
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<Button Grid.Column="1"
+											Margin="12,0,0,0"
+											Classes="secondaryAction"
+											IsEnabled="{Binding CanQuickAddFormationMonster}"
+											Click="Button_AddMonsterToFirstEmptySlot">Add To First Empty</Button>
+									<Button Grid.Column="2"
+											Margin="12,0,0,0"
+											IsEnabled="{Binding CanQuickAddFormationMonster}"
+											Click="Button_FillEmptyFormationSlots">Fill Empty Slots</Button>
+								</Grid>
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_current_safe_scope_the_initial_formation_chunk_o_5be993b1}" />
+							</StackPanel>
+						</Border>
+
+						<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+							<TextBlock Foreground="{DynamicResource AccentBrush}" Text="{Binding SelectedFormationSaveSummary}" TextWrapping="Wrap" />
+						</Border>
+
+						<ItemsControl ItemsSource="{Binding EditableFormationRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+										<StackPanel Spacing="8">
+											<Grid ColumnDefinitions="120,130,*">
+												<TextBlock FontWeight="SemiBold" Text="{Binding SlotLabel}" />
+												<TextBlock Grid.Column="1" Margin="10,0,0,0" Classes="sectionLabel" Text="{Binding OriginalRawHex}" />
+												<TextBlock Grid.Column="2" Margin="10,0,0,0" Classes="muted" Text="{Binding OriginalMonsterLabel}" />
+											</Grid>
+
+											<Grid ColumnDefinitions="*,120,Auto,Auto">
+												<ComboBox ItemsSource="{Binding AvailableMonsters}"
+														  HorizontalAlignment="Stretch"
+														  SelectedItem="{Binding SelectedMonster, Mode=TwoWay}"
+														  MinWidth="220">
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<TextBlock Text="{Binding DisplayName}" />
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+
+												<StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="2">
+													<TextBlock Classes="sectionLabel" Text="{Binding CurrentRawHex}" />
+													<TextBlock Classes="muted" Text="{Binding IsChanged, StringFormat='Changed: {0}'}" />
+												</StackPanel>
+
+												<Button Grid.Column="2"
+														Margin="10,0,0,0"
+														Classes="secondaryAction"
+														IsEnabled="{Binding CanOpenSelectedMonster}"
+														Click="Button_OpenFormationMonster">Open Monster</Button>
+
+												<Button Grid.Column="3" Margin="10,0,0,0" Classes="secondaryAction" Click="Button_ClearFormationSlot">Set Empty</Button>
+											</Grid>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<Border Padding="14" Classes="cardSoft" IsVisible="{Binding HasPendingFormationChanges}">
+							<StackPanel Spacing="10">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPendingDiff}" />
+								<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_before_after_079c88a6}" />
+								<ItemsControl ItemsSource="{Binding FormationDiffRows}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Grid Margin="0,0,0,10" ColumnDefinitions="100,*,*">
+												<TextBlock FontWeight="SemiBold" Text="{Binding SlotLabel}" />
+												<StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="2">
+													<TextBlock Classes="sectionLabel" Text="{Binding BeforeRawHex}" />
+													<TextBlock Classes="muted" Text="{Binding BeforeMonsterLabel}" TextWrapping="Wrap" />
+												</StackPanel>
+												<StackPanel Grid.Column="2" Margin="10,0,0,0" Spacing="2">
+													<TextBlock Foreground="{DynamicResource SuccessBrush}" Text="{Binding AfterRawHex}" />
+													<TextBlock Text="{Binding AfterMonsterLabel}" TextWrapping="Wrap" />
+												</StackPanel>
+											</Grid>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_chunks_4a527377}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.CommonChunkLayout}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_useful_for_proving_the_write_path_before_we_ever_b2005d91}" />
+						<TextBlock Classes="muted" Text="{Binding ChunkLegendSummary}" TextWrapping="Wrap" />
+
+						<DataGrid ItemsSource="{Binding ChunkRows}"
+								  GridLinesVisibility="All"
+								  BorderThickness="1"
+								  BorderBrush="{DynamicResource PanelStrokeBrush}"
+								  MinHeight="220">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="#" Binding="{Binding Index}" Width="70" />
+								<DataGridTextColumn Header="{x:Static res:Strings.U_chunk_463c2a8b}" Binding="{Binding Label}" Width="220" />
+								<DataGridTextColumn Header="{x:Static res:Strings.U_pt_br_2e5c3576}" Binding="{Binding LabelPt}" Width="240" />
+								<DataGridTextColumn Header="{x:Static res:Strings.CommonRisk}" Binding="{Binding Risk}" Width="170" />
+								<DataGridTextColumn Header="{x:Static res:Strings.U_significado_dec229c5}" Binding="{Binding Explanation}" Width="2*" />
+								<DataGridTextColumn Header="{x:Static res:Strings.CommonOffset}" Binding="{Binding Offset}" Width="140" />
+								<DataGridTextColumn Header="{x:Static res:Strings.U_length_3bade34e}" Binding="{Binding Length}" Width="140" />
+								<DataGridTextColumn Header="{x:Static res:Strings.CommonRange}" Binding="{Binding Range}" Width="220" />
+							</DataGrid.Columns>
+						</DataGrid>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<Grid ColumnDefinitions="*,Auto">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_runtime_probe_57903d70}" />
+								<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_chunk_3_lab_251e4e1a}" />
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_use_this_with_the_game_open_to_correlate_battlef_ed379220}" TextWrapping="Wrap" />
+							</StackPanel>
+							<Button Grid.Column="1"
+									Classes="secondaryAction"
+									Click="Button_RefreshRuntimeProbe">Refresh Runtime Probe</Button>
+						</Grid>
+
+						<TextBlock Classes="muted" Text="{Binding RuntimeProbeSummary}" TextWrapping="Wrap" />
+
+						<Grid ColumnDefinitions="*,*">
+							<Border Grid.Column="0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_battle_state_7367321f}" />
+									<TextBlock Text="{Binding RuntimeBattleSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Column="1" Margin="12,0,0,0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_routing_guess_ae81ebdb}" />
+									<TextBlock Text="{Binding RuntimeRoutingSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</Grid>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_party_placement_snapshot_2b9d1f29}" />
+								<TextBlock Text="{Binding RuntimeFrontlineSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<TextBlock Classes="muted" Text="{Binding RuntimePositionNotes}" TextWrapping="Wrap" />
+
+						<DataGrid ItemsSource="{Binding RuntimeEnemyRows}"
+								  GridLinesVisibility="All"
+								  BorderThickness="1"
+								  BorderBrush="{DynamicResource PanelStrokeBrush}"
+								  MinHeight="220">
+							<DataGrid.Columns>
+								<DataGridTextColumn Header="{x:Static res:Strings.CommonSlot}" Binding="{Binding SlotLabel}" Width="100" />
+								<DataGridTextColumn Header="{x:Static res:Strings.CommonMonster}" Binding="{Binding MonsterLabel}" Width="*" />
+								<DataGridTextColumn Header="{x:Static res:Strings.U_raw_da433cd4}" Binding="{Binding RawHex}" Width="90" />
+								<DataGridTextColumn Header="P1" Binding="{Binding P1Label}" Width="90" />
+								<DataGridTextColumn Header="P2" Binding="{Binding P2Label}" Width="90" />
+								<DataGridTextColumn Header="P3" Binding="{Binding P3Label}" Width="90" />
+								<DataGridTextColumn Header="P4" Binding="{Binding P4Label}" Width="90" />
+							</DataGrid.Columns>
+						</DataGrid>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    PhyreSkinnedAnimExportLab read-only lab tool.
+    Exports a SKINNED + ANIMATED glTF from a FFX HD (PhyreEngine) monster .dae.phyre.
+    Emits skeleton nodes (PNode hierarchy), skin (JOINTS_0/WEIGHTS_0 + inverseBindMatrices),
+    and a glTF animation built from the REAL embedded keyframes (PAnimationChannel/Times).
+    Validated end to end in F3D 3.5.0 for the keyframed rig family m153, m189, m190, m323.
+    No game files are modified. See docs/history/FFX_MODELVIEWER_SKINNED_ANIM_EXPORT_2026-06-02.md.
+    Usage: pass two args to the built exe: the input .dae.phyre path and the output .gltf path.
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>PhyreSkinnedAnimExportLab</AssemblyName>
+    <RootNamespace>PhyreSkinnedAnimExportLab</RootNamespace>
+  </PropertyGroup>
+  <!-- Reuse the proven DXT/.dds.phyre decoder (PhyreTextureExtractor) for A2 coarse texturing. -->
+  <ItemGroup>
+    <ProjectReference Include="..\PhyreModelExportLab\PhyreModelExportLab.csproj" />
+  </ItemGroup>
+</Project>

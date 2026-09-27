@@ -1,0 +1,279 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:global="clr-namespace:FFXProjectEditor"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FFXProjectEditor.DebugMenu_Control">
+
+	<ScrollViewer>
+		<StackPanel>
+			<Expander Header="{x:Static res:Strings.U_battle_f5552713}" IsExpanded="True" HorizontalAlignment="Stretch">
+				<Border Padding="10">
+					<StackPanel>
+						<WrapPanel HorizontalAlignment="Left">
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Invincible Enemies</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_invincible_mon}" />
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Invincible Allies</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_invincible_ply}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Control Enemies</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_mon_control}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Free Camera</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_free_camera}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">No Magic Effects</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_no_magic_effects}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">No MP Cost</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_no_mp_cost}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">No Variance</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_no_variance}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Never Crit</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_never_crit}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Always Hit</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_always_hit}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">OD Always Available</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_always_available_overdrive}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Always Crit</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_always_crit}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Always 1 dmg</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_always_1_dmg}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Always 9999 dmg</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_always_9999_dmg}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Always 99999 dmg</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_always_99999_dmg}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Always Rare Steal</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_always_rare_steal}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Never Overkill</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_never_overkill}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Never Charge Overdrive</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_never_charge_overdrive}"/>
+							</DockPanel>
+							<DockPanel MinWidth="220" MaxWidth="320">
+								<Label HorizontalAlignment="Left" VerticalAlignment="Center">Never Hit</Label>
+								<ToggleSwitch HorizontalAlignment="Right" IsChecked="{Binding LoadedBtlDebug.debug_never_hit}"/>
+							</DockPanel>
+						</WrapPanel>
+						<Button Click="Button_Apply">Apply</Button>
+					</StackPanel>
+				</Border>
+			</Expander>
+			<Expander Header="{x:Static res:Strings.U_minigames_5ade3bf0}" IsExpanded="True" HorizontalAlignment="Stretch">
+				<StackPanel>
+					<Label FontSize="20" FontWeight="Bold">Blitzball</Label>
+					<Separator/>
+					<WrapPanel>
+						<Button Margin="5" Click="Button_WinMatch">Win Match</Button>
+						<Button Margin="5" Click="Button_WinHalf">Win Half</Button>
+					</WrapPanel>
+					<WrapPanel>
+						<global:Property_Template Margin="5" Property_Label="Blitzball Wins" Property_Value="{Binding BlitzballWins}" BorderWidth="200" ValueBorderWidth="50"/>
+						<Button Margin="5" Click="Button_SetBlitzballWins">Overwrite</Button>
+					</WrapPanel>
+					<Label FontSize="20" FontWeight="Bold">Chocobo</Label>
+					<Separator/>
+					<WrapPanel>
+						<Button Margin="5" Click="Button_WinChocoboRace">Win Race</Button>
+						<Button Margin="5" Click="Button_ResetChocoboTimer">Reset Time</Button>
+					</WrapPanel>
+				</StackPanel>
+			</Expander>
+			<Expander Header="{x:Static res:Strings.U_temple_treasure_seals_78bf2054}" IsExpanded="True" HorizontalAlignment="Stretch">
+				<StackPanel>
+					<WrapPanel>
+						<global:PropertyBool_Template Margin="5" Property_Label="Besaid" Property_Value="{Binding TempleSeals.Besaid}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Kilika" Property_Value="{Binding TempleSeals.Kilika}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Djose" Property_Value="{Binding TempleSeals.Djose}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Macalania" Property_Value="{Binding TempleSeals.Macalania}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Bevelle" Property_Value="{Binding TempleSeals.Bevelle}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Zanarkand" Property_Value="{Binding TempleSeals.Zanarkand}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Baaj" Property_Value="{Binding TempleSeals.Baaj}" BorderWidth="200" ValueBorderWidth="50"/>
+					</WrapPanel>
+					<Button Click="Button_SetTempleSeals">Overwrite</Button>
+				</StackPanel>
+			</Expander>
+			<Expander Header="{x:Static res:Strings.U_albhed_characters_33a203a4}" IsExpanded="True" HorizontalAlignment="Stretch">
+				<StackPanel>
+					<Label>Note: These do not unlock the primers (Check key items)</Label>
+					<WrapPanel>
+						<global:PropertyBool_Template Margin="5" Property_Label="1" Property_Value="{Binding AlbhedCharacters.Albhed1}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="2" Property_Value="{Binding AlbhedCharacters.Albhed2}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="3" Property_Value="{Binding AlbhedCharacters.Albhed3}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="4" Property_Value="{Binding AlbhedCharacters.Albhed4}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="5" Property_Value="{Binding AlbhedCharacters.Albhed5}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="6" Property_Value="{Binding AlbhedCharacters.Albhed6}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="7" Property_Value="{Binding AlbhedCharacters.Albhed7}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="8" Property_Value="{Binding AlbhedCharacters.Albhed8}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="9" Property_Value="{Binding AlbhedCharacters.Albhed9}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="10" Property_Value="{Binding AlbhedCharacters.Albhed10}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="11" Property_Value="{Binding AlbhedCharacters.Albhed11}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="12" Property_Value="{Binding AlbhedCharacters.Albhed12}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="13" Property_Value="{Binding AlbhedCharacters.Albhed13}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="14" Property_Value="{Binding AlbhedCharacters.Albhed14}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="15" Property_Value="{Binding AlbhedCharacters.Albhed15}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="16" Property_Value="{Binding AlbhedCharacters.Albhed16}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="17" Property_Value="{Binding AlbhedCharacters.Albhed17}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="18" Property_Value="{Binding AlbhedCharacters.Albhed18}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="19" Property_Value="{Binding AlbhedCharacters.Albhed19}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="20" Property_Value="{Binding AlbhedCharacters.Albhed20}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="21" Property_Value="{Binding AlbhedCharacters.Albhed21}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="22" Property_Value="{Binding AlbhedCharacters.Albhed22}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="23" Property_Value="{Binding AlbhedCharacters.Albhed23}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="24" Property_Value="{Binding AlbhedCharacters.Albhed24}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="25" Property_Value="{Binding AlbhedCharacters.Albhed25}" BorderWidth="100" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="26" Property_Value="{Binding AlbhedCharacters.Albhed26}" BorderWidth="100" ValueBorderWidth="50"/>
+					</WrapPanel>
+					<Button Click="Button_SetAlbhedPrimers">Overwrite</Button>
+				</StackPanel>
+			</Expander>
+			<Expander Header="{x:Static res:Strings.U_overdrives_f9f4630f}" IsExpanded="True" HorizontalAlignment="Stretch">
+				<StackPanel>
+					<Label FontSize="20" FontWeight="Bold">Tidus</Label>
+					<Separator/>
+					<WrapPanel>
+						<global:Property_Template Margin="5" Property_Label="Overdrive count" Property_Value="{Binding ConditionTidusOdCount}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Spiral Cut" Property_Value="{Binding TidusOdUnlock.Overdrive0}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Slice Dice" Property_Value="{Binding TidusOdUnlock.Overdrive1}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Energy Rain" Property_Value="{Binding TidusOdUnlock.Overdrive2}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Blitz Ace" Property_Value="{Binding TidusOdUnlock.Overdrive3}" BorderWidth="200" ValueBorderWidth="50"/>
+					</WrapPanel>
+					<Label FontSize="20" FontWeight="Bold">Wakka</Label>
+					<Separator/>
+					<WrapPanel>
+						<global:Property_Template Margin="5" Property_Label="Battle count" Property_Value="{Binding ConditionWakkaBattleCount}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Elemental Reels" Property_Value="{Binding WakkaOdUnlock.Overdrive4}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Attack Reels" Property_Value="{Binding WakkaOdUnlock.Overdrive5}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Status Reels" Property_Value="{Binding WakkaOdUnlock.Overdrive6}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Auroch Reels" Property_Value="{Binding WakkaOdUnlock.Overdrive7}" BorderWidth="200" ValueBorderWidth="50"/>
+					</WrapPanel>
+					<Label FontSize="20" FontWeight="Bold">Auron</Label>
+					<Separator/>
+					<WrapPanel>
+						<global:PropertyBool_Template Margin="5" Property_Label="Dragon Fang" Property_Value="{Binding AuronOdUnlock.Overdrive4}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Shooting Star" Property_Value="{Binding AuronOdUnlock.Overdrive5}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Banishing Blade" Property_Value="{Binding AuronOdUnlock.Overdrive6}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Tornado" Property_Value="{Binding AuronOdUnlock.Overdrive7}" BorderWidth="200" ValueBorderWidth="50"/>
+					</WrapPanel>
+					<Label FontSize="20" FontWeight="Bold">Khimari</Label>
+					<Separator/>
+					<WrapPanel>
+						<global:PropertyBool_Template Margin="5" Property_Label="Jump" Property_Value="{Binding RonsoRageUnlock.Jump}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Fire Breath" Property_Value="{Binding RonsoRageUnlock.FireBreath}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Seed Cannon" Property_Value="{Binding RonsoRageUnlock.SeedCannon}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Self Destruct" Property_Value="{Binding RonsoRageUnlock.SelfDestruct}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Thrust Kick" Property_Value="{Binding RonsoRageUnlock.ThrustKick}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Stone Breath" Property_Value="{Binding RonsoRageUnlock.StoneBreath}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Aqua Breath" Property_Value="{Binding RonsoRageUnlock.AquaBreath}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Doom" Property_Value="{Binding RonsoRageUnlock.Doom}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="White Wind" Property_Value="{Binding RonsoRageUnlock.WhiteWind}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Bad Breath" Property_Value="{Binding RonsoRageUnlock.BadBreath}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Mighty Guard" Property_Value="{Binding RonsoRageUnlock.MightyGuard}" BorderWidth="200" ValueBorderWidth="50"/>
+						<global:PropertyBool_Template Margin="5" Property_Label="Nova" Property_Value="{Binding RonsoRageUnlock.Nova}" BorderWidth="200" ValueBorderWidth="50"/>
+					</WrapPanel>
+					<Button Click="Button_WriteOverdriveData">Overwrite</Button>
+				</StackPanel>
+			</Expander>
+			<Expander Header="{x:Static res:Strings.U_other_6e6a6f20}" IsExpanded="True" HorizontalAlignment="Stretch">
+				<StackPanel>
+					<StackPanel>
+						<Label FontSize="20" FontWeight="Bold">Misc.</Label>
+						<Separator/>
+						<WrapPanel>
+							<global:PropertyBool_Template Margin="5" Property_Label="Rikku Albhed Costume" Property_Value="{Binding RikkuAlbhedCostume}" BorderWidth="250" ValueBorderWidth="50"/>
+							<Border MinWidth="320" MaxWidth="480" Margin="10" Padding="{DynamicResource SpacingSm}" BorderThickness="1" BorderBrush="AliceBlue" CornerRadius="5">
+								<StackPanel>
+									<DockPanel>
+										<Label DockPanel.Dock="Left" VerticalAlignment="Center">Yojimbo Compatibility</Label>
+										<TextBox DockPanel.Dock="Right" Width="80" HorizontalAlignment="Right" Text="{Binding YojimboCompatibility, Mode=TwoWay}"/>
+									</DockPanel>
+									<TextBlock Margin="0 4 0 0" Opacity="0.75" TextWrapping="Wrap">Valor escondido de afinidade entre 0 e 255. No HD/International, o valor base conhecido e 128.</TextBlock>
+									<TextBlock Margin="0 2 0 0" Opacity="0.75" TextWrapping="Wrap">Quanto maior o valor, melhores tendem a ser as respostas do Yojimbo. 0 = pessimo, 128 = neutro HD, 255 = maximo.</TextBlock>
+									<WrapPanel Margin="0 8 0 0">
+										<Button Margin="0 0 6 0" Click="Button_YojimboMin">Min 0</Button>
+										<Button Margin="0 0 6 0" Click="Button_YojimboDefault">HD Default 128</Button>
+										<Button Click="Button_YojimboMax">Max 255</Button>
+									</WrapPanel>
+								</StackPanel>
+							</Border>
+						</WrapPanel>
+					</StackPanel>
+					<StackPanel Margin="0 30 0 0">
+						<Label FontSize="20" FontWeight="Bold">Thunder Plains - Lightning</Label>
+						<Separator/>
+						<TextBlock Margin="5 0 5 8" Opacity="0.75" TextWrapping="Wrap">Esses valores correspondem ao livro "All About Lightning". Aqui nao existe True/False: sao contadores e recordes.</TextBlock>
+						<WrapPanel>
+							<Border MinWidth="220" MaxWidth="320" Margin="10" Padding="{DynamicResource SpacingSm}" BorderThickness="1" BorderBrush="AliceBlue" CornerRadius="5">
+								<StackPanel>
+									<DockPanel>
+										<Label DockPanel.Dock="Left" VerticalAlignment="Center">Total - All</Label>
+										<TextBox DockPanel.Dock="Right" Width="80" HorizontalAlignment="Right" Text="{Binding LightningTotalAll, Mode=TwoWay}"/>
+									</DockPanel>
+									<TextBlock Margin="0 4 0 0" Opacity="0.75" TextWrapping="Wrap">Total de relampagos que cairam em direcao ao Tidus. Usado nos premios combinados de 30 e 80.</TextBlock>
+								</StackPanel>
+							</Border>
+							<Border MinWidth="220" MaxWidth="320" Margin="10" Padding="{DynamicResource SpacingSm}" BorderThickness="1" BorderBrush="AliceBlue" CornerRadius="5">
+								<StackPanel>
+									<DockPanel>
+										<Label DockPanel.Dock="Left" VerticalAlignment="Center">Total - Dodged</Label>
+										<TextBox DockPanel.Dock="Right" Width="80" HorizontalAlignment="Right" Text="{Binding LightningTotalDodged, Mode=TwoWay}"/>
+									</DockPanel>
+									<TextBlock Margin="0 4 0 0" Opacity="0.75" TextWrapping="Wrap">Total acumulado de relampagos realmente desviados.</TextBlock>
+								</StackPanel>
+							</Border>
+							<Border MinWidth="220" MaxWidth="320" Margin="10" Padding="{DynamicResource SpacingSm}" BorderThickness="1" BorderBrush="AliceBlue" CornerRadius="5">
+								<StackPanel>
+									<DockPanel>
+										<Label DockPanel.Dock="Left" VerticalAlignment="Center">Record - Streak</Label>
+										<TextBox DockPanel.Dock="Right" Width="80" HorizontalAlignment="Right" Text="{Binding LightningRecordStreak, Mode=TwoWay}"/>
+									</DockPanel>
+									<TextBlock Margin="0 4 0 0" Opacity="0.75" TextWrapping="Wrap">Maior sequencia consecutiva ja registrada. 200 e a meta famosa do Venus Sigil.</TextBlock>
+								</StackPanel>
+							</Border>
+						</WrapPanel>
+						<WrapPanel Margin="5 0 5 0">
+							<Button Margin="0 0 6 0" Click="Button_LightningReward30">30 Combined</Button>
+							<Button Margin="0 0 6 0" Click="Button_LightningReward80">80 Combined</Button>
+							<Button Margin="0 0 6 0" Click="Button_LightningRecord200">200 Record</Button>
+							<Button Click="Button_LightningReset">Reset</Button>
+						</WrapPanel>
+						<TextBlock Margin="5 8 5 0" Opacity="0.75" TextWrapping="Wrap">Depois de sobrescrever, ainda e melhor desviar pelo menos mais um relampago manualmente para o jogo recalcular e liberar a recompensa.</TextBlock>
+					</StackPanel>
+					<Button Click="Button_SetOtherData">Overwrite</Button>
+				</StackPanel>
+			</Expander>
+		</StackPanel>
+	</ScrollViewer>
+	
+</UserControl>

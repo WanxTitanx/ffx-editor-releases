@@ -1,0 +1,270 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1500"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.ProjectPipelineExplorer_Control">
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_project_pipeline_d3897391}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_project_pipeline_explorer_26c5116a}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" Text="{Binding OverviewSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<TabControl Grid.Row="1">
+			<TabItem Header="{x:Static res:Strings.U_cdindexexplorer_560d7d11}">
+				<Grid ColumnDefinitions="2*,5*" Margin="0,0,0,12">
+					<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0" MinWidth="280" MaxWidth="420">
+						<Grid RowDefinitions="Auto,*">
+							<Grid ColumnDefinitions="*,Auto,Auto">
+								<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_cdrom_id_fid_mdg_c626b01c}" />
+								<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+								<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenRoot">Open Root</Button>
+							</Grid>
+							<ListBox Grid.Row="1" Margin="0,10,0,0"
+							         ItemsSource="{Binding CdIndexRecords}"
+							         SelectedItem="{Binding SelectedCdIndex, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+											<StackPanel Spacing="4">
+												<TextBlock FontWeight="SemiBold" Text="{Binding Label}" />
+												<TextBlock Text="{Binding TripletSummary}" />
+												<TextBlock Classes="muted" Text="{Binding WarningSummary}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</Border>
+
+					<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+						<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+							<StackPanel Spacing="12">
+								<Grid ColumnDefinitions="*,Auto">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_triplet_40586e17}" />
+										<TextBlock Classes="cardTitle" Text="{Binding SelectedCdIndexTitle}" />
+									</StackPanel>
+									<Button Grid.Column="1" Classes="secondaryAction" Click="Button_OpenSelectedCdIndex">Open Directory</Button>
+								</Grid>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSummary}" />
+										<TextBlock Text="{Binding SelectedCdIndexSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_paths_13e7e117}" />
+										<TextBlock Text="{Binding SelectedCdIndexPaths}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHeadHex}" />
+										<TextBlock Text="{Binding SelectedCdIndexHead}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWarnings}" />
+										<TextBlock Text="{Binding SelectedCdIndexWarnings}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+							</StackPanel>
+						</ScrollViewer>
+					</Border>
+				</Grid>
+			</TabItem>
+
+			<TabItem Header="{x:Static res:Strings.U_projectdescriptorviewer_f3711fb0}">
+				<Grid ColumnDefinitions="2*,5*" Margin="0,0,0,12">
+					<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0" MinWidth="280" MaxWidth="420">
+						<Grid RowDefinitions="Auto,*">
+							<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_descriptors_4b52e2cc}" />
+							<ListBox Grid.Row="1" Margin="0,10,0,0"
+							         ItemsSource="{Binding DescriptorRecords}"
+							         SelectedItem="{Binding SelectedDescriptor, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+											<StackPanel Spacing="4">
+												<TextBlock FontWeight="SemiBold" Text="{Binding Label}" />
+												<TextBlock Text="{Binding Probe.SizeSummary}" />
+												<TextBlock Classes="muted" Text="{Binding WarningSummary}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</Border>
+
+					<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+						<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+							<StackPanel Spacing="12">
+								<Grid ColumnDefinitions="*,Auto">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_descriptor_3e8ceeed}" />
+										<TextBlock Classes="cardTitle" Text="{Binding SelectedDescriptorTitle}" />
+									</StackPanel>
+									<Button Grid.Column="1" Classes="secondaryAction" Click="Button_OpenSelectedDescriptor">Open File</Button>
+								</Grid>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSummary}" />
+										<TextBlock Text="{Binding SelectedDescriptorSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHeadHex}" />
+										<TextBlock Text="{Binding SelectedDescriptorHead}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_string_preview_7631486a}" />
+										<TextBlock Text="{Binding SelectedDescriptorPreview}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWarnings}" />
+										<TextBlock Text="{Binding SelectedDescriptorWarnings}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+							</StackPanel>
+						</ScrollViewer>
+					</Border>
+				</Grid>
+			</TabItem>
+
+			<TabItem Header="{x:Static res:Strings.U_abmapsupportgraph_3e7dcefb}">
+				<Grid ColumnDefinitions="2*,5*" Margin="0,0,0,12">
+					<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0" MinWidth="280" MaxWidth="420">
+						<Grid RowDefinitions="Auto,*">
+							<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_abmap_support_7fc988b6}" />
+							<ListBox Grid.Row="1" Margin="0,10,0,0"
+							         ItemsSource="{Binding AbmapRecords}"
+							         SelectedItem="{Binding SelectedAbmap, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+											<StackPanel Spacing="4">
+												<TextBlock FontWeight="SemiBold" Text="{Binding Label}" />
+												<TextBlock Text="{Binding Probe.SizeSummary}" />
+												<TextBlock Classes="muted" Text="{Binding WarningSummary}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</Border>
+
+					<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+						<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+							<StackPanel Spacing="12">
+								<Grid ColumnDefinitions="*,Auto">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_abmap_record_e7f92c6c}" />
+										<TextBlock Classes="cardTitle" Text="{Binding SelectedAbmapTitle}" />
+									</StackPanel>
+									<Button Grid.Column="1" Classes="secondaryAction" Click="Button_OpenSelectedAbmap">Open File</Button>
+								</Grid>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSummary}" />
+										<TextBlock Text="{Binding SelectedAbmapSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHeadHex}" />
+										<TextBlock Text="{Binding SelectedAbmapHead}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_references_5d20d0fe}" />
+										<TextBlock Text="{Binding SelectedAbmapReferences}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWarnings}" />
+										<TextBlock Text="{Binding SelectedAbmapWarnings}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_graph_edges_ef3cf111}" />
+										<ItemsControl ItemsSource="{Binding Edges}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<StackPanel Margin="0,0,0,8">
+														<TextBlock FontWeight="SemiBold" Text="{Binding Summary}" TextWrapping="Wrap" />
+														<TextBlock Classes="muted" Text="{Binding Note}" TextWrapping="Wrap" />
+													</StackPanel>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</Border>
+							</StackPanel>
+						</ScrollViewer>
+					</Border>
+				</Grid>
+			</TabItem>
+		</TabControl>
+
+		<Border Grid.Row="2" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,12,0,0">
+			<Grid ColumnDefinitions="*,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_global_warnings_11b6eec6}" />
+					<ItemsControl ItemsSource="{Binding GlobalWarnings}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Margin="0,0,0,6" Text="{Binding}" TextWrapping="Wrap" />
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</StackPanel>
+				<StackPanel Grid.Column="1" Spacing="8" Margin="12,0,0,0">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_blocked_actions_ea58b312}" />
+					<ItemsControl ItemsSource="{Binding BlockedActions}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Margin="0,0,0,6" Text="{Binding}" TextWrapping="Wrap" />
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</StackPanel>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>

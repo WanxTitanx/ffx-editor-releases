@@ -1,0 +1,418 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:sg="clr-namespace:FFXProjectEditor.Controls.SphereGrid"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1420"
+             d:DesignHeight="820"
+             x:Class="FFXProjectEditor.SphereGridExplorer_Control">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*" MinWidth="240" MaxWidth="360" />
+			<ColumnDefinition Width="3*" MinWidth="320" MaxWidth="520" />
+			<ColumnDefinition Width="5*" MinWidth="360" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.Column="0" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<Grid ColumnDefinitions="*,Auto">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_grid_domains_f929d8d7}" VerticalAlignment="Center" />
+						<ctrl:CapabilityBadge Grid.Column="1" Name="SphereGridCapabilityBadge" VerticalAlignment="Center" />
+					</Grid>
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_sphere_grid_editor_sphere_bin_a0f0a771}" />
+					<TextBlock Classes="muted"
+					           Text="{x:Static res:Strings.U_sphere_types_node_types_and_the_three_grid_layou_79189b1e}"
+					           TextWrapping="Wrap" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,14" Spacing="10">
+					<StackPanel Orientation="Horizontal" Spacing="8">
+						<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+						<Button HorizontalAlignment="Left" Classes="secondaryAction" Name="Button_ReviewDiff" Click="Button_ReviewDiff_Click" AutomationProperties.Name="Review Diff">🔍 Diff</Button>
+					</StackPanel>
+					<TextBlock Classes="muted" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding LoadedSources}"
+						 SelectedItem="{Binding SelectedSource, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+									<TextBlock Classes="sectionLabel" Text="{Binding ParserModeLabel}" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Column="1" Margin="18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonDecodedEntries}" />
+					<TextBlock Classes="cardTitle" Text="{Binding SelectedSource.DisplayName}" />
+					<TextBlock Classes="muted" Text="{Binding SelectedSourceSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<TextBox Grid.Row="1"
+						 Margin="0,14,0,14"
+						 Watermark="{x:Static res:Strings.U_filter_by_id_localized_text_move_name_or_layout__1df2665b}"
+						 Text="{Binding FilterText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding DisplayedRecords}"
+						 SelectedItem="{Binding SelectedRecord, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<ScrollViewer Grid.Column="2" Margin="0,18,18,18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_record_38aaa858}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedRecord.IndexLabel}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedRecordSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding HasLoadedSphereGrid}">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+						<Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto">
+							<StackPanel Spacing="2" VerticalAlignment="Center">
+								<TextBlock Text="{Binding EditSession.SessionSummary}" FontWeight="SemiBold" />
+								<TextBlock Text="{Binding EditSession.BehaviorSummary}" Classes="muted" TextWrapping="Wrap" />
+							</StackPanel>
+							<core:AutoSaveIndicator_Control Grid.Column="1"
+							                               Margin="12,0,0,0"
+							                               VerticalAlignment="Center"
+							                               Session="{Binding EditSession}" />
+							<CheckBox Grid.Column="2"
+									  Margin="12,0,0,0"
+									  VerticalAlignment="Center"
+									  IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+							<Button Grid.Column="3"
+									Margin="12,0,0,0"
+									Classes="secondaryAction"
+									IsEnabled="{Binding EditSession.CanUndo}"
+									Click="Button_Undo">Undo</Button>
+							<Button Grid.Column="4"
+									Margin="12,0,0,0"
+									Classes="secondaryAction"
+									IsEnabled="{Binding EditSession.HasPendingChanges}"
+									Click="Button_Discard">Discard</Button>
+							<Button Grid.Column="5"
+									Margin="12,0,0,0"
+									IsEnabled="{Binding EditSession.HasPendingChanges}"
+									Click="Button_Save">Save</Button>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding IsLayoutPreviewVisible}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_grid_preview_e96bacb1}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedLayoutPreviewSummary}" TextWrapping="Wrap" />
+						<Grid ColumnDefinitions="2*,2*,Auto,3*,Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+							<StackPanel Grid.Column="0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_visual_preset_a64a8882}" />
+								<ComboBox ItemsSource="{Binding PreviewPresetOptions}"
+								          SelectedItem="{Binding SelectedPreviewPresetOption, Mode=TwoWay}"
+								          ToolTip.Tip="{x:Static res:Strings.U_quick_switches_for_different_moods_gameplay_like_ef9f1533}" />
+							</StackPanel>
+							<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_visual_mode_42c57915}" />
+								<ComboBox ItemsSource="{Binding PreviewVisualModeOptions}"
+								          SelectedItem="{Binding SelectedPreviewVisualModeOption, Mode=TwoWay}"
+								          ToolTip.Tip="{x:Static res:Strings.U_fine_control_over_how_nodes_render_hybrid_art_pl_5354bdfa}" />
+							</StackPanel>
+							<StackPanel Grid.Column="2" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_zoom_9b3cbed5}" />
+								<TextBlock Text="{Binding PreviewZoomSummary}" FontWeight="SemiBold" ToolTip.Tip="{x:Static res:Strings.U_current_preview_zoom_wheel_and_slider_both_updat_cceab271}" />
+							</StackPanel>
+							<Slider Grid.Column="3"
+							        Grid.ColumnSpan="2"
+							        Margin="12,18,0,0"
+							        Minimum="0.55"
+							        Maximum="2.8"
+							        SmallChange="0.05"
+							        LargeChange="0.2"
+							        TickFrequency="0.15"
+							        Value="{Binding PreviewZoomFactor, Mode=TwoWay}"
+							        ToolTip.Tip="{x:Static res:Strings.U_wheel_or_drag_this_to_zoom_out_for_whole_board_r_9b3f4316}" />
+							<Button Grid.Column="5"
+									Margin="12,18,0,0"
+									Classes="secondaryAction"
+									ToolTip.Tip="{x:Static res:Strings.U_zoom_out_one_step_a88ac2c9}"
+									Click="Button_PreviewZoomOut">-</Button>
+							<Button Grid.Column="6"
+									Margin="12,18,0,0"
+									Classes="secondaryAction"
+									ToolTip.Tip="{x:Static res:Strings.U_zoom_in_one_step_8aea21c7}"
+									Click="Button_PreviewZoomIn">+</Button>
+							<TextBlock Grid.Row="1"
+							           Grid.Column="0"
+							           Grid.ColumnSpan="7"
+							           Margin="0,4,0,0"
+							           Text="{Binding SelectedPreviewPresetSummary}"
+							           FontWeight="SemiBold"
+							           TextWrapping="Wrap" />
+							<TextBlock Grid.Row="2"
+							           Grid.Column="0"
+							           Grid.ColumnSpan="7"
+							           Classes="muted"
+							           Text="{x:Static res:Strings.U_left_click_on_a_node_selects_it_and_the_almost_i_22ac166b}"
+							           TextWrapping="Wrap" />
+						</Grid>
+						<WrapPanel Orientation="Horizontal">
+							<Border Margin="0,0,8,8" Padding="10,6" Classes="cardSoft" ToolTip.Tip="{x:Static res:Strings.U_bright_cyan_halo_this_is_the_currently_focused_n_2f2202c7}">
+								<TextBlock Text="{x:Static res:Strings.U_halo_selected_0e7ba85a}" />
+							</Border>
+							<Border Margin="0,0,8,8" Padding="10,6" Classes="cardSoft" ToolTip.Tip="{x:Static res:Strings.U_short_labels_are_the_node_payload_shorthand_usef_9b69df59}">
+								<TextBlock Text="{x:Static res:Strings.U_labels_payload_ad2cd3d8}" />
+							</Border>
+							<Border Margin="0,0,8,8" Padding="10,6" Classes="cardSoft" ToolTip.Tip="{x:Static res:Strings.U_lock_nodes_show_their_lock_icon_or_level_when_th_b9175850}">
+								<TextBlock Text="{x:Static res:Strings.U_locks_native_icons_d60e652b}" />
+							</Border>
+							<Border Margin="0,0,8,8" Padding="10,6" Classes="cardSoft" ToolTip.Tip="{x:Static res:Strings.U_debug_colors_exaggerate_payload_separation_so_de_605c29f5}">
+								<TextBlock Text="{x:Static res:Strings.U_colors_dense_debug_a62b0084}" />
+							</Border>
+							<Border Margin="0,0,8,8" Padding="10,6" Classes="cardSoft" ToolTip.Tip="{x:Static res:Strings.U_background_only_mode_is_for_comparing_the_real_b_75b5a0b1}">
+								<TextBlock Text="{x:Static res:Strings.U_backdrop_art_study_c3c9ec64}" />
+							</Border>
+							<Border Margin="0,0,8,8" Padding="10,6" Classes="cardSoft" ToolTip.Tip="{x:Static res:Strings.U_almost_in_game_locks_the_camera_tighter_on_the_s_963a50d4}">
+								<TextBlock Text="{x:Static res:Strings.U_almost_in_game_native_feel_bf2ddf7e}" />
+							</Border>
+						</WrapPanel>
+						<ScrollViewer x:Name="PreviewScrollViewer"
+						              MinHeight="540"
+						              HorizontalScrollBarVisibility="Auto"
+						              VerticalScrollBarVisibility="Auto"
+						              ToolTip.Tip="{x:Static res:Strings.U_left_click_a_node_to_focus_it_left_drag_right_dr_29d924e3}">
+							<sg:SphereGridPreview_Control x:Name="PreviewSurface"
+							                              Width="{Binding PreviewCanvasSize}"
+							                              Height="{Binding PreviewCanvasSize}"
+							                              Layout="{Binding SelectedLayoutPreview}"
+							                              HighlightedNodeIndex="{Binding SelectedLayoutHighlightedNodeIndex, Mode=TwoWay}"
+							                              NodeVisuals="{Binding PreviewNodeVisuals}"
+							                              BackgroundKind="{Binding SelectedLayoutBackgroundKind}"
+							                              VisualMode="{Binding SelectedPreviewVisualMode}" />
+						</ScrollViewer>
+						<Button HorizontalAlignment="Left"
+						        Classes="secondaryAction"
+						        ToolTip.Tip="{x:Static res:Strings.U_reset_to_the_current_preset_s_intended_zoom_fcfb4288}"
+						        Click="Button_PreviewReset">Reset Zoom</Button>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_editor_surface_1f595da2}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedEditorSummary}" TextWrapping="Wrap" />
+
+						<StackPanel Spacing="12" IsVisible="{Binding IsSphereTypeEditorVisible}">
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonUsDescription}" />
+									<TextBox Text="{Binding SelectedSphereTypeRow.UsDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonJpDescription}" />
+									<TextBox Text="{Binding SelectedSphereTypeRow.JpDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+							</Grid>
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_us_simplified_6af0cb7c}" />
+									<TextBox Text="{Binding SelectedSphereTypeRow.UsSimplifiedDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_jp_simplified_8d8d7311}" />
+									<TextBox Text="{Binding SelectedSphereTypeRow.JpSimplifiedDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+							</Grid>
+							<Grid ColumnDefinitions="*,*,*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_action_97c89a4d}" />
+									<ComboBox ItemsSource="{Binding ActionOptions}"
+									          SelectedItem="{Binding SelectedActionOption, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonRange}" />
+									<ComboBox ItemsSource="{Binding RangeOptions}"
+									          SelectedItem="{Binding SelectedRangeOption, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="2" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_activation_bitfield_locked_b86e7249}" />
+									<TextBox IsReadOnly="True" Text="{Binding SelectedSphereTypeRow.Activates}" />
+								</StackPanel>
+								<StackPanel Grid.Column="3" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_special_zero_locked_a87a2cc3}" />
+									<TextBox IsReadOnly="True" Text="{Binding SelectedSphereTypeRow.SpecialRole, StringFormat='Special {0}'}" />
+								</StackPanel>
+							</Grid>
+						</StackPanel>
+
+						<StackPanel Spacing="12" IsVisible="{Binding IsNodeTypeEditorVisible}">
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonUsName}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.UsName, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonJpName}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.JpName, Mode=TwoWay}" />
+								</StackPanel>
+							</Grid>
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_us_simplified_name_a0e670ed}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.UsSimplifiedName, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_jp_simplified_name_6e0064ad}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.JpSimplifiedName, Mode=TwoWay}" />
+								</StackPanel>
+							</Grid>
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonUsDescription}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.UsDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonJpDescription}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.JpDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+							</Grid>
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_us_simplified_description_935e635c}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.UsSimplifiedDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_jp_simplified_description_e16deec9}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.JpSimplifiedDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" />
+								</StackPanel>
+							</Grid>
+							<Grid ColumnDefinitions="1.3*,*,*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_required_sphere_7529e326}" />
+									<ComboBox ItemsSource="{Binding SphereRequirementOptions}"
+									          SelectedItem="{Binding SelectedSphereRequirementOption, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_learned_move_67bf0858}" />
+									<ComboBox ItemsSource="{Binding LearnedMoveOptions}"
+									          SelectedItem="{Binding SelectedLearnedMoveOption, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="2" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_increase_amount_a4017f44}" />
+									<TextBox Text="{Binding SelectedNodeTypeRow.IncreaseAmount, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="3" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_effect_appearance_07503c42}" />
+									<TextBox IsReadOnly="True" Text="{Binding SelectedNodeEffectAppearanceSummary}" />
+								</StackPanel>
+							</Grid>
+						</StackPanel>
+
+						<StackPanel Spacing="12" IsVisible="{Binding IsLayoutNodeEditorVisible}">
+							<Grid ColumnDefinitions="1.3*,*,*,*">
+								<StackPanel Grid.Column="0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_node_type_33d6848a}" />
+									<ComboBox ItemsSource="{Binding NodeTypeOptions}"
+									          SelectedItem="{Binding SelectedLayoutNodeTypeOption, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_cluster_locked_1fcd2768}" />
+									<TextBox IsReadOnly="True" Text="{Binding SelectedLayoutNodeRow.Cluster}" />
+								</StackPanel>
+								<StackPanel Grid.Column="2" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_links_locked_03039456}" />
+									<TextBox IsReadOnly="True" Text="{Binding SelectedLayoutNodeRow.ConnectedNodeCount}" />
+								</StackPanel>
+								<StackPanel Grid.Column="3" Margin="12,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_position_locked_ecdc3376}" />
+									<TextBox IsReadOnly="True" Text="{Binding SelectedLayoutNodeRow.PosX, StringFormat='X {0}'}" />
+								</StackPanel>
+							</Grid>
+							<common:AtlasEvidenceBadgeStrip Evidence="{Binding SelectedNodeEvidence}" />
+							<TextBlock Classes="muted" Text="{x:Static res:Strings.U_this_v1_editor_only_swaps_the_node_payload_conte_c319e5bf}" TextWrapping="Wrap" />
+						</StackPanel>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPendingDiff}" />
+						<TextBlock Classes="muted" Text="{Binding PendingDiffSummary}" TextWrapping="Wrap" />
+						<ItemsControl ItemsSource="{Binding PendingDiffRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,8" Padding="10" Classes="cardSoft">
+										<StackPanel Spacing="4">
+											<TextBlock Classes="sectionLabel" Text="{Binding Scope}" />
+											<TextBlock Text="{Binding Change}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.PrimaryLabel}" />
+						<TextBox Text="{Binding SelectedRecord.PrimaryText}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.SecondaryLabel}" />
+						<TextBox Text="{Binding SelectedRecord.SecondaryText}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.TertiaryLabel}" />
+						<TextBox Text="{Binding SelectedRecord.TertiaryText}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.QuaternaryLabel}" />
+						<TextBox Text="{Binding SelectedRecord.QuaternaryText}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

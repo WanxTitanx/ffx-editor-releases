@@ -1,0 +1,303 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="1040"
+        d:DesignHeight="760"
+        x:Class="FFXProjectEditor.MonsterAiIndirectDispatchUnit_Window"
+        Title="Editor de unidade indireta"
+        Width="1040"
+        Height="760"
+        MinWidth="900"
+        MinHeight="620">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,*,Auto">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_ai_editor_completo_da_familia_6ba629b8}" />
+					<TextBlock Classes="cardTitle" Text="{Binding UnitTitle}" />
+					<TextBlock Classes="muted" Text="{Binding HookSummary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding ConsumerSummary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding OffsetSummary}" />
+					<TextBlock Classes="muted"
+					           Text="{x:Static res:Strings.U_os_atalhos_do_gerenciador_de_fases_avancado_agor_f623a534}"
+					           TextWrapping="Wrap" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Margin="0,14,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="12">
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentCycleFillBrush}"
+					        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7"
+					        IsVisible="{Binding HasMultipleUnits}">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_rota_detectada_nesta_familia_565b4aa4}"
+							           Foreground="{DynamicResource AccentCycleBorderBrush}" />
+							<TextBlock Classes="muted"
+							           Text="{x:Static res:Strings.U_esta_acao_indireta_compartilha_varias_rotas_irma_7640784d}"
+							           TextWrapping="Wrap" />
+							<ComboBox ItemsSource="{Binding AvailableUnits}"
+							          SelectedItem="{Binding SelectedUnit, Mode=TwoWay}"
+							          MaxDropDownHeight="280">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Spacing="2">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+											<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7"
+					        IsVisible="{Binding HasFocusedContext}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonFocusFromV2}"
+							           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<TextBlock Text="{Binding FocusedContextSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<TextBlock TextWrapping="Wrap" Text="{Binding WarningSummary}" />
+					</Border>
+
+					<TextBlock Classes="sectionLabel"
+					           Text="{x:Static res:Strings.U_slots_de_comando_editaveis_550bad56}"
+					           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+
+					<ItemsControl ItemsSource="{Binding SlotRows}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,8"
+								        Padding="{DynamicResource SpacingMd}"
+								        Background="{DynamicResource AccentShellFillBrush}"
+								        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+								        BorderThickness="1"
+								        CornerRadius="7">
+								<StackPanel Spacing="8">
+										<Grid ColumnDefinitions="*,Auto,Auto">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Label}" />
+											<Border Grid.Column="1"
+											        Margin="10,0,0,0"
+											        Padding="7,2"
+											        Background="{DynamicResource AccentGoldFillBrush}"
+											        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+											        BorderThickness="1"
+											        CornerRadius="5"
+											        IsVisible="{Binding IsFocused}">
+												<TextBlock FontSize="11" FontWeight="SemiBold" Text="{x:Static res:Strings.CommonFocus}" />
+											</Border>
+											<TextBlock Grid.Column="2" Margin="10,0,0,0" Classes="muted" Text="{Binding OffsetHex}" />
+										</Grid>
+										<TextBlock Classes="muted" Text="{Binding CurrentDisplay}" TextWrapping="Wrap" />
+										<ComboBox HorizontalAlignment="Stretch"
+										          MaxDropDownHeight="320"
+										          ItemsSource="{Binding CommandOptions}"
+										          SelectedItem="{Binding SelectedCommand, Mode=TwoWay}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Display}" />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+
+					<TextBlock Classes="sectionLabel"
+					           Text="{x:Static res:Strings.U_target_slots_estruturados_0c49bd3b}"
+					           Foreground="{DynamicResource AccentCycleBorderBrush}"
+					           IsVisible="{Binding HasTargetSlotRows}" />
+
+					<ItemsControl ItemsSource="{Binding TargetSlotRows}"
+					              IsVisible="{Binding HasTargetSlotRows}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,8"
+								        Padding="{DynamicResource SpacingMd}"
+								        Background="{DynamicResource AccentShellFillBrush}"
+								        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+								        BorderThickness="1"
+								        CornerRadius="7">
+									<StackPanel Spacing="8">
+										<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+											<StackPanel Spacing="2">
+												<TextBlock FontWeight="SemiBold" Text="{Binding Label}" />
+												<TextBlock Classes="sectionLabel"
+												           Text="{Binding VariableName}"
+												           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+											</StackPanel>
+											<TextBlock Grid.Column="1"
+											           Margin="10,0,0,0"
+											           Classes="muted"
+											           Text="{Binding SourceKindLabel}" />
+											<Border Grid.Column="2"
+											        Margin="10,0,0,0"
+											        Padding="7,2"
+											        Background="{DynamicResource AccentGoldFillBrush}"
+											        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+											        BorderThickness="1"
+											        CornerRadius="5"
+											        IsVisible="{Binding IsFocused}">
+												<TextBlock FontSize="11" FontWeight="SemiBold" Text="{x:Static res:Strings.CommonFocus}" />
+											</Border>
+											<TextBlock Grid.Column="3"
+											           Margin="10,0,0,0"
+											           Classes="muted"
+											           Text="{Binding OffsetHex}" />
+										</Grid>
+										<TextBlock Text="{Binding CurrentDisplay}" TextWrapping="Wrap" />
+										<StackPanel Spacing="4" IsVisible="{Binding CanChangeMode}">
+											<TextBlock Classes="sectionLabel"
+											           Text="{x:Static res:Strings.CommonSlotMode}"
+											           Foreground="{DynamicResource AccentCycleBorderBrush}" />
+											<ComboBox HorizontalAlignment="Stretch"
+											          ItemsSource="{Binding EditModeOptions}"
+											          SelectedItem="{Binding SelectedEditMode, Mode=TwoWay}" />
+										</StackPanel>
+										<ComboBox HorizontalAlignment="Stretch"
+										          MaxDropDownHeight="320"
+										          ItemsSource="{Binding TargetOptions}"
+										          SelectedItem="{Binding SelectedTarget, Mode=TwoWay}"
+										          IsVisible="{Binding ShowLiteralEditor}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Display}" TextWrapping="Wrap" />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+										<ComboBox HorizontalAlignment="Stretch"
+										          MaxDropDownHeight="320"
+										          ItemsSource="{Binding RecipeOptions}"
+										          SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}"
+										          IsVisible="{Binding ShowRecipeEditor}" />
+										<ComboBox HorizontalAlignment="Stretch"
+										          MaxDropDownHeight="320"
+										          ItemsSource="{Binding CopyVariableOptions}"
+										          SelectedItem="{Binding SelectedCopyVariable, Mode=TwoWay}"
+										          IsVisible="{Binding ShowCopyEditor}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Display}" TextWrapping="Wrap" />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+										<TextBlock Classes="muted"
+										           Text="{Binding DetailSummary}"
+										           TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentCycleFillBrush}"
+					        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7"
+					        IsVisible="{Binding HasEditableNextState}">
+						<StackPanel Spacing="8">
+							<Border Padding="7,2"
+							        Background="{DynamicResource AccentGoldFillBrush}"
+							        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+							        BorderThickness="1"
+							        CornerRadius="5"
+							        HorizontalAlignment="Left"
+							        IsVisible="{Binding IsNextStateFocused}">
+								<TextBlock FontSize="11" FontWeight="SemiBold" Text="{x:Static res:Strings.CommonFocus}" />
+							</Border>
+							<Grid ColumnDefinitions="Auto,140,*">
+								<TextBlock Classes="sectionLabel"
+								           Text="{x:Static res:Strings.CommonNextState}"
+								           VerticalAlignment="Center"
+								           Foreground="{DynamicResource AccentCycleBorderBrush}" />
+								<TextBox Grid.Column="1"
+								         Margin="10,0,0,0"
+								         Text="{Binding NextStateText, Mode=TwoWay}"
+								         FontFamily="Cascadia Mono,Consolas,Monospace" />
+								<TextBlock Grid.Column="2"
+								           Margin="12,0,0,0"
+								           Classes="muted"
+								           VerticalAlignment="Center"
+								           Text="{x:Static res:Strings.U_literal_ushort_gravado_no_write_final_de_fase_03ef6f47}" />
+							</Grid>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentShellFillBrush}"
+					        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="7">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonPreviewApply}"
+							           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBox Text="{Binding PreviewSummary}"
+							         IsReadOnly="True"
+							         AcceptsReturn="True"
+							         TextWrapping="Wrap"
+							         MinHeight="110"
+							         FontFamily="Cascadia Mono,Consolas,Monospace" />
+						</StackPanel>
+					</Border>
+
+					<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding StatusSummary}" />
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+		<Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="*,Auto,Auto">
+			<TextBlock Classes="muted"
+			           VerticalAlignment="Center"
+			           Text="{x:Static res:Strings.U_writer_estrutural_atual_command_rows_target_lite_c34f33e4}" />
+			<Button Grid.Column="1"
+			        Margin="12,0,8,0"
+			        Classes="secondaryAction accentProtect"
+			        Click="Button_Apply"
+			        IsEnabled="{Binding HasChanges}"
+			        Content="{x:Static res:Strings.CommonApplyToMonster}" />
+			<Button Grid.Column="2"
+			        Classes="secondaryAction"
+			        Click="Button_Close"
+			        Content="{x:Static res:Strings.CommonClose}" />
+		</Grid>
+	</Grid>
+</Window>

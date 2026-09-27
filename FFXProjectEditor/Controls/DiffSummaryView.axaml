@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="250"
+             x:Class="FFXProjectEditor.Controls.DiffSummaryView">
+	<Border Background="#0A1118" BorderBrush="#264052" BorderThickness="1" CornerRadius="6" Padding="12">
+		<Grid RowDefinitions="Auto,Auto,*">
+			<!-- File Header -->
+			<Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+				<StackPanel Orientation="Horizontal" Spacing="8">
+					<TextBlock Text="📄" FontSize="14" VerticalAlignment="Center" />
+					<TextBlock Name="FileNameText" Text="monster.bin" Foreground="#F1F5F9" FontWeight="Bold" FontSize="12" VerticalAlignment="Center" />
+				</StackPanel>
+				<TextBlock Grid.Column="1" Name="HashesText" Text="a1b2c3d4... ➔ e5f6g7h8..." Foreground="#8BA3B5" FontSize="10" VerticalAlignment="Center" />
+			</Grid>
+
+			<!-- Human Summary Banner -->
+			<Border Grid.Row="1" Background="#15212C" BorderBrush="#264052" BorderThickness="1" CornerRadius="4" Padding="8,4" Margin="0,0,0,8">
+				<TextBlock Name="HumanSummaryText" Text="{x:Static res:Strings.U_DiffSummary}" Foreground="#4A90D9" FontSize="11" />
+			</Border>
+
+			<!-- 3-Layer Tab View (Semântica / Disassembly / Bytes) -->
+			<TabControl Grid.Row="2" Padding="0">
+				<!-- Layer 1: Semântica -->
+				<TabItem Header="{x:Static res:Strings.U_DiffSemantics}" FontSize="11">
+					<ScrollViewer Height="120" Margin="0,6,0,0">
+						<ListBox Name="SemanticDiffList" Background="Transparent" BorderThickness="0" ItemTemplate="{DynamicResource DiffLineTemplate}" />
+					</ScrollViewer>
+				</TabItem>
+				<!-- Layer 2: Disassembly -->
+				<TabItem Header="⚙️ Disassembly" FontSize="11">
+					<ScrollViewer Height="120" Margin="0,6,0,0">
+						<ListBox Name="DisassemblyDiffList" Background="Transparent" BorderThickness="0" ItemTemplate="{DynamicResource DiffLineTemplate}" />
+					</ScrollViewer>
+				</TabItem>
+				<!-- Layer 3: Bytes -->
+				<TabItem Header="🔢 Bytes" FontSize="11">
+					<ScrollViewer Height="120" Margin="0,6,0,0">
+						<ListBox Name="ByteDiffList" Background="Transparent" BorderThickness="0" ItemTemplate="{DynamicResource DiffLineTemplate}" />
+					</ScrollViewer>
+				</TabItem>
+			</TabControl>
+		</Grid>
+	</Border>
+
+	<UserControl.Resources>
+		<DataTemplate x:Key="DiffLineTemplate">
+			<TextBlock Text="{Binding}" FontFamily="Consolas,Cascadia Code,Monospace" FontSize="11" Foreground="#F1F5F9" />
+		</DataTemplate>
+	</UserControl.Resources>
+</UserControl>

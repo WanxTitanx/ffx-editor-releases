@@ -1,0 +1,362 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:local="clr-namespace:FFXProjectEditor.Modules.AutoAbilityEditor"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1380"
+             d:DesignHeight="820"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.AutoAbilityEditor_Control">
+
+	<!-- Jarvis-UI Fase E §E6: hand-rolled 2*,5* grid → ModuleMasterDetail_Shell (Auto,*). -->
+
+	<UserControl.Styles>
+		<Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+			<Setter Property="IsMasterExpanded" Value="False" />
+		</Style>
+	</UserControl.Styles>
+
+	<common:ModuleMasterDetail_Shell MasterHeaderLabel="Auto-Abilities">
+
+		<common:ModuleMasterDetail_Shell.MasterHeader>
+			<StackPanel Spacing="4" Margin="2,0,2,2">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_a_ability_bin_arms_rate_bin_31898c32}" />
+				<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+				           Text="{x:Static res:Strings.U_names_prices_elements_status_stat_boosts_flags_c_c258146a}" />
+			</StackPanel>
+		</common:ModuleMasterDetail_Shell.MasterHeader>
+
+		<common:ModuleMasterDetail_Shell.MasterList>
+			<Grid RowDefinitions="Auto,*">
+				<StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+					<Grid ColumnDefinitions="*,Auto">
+						<TextBox Watermark="{x:Static res:Strings.U_filter_by_name_description_group_or_price_5845a683}"
+								 Text="{Binding FilterText, Mode=TwoWay}" />
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh" AutomationProperties.Name="Refresh">Refresh</Button>
+					</Grid>
+					<TextBlock Classes="muted" FontSize="11" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<ListBox Grid.Row="1"
+						 ItemsSource="{Binding DisplayedAbilities}"
+						 SelectedItem="{Binding SelectedAbility, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,6" Padding="10" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding DisplayLabel}" />
+									<TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding IndexLabel}" />
+									<TextBlock Classes="muted" FontSize="11" Text="{Binding PayloadSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" FontSize="11" Text="{Binding DescriptionText}" TextWrapping="Wrap" MaxLines="3" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</common:ModuleMasterDetail_Shell.MasterList>
+
+		<common:ModuleMasterDetail_Shell.Detail>
+			<ScrollViewer Margin="0" HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Spacing="14" Margin="10,10,10,10">
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_auto_ability_surface_c04e88b6}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedAbility.DisplayLabel}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedAbilitySummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_editing_3b9ba1a2}" />
+						<Grid ColumnDefinitions="*">
+							<StackPanel Spacing="4">
+								<TextBlock Text="{Binding EditingSurfaceSummary}" FontWeight="SemiBold" />
+								<TextBlock Text="{Binding EditingSurfaceDetail}" Classes="muted" TextWrapping="Wrap" />
+							</StackPanel>
+						</Grid>
+						<WrapPanel Orientation="Horizontal" IsEnabled="{Binding EditingSurfaceEnabled}">
+							<CheckBox VerticalAlignment="Center"
+									  IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+							<Button Margin="12,0,0,0"
+									Classes="secondaryAction"
+									IsEnabled="{Binding EditSession.CanUndo}"
+									Click="Button_Undo" AutomationProperties.Name="Undo">Undo</Button>
+							<Button Margin="12,0,0,0"
+									Classes="secondaryAction"
+									IsEnabled="{Binding EditSession.DiffersFromOriginal}"
+									Click="Button_Discard" AutomationProperties.Name="Discard">Discard</Button>
+							<Button Margin="12,0,0,0"
+									IsEnabled="{Binding EditSession.HasPendingChanges}"
+									Click="Button_Save" AutomationProperties.Name="Save">Save</Button>
+							<Button Margin="12,0,0,0"
+									Classes="secondaryAction"
+									Click="Button_CreateNewAbility" AutomationProperties.Name="+ Nova auto-ability">+ Nova auto-ability</Button>
+						</WrapPanel>
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_duplicates_the_selected_record_into_the_next_id__7a2f10ba}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_text_c3328c39}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_name_and_description_2b0336a1}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_save_rebuilds_the_text_pool_and_keeps_control_to_d6788d22}" TextWrapping="Wrap" />
+
+						<Grid ColumnDefinitions="*,*">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonName}" />
+								<TextBox Text="{Binding SelectedAbility.NameText, Mode=TwoWay}" />
+							</StackPanel>
+							<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_aux_text_a_680d595c}" />
+								<TextBox Text="{Binding SelectedAbility.AuxiliaryText1, Mode=TwoWay}" />
+							</StackPanel>
+						</Grid>
+
+						<Grid ColumnDefinitions="*,*">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonDescription}" />
+								<TextBox Text="{Binding SelectedAbility.DescriptionText, Mode=TwoWay}" AcceptsReturn="True" Height="84" TextWrapping="Wrap" />
+							</StackPanel>
+							<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_aux_text_b_c89efe72}" />
+								<TextBox Text="{Binding SelectedAbility.AuxiliaryText2, Mode=TwoWay}" AcceptsReturn="True" Height="84" TextWrapping="Wrap" />
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_price_customization_metadata_39031492}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_editable_metadata_89d9d407}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_names_follow_the_community_au7_table_where_known_40290865}" TextWrapping="Wrap" />
+
+						<Grid ColumnDefinitions="*,*,*,*">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_gil_price_38f8557d}" />
+								<TextBox Text="{Binding SelectedAbility.GilPrice, Mode=TwoWay}" />
+							</StackPanel>
+							<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_sos_byte_10h_6183cb16}" />
+								<TextBox Text="{Binding SelectedAbility.SosFlagByte, Mode=TwoWay}" />
+							</StackPanel>
+							<StackPanel Grid.Column="2" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_unused_67h_dffdd136}" />
+								<TextBox Text="{Binding SelectedAbility.UnknownByte67, Mode=TwoWay}" />
+							</StackPanel>
+							<StackPanel Grid.Column="3" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_icon_68h_0648bf56}" />
+								<TextBox Text="{Binding SelectedAbility.Icon, Mode=TwoWay}" />
+							</StackPanel>
+						</Grid>
+
+						<Grid ColumnDefinitions="*,*,*">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_customize_group_aa9b8f38}" />
+								<TextBox Text="{Binding SelectedAbility.GroupIndex, Mode=TwoWay}" />
+							</StackPanel>
+							<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_custom_priority_2a4c9b44}" />
+								<TextBox Text="{Binding SelectedAbility.GroupLevel, Mode=TwoWay}" />
+							</StackPanel>
+							<StackPanel Grid.Column="2" Margin="12,0,0,0" Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_unknown_6bh_937bf453}" />
+								<TextBox Text="{Binding SelectedAbility.InternationalBonusIndex, Mode=TwoWay}" />
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_elements_au3_369b7a25}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_toggle_the_element_bits_attached_to_this_auto_ab_062d3e1e}" TextWrapping="Wrap" />
+
+						<ItemsControl ItemsSource="{Binding SelectedAbility.ElementRows}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Classes="cardSoft" Margin="0,0,12,12" Padding="12">
+										<StackPanel Spacing="8">
+											<TextBlock Classes="cardTitle" Text="{Binding ElementName}" />
+											<WrapPanel Orientation="Horizontal">
+												<local:AbilityTogglePill_Control Label="Strike" IsActive="{Binding Strike, Mode=TwoWay}" />
+												<local:AbilityTogglePill_Control Label="Absorb" IsActive="{Binding Absorb, Mode=TwoWay}" />
+												<local:AbilityTogglePill_Control Label="Immune" IsActive="{Binding Immune, Mode=TwoWay}" />
+												<local:AbilityTogglePill_Control Label="Resist" IsActive="{Binding Resist, Mode=TwoWay}" />
+												<local:AbilityTogglePill_Control Label="Weak" IsActive="{Binding Weak, Mode=TwoWay}" />
+											</WrapPanel>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_stat_boost_au2_au4_22ecc7c8}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_boost_values_008944eb}" />
+
+						<ItemsControl ItemsSource="{Binding SelectedAbility.StatBoostRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid ColumnDefinitions="160,*,60" Margin="0,0,0,12">
+										<local:AbilityTogglePill_Control Grid.Column="0" Label="{Binding StatName}" IsActive="{Binding IsActive, Mode=TwoWay}" />
+										<local:AbilityStatusBar_Control Grid.Column="1" Value="{Binding Amount, Mode=TwoWay}" Margin="12,0" />
+										<TextBlock Grid.Column="2" Classes="muted" Text="{Binding TechnicalLabel}" VerticalAlignment="Center" />
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_technical_stat_bits_3aa172a0}" Margin="0,16,0,8" />
+						<ItemsControl ItemsSource="{Binding SelectedAbility.StatTechnicalRows}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<local:AbilityTogglePill_Control Label="{Binding DisplayLabel}" IsActive="{Binding IsActive, Mode=TwoWay}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_auto_status_extra_flags_au4_au5_e4781540}" />
+
+						<ItemsControl ItemsSource="{Binding SelectedAbility.NamedFlagRows}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<local:AbilityTogglePill_Control Label="{Binding DisplayLabel}" IsActive="{Binding IsActive, Mode=TwoWay}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_special_auto_abilities_au6_62h_66h_939ddcce}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_special_and_technical_flags_99c7bbbf}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_toggle_every_au6_bit_from_the_ffxauto_table_incl_fda71274}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding SelectedAbility.HardcodedFlagSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding SelectedAbility.SpecialByteSummary, StringFormat='Bytes 62h-67h: {0}'}" TextWrapping="Wrap" />
+
+						<ItemsControl ItemsSource="{Binding SelectedAbility.HardcodedFlagRows}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<local:AbilityTogglePill_Control Label="{Binding NameLabel}" IsActive="{Binding IsActive, Mode=TwoWay}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_status_chances_au1_au2_43605602}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_instant_statuses_9247e6a9}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_set_chance_values_from_0_to_255_for_each_named_s_aa8336e3}" TextWrapping="Wrap" />
+
+						<ItemsControl ItemsSource="{Binding SelectedAbility.PrimaryStatusRows}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Classes="cardSoft" Margin="0,0,12,12" Padding="12" Width="280">
+										<StackPanel Spacing="8">
+											<TextBlock Text="{Binding Label}" FontWeight="SemiBold" />
+											<Grid ColumnDefinitions="*,*">
+												<StackPanel Grid.Column="0" Margin="0,0,4,0">
+													<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.CommonInflict}" Margin="0,0,0,2"/>
+													<local:AbilityStatusBar_Control Value="{Binding InflictChance, Mode=TwoWay}" />
+												</StackPanel>
+												<StackPanel Grid.Column="1" Margin="4,0,0,0">
+													<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.CommonResist}" Margin="0,0,0,2"/>
+													<local:AbilityStatusBar_Control Value="{Binding ResistChance, Mode=TwoWay}" />
+												</StackPanel>
+											</Grid>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsEnabled="{Binding EditingSurfaceEnabled}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_timed_status_chances_au1_au2_d0cdfeff}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_sleep_through_slow_4c54c1fb}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_set_inflict_chance_duration_hit_count_and_resist_755f69ae}" TextWrapping="Wrap" />
+
+						<ItemsControl ItemsSource="{Binding SelectedAbility.TimedStatusRows}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel Orientation="Horizontal" />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Classes="cardSoft" Margin="0,0,12,12" Padding="12" Width="420">
+										<StackPanel Spacing="8">
+											<TextBlock Text="{Binding Label}" FontWeight="SemiBold" />
+											<Grid ColumnDefinitions="*,*,*">
+												<StackPanel Grid.Column="0" Margin="0,0,4,0">
+													<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.CommonInflict}" Margin="0,0,0,2"/>
+													<local:AbilityStatusBar_Control Value="{Binding InflictChance, Mode=TwoWay}" />
+												</StackPanel>
+												<StackPanel Grid.Column="1" Margin="4,0,4,0">
+													<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_duration_1370004d}" Margin="0,0,0,2"/>
+													<local:AbilityStatusBar_Control Value="{Binding Duration, Mode=TwoWay}" />
+												</StackPanel>
+												<StackPanel Grid.Column="2" Margin="4,0,0,0">
+													<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.CommonResist}" Margin="0,0,0,2"/>
+													<local:AbilityStatusBar_Control Value="{Binding ResistChance, Mode=TwoWay}" />
+												</StackPanel>
+											</Grid>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+				</StackPanel>
+			</ScrollViewer>
+		</common:ModuleMasterDetail_Shell.Detail>
+
+	</common:ModuleMasterDetail_Shell>
+</UserControl>

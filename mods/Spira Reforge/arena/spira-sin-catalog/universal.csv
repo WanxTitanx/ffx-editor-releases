@@ -1,0 +1,12 @@
+# Spira Reforge — SIN v2 universal pool. v1 SIN-001..100 = retired prototype (not shown in UI).
+# legacy_proto_id = RT2/sandbox bridge. preview = UI detail pane (optional).
+
+id,name,maturity,threat,primitives,summary,legacy_proto_id,preview
+UNI-001,Opening Veil,bake-ready,1,BUFF,Abertura defensiva ao levar o primeiro hit independente do turno do monstro — Haste+Protect+Shell em si.,SIN-006,Opener defensivo — Haste+Protect+Shell em si. Guarda one-shot por var privada.
+UNI-002,Counter March,bake-ready,2,CMD,Delay Attack em LastAttacker no onHit. Contra-ataca com atraso de turno.,SIN-009,Delay Attack em LastAttacker no onHit — contra-ataque com delay de turno. Qualquer monstro.
+UNI-003,Low HP Rush,bake-ready,2,HP% + BUFF,When HP below 50% gain Haste (enrage).,,HP<50%: Haste em si. Enrage genérico — qualquer monstro pode usar.
+UNI-004,Ward Stack,bake-ready,1,BUFF,Turn-1 Shell Regen NulBlaze NulShock sustain opener.,SIN-016,Sustentação elemental: Shell+Regen+NulBlaze+NulShock turno 1. Protege fogo/raio.
+UNI-005,Frost-Flood Weave,bake-ready,2,MC + CMD + ELEMENT,Same turn: force Blizzara then Watera (Macalania ice/water pulse).,,Blizzara+Watera na linha de frente. Só m019/m081 na allowlist Macalania.
+UNI-006,Shoreline Break,bake-ready,2,TARGET + CMD + FRONT,Force Watera on FrontlineChars — hits the whole front row.,,Watera em FrontlineChars — pressão na fileira da frente.
+UNI-007,Sin Salve,bake-ready,1,HP% + CMD + HEAL,When HP below 70% force Cure on self.,,HP<70%: Cure em si. Tanques (Murussu Xiphos).
+UNI-008,Mist Chorus,bake-ready,2,HP% + CMD + HEAL,When HP below 50% force White Wind on all allied monsters.,,HP<50%: White Wind em AllMonsters — packs multi-slot (Chimera).

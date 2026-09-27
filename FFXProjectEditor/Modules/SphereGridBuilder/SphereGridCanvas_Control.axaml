@@ -1,0 +1,346 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1440"
+             d:DesignHeight="900"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.Modules.SphereGridBuilder.SphereGridCanvas_Control">
+
+	<UserControl.Styles>
+
+		<!-- Active tool highlight -->
+		<Style Selector="Button.toolActive">
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+		</Style>
+
+		<!-- Compact toolbar buttons -->
+		<Style Selector="Button.tb">
+			<Setter Property="Padding" Value="10,4" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style Selector="Button.tbPrimary">
+			<Setter Property="Padding" Value="14,4" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style Selector="CheckBox.tb">
+			<Setter Property="FontSize" Value="11" />
+			<Setter Property="Margin" Value="0,0,10,0" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style Selector="TextBlock.grpLabel">
+			<Setter Property="FontSize" Value="9" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Opacity" Value="0.55" />
+			<Setter Property="Margin" Value="0,0,6,0" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style Selector="Border.tbSep">
+			<Setter Property="Width" Value="1" />
+			<Setter Property="Background" Value="{DynamicResource PanelStrokeBrush}" />
+			<Setter Property="Margin" Value="10,3" />
+			<Setter Property="Opacity" Value="0.5" />
+		</Style>
+
+		<!-- Side panel styles -->
+		<Style Selector="TextBlock.sectionTitle">
+			<Setter Property="FontSize" Value="10" />
+			<Setter Property="FontWeight" Value="Bold" />
+			<Setter Property="Opacity" Value="0.55" />
+			<Setter Property="Margin" Value="0,10,0,4" />
+		</Style>
+		<Style Selector="TextBox.field">
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="MinHeight" Value="28" />
+		</Style>
+		<Style Selector="ComboBox.field">
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="MinHeight" Value="28" />
+		</Style>
+		<Style Selector="Button.panelBtn">
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="Padding" Value="10,5" />
+			<Setter Property="MinHeight" Value="30" />
+			<Setter Property="HorizontalAlignment" Value="Stretch" />
+			<Setter Property="HorizontalContentAlignment" Value="Center" />
+		</Style>
+
+	</UserControl.Styles>
+
+	<DockPanel Margin="10" LastChildFill="True">
+
+		<!-- ============ TOP TOOLBAR ============ -->
+		<Border DockPanel.Dock="Top" Classes="card" Padding="12,8" Margin="0,0,0,8">
+			<StackPanel Spacing="6">
+
+				<!-- Row 1: All actions in one horizontal strip -->
+				<Grid ColumnDefinitions="Auto,Auto,Auto,Auto,*,Auto" VerticalAlignment="Center">
+
+					<!-- [ARQUIVO] -->
+					<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+						<TextBlock Classes="grpLabel" Text="{x:Static res:Strings.U_arquivo_85d47896}" />
+						<Button Classes="tb" Click="Button_New"
+						        AutomationProperties.Name="Novo grid vazio do zero">Novo</Button>
+						<Button Classes="tb" Click="Button_OpenOriginal"
+						        AutomationProperties.Name="Abrir grid Original (vanilla)">Original</Button>
+						<Button Classes="tb" Click="Button_OpenStandard"
+						        AutomationProperties.Name="Abrir grid Standard">Standard</Button>
+						<Button Classes="tb" Click="Button_OpenExpert"
+						        AutomationProperties.Name="Abrir grid Expert">Expert</Button>
+					</StackPanel>
+
+					<Border Grid.Column="1" Classes="tbSep" />
+
+					<!-- [FERRAMENTAS] -->
+					<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center">
+						<TextBlock Classes="grpLabel" Text="{x:Static res:Strings.U_ferramentas_b3f3a70e}" />
+						<Button x:Name="ToolBtnSelect" Classes="tb" Click="Button_ModeSelect"
+						        AutomationProperties.Name="Modo Selecionar/arrastar">Selecionar</Button>
+						<Button x:Name="ToolBtnAddNode" Classes="tb" Click="Button_ModeAddNode"
+					        AutomationProperties.Name="Modo adicionar nó">+ Nó</Button>
+						<Button x:Name="ToolBtnAddLink" Classes="tb" Click="Button_ModeAddLink"
+						        AutomationProperties.Name="Modo adicionar link">+ Link</Button>
+						<Button Classes="tb" Click="Button_Fit"
+					        AutomationProperties.Name="{x:Static res:Strings.F2_fit_view_to_content_fit_9ef968b2}">Ajustar</Button>
+					</StackPanel>
+
+					<Border Grid.Column="3" Classes="tbSep" />
+
+					<!-- [VISTA] -->
+					<StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="0" VerticalAlignment="Center"
+					            HorizontalAlignment="Left" Margin="4,0,0,0">
+						<TextBlock Classes="grpLabel" Text="{x:Static res:Strings.U_vista_1c01729b}" Margin="0,0,8,0" />
+						<CheckBox Classes="tb" IsChecked="{Binding SnapEnabled, Mode=TwoWay}" Content="{x:Static res:Strings.U_snap_43_af01210e}" />
+						<CheckBox Classes="tb" IsChecked="{Binding ShowIcons, Mode=TwoWay}" Content="{x:Static res:Strings.U_icones_3cd9b3d5}" />
+						<CheckBox Classes="tb" IsChecked="{Binding ShowLabels, Mode=TwoWay}" Content="{x:Static res:Strings.U_nomes_9bfffc2d}" />
+					</StackPanel>
+
+					<!-- [PROJETO] -->
+					<StackPanel Grid.Column="5" Orientation="Horizontal" Spacing="3" VerticalAlignment="Center"
+					            HorizontalAlignment="Right">
+						<TextBlock Classes="grpLabel" Text="{x:Static res:Strings.U_projeto_cdcc8912}" />
+						<Button Classes="tb" Click="Button_Validate"
+						        AutomationProperties.Name="Validar topologia do grid">Validate</Button>
+						<Button Classes="tb" Click="Button_SaveCopy"
+						        AutomationProperties.Name="Salvar cópia do grid (.dat)">Salvar cópia</Button>
+						<CheckBox Classes="tb" IsChecked="{Binding AllowRuntimeTestDeploy, Mode=TwoWay}"
+						          Content="{x:Static res:Strings.U_deploy_rt2_save_descartavel_ee02b622}"
+						          ToolTip.Tip="{x:Static res:Strings.U_permite_gravar_com_counts_alterados_para_o_teste_f4dd01a5}" />
+						<Button Classes="tbPrimary" Click="Button_SaveProject"
+						        AutomationProperties.Name="{x:Static res:Strings.F2_save_grid_to_project_9df2584d}">Gravar</Button>
+						<Button Classes="tb" Click="Button_Restore"
+						        AutomationProperties.Name="Restaurar grid original da referência">Restaurar</Button>
+					</StackPanel>
+				</Grid>
+
+				<!-- Row 2: topologia (counts) + counts + cluster input -->
+				<Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+
+					<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+						<CheckBox Classes="tb" IsChecked="{Binding SquareModeEnabled, Mode=TwoWay}"
+						          Content="{x:Static res:Strings.U_editar_topologia_counts_6d33396e}"
+						          ToolTip.Tip="{x:Static res:Strings.U_libera_adicionar_remover_nos_e_links_em_grid_exi_345c9725}" />
+					</StackPanel>
+
+					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+						<TextBlock FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center"
+						           Text="{Binding CountsSummary}" />
+						<TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center"
+						           Text="{Binding GameCompatibilitySummary}" />
+
+						<TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center"
+						           Text="{Binding ModeLabel}" />
+						<StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+							<TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.U_cluster_4ebfabf6}" />
+							<TextBox Classes="field" MinWidth="56" MaxWidth="96"
+							         Text="{Binding ActiveClusterText, Mode=TwoWay}" />
+						</StackPanel>
+					</StackPanel>
+				</Grid>
+
+				<!-- Row 3: Source + safety -->
+				<Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+					<TextBlock Grid.Column="0" FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+					           Text="{Binding SourceLabel}" />
+					<TextBlock Grid.Column="1" FontSize="11" FontWeight="SemiBold"
+					           Foreground="{DynamicResource WarningBrush}" VerticalAlignment="Center"
+					           TextTrimming="CharacterEllipsis"
+					           Text="{Binding TopologySafetySummary}" />
+				</Grid>
+
+			</StackPanel>
+		</Border>
+
+		<!-- ============ BOTTOM STATUS ============ -->
+		<Border DockPanel.Dock="Bottom" Classes="card" Padding="12,7" Margin="0,8,0,0">
+			<Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+				<TextBlock Grid.Column="0" Foreground="{DynamicResource DangerBrush}" FontWeight="Bold"
+				           FontSize="12" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+				           Text="{Binding LiveRiskWarning}" />
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="20" VerticalAlignment="Center" Margin="20,0">
+					<TextBlock FontSize="11" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+					           Text="{Binding ValidationSummary}" />
+					<TextBlock Foreground="{DynamicResource WarningBrush}" FontSize="11" VerticalAlignment="Center"
+					           TextTrimming="CharacterEllipsis"
+					           Text="{Binding StatusSummary}" />
+				</StackPanel>
+				<TextBlock Grid.Column="2" Classes="muted" FontSize="11" VerticalAlignment="Center"
+				           TextTrimming="CharacterEllipsis"
+				           Text="{Binding Banner}" />
+			</Grid>
+		</Border>
+
+		<!-- ============ MAIN: CANVAS + SIDE PANEL ============ -->
+		<Grid ColumnDefinitions="*,340">
+
+			<!-- Canvas -->
+			<Border Grid.Column="0" x:Name="CanvasHost" Classes="card" Padding="0"
+			        Margin="0,0,8,0" MinHeight="520" ClipToBounds="True" />
+
+			<!-- Side Panel -->
+			<Border Grid.Column="1" Classes="card" Padding="0">
+				<DockPanel>
+
+					<!-- Header strip -->
+					<Border DockPanel.Dock="Top" Padding="14,12"
+					        BorderBrush="{DynamicResource PanelStrokeBrush}"
+					        BorderThickness="0,0,0,1">
+						<Grid ColumnDefinitions="*,Auto">
+							<TextBlock Grid.Column="0" Classes="cardTitle" Text="{x:Static res:Strings.U_no_selecionado_e347c831}" VerticalAlignment="Center" />
+							<TextBlock Grid.Column="1" Classes="muted" FontSize="11"
+							           VerticalAlignment="Center"
+							           Text="{Binding SelIndexLabel}" />
+						</Grid>
+					</Border>
+
+					<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+					              Padding="14,6,14,14">
+						<StackPanel Spacing="2">
+
+							<!-- Empty state -->
+							<Border IsVisible="{Binding !HasSelection}"
+							        BorderBrush="{DynamicResource PanelStrokeBrush}"
+							        BorderThickness="1"
+							        CornerRadius="6"
+							        Padding="16,18"
+							        Margin="0,10,0,8">
+								<StackPanel Spacing="6">
+									<TextBlock Text="◎" FontSize="32" HorizontalAlignment="Center" Opacity="0.35" />
+									<TextBlock Classes="h3" HorizontalAlignment="Center" TextAlignment="Center"
+									           Text="{x:Static res:Strings.U_nenhum_no_selecionado_f3065df3}" />
+									<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+									           TextAlignment="Center"
+									           Text="{x:Static res:Strings.U_use_o_modo_selecionar_e_clique_num_no_do_canvas__7649ab85}" />
+								</StackPanel>
+							</Border>
+
+							<!-- Selected node editor -->
+							<StackPanel IsVisible="{Binding HasSelection}" Spacing="6">
+
+								<TextBlock Classes="sectionTitle" Text="{x:Static res:Strings.U_posicao_baf0ef15}" Margin="0,6,0,4" />
+								<Grid ColumnDefinitions="*,8,*">
+									<StackPanel Grid.Column="0" Spacing="2">
+										<TextBlock Classes="muted" FontSize="10" Text="{x:Static res:Strings.CommonPosX}" />
+										<TextBox Classes="field" Text="{Binding SelPosX, Mode=TwoWay}"
+										         Watermark="{x:Static res:Strings.U_posx_short_4bce566f}" />
+									</StackPanel>
+									<StackPanel Grid.Column="2" Spacing="2">
+										<TextBlock Classes="muted" FontSize="10" Text="{x:Static res:Strings.CommonPosY}" />
+										<TextBox Classes="field" Text="{Binding SelPosY, Mode=TwoWay}"
+										         Watermark="{x:Static res:Strings.U_posy_short_e71c073d}" />
+									</StackPanel>
+								</Grid>
+
+								<TextBlock Classes="sectionTitle" Text="{x:Static res:Strings.U_cluster_e3b9b526}" />
+								<TextBox Classes="field" Text="{Binding SelCluster, Mode=TwoWay}"
+								         Watermark="{x:Static res:Strings.CommonClusterIdx}" />
+
+								<TextBlock Classes="sectionTitle" Text="{x:Static res:Strings.U_conteudo_7459b9d3}" />
+								<TextBlock Classes="muted" FontSize="10" TextWrapping="Wrap"
+								           Text="{x:Static res:Strings.U_tipo_de_no_panel_bin_ou_habilidade_command_bin_997299f3}" />
+								<ComboBox Classes="field" HorizontalAlignment="Stretch" MaxDropDownHeight="320"
+								          ItemsSource="{Binding NodeTypeOptions}"
+								          SelectedItem="{Binding SelectedNodeTypeOption, Mode=TwoWay}" />
+								<Button Classes="secondaryAction panelBtn" Click="Button_PopulatePanel"
+								        Content="{x:Static res:Strings.U_popular_panel_clones_320_18f79b6e}" />
+
+								<TextBlock Classes="muted" FontSize="10" Text="{x:Static res:Strings.U_ou_indice_cru_hex_ff_vazio_0d4b315b}" Margin="0,2,0,0" />
+								<TextBox Classes="field" Text="{Binding SelContent, Mode=TwoWay}"
+								         Watermark="{x:Static res:Strings.CommonContentFfEmpty}" />
+
+								<Grid ColumnDefinitions="*,8,*" Margin="0,6,0,0">
+									<Button Grid.Column="0" Classes="primaryAction panelBtn" Click="Button_ApplyNode"
+									        Content="{x:Static res:Strings.CommonApply}" />
+									<Button Grid.Column="2" Classes="secondaryAction panelBtn" Click="Button_RemoveNode"
+									        Content="{x:Static res:Strings.U_remover_no_89a78ed0}" />
+								</Grid>
+
+								<Border Height="1" Background="{DynamicResource PanelStrokeBrush}" Opacity="0.4" Margin="0,12,0,4" />
+
+								<TextBlock Classes="sectionTitle" Text="{x:Static res:Strings.U_links_deste_no_f4e18ef7}" Margin="0,2,0,4" />
+								<ItemsControl ItemsSource="{Binding SelectedNodeLinks}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Grid ColumnDefinitions="*,Auto" Margin="0,2">
+												<TextBlock Grid.Column="0" Text="{Binding Display}" VerticalAlignment="Center"
+												           FontSize="11" TextTrimming="CharacterEllipsis" />
+												<Button Grid.Column="1" Classes="secondaryAction" FontSize="10"
+												        Padding="8,1" Content="✕"
+												        AutomationProperties.Name="{Binding Display, StringFormat='Remover link {0}'}"
+												        Command="{Binding DataContext.RemoveLinkByIndexCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+												        CommandParameter="{Binding LinkIndex}" />
+											</Grid>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								<Grid ColumnDefinitions="*,8,Auto" Margin="0,4,0,0">
+									<TextBox Grid.Column="0" Classes="field" MinWidth="0"
+									         Text="{Binding AddLinkTargetText, Mode=TwoWay}" Watermark="{x:Static res:Strings.U_no_24d9594b}" />
+									<Button Grid.Column="2" Classes="secondaryAction panelBtn" Click="Button_AddLinkPanel"
+									        Content="{x:Static res:Strings.U_link_13d12c7f}" MinWidth="80" />
+								</Grid>
+							</StackPanel>
+
+							<Border Height="1" Background="{DynamicResource PanelStrokeBrush}" Opacity="0.4" Margin="0,14,0,8" />
+
+							<TextBlock Classes="sectionTitle" Text="{x:Static res:Strings.U_cores_por_categoria_eca66c0d}" Margin="0,0,0,6" />
+							<ItemsControl ItemsSource="{Binding Legend}">
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<WrapPanel Orientation="Horizontal" />
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border BorderBrush="{DynamicResource PanelStrokeBrush}"
+										        BorderThickness="1"
+										        CornerRadius="3"
+										        Padding="6,3" Margin="0,0,4,4">
+											<StackPanel Orientation="Horizontal" Spacing="5">
+												<Ellipse Width="9" Height="9" Fill="{Binding Swatch}" VerticalAlignment="Center" />
+												<TextBlock Text="{Binding Label}" FontSize="10" VerticalAlignment="Center" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+							<Border Height="10" />
+						</StackPanel>
+					</ScrollViewer>
+				</DockPanel>
+			</Border>
+		</Grid>
+
+	</DockPanel>
+</UserControl>

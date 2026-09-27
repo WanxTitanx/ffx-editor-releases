@@ -1,0 +1,258 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1380"
+             d:DesignHeight="760"
+             x:Class="FFXProjectEditor.StringExplorer_Control">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*" MinWidth="240" />
+			<ColumnDefinition Width="4*" MinWidth="320" />
+			<ColumnDefinition Width="6*" MinWidth="320" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.Column="0" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_text_domains_4c50c2da}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_string_file_explorer_0c156036}" />
+					<TextBlock Classes="muted" Text="{x:Static res:Strings.U_read_string_file_and_read_monster_localizations__249105c8}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,14" Spacing="10">
+					<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					<TextBlock Classes="muted" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding LoadedSources}"
+						 SelectedItem="{Binding SelectedSource, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+									<StackPanel Orientation="Horizontal" Spacing="6">
+										<Border Background="{Binding TrustBrush}" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+											<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding TrustLabel}" />
+										</Border>
+										<Border Background="{Binding WritePolicyBrush}" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+											<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding WritePolicyLabel}" />
+										</Border>
+									</StackPanel>
+									<TextBlock Classes="sectionLabel" Text="{Binding FamilyLabel}" />
+									<TextBlock Classes="sectionLabel" Text="{Binding ParserModeLabel}" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Column="1" Margin="18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonDecodedEntries}" />
+					<TextBlock Classes="cardTitle" Text="{Binding SelectedSource.DisplayName}" />
+					<StackPanel Orientation="Horizontal" Spacing="6">
+						<Border Background="{Binding SelectedSourceTrustBrush}" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+							<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding SelectedSourceTrustLabel}" />
+						</Border>
+						<Border Background="{Binding SelectedSourceWriteBrush}" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+							<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding SelectedSourceWriteLabel}" />
+						</Border>
+						<Border Background="#142A39" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+							<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding SelectedSourceFamilyLabel}" />
+						</Border>
+					</StackPanel>
+					<TextBlock Classes="muted" Text="{Binding SelectedSourceSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<TextBox Grid.Row="1"
+						 Margin="0,14,0,14"
+						 Watermark="{x:Static res:Strings.U_filter_by_index_decoded_text_or_summary_3e342c43}"
+						 Text="{Binding FilterText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding DisplayedRecords}"
+						 SelectedItem="{Binding SelectedRecord, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<DockPanel Grid.Column="2" Margin="0,18,18,18">
+			<!-- PINNED SESSION CONTROLS -->
+			<Border DockPanel.Dock="Top" Margin="0,0,0,18" Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding IsSafeWriterEnabled}">
+				<StackPanel Spacing="10">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+					<TextBlock Classes="muted"
+					           Text="{Binding EditorScopeSummary}"
+					           TextWrapping="Wrap" />
+					<Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+						<StackPanel Spacing="2" VerticalAlignment="Center">
+							<TextBlock Text="{Binding EditSession.SessionSummary}" FontWeight="SemiBold" />
+							<TextBlock Text="{Binding EditSession.BehaviorSummary}" Classes="muted" TextWrapping="Wrap" />
+						</StackPanel>
+						<core:AutoSaveIndicator_Control Grid.Column="1"
+						                               Margin="12,0,0,0"
+						                               VerticalAlignment="Center"
+						                               Session="{Binding EditSession}" />
+						<Button Grid.Column="2"
+								Margin="12,0,0,0"
+								Classes="secondaryAction"
+								IsEnabled="{Binding CanUndoCurrentSource}"
+								Click="Button_Undo">Undo</Button>
+						<Button Grid.Column="3"
+								Margin="12,0,0,0"
+								Classes="secondaryAction"
+								IsEnabled="{Binding CanDiscardCurrentSource}"
+								Click="Button_Discard">Discard</Button>
+						<Button Grid.Column="4"
+								Margin="12,0,0,0"
+								IsEnabled="{Binding CanSaveCurrentSource}"
+								Click="Button_Save">Save</Button>
+					</Grid>
+				</StackPanel>
+			</Border>
+
+			<!-- SCROLLABLE DETAIL -->
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Spacing="14">
+					<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_decoded_record_790695fd}" />
+							<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedRecord.IndexLabel}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedRecordSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="10">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_source_gate_7828f2bd}" />
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<Border Background="{Binding SelectedSourceTrustBrush}" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+									<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding SelectedSourceTrustLabel}" />
+								</Border>
+								<Border Background="{Binding SelectedSourceWriteBrush}" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+									<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding SelectedSourceWriteLabel}" />
+								</Border>
+								<Border Background="#142A39" CornerRadius="{DynamicResource RadiusPill}" Padding="10,4">
+									<TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding SelectedSourceFamilyLabel}" />
+								</Border>
+							</StackPanel>
+							<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedSourceDecisionSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_proof_5f174de1}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedSourceProofSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_residual_risk_73121dca}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedSourceRiskSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding ShowReadOnlySourceNotice}">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_write_path_locked_0f987d17}" />
+							<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedSourceWriteLabel}" />
+							<TextBlock Classes="muted"
+							           Text="{Binding EditorScopeSummary}"
+							           TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding CanOpenSelectedMonster}">
+						<StackPanel Spacing="10">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_linked_monster_86c0f816}" />
+							<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedMonsterJumpSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted"
+							           Text="{x:Static res:Strings.U_use_this_to_leave_the_localization_table_and_ope_053ed178}"
+							           TextWrapping="Wrap" />
+							<Button HorizontalAlignment="Left"
+							        Classes="secondaryAction"
+							        Click="Button_OpenLinkedMonster"
+							        Content="{Binding SelectedMonsterJumpButtonLabel}" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding IsSafeWriterEnabled}">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonValidation}" />
+							<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding ValidationSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding IsSafeWriterEnabled}">
+						<StackPanel Spacing="10">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPendingDiff}" />
+							<TextBlock Classes="muted" Text="{Binding PendingDiffSummary}" TextWrapping="Wrap" />
+							<ItemsControl ItemsSource="{Binding PendingDiffRows}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+											<StackPanel Spacing="4">
+												<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+												<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" Text="{Binding FieldsSummary}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.PrimaryLabel}" />
+							<TextBox Text="{Binding SelectedRecord.PrimaryText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsSelectedRecordReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.SecondaryLabel}" />
+							<TextBox Text="{Binding SelectedRecord.SecondaryText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsSelectedRecordReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.TertiaryLabel}" />
+							<TextBox Text="{Binding SelectedRecord.TertiaryText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsSelectedRecordReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding SelectedRecord.HasQuaternary}">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.QuaternaryLabel}" />
+							<TextBox Text="{Binding SelectedRecord.QuaternaryText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" IsReadOnly="{Binding IsSelectedRecordReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card" IsVisible="{Binding SelectedRecord.HasDetails}">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{Binding SelectedRecord.DetailsLabel}" />
+							<TextBox Text="{Binding SelectedRecord.DetailsText}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+		</DockPanel>
+	</Grid>
+</UserControl>

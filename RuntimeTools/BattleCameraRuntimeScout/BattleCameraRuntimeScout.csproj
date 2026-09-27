@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>BattleCameraRuntimeScout</AssemblyName>
+    <RootNamespace>BattleCameraRuntimeScout</RootNamespace>
+  </PropertyGroup>
+
+  <!-- i18n (v2.234.3.0): linked FfxLib sources use FFXProjectEditor.Resources (Strings); ship the
+       generated accessor + neutral resx so the links compile with identical lookups. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Resources\Strings.cs" Link="Strings.cs" />
+    <EmbeddedResource Include="..\..\FFXProjectEditor\Resources\Strings.resx" LogicalName="FFXProjectEditor.Resources.Strings.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleCameraSetup_File.cs" Link="BattleCameraSetup_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\EncounterTable_File.cs" Link="EncounterTable_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiScript_File.cs" Link="AiScript_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiTargetNames.cs" Link="AiTargetNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiChrPropertyNames.cs" Link="AiChrPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMotionPropertyNames.cs" Link="AiMotionPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMovePropertyNames.cs" Link="AiMovePropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiSaveDataVariableNames.cs" Link="AiSaveDataVariableNames.cs" />
+  </ItemGroup>
+</Project>

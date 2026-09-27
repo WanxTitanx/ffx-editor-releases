@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>AuroraChamberLab</AssemblyName>
+    <RootNamespace>AuroraChamberLab</RootNamespace>
+  </PropertyGroup>
+
+  <!-- 🌅 AURORA CHAMBER RT0 gate — links the REAL production reader/catalog (no reimplementation), all dependency-free.
+       Mirrors RuntimeTools/BiancaCatalogLab: only System.*-only FfxLib files, never Avalonia / Monster_Dictionary. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Core\OwnerEnvironmentPaths.cs" Link="OwnerEnvironmentPaths.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaAnchors_File.cs" Link="BattleArenaAnchors_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleMapCatalog_File.cs" Link="BattleMapCatalog_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattlefieldSceneResolver.cs" Link="BattlefieldSceneResolver.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\EncounterTable_File.cs" Link="EncounterTable_File.cs" />
+  </ItemGroup>
+</Project>

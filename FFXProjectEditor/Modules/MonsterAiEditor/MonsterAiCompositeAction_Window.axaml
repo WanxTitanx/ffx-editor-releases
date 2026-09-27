@@ -1,0 +1,216 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="1180"
+        d:DesignHeight="780"
+        x:Class="FFXProjectEditor.MonsterAiCompositeAction_Window"
+        Title="{x:Static res:Strings.U_WinCompositeAction}"
+        Width="1180"
+        Height="780"
+        MinWidth="980"
+        MinHeight="620">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,Auto,*">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_ai_acao_composta_17d1dde6}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_monte_uma_sequencia_de_acoes_19b54e45}" />
+					<TextBlock Classes="muted" TextWrapping="Wrap"
+					           Text="{x:Static res:Strings.U_clique_em_um_passo_para_editar_passo_1_e_a_acao__0c6f78f0}" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Margin="0,14,0,0" Padding="{DynamicResource SpacingMd}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto,Auto">
+				<ListBox ItemsSource="{Binding CompositeSteps}"
+				         SelectedItem="{Binding SelectedCompositeStep, Mode=TwoWay}"
+				         HorizontalAlignment="Stretch">
+					<ListBox.ItemsPanel>
+						<ItemsPanelTemplate>
+							<WrapPanel />
+						</ItemsPanelTemplate>
+					</ListBox.ItemsPanel>
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,10,8"
+							        Padding="{DynamicResource SpacingMd}"
+							        MinWidth="190"
+							        MaxWidth="250"
+							        Background="{DynamicResource AccentShellFillBrush}"
+							        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+							        BorderThickness="1"
+							        CornerRadius="7">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{Binding StepLabel}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+									<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Subtitle}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+				<Button Grid.Column="1"
+				        Margin="12,0,8,8"
+				        VerticalAlignment="Top"
+				        Classes="primaryAction"
+				        Click="Button_AddCompositeStep"
+				        Content="{x:Static res:Strings.U_passo_0cd53ff5}" />
+				<Button Grid.Column="2"
+				        Margin="0,0,0,8"
+				        VerticalAlignment="Top"
+				        Classes="secondaryAction"
+				        IsEnabled="{Binding CanRemoveCompositeStep}"
+				        Click="Button_RemoveCompositeStep"
+				        Content="{x:Static res:Strings.U_remover_passo_7d402be3}" />
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="2" Margin="0,14,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="12">
+					<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7"
+					        IsVisible="{Binding IsCompositeAnchorStepSelected}">
+						<StackPanel Spacing="9">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_editar_passo_1_acao_real_18bdb547}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBlock Classes="muted" TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_escolha_qual_acao_existente_do_monstro_sera_o_co_eaa15db8}" />
+							<ComboBox HorizontalAlignment="Stretch"
+							          MaxDropDownHeight="340"
+							          ItemsSource="{Binding AutomationActions}"
+							          SelectedItem="{Binding SelectedAutomationAction, Mode=TwoWay}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Spacing="2">
+											<TextBlock FontWeight="SemiBold" Text="{Binding HumanTitle}" />
+											<TextBlock Classes="muted" Text="{Binding HumanSubtitle}" />
+										</StackPanel>
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7"
+					        IsVisible="{Binding IsCompositeAbilityStepSelected}">
+						<StackPanel Spacing="9">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_editar_passo_habilidade_criada_96ab21d7}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<Grid ColumnDefinitions="Auto,*">
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonCategoryLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+								<ComboBox Grid.Column="1"
+								          HorizontalAlignment="Stretch"
+								          ItemsSource="{Binding AutomationAbilityCategories}"
+								          SelectedItem="{Binding SelectedAbilityCategory, Mode=TwoWay}" />
+							</Grid>
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBox Watermark="{x:Static res:Strings.CommonSearchAbilityByHex}"
+								         Text="{Binding AbilitySearch, Mode=TwoWay}" />
+								<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0"
+								           Text="{Binding AbilityFilterSummary}" />
+							</Grid>
+							<ComboBox HorizontalAlignment="Stretch"
+							          MaxDropDownHeight="320"
+							          ItemsSource="{Binding AutomationAbilityOptions}"
+							          SelectedItem="{Binding SelectedCompositeStep.SelectedAbility, Mode=TwoWay}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding Display}" />
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+					</Border>
+
+					<Grid ColumnDefinitions="*,*">
+						<Border Padding="{DynamicResource SpacingMd}" Margin="0,0,7,0" Background="{DynamicResource AccentCycleFillBrush}" BorderBrush="{DynamicResource AccentCycleBorderBrush}" BorderThickness="1" CornerRadius="7">
+							<StackPanel Spacing="9">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_como_o_alvo_sera_tratado_24702693}" Foreground="{DynamicResource AccentCycleBorderBrush}" />
+								<ComboBox HorizontalAlignment="Stretch"
+								          ItemsSource="{Binding CompositeTargetModes}"
+								          SelectedItem="{Binding SelectedCompositeTargetMode, Mode=TwoWay}" />
+								<WrapPanel>
+									<CheckBox Margin="0,0,18,0" Content="{x:Static res:Strings.U_se_so_houver_1_alvo_vivo_repetir_nele_d37be9ca}"
+									          IsChecked="{Binding CompositeRepeatSingleTarget, Mode=TwoWay}" />
+									<CheckBox Content="{x:Static res:Strings.U_respeitar_provoke_quando_o_writer_seymour_existi_afa33e06}"
+									          IsChecked="{Binding CompositeRespectProvoke, Mode=TwoWay}" />
+								</WrapPanel>
+							</StackPanel>
+						</Border>
+
+						<Border Grid.Column="1" Padding="{DynamicResource SpacingMd}" Margin="7,0,0,0" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="7">
+							<StackPanel Spacing="9">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_forbidden_rite_opcional_97250ab6}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+								<ComboBox HorizontalAlignment="Stretch"
+								          ItemsSource="{Binding CompositeForbiddenPlacements}"
+								          SelectedItem="{Binding SelectedCompositeForbiddenPlacement, Mode=TwoWay}" />
+								<Grid ColumnDefinitions="Auto,*">
+									<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonTargetLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+									<ComboBox Grid.Column="1"
+									          HorizontalAlignment="Stretch"
+									          MaxDropDownHeight="220"
+									          ItemsSource="{Binding ForbiddenRiteTargets}"
+									          SelectedItem="{Binding SelectedForbiddenRiteTarget, Mode=TwoWay}" />
+								</Grid>
+								<Grid ColumnDefinitions="Auto,*,Auto,90">
+									<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonStatusLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+									<ComboBox Grid.Column="1"
+									          HorizontalAlignment="Stretch"
+									          MaxDropDownHeight="220"
+									          ItemsSource="{Binding ForbiddenStatusPresets}"
+									          SelectedItem="{Binding SelectedForbiddenStatus, Mode=TwoWay}">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Display}" />
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<TextBlock Grid.Column="2" Classes="muted" Text="{x:Static res:Strings.CommonValue}" VerticalAlignment="Center" Margin="10,0,8,0" />
+									<TextBox Grid.Column="3" Text="{Binding ForbiddenStatusValue, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+								</Grid>
+							</StackPanel>
+						</Border>
+					</Grid>
+
+					<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="7">
+						<StackPanel Spacing="7">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHumanPreview}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBlock TextWrapping="Wrap" Text="{Binding CompositeActionPreview}" />
+						</StackPanel>
+					</Border>
+
+					<Grid ColumnDefinitions="*,Auto,Auto">
+						<TextBlock Classes="muted" TextWrapping="Wrap" VerticalAlignment="Center"
+						           Text="{Binding CompositeActionSummary}" />
+						<Button Grid.Column="1"
+						        Margin="12,0,8,0"
+						        Classes="secondaryAction"
+						        Click="Button_ApplyCompositeActionRecipe"
+						        Content="{x:Static res:Strings.U_aplicar_no_monstro_cdec57cf}" />
+						<Button Grid.Column="2"
+						        Classes="secondaryAction"
+						        Click="Button_Close"
+						        Content="{x:Static res:Strings.CommonClose}" />
+					</Grid>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</Window>

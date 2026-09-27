@@ -1,0 +1,31 @@
+name: Public source validation
+
+# Manual so a source publication does not consume private-repository CI minutes.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Build development source
+        run: dotnet build FFXProjectEditor/FFXProjectEditor.csproj -c Release
+      - name: Test source-only contracts
+        run: dotnet test FFXProjectEditor.Tests/FFXProjectEditor.Tests.csproj -c Release --filter "FullyQualifiedName~StringsIntegrityTests|FullyQualifiedName~WindowsDesktopDependencyContractTests|FullyQualifiedName~LlmRedactorTests|FullyQualifiedName~LlmHttpAdapterTests"
+      - name: Verify Linux product compilation
+        if: runner.os == 'Linux'
+        run: dotnet publish FFXProjectEditor/FFXProjectEditor.csproj -p:PublishProfile=linux-x64-portable -o artifacts/linux-x64
+      - name: Verify Windows product compilation
+        if: runner.os == 'Windows'
+        run: dotnet build FFXProjectEditor/FFXProjectEditor.csproj -c Release -r win-x64 -p:FFXIncludeDevTools=false

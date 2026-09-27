@@ -1,0 +1,213 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="780"
+             x:Class="FFXProjectEditor.Modules.ThunderPlainsEditor.ThunderPlainsEditor_Control">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="ThresholdRowTemplate">
+            <Border Padding="8,6" Margin="0,2" Classes="card">
+                <Grid ColumnDefinitions="200,170,110,40,*" RowDefinitions="Auto">
+                    <TextBlock Text="{Binding Label}" VerticalAlignment="Center" FontWeight="SemiBold" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+                        <NumericUpDown Value="{Binding CurrentValue}"
+                                       Minimum="1" Maximum="255"
+                                       Width="90" FormatString="N0" />
+                        <TextBlock Text="x" Classes="muted" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Grid.Column="2"
+                               Text="{Binding BitFlag, StringFormat='Flag: {0}'}"
+                               Classes="muted" VerticalAlignment="Center" FontSize="11" />
+                    <Border Grid.Column="3"
+                            Background="#FFC107"
+                            CornerRadius="6"
+                            Padding="6,2"
+                            Margin="4,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            IsVisible="{Binding IsDirty}">
+                        <TextBlock Text="{x:Static res:Strings.CommonAsterisk}" Foreground="Black" FontSize="11" />
+                    </Border>
+                    <StackPanel Grid.Column="4" VerticalAlignment="Center" Spacing="1">
+                        <TextBlock Text="{Binding DefaultValue, StringFormat='Vanilla: {0}'}"
+                                   Classes="muted" FontSize="10" />
+                        <TextBlock Text="{x:Static res:Strings.U_x26a0_pattern_mismatch_70725111}"
+                                   Classes="muted" FontSize="10" Foreground="#D32F2F"
+                                   IsVisible="{Binding !PatternValidKami0000}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <common:ModuleMasterDetail_Shell MasterHeaderLabel="Lightning Dodge Thresholds">
+
+        <common:ModuleMasterDetail_Shell.MasterList>
+            <DockPanel LastChildFill="true" Margin="8">
+                <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,8">
+                    <TextBlock Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding FilePathSummary}" Classes="muted" TextWrapping="Wrap" FontSize="11" />
+
+                    <Border Background="#FFF3CD" BorderBrush="#FFC107" BorderThickness="1"
+                            Padding="8,4" CornerRadius="4" Margin="0,4,0,0"
+                            IsVisible="{Binding HasDivergences}">
+                        <TextBlock Text="{Binding DivergenceSummary}" TextWrapping="Wrap" Foreground="#856404" FontSize="11" />
+                    </Border>
+
+                    <WrapPanel Margin="0,8,0,0">
+                        <Button Classes="secondaryAction" Margin="0,0,4,4" Click="Button_Refresh">&#x1F504; Refresh</Button>
+                        <Button Margin="0,0,4,4"
+                                IsEnabled="{Binding HasChanges}"
+                                Click="Button_Save">&#x1F4BE; Save</Button>
+                        <Button Classes="secondaryAction" Margin="0,0,4,4"
+                                IsEnabled="{Binding CanUndo}"
+                                Click="Button_Undo">&#x21B6; Undo</Button>
+                        <Button Classes="secondaryAction" Margin="0,0,4,4"
+                                IsEnabled="{Binding CanRedo}"
+                                Click="Button_Redo">&#x21B7; Redo</Button>
+                        <Button Classes="secondaryAction" Margin="0,0,4,4"
+                                IsEnabled="{Binding HasChanges}"
+                                Click="Button_ResetVanilla">&#x27F2; Reset to Vanilla</Button>
+                    </WrapPanel>
+
+                    <Separator Margin="0,4" />
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_built_in_presets_3c37c8df}" />
+                    <WrapPanel>
+                        <Button Classes="minorAction" Margin="0,0,4,4" Click="Button_PresetVanilla">Vanilla</Button>
+                        <Button Classes="minorAction" Margin="0,0,4,4" Click="Button_PresetHalf">Half</Button>
+                        <Button Classes="minorAction" Margin="0,0,4,4" Click="Button_PresetEasy">Easy</Button>
+                        <Button Classes="minorAction" Click="Button_PresetExtreme">Extreme (2x)</Button>
+                    </WrapPanel>
+
+                    <Separator Margin="0,4" />
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_custom_presets_89050638}" />
+                    <Button Classes="minorAction" Margin="0,0,0,4"
+                            Click="Button_SaveCustomPreset">+ Save current as preset</Button>
+
+                    <ItemsControl ItemsSource="{Binding CustomPresets}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,Auto,Auto" Margin="0,2">
+                                    <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+                                    <Button Grid.Column="1" Classes="minorAction" Margin="4,0"
+                                            Tag="{Binding Name}"
+                                            Click="Button_ApplyCustomPreset">Apply</Button>
+                                    <Button Grid.Column="2" Classes="minorAction"
+                                            Tag="{Binding Name}"
+                                            Click="Button_DeleteCustomPreset">&#x2715;</Button>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <Separator Margin="0,4" />
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_all_thresholds_ce21b8f8}" />
+                </StackPanel>
+
+                <ListBox ItemsSource="{Binding Thresholds}" SelectedItem="{Binding SelectedThreshold, Mode=TwoWay}"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Spacing="2" Margin="0,1">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <TextBlock Text="{Binding Label}" FontWeight="SemiBold" />
+                                    <Border Background="#FFC107" CornerRadius="4" Padding="4,1"
+                                            IsVisible="{Binding IsDirty}">
+                                        <TextBlock Text="{x:Static res:Strings.CommonAsterisk}" Foreground="Black" FontSize="10" />
+                                    </Border>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock Text="{Binding RewardType}" Classes="muted" FontSize="11" />
+                                    <TextBlock Text=":" Classes="muted" FontSize="11" />
+                                    <TextBlock Text="{Binding CurrentValue}" FontSize="11" />
+                                    <TextBlock Text="{Binding DefaultValue, StringFormat='(vanilla {0})'}" Classes="muted" FontSize="10" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </common:ModuleMasterDetail_Shell.MasterList>
+
+        <common:ModuleMasterDetail_Shell.Detail>
+            <ScrollViewer Margin="16">
+                <StackPanel Spacing="12">
+
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_lightning_dodge_threshold_editor_8c1622dc}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_edit_the_consecutive_dodge_and_total_bolt_thresh_109917dd}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_consecutive_dodge_rewards_8f3e3b6d}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_checked_against_lightningdodginghighestconsecuti_24b6df13}" />
+                            <ItemsControl ItemsSource="{Binding ConsecutiveThresholds}"
+                                          ItemTemplate="{StaticResource ThresholdRowTemplate}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_total_bolt_rewards_f0895620}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_checked_against_lightningdodgingtotalbolts_06ee6cbf}" />
+                            <ItemsControl ItemsSource="{Binding TotalThresholds}"
+                                          ItemTemplate="{StaticResource ThresholdRowTemplate}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_hit_handler_mirror_sites_read_only_88116601}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_these_are_duplicate_threshold_sites_in_the_atel__6791de01}" />
+                            <ItemsControl ItemsSource="{Binding SecondaryThresholds}"
+                                          ItemTemplate="{StaticResource ThresholdRowTemplate}" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card"
+                            IsVisible="{Binding HasDivergences}">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_x26a0_divergences_between_files_49d8f2a4}" Foreground="#B71C1C" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_kami0000_ebp_and_kami0300_ebp_disagree_on_these__e39c8ebc}" />
+                            <ItemsControl ItemsSource="{Binding Divergences}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="200,100,100" Margin="0,2">
+                                            <TextBlock Text="{Binding Label}" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Kami0000Value, StringFormat='kami0000: {0}'}"
+                                                       Classes="muted" FontSize="11" />
+                                            <TextBlock Grid.Column="2"
+                                                       Text="{Binding Kami0300Value, StringFormat='kami0300: {0}'}"
+                                                       Classes="muted" FontSize="11" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_limits_amp_backups_ee5900a9}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_values_1_255_single_byte_atel_immediate_out_of_r_dc1da6d8}" />
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </common:ModuleMasterDetail_Shell.Detail>
+    </common:ModuleMasterDetail_Shell>
+</UserControl>

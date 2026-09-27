@@ -1,0 +1,87 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="820"
+             x:Class="FFXProjectEditor.Modules.SphereGridPanel.SphereGridPanel_Control">
+
+	<Grid Margin="12" ColumnDefinitions="*,360" RowDefinitions="*">
+		<Grid Grid.Column="0" RowDefinitions="Auto,Auto,*" Margin="0,0,10,0">
+			<Border Grid.Row="0" Classes="card" Padding="{DynamicResource SpacingMd}">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_panel_bin_node_types_sphere_grid_teach_0d41f843}" />
+					<TextBlock Classes="muted" TextWrapping="Wrap"
+					           Text="{x:Static res:Strings.U_edite_entradas_existentes_nome_learnedmove_incre_f5ba5a7c}" />
+					<WrapPanel>
+						<Button Classes="secondaryAction" Margin="0,0,6,0" Click="Button_Refresh">Refresh</Button>
+						<Button Classes="secondaryAction" Margin="0,0,6,0" Click="Button_RestoreBackup">Restaurar .panelgrow.bak</Button>
+						<Button Classes="secondaryAction" Margin="0,0,6,0" Click="Button_RestoreVanilla">Restaurar vanilla</Button>
+						<Button Classes="secondaryAction" Margin="0,0,6,0" Click="Button_PopulateClones">Popular clones ≥320</Button>
+						<Button Classes="primaryAction" Click="Button_Save">Gravar panel.bin</Button>
+					</WrapPanel>
+					<TextBlock FontWeight="SemiBold" Text="{Binding HeaderSummary}" />
+					<TextBlock Classes="muted" FontSize="11" Text="{Binding PathSummary}" TextWrapping="Wrap" />
+					<TextBlock Foreground="#C9A227" Text="{Binding StatusSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+			</Border>
+
+			<Border Grid.Row="1" Classes="card" Padding="{DynamicResource SpacingMd}" Margin="0,10,0,0">
+				<StackPanel Spacing="6">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_ensure_command_node_type_bc7c180e}" />
+					<StackPanel Orientation="Horizontal" Spacing="6">
+						<TextBox MinWidth="72" Watermark="{x:Static res:Strings.U_command_65fec147}" Text="{Binding EnsureCommandIdText, Mode=TwoWay}" />
+						<Button Classes="secondaryAction" Click="Button_EnsureCommand">Criar / mapear</Button>
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<Border Grid.Row="2" Classes="card" Padding="0" Margin="0,10,0,0" MinHeight="200">
+				<ListBox ItemsSource="{Binding Rows}"
+				         SelectedItem="{Binding SelectedRow, Mode=TwoWay}"
+				         IsEnabled="{Binding HasLoadedPanel}"
+				         ScrollViewer.VerticalScrollBarVisibility="Auto"
+				         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding Summary}" FontSize="12" Margin="8,4" />
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Border>
+		</Grid>
+
+		<ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+		<Border Classes="card" Padding="{DynamicResource SpacingMd}">
+			<StackPanel Spacing="8" IsEnabled="{Binding HasSelectedEditor}">
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_entrada_selecionada_8754af1f}" />
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_learnedmove_0x3000_commandid_para_ensinar_habili_ac1d0bf4}" TextWrapping="Wrap" />
+
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.CommonUsName}" />
+				<TextBox Text="{Binding SelectedEditorRow.UsName, Mode=TwoWay}" />
+
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.CommonJpName}" />
+				<TextBox Text="{Binding SelectedEditorRow.JpName, Mode=TwoWay}" />
+
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_esfera_necessaria_nodeeffectbitfield_appearancet_aeac7c1e}" />
+				<ComboBox ItemsSource="{Binding SphereRequirementOptions}"
+				          SelectedItem="{Binding SelectedSphereRequirementOption, Mode=TwoWay}" />
+
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_learnedmove_hex_8c169f14}" />
+				<TextBox Text="{Binding SelectedEditorRow.LearnedMove, Mode=TwoWay}" />
+
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_increaseamount_stat_95d928f8}" />
+				<TextBox Text="{Binding SelectedEditorRow.IncreaseAmount, Mode=TwoWay}" />
+
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.CommonUsDescription}" />
+				<TextBox Text="{Binding SelectedEditorRow.UsDescription, Mode=TwoWay}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="72" />
+
+				<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_effect_appearance_hex_readonly_7c96a85f}" />
+				<TextBox IsReadOnly="True" Text="{Binding SelectedEffectAppearanceSummary}" />
+			</StackPanel>
+		</Border>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

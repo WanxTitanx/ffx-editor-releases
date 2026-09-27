@@ -1,0 +1,160 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="920"
+        d:DesignHeight="700"
+        x:Class="FFXProjectEditor.MonsterAiIndirectDispatchPayload_Window"
+        Title="Editor de payload da rota"
+        Width="920"
+        Height="700"
+        MinWidth="760"
+        MinHeight="560">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,*,Auto">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_ai_payload_da_rota_10bb8a8a}" />
+					<TextBlock Classes="cardTitle" Text="{Binding UnitTitle}" />
+					<TextBlock Classes="muted" Text="{Binding HookSummary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding OffsetSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Margin="0,14,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="12">
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7"
+					        IsVisible="{Binding HasFocusedContext}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonFocusFromV2}"
+							           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<TextBlock Text="{Binding FocusedContextSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentCycleFillBrush}"
+					        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_habilidade_desta_rota_655672d0}"
+							           Foreground="{DynamicResource AccentCycleBorderBrush}" />
+							<TextBlock TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_este_popup_mexe_so_nos_command_slots_da_rota_em__d3f245d0}" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<TextBlock TextWrapping="Wrap" Text="{Binding WarningSummary}" />
+					</Border>
+
+					<ItemsControl ItemsSource="{Binding SlotRows}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,8"
+								        Padding="{DynamicResource SpacingMd}"
+								        Background="{DynamicResource AccentShellFillBrush}"
+								        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+								        BorderThickness="1"
+								        CornerRadius="7">
+									<StackPanel Spacing="8">
+										<Grid ColumnDefinitions="*,Auto,Auto">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Label}" />
+											<Border Grid.Column="1"
+											        Margin="10,0,0,0"
+											        Padding="7,2"
+											        Background="{DynamicResource AccentGoldFillBrush}"
+											        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+											        BorderThickness="1"
+											        CornerRadius="5"
+											        IsVisible="{Binding IsFocused}">
+												<TextBlock FontSize="11" FontWeight="SemiBold" Text="{x:Static res:Strings.CommonFocus}" />
+											</Border>
+											<TextBlock Grid.Column="2" Margin="10,0,0,0" Classes="muted" Text="{Binding OffsetHex}" />
+										</Grid>
+										<TextBlock Classes="muted" Text="{Binding CurrentDisplay}" TextWrapping="Wrap" />
+										<ComboBox HorizontalAlignment="Stretch"
+										          MaxDropDownHeight="320"
+										          ItemsSource="{Binding CommandOptions}"
+										          SelectedItem="{Binding SelectedCommand, Mode=TwoWay}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Display}" />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentShellFillBrush}"
+					        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="7">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonPreviewApply}"
+							           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBox Text="{Binding PreviewSummary}"
+							         IsReadOnly="True"
+							         AcceptsReturn="True"
+							         TextWrapping="Wrap"
+							         MinHeight="110"
+							         FontFamily="Cascadia Mono,Consolas,Monospace" />
+						</StackPanel>
+					</Border>
+
+					<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding StatusSummary}" />
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+		<Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="*,Auto,Auto">
+			<TextBlock Classes="muted"
+			           VerticalAlignment="Center"
+			           Text="{x:Static res:Strings.U_troca_rapida_de_payload_mantem_a_familia_inteira_fe5a989d}" />
+			<Button Grid.Column="1"
+			        Margin="12,0,8,0"
+			        Classes="secondaryAction accentProtect"
+			        Click="Button_Apply"
+			        IsEnabled="{Binding HasChanges}"
+			        Content="{x:Static res:Strings.U_aplicar_habilidade_3628d9b3}" />
+			<Button Grid.Column="2"
+			        Classes="secondaryAction"
+			        Click="Button_Close"
+			        Content="{x:Static res:Strings.CommonClose}" />
+		</Grid>
+	</Grid>
+</Window>

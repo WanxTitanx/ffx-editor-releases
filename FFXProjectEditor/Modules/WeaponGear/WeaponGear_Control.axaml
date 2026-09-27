@@ -1,0 +1,249 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1300"
+             d:DesignHeight="860"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.Modules.WeaponGear.WeaponGear_Control">
+
+    <UserControl.Styles>
+        <Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+            <Setter Property="IsMasterExpanded" Value="False" />
+        </Style>
+    
+		<!-- Aroma Premium Styles -->
+		<Style Selector="TextBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="ComboBox:pointerover /template/ Border#Background">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox:focus /template/ Border#Background">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="CheckBox.flag">
+			<Setter Property="Width" Value="140" />
+			<Setter Property="Margin" Value="0,0,8,4" />
+		</Style>
+
+    
+		<!-- NumericUpDown Fix for global TextBox styles -->
+		<Style Selector="NumericUpDown">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="MinHeight" Value="20" />
+			<Setter Property="Margin" Value="0" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+
+    </UserControl.Styles>
+
+    <common:ModuleMasterDetail_Shell>
+
+        <common:ModuleMasterDetail_Shell.MasterHeader>
+            <StackPanel Spacing="2">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <Button Classes="secondaryAction" FontSize="11" Padding="4,2" Click="Button_Refresh">⟳</Button>
+                    <Button Classes="primaryAction" FontSize="11" Padding="4,2" IsEnabled="{Binding IsDirty}" Click="Button_Save">
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <TextBlock Text="💾" />
+                            <TextBlock Text="{x:Static res:Strings.CommonSave}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="secondaryAction" FontSize="11" Padding="4,2" Click="Button_Discard">
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <TextBlock Text="↩" />
+                            <TextBlock Text="{x:Static res:Strings.CommonDiscard}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="secondaryAction" FontSize="11" Padding="4,2" Click="Button_AddEntry">
+                        <StackPanel Orientation="Horizontal" Spacing="2">
+                            <TextBlock Text="+" />
+                            <TextBlock Text="{x:Static res:Strings.CommonAdd}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+                <TextBlock Classes="muted" FontSize="10" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+                <TextBox Watermark="{x:Static res:Strings.U_filter_ac323104}"
+                         FontSize="11" Padding="2"
+                         Text="{Binding FilterText, Mode=TwoWay}" />
+            </StackPanel>
+        </common:ModuleMasterDetail_Shell.MasterHeader>
+
+        <common:ModuleMasterDetail_Shell.MasterList>
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ListBox ItemsSource="{Binding DisplayedEntries}"
+                         SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,2" Padding="6" Classes="cardSoft" IsVisible="{Binding IsVisible}">
+                                <StackPanel Spacing="2">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock FontWeight="SemiBold" FontSize="12" Text="{Binding Title}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Grid.Column="1" Classes="sectionLabel" FontSize="10" Text="{Binding GearType}" />
+                                    </Grid>
+                                    <TextBlock Classes="muted" FontSize="10" Text="{Binding Summary}" TextWrapping="Wrap" MaxLines="1" />
+                                    <TextBlock Classes="muted" FontSize="9" Text="{Binding Abilities}" TextWrapping="Wrap" MaxLines="1" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </common:ModuleMasterDetail_Shell.MasterList>
+
+        <common:ModuleMasterDetail_Shell.Detail>
+            <ScrollViewer Margin="0" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="10" Margin="8">
+
+                    <!-- Title -->
+                    <Border Padding="10" Classes="card">
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="sectionLabel" FontSize="14" Text="{Binding SelectedEntry.Title}" />
+                            <TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_weapon_bin_catalogo_mestre_de_equipamentos_f6a47ac2}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Stats grid (editable) -->
+                    <Border Padding="10" Classes="card">
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.TermStatus}" />
+                            <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+                                <!-- Row 0: Tipo / Personagem -->
+                                <TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonType}" />
+                                <ComboBox Grid.Column="1" Width="110" Margin="4,0" FontSize="11"
+                                          ItemsSource="{Binding SelectedEntry.GearTypeOptions}"
+                                          SelectedItem="{Binding SelectedEntry.SelectedGearType, Mode=TwoWay}" />
+
+                                <TextBlock Grid.Column="2" Classes="muted" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0" Text="{x:Static res:Strings.CommonCharacter}" />
+                                <ComboBox Grid.Column="3" Width="130" Margin="4,0" FontSize="11"
+                                          ItemsSource="{Binding SelectedEntry.CharacterOptions}"
+                                          SelectedItem="{Binding SelectedEntry.SelectedCharacter, Mode=TwoWay}" />
+
+                                <TextBlock Grid.Column="4" Classes="muted" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0" Text="{x:Static res:Strings.U_model_id_c7eb22a3}" />
+                                <NumericUpDown Grid.Column="5" Width="110" Margin="4,0" FontSize="11"
+                                               Minimum="0" Maximum="65535" FormatString="0x X4"
+                                               Value="{Binding SelectedEntry.RawModelId, Mode=TwoWay}" />
+
+                                <!-- Row 1: Formula / Poder / Critico -->
+                                <TextBlock Grid.Row="1" Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonFormula}" />
+                                <ComboBox Grid.Row="1" Grid.Column="1" Width="150" Margin="4,0" FontSize="11"
+                                          ItemsSource="{Binding SelectedEntry.FormulaOptions}"
+                                          SelectedItem="{Binding SelectedEntry.SelectedFormula, Mode=TwoWay}" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="2" Classes="muted" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0" Text="{x:Static res:Strings.CommonPower}" />
+                                <NumericUpDown Grid.Row="1" Grid.Column="3" Width="80" Margin="4,0" FontSize="11"
+                                               Minimum="0" Maximum="255"
+                                               Value="{Binding SelectedEntry.RawPower, Mode=TwoWay}" />
+
+                                <TextBlock Grid.Row="1" Grid.Column="4" Classes="muted" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0" Text="{x:Static res:Strings.U_critical_04b7b26c}" />
+                                <NumericUpDown Grid.Row="1" Grid.Column="5" Width="80" Margin="4,0" FontSize="11"
+                                               Minimum="0" Maximum="255"
+                                               Value="{Binding SelectedEntry.RawCrit, Mode=TwoWay}" />
+
+                                <!-- Row 2: Slots + Save fields (read-only) -->
+                                <TextBlock Grid.Row="2" Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonSlots}" />
+                                <NumericUpDown Grid.Row="2" Grid.Column="1" Width="80" Margin="4,0" FontSize="11"
+                                               Minimum="0" Maximum="4"
+                                               Value="{Binding SelectedEntry.RawSlots, Mode=TwoWay}" />
+
+                                <TextBlock Grid.Row="2" Grid.Column="2" Classes="muted" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0" Text="{x:Static res:Strings.CommonSaveFields}" />
+                                <TextBlock Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" FontWeight="SemiBold" FontSize="11" VerticalAlignment="Center" Margin="4,0" Text="{Binding SelectedEntry.SaveFields}" />
+
+                                <!-- Row 3: Flags -->
+                                <TextBlock Grid.Row="3" Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonFlags}" />
+                                <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Orientation="Horizontal" Spacing="8">
+                                    <CheckBox Classes="flag" IsChecked="{Binding SelectedEntry.IsSummon}" Content="{x:Static res:Strings.CommonSummon}" />
+                                    <CheckBox Classes="flag" IsChecked="{Binding SelectedEntry.IsHidden}" Content="{x:Static res:Strings.CommonHidden}" />
+                                    <CheckBox Classes="flag" IsChecked="{Binding SelectedEntry.IsNoKaizou}" Content="{x:Static res:Strings.U_no_kaizou_bf3c4f1a}" />
+                                    <CheckBox Classes="flag" IsChecked="{Binding SelectedEntry.IsBrotherhood}" Content="{x:Static res:Strings.U_brotherhood_e66c3d76}" />
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Auto-Abilities (editable) -->
+                    <Border Padding="10" Classes="card">
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonAutoAbilities}" />
+                            <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto">
+                                <TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonSlot1}" />
+                                <ComboBox Grid.Column="1" Margin="4,0" FontSize="11"
+                                          ItemsSource="{Binding SelectedEntry.AbilityOptions}"
+                                          SelectedItem="{Binding SelectedEntry.SelectedAbility1, Mode=TwoWay}" />
+                                <TextBlock Grid.Row="1" Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonSlot2}" />
+                                <ComboBox Grid.Row="1" Grid.Column="1" Margin="4,0" FontSize="11"
+                                          ItemsSource="{Binding SelectedEntry.AbilityOptions}"
+                                          SelectedItem="{Binding SelectedEntry.SelectedAbility2, Mode=TwoWay}" />
+                                <TextBlock Grid.Row="2" Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonSlot3}" />
+                                <ComboBox Grid.Row="2" Grid.Column="1" Margin="4,0" FontSize="11"
+                                          ItemsSource="{Binding SelectedEntry.AbilityOptions}"
+                                          SelectedItem="{Binding SelectedEntry.SelectedAbility3, Mode=TwoWay}" />
+                                <TextBlock Grid.Row="3" Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonSlot4}" />
+                                <ComboBox Grid.Row="3" Grid.Column="1" Margin="4,0" FontSize="11"
+                                          ItemsSource="{Binding SelectedEntry.AbilityOptions}"
+                                          SelectedItem="{Binding SelectedEntry.SelectedAbility4, Mode=TwoWay}" />
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Raw bytes -->
+                    <Border Padding="10" Classes="cardSoft">
+                        <StackPanel Spacing="4">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_bytes_raw_13203675}" />
+                            <TextBlock Classes="muted" FontSize="10" Text="{Binding SelectedEntry.RawFields}" TextWrapping="Wrap" />
+                            <TextBlock Classes="muted" FontSize="9" TextWrapping="Wrap" Text="{x:Static res:Strings.U_weapon_bin_layout_notes_8a2c4e91}" />
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </common:ModuleMasterDetail_Shell.Detail>
+
+    </common:ModuleMasterDetail_Shell>
+</UserControl>

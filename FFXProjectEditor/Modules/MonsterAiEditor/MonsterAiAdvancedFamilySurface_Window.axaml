@@ -1,0 +1,122 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="920"
+        d:DesignHeight="760"
+        x:Class="FFXProjectEditor.MonsterAiAdvancedFamilySurface_Window"
+        Width="920"
+        Height="760"
+        MinWidth="760"
+        MinHeight="560">
+
+	<Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+		<DataTemplate x:Key="DialogFamilyRowTemplate">
+			<Border Margin="0,0,0,8"
+			        Padding="10"
+			        Background="{DynamicResource AccentShellFillBrush}"
+			        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+			        BorderThickness="1"
+			        CornerRadius="7">
+				<StackPanel Spacing="6">
+					<Grid ColumnDefinitions="*,Auto">
+						<StackPanel Spacing="2">
+							<TextBlock FontWeight="SemiBold"
+							           Text="{Binding Title}"
+							           TextWrapping="Wrap" />
+							<TextBlock Classes="sectionLabel"
+							           Text="{Binding Subtitle}"
+							           Foreground="{DynamicResource AccentRegenForegroundBrush}"
+							           TextWrapping="Wrap" />
+						</StackPanel>
+						<TextBlock Grid.Column="1"
+						           Classes="muted"
+						           Margin="10,0,0,0"
+						           Text="{Binding OffsetSummary}"
+						           VerticalAlignment="Top" />
+					</Grid>
+					<TextBlock Classes="muted"
+					           Text="{Binding DetailSummary}"
+					           TextWrapping="Wrap" />
+					<Button HorizontalAlignment="Left"
+					        Classes="secondaryAction accentProtect"
+					        Click="Button_OpenFamilyRowEditor"
+					        IsVisible="{Binding CanOpenEditor}"
+					        Tag="{Binding LaunchContext}"
+					        Content="{Binding OpenButtonLabel}" />
+				</StackPanel>
+			</Border>
+		</DataTemplate>
+	        </ResourceDictionary>
+    </Window.Resources>
+
+	<Grid Margin="14" RowDefinitions="Auto,*,Auto">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{Binding HeaderLabel}" />
+					<TextBlock Classes="cardTitle" Text="{Binding Summary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding Coverage}" TextWrapping="Wrap" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Margin="0,14,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="12">
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentExperimentalFillBrush}"
+					        BorderBrush="{DynamicResource AccentExperimentalBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonHonestRead}"
+							           Foreground="{DynamicResource AccentExperimentalBorderBrush}" />
+							<TextBlock Text="{Binding HonestSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_escopo_desta_familia_a47315a8}"
+							           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<TextBlock Classes="muted"
+							           Text="{Binding ApplySummary}"
+							           TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<ItemsControl ItemsSource="{Binding Rows}"
+					              ItemTemplate="{StaticResource DialogFamilyRowTemplate}" />
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+		<Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="*,Auto">
+			<TextBlock Classes="muted"
+			           VerticalAlignment="Center"
+			           Text="{x:Static res:Strings.U_popup_family_specific_mostra_apenas_os_beats_des_ec99616d}" />
+			<Button Grid.Column="1"
+			        Classes="secondaryAction"
+			        Click="Button_Close"
+			        Content="{x:Static res:Strings.CommonClose}" />
+		</Grid>
+	</Grid>
+</Window>

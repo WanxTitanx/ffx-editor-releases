@@ -1,0 +1,108 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.Ps2RsdModelBrowser_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_ps2_models_rsd_713988b4}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_ps2_rsd_model_bundle_browser_1aeb1939}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" Text="{Binding ReadonlyScopeSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Grid Grid.Row="1" ColumnDefinitions="2*,3*">
+
+			<!-- Column 0: RSD bundle list -->
+			<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0" MinWidth="320" MaxWidth="460">
+				<Grid RowDefinitions="Auto,Auto,Auto,*">
+					<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_model_bundles_af719a4c}" VerticalAlignment="Center" />
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_SetRoot">Set Root...</Button>
+						<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+						<Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenFolder">Open Folder</Button>
+					</Grid>
+
+					<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,10">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSourceRoot}" />
+							<TextBlock Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding OverviewSummary}" />
+							<TextBlock Classes="muted" Text="{Binding CountSummary}" />
+						</StackPanel>
+					</Border>
+
+					<TextBox Grid.Row="2" Margin="0,0,0,10" Watermark="{x:Static res:Strings.U_search_bundle_or_lane_a18504b3}"
+					         Text="{Binding SearchText, Mode=TwoWay}" />
+
+					<ListBox Grid.Row="3"
+					         ItemsSource="{Binding Entries}"
+					         SelectedItem="{Binding Selected, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+									<Grid ColumnDefinitions="*,Auto">
+										<StackPanel Spacing="2">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+											<TextBlock Classes="muted" Text="{Binding GeometrySummary}" />
+										</StackPanel>
+										<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Text="{Binding Lane}" />
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</Border>
+
+			<!-- Column 1: bundle detail -->
+			<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Spacing="12">
+						<Grid ColumnDefinitions="*,Auto">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_bundle_a2413505}" />
+								<TextBlock Classes="cardTitle" Text="{Binding SelectedTitle}" />
+								<TextBlock Classes="muted" Text="{Binding SelectedPath}" TextWrapping="Wrap" />
+								<TextBlock Classes="muted" Text="{Binding SelectedStatus}" />
+							</StackPanel>
+							<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenRsdFile">Open RSD</Button>
+						</Grid>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_geometry_ply_d37f9b50}" />
+								<TextBlock Text="{Binding SelectedGeometry}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_manifest_rsd_42872c7b}" />
+								<TextBlock Text="{Binding SelectedManifest}" TextWrapping="Wrap" />
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_linkage_b27dc311}" Margin="0,8,0,0" />
+								<TextBlock Text="{Binding SelectedLinkage}" TextWrapping="Wrap" />
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_textures_tm2_0d1909b0}" Margin="0,8,0,0" />
+								<TextBlock Classes="muted" Text="{Binding SelectedTextures}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonReadOnlyGuardrail}" />
+								<TextBlock Classes="muted" Text="{Binding ReadonlyScopeSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

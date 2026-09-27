@@ -1,0 +1,386 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1500"
+             d:DesignHeight="860"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.ShopExplorer_Control">
+
+    <!-- Jarvis-UI Fase E §E10 (v2.161.3.0): migrate hand-rolled 3-col cascading grid -> ModuleMasterDetail_Shell.
+         O layout era Auto,Auto,* (source ListBox | shop rows ListBox | slot slice editor).
+         Decisao arquitetural (doc §3.E10):
+           - source picker (Col0) vira MasterHeader dropdown (ComboBox compacta do SelectedSource);
+           - shop rows (Col1) viram MasterList (filtro TextBox + Refresh + ListBox DisplayedShops);
+           - slot slice editor (Col2) vira Detail (WrapPanel denso de cards + Expander "Advanced details").
+         Hex inline (#0D1621 background / #274760 border do visual badge) -> tokens
+         (PanelDeepBrush / PanelStrokeBrush).
+         DataContext, bindings, handlers, AutoSaveIndicator, AtlasEvidenceBadgeStrip e
+         IRestorableModule (D2) inalterados. -->
+
+    <UserControl.Styles>
+        <Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+            <Setter Property="IsMasterExpanded" Value="False" />
+        </Style>
+    </UserControl.Styles>
+
+    <common:ModuleMasterDetail_Shell MasterHeaderLabel="Shops">
+
+        <!-- ===== MASTER: source picker dropdown + shop rows ListBox ===== -->
+        <common:ModuleMasterDetail_Shell.MasterHeader>
+            <StackPanel Spacing="6" Margin="2,0,2,2">
+                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_shop_tables_89ef7f29}" />
+                <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                           Text="{x:Static res:Strings.U_pick_a_source_then_select_a_shop_row_to_edit_its_f25f97e9}" />
+            </StackPanel>
+        </common:ModuleMasterDetail_Shell.MasterHeader>
+
+        <common:ModuleMasterDetail_Shell.MasterList>
+            <Grid RowDefinitions="Auto,Auto,Auto,Auto,*">
+                <!-- Source picker (era Col0): ComboBox do SelectedSource -->
+                <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,8">
+                    <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_source_6da13add}" />
+                    <ComboBox ItemsSource="{Binding LoadedSources}"
+                              SelectedItem="{Binding SelectedSource, Mode=TwoWay}"
+                              MaxDropDownHeight="420">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Spacing="1">
+                                    <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" />
+                                    <TextBlock Classes="muted" FontSize="11" Text="{Binding Summary}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <TextBlock Classes="muted" FontSize="11" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+                    <Button HorizontalAlignment="Left" Margin="0,2,0,0"
+                            Classes="secondaryAction" Click="Button_Refresh" AutomationProperties.Name="Refresh">Refresh</Button>
+                </StackPanel>
+
+                <!-- Shop rows context (era Col1 header) -->
+                <StackPanel Grid.Row="1" Spacing="4" Margin="0,0,0,8">
+                    <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_shop_rows_5d868001}" />
+                    <TextBlock FontWeight="SemiBold" Text="{Binding SelectedSource.DisplayName}" />
+                    <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedSourceSummary}" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <TextBox Grid.Row="2"
+                         Watermark="{x:Static res:Strings.U_filter_by_row_raw_value_or_label_7360f211}"
+                         Text="{Binding FilterText, Mode=TwoWay}" />
+
+                <Border Grid.Row="3"
+                        Margin="0,8,0,8"
+                        Padding="10"
+                        Classes="cardSoft"
+                        IsVisible="{Binding ShowFilterFeedback}">
+                    <TextBlock Classes="muted" FontSize="11"
+                               Text="{Binding FilterFeedbackSummary}"
+                               TextWrapping="Wrap" />
+                </Border>
+
+                <ListBox Grid.Row="4"
+                         ItemsSource="{Binding DisplayedShops}"
+                         SelectedItem="{Binding SelectedShop, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,6" Padding="10" Classes="cardSoft">
+                                <StackPanel Spacing="4">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding IndexLabel}" />
+                                        <TextBlock Grid.Column="1"
+                                                   Classes="sectionLabel"
+                                                   FontSize="11"
+                                                   HorizontalAlignment="Right"
+                                                   Text="{Binding Summary}" />
+                                    </Grid>
+                                    <TextBlock Classes="muted"
+                                               FontSize="11"
+                                               Text="{Binding PreviewSummary}"
+                                               TextTrimming="CharacterEllipsis"
+                                               MaxLines="2"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </common:ModuleMasterDetail_Shell.MasterList>
+
+        <!-- ===== DETAIL: hero + session + slot slice editor + Advanced details (era Col2) ===== -->
+        <common:ModuleMasterDetail_Shell.Detail>
+            <DockPanel>
+                <!-- SESSION CONTROLS (Pinned to Top) -->
+                <Border DockPanel.Dock="Top" Margin="0,0,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+                    <StackPanel Spacing="10">
+                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+                        <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                            <StackPanel Spacing="2" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding BridgeStatusSummary}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding PendingWriteSummary}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding CompactSurfaceGuardrail}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <core:AutoSaveIndicator_Control Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Session="{Binding EditSession}" />
+                            <CheckBox Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}" IsEnabled="{Binding IsWriterAvailable}">Auto-save</CheckBox>
+                            <Button Grid.Column="3" Margin="12,0,0,0" VerticalAlignment="Center" Classes="secondaryAction" IsEnabled="{Binding EditSession.CanUndo}" Click="Button_Undo">Undo</Button>
+                            <Button Grid.Column="4" Margin="12,0,0,0" VerticalAlignment="Center" IsEnabled="{Binding EditSession.HasPendingChanges}" Click="Button_Save">Save</Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- SCROLLABLE CONTENT -->
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Spacing="14" Margin="10,0,10,10">
+                        <Border Padding="{DynamicResource SpacingLg}" Classes="card heroGradient">
+                            <Grid ColumnDefinitions="2*,3*">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Classes="sectionLabel" Text="{Binding CompactSurfaceTitle}" />
+                                    <TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedShopIndexLabel}" />
+                                    <TextBlock Classes="muted" FontSize="11" Text="{Binding CompactSurfaceSummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Border Padding="{DynamicResource SpacingMd}"
+                                Classes="cardSoft"
+                                IsVisible="{Binding ShowPrimaryWarning}">
+                            <StackPanel Spacing="4">
+                                <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_primary_blocker_c4a0b9fe}" />
+                                <TextBlock Text="{Binding PrimaryWarningSummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                        <StackPanel Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_writable_slot_slice_f4e77944}" />
+                                    <TextBlock Classes="cardTitle" Text="{Binding SelectedShopTitle}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted" FontSize="11"
+                                               Text="{x:Static res:Strings.U_prioritize_slot_short_name_current_value_and_act_626e476f}"
+                                               TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <Border Grid.Column="1" Padding="10,6" Classes="cardSoft" VerticalAlignment="Top">
+                                    <TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding WriterPolicySummary}" TextWrapping="Wrap" />
+                                </Border>
+                            </Grid>
+
+                            <ItemsControl ItemsSource="{Binding SelectedSlots}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <WrapPanel Orientation="Horizontal" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border MinWidth="280"
+                                                MaxWidth="380"
+                                                Margin="0,0,12,12"
+                                                Padding="{DynamicResource SpacingMd}"
+                                                Classes="cardSoft"
+                                                ToolTip.Tip="{Binding TooltipSummary}">
+                                            <StackPanel Spacing="10">
+                                                <Grid ColumnDefinitions="Auto,Auto,Auto,*">
+                                                    <Border Padding="8,4" Classes="card">
+                                                        <TextBlock FontWeight="SemiBold" Text="{Binding SlotLabel}" />
+                                                    </Border>
+
+                                                    <Border Grid.Column="1" Margin="8,0,0,0" Padding="8,4" Classes="card">
+                                                        <TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding RawValueLabel}" />
+                                                    </Border>
+
+                                                    <Border Grid.Column="2" Margin="8,0,0,0" Padding="8,4" Classes="card">
+                                                        <TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding StateLabel}" />
+                                                    </Border>
+                                                </Grid>
+
+                                                <Grid ColumnDefinitions="50,*">
+                                                    <!-- Jarvis-UI §E10: hex #0D1621/#274760 -> tokens PanelDeepBrush/PanelStrokeBrush -->
+                                                    <Border Width="40"
+                                                            Height="40"
+                                                            Padding="{DynamicResource SpacingXs}"
+                                                            HorizontalAlignment="Left"
+                                                            VerticalAlignment="Top"
+                                                            Background="{DynamicResource PanelDeepBrush}"
+                                                            BorderBrush="{DynamicResource PanelStrokeBrush}"
+                                                            BorderThickness="1"
+                                                            CornerRadius="{DynamicResource RadiusLg}"
+                                                            ToolTip.Tip="{Binding VisualBadgeTooltip}">
+                                                        <Grid>
+                                                            <Image Width="28"
+                                                                   Height="28"
+                                                                   HorizontalAlignment="Center"
+                                                                   VerticalAlignment="Center"
+                                                                   RenderTransformOrigin="50%,50%"
+                                                                   Stretch="Uniform"
+                                                                   Source="{Binding VisualImage}"
+                                                                   IsVisible="{Binding HasVisualImage}">
+                                                                <Image.RenderTransform>
+                                                                    <RotateTransform Angle="180" />
+                                                                </Image.RenderTransform>
+                                                            </Image>
+                                                            <TextBlock HorizontalAlignment="Center"
+                                                                       VerticalAlignment="Center"
+                                                                       FontWeight="SemiBold"
+                                                                       Text="{Binding VisualBadgeText}"
+                                                                       IsVisible="{Binding ShowVisualBadgeText}" />
+                                                        </Grid>
+                                                    </Border>
+
+                                                    <StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="3">
+                                                        <TextBlock FontSize="14"
+                                                                   FontWeight="SemiBold"
+                                                                   Text="{Binding PrimaryLabel}"
+                                                                   TextTrimming="CharacterEllipsis" />
+                                                        <TextBlock Classes="muted"
+                                                                   FontSize="11"
+                                                                   Text="{Binding SecondaryLabel}"
+                                                                   MaxLines="2"
+                                                                   TextWrapping="Wrap"
+                                                                   TextTrimming="CharacterEllipsis" />
+                                                        <ItemsControl ItemsSource="{Binding FactChips}"
+                                                                      IsVisible="{Binding ShowFactChips}">
+                                                            <ItemsControl.ItemsPanel>
+                                                                <ItemsPanelTemplate>
+                                                                    <WrapPanel Orientation="Horizontal" />
+                                                                </ItemsPanelTemplate>
+                                                            </ItemsControl.ItemsPanel>
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Margin="0,2,6,0"
+                                                                            Padding="8,3"
+                                                                            Classes="card">
+                                                                        <TextBlock Classes="sectionLabel"
+                                                                                   FontSize="11"
+                                                                                   Text="{Binding Text}" />
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+                                                        <Border Padding="8,3"
+                                                                Classes="card"
+                                                                HorizontalAlignment="Left"
+                                                                IsVisible="{Binding ShowCoverageChip}">
+                                                            <TextBlock Classes="sectionLabel"
+                                                                       FontSize="11"
+                                                                       Text="{Binding CoverageChipText}" />
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
+
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <ComboBox ItemsSource="{Binding AvailableOptions}"
+                                                              SelectedItem="{Binding SelectedOption, Mode=TwoWay}"
+                                                              IsEnabled="{Binding CanEdit}"
+                                                              MaxDropDownHeight="420">
+                                                        <ComboBox.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Spacing="2">
+                                                                    <TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis" />
+                                                                    <TextBlock Classes="muted"
+                                                                               FontSize="11"
+                                                                               Text="{Binding Detail}"
+                                                                               TextTrimming="CharacterEllipsis" />
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ComboBox.ItemTemplate>
+                                                    </ComboBox>
+
+                                                    <Button Grid.Column="1"
+                                                            Margin="10,0,0,0"
+                                                            Classes="secondaryAction"
+                                                            IsEnabled="{Binding CanEdit}"
+                                                            Click="Button_ClearSlot" AutomationProperties.Name="Set Empty">Set Empty</Button>
+                                                </Grid>
+
+                                                <common:AtlasEvidenceBadgeStrip Evidence="{Binding Evidence}" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+
+                    <Expander Header="{x:Static res:Strings.U_advanced_details_7918a7fd}" IsExpanded="False">
+                        <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                            <StackPanel Spacing="12">
+                                <TextBlock Classes="sectionLabel" FontSize="11"
+                                           Text="{x:Static res:Strings.U_structural_proof_raw_contracts_and_lab_readiness_fe3b635f}" />
+
+                                <Grid ColumnDefinitions="*,*">
+                                    <Border Grid.Column="0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_selected_row_88cf1cf3}" />
+                                            <TextBlock FontWeight="SemiBold" Text="{Binding SelectedShopSummary}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedShopOverview}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Column="1" Margin="12,0,0,0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_writer_slice_55c8c676}" />
+                                            <TextBlock Text="{Binding WriterCapabilitySummary}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" FontSize="11" Text="{Binding WriterScopeSummary}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" FontSize="11" Text="{Binding WriterRiskSummary}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,*">
+                                    <Border Grid.Column="0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_header_and_footprint_ecb4e86f}" />
+                                            <TextBlock Text="{Binding SelectedShopHeaderSummary}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedShopFootprintSummary}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedShopConfidenceSummary}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Grid.Column="1" Margin="12,0,0,0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_verification_gates_c9d88f9e}" />
+                                            <TextBlock Text="{Binding RoundTripSummary}" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" FontSize="11" Text="{Binding EditGateSummary}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <Border Padding="{DynamicResource SpacingMd}"
+                                        Classes="cardSoft"
+                                        IsVisible="{Binding ShowItemIconCoverageWarning}">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_original_item_icon_coverage_b2b9527b}" />
+                                        <TextBlock Text="{Binding ItemIconCoverageSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_observed_evidence_8a6b0af6}" />
+                                        <TextBlock Text="{Binding ObservedEvidenceSummary}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" FontSize="11" Text="{Binding SourceConfidenceSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+                                    <StackPanel Spacing="4">
+                                        <TextBlock Classes="sectionLabel" FontSize="11" Text="{x:Static res:Strings.U_opaque_areas_4ae98b4b}" />
+                                        <TextBlock Text="{Binding SelectedShopOpaqueSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+                    </Expander>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </common:ModuleMasterDetail_Shell.Detail>
+    </common:ModuleMasterDetail_Shell>
+</UserControl>

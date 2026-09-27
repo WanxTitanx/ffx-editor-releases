@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>BattleArenaPositionLab</AssemblyName>
+    <RootNamespace>BattleArenaPositionLab</RootNamespace>
+  </PropertyGroup>
+
+  <!-- 🌅 Aurora position-writer RT0 gate — links the REAL reader + writer (no reimplementation), all dependency-free. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaAnchors_File.cs" Link="BattleArenaAnchors_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaPositionWriter.cs" Link="BattleArenaPositionWriter.cs" />
+  </ItemGroup>
+</Project>

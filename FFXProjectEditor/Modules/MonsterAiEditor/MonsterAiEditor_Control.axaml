@@ -1,0 +1,1646 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1440"
+             d:DesignHeight="780"
+             xmlns:common="using:FFXProjectEditor.Modules.Common"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             x:Class="FFXProjectEditor.MonsterAiEditor_Control">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <!-- Studio uses a dark palette. Keep native control themes in the same scope. -->
+    <ThemeVariantScope RequestedThemeVariant="Dark">
+
+
+	<!-- ===== Camada 4 (overhaul de UI): a sidebar interna de 280px vira um Expander colapsável.
+	     Fecha p/ ~32px (só o header), abre no painel denso (Padding="{DynamicResource SpacingSm}" em vez de "16", ListBox
+	     sem cardSoft por item). Estado persiste no DataModel.IsMonsterListExpanded.
+	     Tudo abaixo preserva bindings/handlers originais — só o container externo mudou. -->
+	<Grid ColumnDefinitions="Auto,*">
+		<Expander Grid.Column="0"
+		          IsExpanded="{Binding IsMonsterListExpanded, Mode=TwoWay}"
+		          ExpandDirection="Down"
+		          HorizontalAlignment="Stretch"
+		          VerticalAlignment="Stretch"
+		          Padding="0"
+		          Margin="8,8,0,8">
+			<Expander.Header>
+				<StackPanel Orientation="Horizontal" Spacing="8" Margin="0,6">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonMonster}" />
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ai_list_3d9d92d0}" />
+				</StackPanel>
+			</Expander.Header>
+
+			<Border Width="280" Classes="card" CornerRadius="{DynamicResource RadiusMd}" Padding="{DynamicResource SpacingSm}">
+				<Grid RowDefinitions="Auto,Auto,*">
+					<StackPanel Spacing="6">
+						<Grid ColumnDefinitions="*,Auto">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_atel_disassembler_1bd273ad}" VerticalAlignment="Center" />
+							<ctrl:CapabilityBadge Grid.Column="1" Name="AiCapabilityBadge" VerticalAlignment="Center" />
+						</Grid>
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_monster_ai_editor_3cc50873}" />
+						<TextBlock Classes="muted"
+						           FontSize="11"
+						           Text="{x:Static res:Strings.U_disassembles_the_real_aifile_of_each_monster_bin_016bcabd}"
+						           TextWrapping="Wrap" />
+					</StackPanel>
+
+					<StackPanel Grid.Row="1" Margin="0,10,0,10" Spacing="8">
+						<WrapPanel>
+							<Button Margin="0,0,6,4" HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_Refresh" Content="{x:Static res:Strings.ActionRefresh}" />
+							<Button Margin="0,0,6,4" HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_RefreshRuntime" Content="{x:Static res:Strings.AiEditorRefreshRuntime}" />
+							<Button Margin="0,0,0,4" HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_AtelScriptLab" Content="{x:Static res:Strings.AiEditorAtelLab}" />
+						</WrapPanel>
+						<TextBox AutomationProperties.Name="{x:Static res:Strings.U_filter_by_monster_id_or_path_b1e27db1}" Watermark="{x:Static res:Strings.U_filter_by_monster_id_or_path_b1e27db1}" Text="{Binding FilterText, Mode=TwoWay}" />
+						<TextBlock Classes="muted" FontSize="11" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+
+					<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonMonster}" Grid.Row="2"
+					         ItemsSource="{Binding DisplayedMonsters}"
+					         SelectedItem="{Binding SelectedMonster, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,4" Padding="{DynamicResource SpacingSm}" Classes="cardSoft" CornerRadius="6">
+									<StackPanel Spacing="2">
+										<TextBlock Classes="sectionLabel" FontSize="10" Text="{Binding IndexLabel}" />
+										<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding Summary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</Border>
+		</Expander>
+
+		<ScrollViewer Grid.Column="1" Margin="10,8,8,8" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14" MaxWidth="1280" HorizontalAlignment="Stretch">
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSelectedMonsterAi}" />
+						<TextBlock Classes="cardTitle" Text="{Binding SelectedMonster.Title}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedHeaderSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding ScopeSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Expander Header="{x:Static res:Strings.SessionControls}" IsExpanded="True" HorizontalAlignment="Stretch">
+				<Border Margin="0,8,0,0" Padding="{DynamicResource SpacingMd}" Classes="card accentShell">
+					<Grid RowDefinitions="Auto,Auto">
+						<StackPanel Spacing="2" VerticalAlignment="Center">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" Foreground="{DynamicResource AccentMoveForegroundBrush}" />
+							<TextBlock Classes="muted" Text="{Binding PendingEditSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+						<WrapPanel Grid.Row="1" Margin="0,10,0,0" VerticalAlignment="Center">
+						<Button Margin="0,0,8,0" Classes="secondaryAction accentProtect"
+						        IsEnabled="{Binding HasPendingEdits}" Click="Button_Save"
+						        ToolTip.Tip="{x:Static res:Strings.U_grava_as_edicoes_de_operando_pendentes_no_monste_a101ead9}">
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<PathIcon Data="{DynamicResource IconSave}" Width="14" Height="14" />
+								<TextBlock Text="{x:Static res:Strings.ActionSave}" />
+							</StackPanel>
+						</Button>
+						<Button Margin="0,0,8,0" Classes="secondaryAction" Name="Button_ReviewDiff" Click="Button_ReviewDiff_Click" AutomationProperties.Name="{x:Static res:Strings.AiEditorReviewDiff}" Content="{x:Static res:Strings.AiEditorReviewDiff}" />
+						<Button Margin="0,0,8,0" Classes="secondaryAction accentUndo"
+						        IsEnabled="{Binding CanUndoBackup}" Click="Button_RestoreBackup"
+						        ToolTip.Tip="{x:Static res:Strings.U_restaura_o_prev_bak_desfaz_o_ultimo_save_desta_s_df5bbd05}"
+						        Content="{x:Static res:Strings.U_desfazer_d328a0c3}" />
+						<Button Margin="0,0,8,0" Classes="secondaryAction accentCrimson"
+						        IsEnabled="{Binding CanRestoreVanillaAi}" Click="Button_RestoreVanillaDiff"
+						        ToolTip.Tip="{x:Static res:Strings.U_sobrescreve_a_ia_atual_pela_vanilla_extraida_con_c7e6e311}"
+						        Content="{Binding RestoreVanillaDiffButtonText}" />
+						<Button Classes="secondaryAction accentRefresh"
+						        Click="Button_Refresh"
+						        ToolTip.Tip="{x:Static res:Strings.U_recarrega_a_lista_de_monstros_do_disco_117473e7}"
+						        Content="{x:Static res:Strings.U_atualizar_8c38bfbe}" />
+						</WrapPanel>
+					</Grid>
+				</Border>
+				</Expander>
+
+				<Expander Header="{x:Static res:Strings.CommonMonsterAiTrinity}" IsExpanded="False" HorizontalAlignment="Stretch">
+				<Border Margin="0,8,0,0" Padding="{DynamicResource SpacingLg}" Classes="card accentShell">
+					<StackPanel Spacing="12">
+						<StackPanel Spacing="2" HorizontalAlignment="Center">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonMonsterAiTrinity}"
+							           Foreground="{DynamicResource AccentGoldForegroundBrush}"
+							           HorizontalAlignment="Center"
+							           TextAlignment="Center" />
+							<TextBlock Classes="cardTitle"
+							           Text="{x:Static res:Strings.U_aeon_observa_bible_ensina_yunalesca_consagra_1ee07c6e}"
+							           HorizontalAlignment="Center"
+							           TextAlignment="Center" />
+							<TextBlock Classes="muted"
+							           Text="{x:Static res:Strings.U_sin_fica_embaixo_templates_bestiais_compostos_e__a0b3a9b7}"
+							           HorizontalAlignment="Center"
+							           TextAlignment="Center" />
+						</StackPanel>
+
+						<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft accentShell">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_o_que_este_monstro_faz_c252e2d6}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+								<TextBlock FontSize="14" TextWrapping="Wrap" Text="{Binding BehaviorSummary}" />
+							</StackPanel>
+						</Border>
+
+				<Expander Header="{x:Static res:Strings.U_aeon_diff_da_ia_ca36f443}" IsExpanded="False" HorizontalAlignment="Stretch">
+				<Border Margin="0,8,0,0" Padding="14" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+					<StackPanel Spacing="8">
+						<Grid RowDefinitions="Auto,Auto">
+							<StackPanel Spacing="2">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_aeon_assembly_evolution_observation_node_d82a307d}" Foreground="{DynamicResource AccentMoveForegroundBrush}" />
+								<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding DiffSummary}" />
+<TextBlock Classes="muted" Text="{Binding DiffReferencePath}" TextWrapping="Wrap" IsVisible="{Binding DiffReferencePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+							</StackPanel>
+							<WrapPanel Grid.Row="1" Margin="0,10,0,0">
+						<Button
+						        Classes="secondaryAction accentRefresh"
+						        Click="Button_LoadAiDiff" Content="{x:Static res:Strings.AiEditorReloadDiff}" />
+						<Button
+						        Margin="8,0,0,0"
+						        Classes="secondaryAction accentCrimson"
+						        IsEnabled="{Binding CanRestoreVanillaAi}"
+						        Click="Button_RestoreVanillaDiff"
+						        Content="{Binding RestoreVanillaDiffButtonText}" />
+							</WrapPanel>
+						</Grid>
+						<Expander Header="{x:Static res:Strings.U_ver_diff_instrucao_a_instrucao_ce6b9edd}" IsExpanded="False" HorizontalAlignment="Stretch">
+							<StackPanel Spacing="10" Margin="0,8,0,0">
+								<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding DiffWarning}" />
+								<Border Padding="{DynamicResource SpacingMd}"
+								        Background="{DynamicResource AccentShellFillBrush}"
+								        BorderBrush="{DynamicResource PanelStrokeBrush}"
+								        BorderThickness="1"
+								        CornerRadius="{DynamicResource RadiusSm}"
+								        IsVisible="{Binding HasNoDiffEntries}">
+									<StackPanel Spacing="4">
+										<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_nenhum_diff_para_listar_39196b7c}" IsVisible="{Binding DiffReferencePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+										<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding DiffEmptyMessage}" />
+									</StackPanel>
+								</Border>
+								<ScrollViewer MaxHeight="360" HorizontalScrollBarVisibility="Disabled" IsVisible="{Binding HasDiffEntries}">
+									<ItemsControl ItemsSource="{Binding DiffEntries}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Margin="0,0,0,8"
+												        Padding="10"
+												        Background="{Binding TypeBrush}"
+												        BorderBrush="{DynamicResource PanelStrokeBrush}"
+												        BorderThickness="1"
+												        CornerRadius="{DynamicResource RadiusSm}">
+													<StackPanel Spacing="8">
+														<WrapPanel>
+															<StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,14,6">
+																<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonType}" />
+																<TextBlock FontWeight="SemiBold" Text="{Binding TypeLabel}" />
+															</StackPanel>
+															<StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,14,6">
+																<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_worker_99edd8c8}" />
+																<TextBlock FontFamily="Cascadia Mono,Consolas,Monospace" Text="{Binding WorkerLabel}" />
+															</StackPanel>
+															<StackPanel Orientation="Horizontal" Spacing="4" Margin="0,0,14,6">
+																<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonOffset}" />
+																<TextBlock FontFamily="Cascadia Mono,Consolas,Monospace" Text="{Binding OffsetLabel}" />
+															</StackPanel>
+														</WrapPanel>
+														<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="72,*">
+															<TextBlock Grid.Row="0"
+															           Grid.Column="0"
+															           Classes="sectionLabel"
+															           Text="{x:Static res:Strings.U_antes_1177e4ed}"
+															           Margin="0,4,8,0" />
+															<Border Grid.Row="0"
+															        Grid.Column="1"
+															        Padding="8,6"
+															        Background="{DynamicResource AccentShellFillBrush}"
+															        CornerRadius="6">
+																<TextBlock FontFamily="Cascadia Mono,Consolas,Monospace"
+																           TextWrapping="Wrap"
+																           Text="{Binding OriginalText}" />
+															</Border>
+															<TextBlock Grid.Row="1"
+															           Grid.Column="0"
+															           Classes="sectionLabel"
+															           Text="{x:Static res:Strings.U_depois_61f6ee7b}"
+															           Margin="0,8,8,0" />
+															<Border Grid.Row="1"
+															        Grid.Column="1"
+															        Margin="0,6,0,0"
+															        Padding="8,6"
+															        Background="{DynamicResource AccentShellFillBrush}"
+															        CornerRadius="6">
+																<TextBlock FontFamily="Cascadia Mono,Consolas,Monospace"
+																           TextWrapping="Wrap"
+																           Text="{Binding EditedText}" />
+															</Border>
+														</Grid>
+													</StackPanel>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</ScrollViewer>
+							</StackPanel>
+						</Expander>
+					</StackPanel>
+				</Border>
+				</Expander>
+
+						<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+							<Expander Header="{x:Static res:Strings.U_yunalesca_ritos_rapidos_6d1ebaa5}" IsExpanded="False" HorizontalAlignment="Stretch">
+							<Border Margin="0,8,0,0" Padding="14" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentGoldBorderBrush}" BorderThickness="1">
+								<StackPanel Spacing="10">
+									<Grid ColumnDefinitions="*,Auto">
+										<StackPanel Spacing="2">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_yunalesca_8aaf1c12}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+											<TextBlock FontWeight="SemiBold" FontSize="18" Text="{x:Static res:Strings.U_ritos_rapidos_de_1_clique_ee1ad2a1}" />
+										</StackPanel>
+										<TextBlock Grid.Column="1" Classes="muted" Text="{x:Static res:Strings.U_salva_com_prev_bak_24dfca77}" VerticalAlignment="Center" />
+									</Grid>
+									<TextBlock Classes="muted" TextWrapping="Wrap"
+									           Text="{x:Static res:Strings.U_yevon_s_unsent_nexus_for_automated_legendary_ene_1478eb36}" />
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_presets_prontos_status_proprio_0f4fea99}" Foreground="{DynamicResource AccentMoveForegroundBrush}" />
+									<WrapPanel>
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentHaste" Click="Button_PresetHaste" Content="{x:Static res:Strings.U_haste_c0fb3161}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentShell" Click="Button_PresetProtect" Content="{x:Static res:Strings.U_protect_838ab88e}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentShell" Click="Button_PresetShell" Content="{x:Static res:Strings.U_shell_381ec11c}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentReflect" Click="Button_PresetReflect" Content="{x:Static res:Strings.U_reflect_f487fb66}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentRegen" Click="Button_PresetRegen" Content="{x:Static res:Strings.U_regen_0395c42d}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentNulAll" Click="Button_PresetNulAll" Content="{x:Static res:Strings.U_nulall_4100afb3}" />
+									<Button Margin="0,0,0,8" Classes="secondaryAction accentGold" Click="Button_PresetDefensive" Content="{x:Static res:Strings.U_defensivo_p_h_e89bce56}" />
+									</WrapPanel>
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_escala_de_modelo_scaleownsize_atel_0x7028_45fde94c}" Foreground="{DynamicResource AccentGoldForegroundBrush}" Margin="0,6,0,0" />
+									<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding UniformScaleSummary}" />
+									<Grid ColumnDefinitions="Auto,100,Auto,Auto,Auto">
+										<TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.U_fator_68e80056}" />
+										<TextBox AutomationProperties.Name="{x:Static res:Strings.AiEditorScaleLabel}" Grid.Column="1"
+										         Margin="8,0,0,0"
+										         Watermark="1.8"
+										         Text="{Binding ScaleFactorText, Mode=TwoWay}"
+										         FontFamily="Cascadia Mono,Consolas,Monospace" />
+										<Button Grid.Column="2"
+										        Margin="8,0,0,0"
+										        Classes="secondaryAction accentGold"
+										        Click="Button_ApplyUniformScale"
+										        Content="{x:Static res:Strings.U_aplicar_escala_580ff642}" />
+										<Button Grid.Column="3"
+										        Margin="4,0,0,0"
+										        Classes="secondaryAction"
+										        Click="Button_ScalePlus10"
+										        Content="+10%" />
+										<Button Grid.Column="4"
+										        Margin="4,0,0,0"
+										        Classes="secondaryAction"
+										        Click="Button_ScalePlus80"
+										        Content="+80%" />
+									</Grid>
+									<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PresetSummary}" />
+								</StackPanel>
+							</Border>
+							</Expander>
+
+							<Expander Grid.Row="1" Margin="0,14,0,0" Header="{x:Static res:Strings.CommonBibleOfSpira}" IsExpanded="False" HorizontalAlignment="Stretch">
+							<Border Margin="0,8,0,0" Padding="14" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+								<StackPanel Spacing="10">
+									<Grid ColumnDefinitions="*,Auto">
+										<StackPanel Spacing="2">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBibleOfSpira}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+											<TextBlock FontWeight="SemiBold" FontSize="18" Text="{x:Static res:Strings.U_manual_atel_read_only_7cc003e9}" />
+										</StackPanel>
+									<Button Grid.Column="1"
+									        Margin="10,0,0,0"
+									        MinWidth="158"
+									        Padding="16,10"
+									        Classes="secondaryAction accentShell"
+									        Click="Button_OpenBibleGuide"
+									        ToolTip.Tip="{x:Static res:Strings.U_abrir_guia_atel_completo_a5ba8315}" Content="{x:Static res:Strings.AiEditorOpenGuide}" />
+									</Grid>
+									<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding BibleContextSummary}" />
+									<TextBox AutomationProperties.Name="{x:Static res:Strings.U_buscar_opcode_funcao_field_alvo_ou_padrao_e3cb8188}" Watermark="{x:Static res:Strings.U_buscar_opcode_funcao_field_alvo_ou_padrao_e3cb8188}"
+									         Text="{Binding BibleSearchText, Mode=TwoWay}" />
+									<Grid ColumnDefinitions="2*,5*">
+										<ScrollViewer Grid.Column="0" MaxHeight="230">
+											<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonEvidence}" ItemsSource="{Binding BibleEntries}"
+											         SelectedItem="{Binding SelectedBibleEntry, Mode=TwoWay}"
+											         Background="{DynamicResource AccentShellFillBrush}"
+											         BorderBrush="{DynamicResource AccentShellBorderBrush}"
+											         BorderThickness="1"
+											         Padding="6">
+												<ListBox.ItemTemplate>
+													<DataTemplate>
+														<Border Margin="0,0,0,6" Padding="9" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+															<StackPanel Spacing="2">
+																<TextBlock Classes="sectionLabel" Foreground="{DynamicResource AccentRegenForegroundBrush}" Text="{Binding KindLabel}" />
+																<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+															</StackPanel>
+														</Border>
+													</DataTemplate>
+												</ListBox.ItemTemplate>
+											</ListBox>
+										</ScrollViewer>
+										<Border Grid.Column="1" Margin="12,0,0,0" Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="7">
+											<StackPanel Spacing="6">
+												<TextBlock Classes="sectionLabel" Text="{Binding SelectedBibleEntry.KindLabel}" />
+												<TextBlock FontWeight="SemiBold" FontSize="15" Text="{Binding SelectedBibleEntry.Title}" TextWrapping="Wrap" />
+												<TextBlock Text="{Binding SelectedBibleEntry.Summary}" TextWrapping="Wrap" />
+												<common:AtlasEvidenceBadgeStrip Evidence="{Binding SelectedBibleEvidence}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedBibleEntry.StackShape}" TextWrapping="Wrap"
+												           FontFamily="Cascadia Mono,Consolas,Monospace" />
+												<TextBlock Classes="muted" Text="{Binding SelectedBibleEntry.Guardrail}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+									</Grid>
+								</StackPanel>
+							</Border>
+							</Expander>
+						</Grid>
+					</StackPanel>
+				</Border>
+				</Expander>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1">
+					<StackPanel Spacing="12">
+						<Grid ColumnDefinitions="*,Auto,Auto">
+							<StackPanel Spacing="2">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_workbench_de_ia_a4b980d4}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+								<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_ajuste_fino_da_ia_do_monstro_78720b61}" />
+							</StackPanel>
+							<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="3" VerticalAlignment="Center">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_nivel_87dc673f}" HorizontalAlignment="Right" />
+								<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorModeLabel}" MinWidth="160"
+								          MaxWidth="240"
+								          HorizontalAlignment="Right"
+								          ItemsSource="{Binding HumanModeChoices}"
+								          SelectedItem="{Binding SelectedHumanMode, Mode=TwoWay}" />
+							</StackPanel>
+							<CheckBox Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" Content="{x:Static res:Strings.U_modo_tecnico_nomes_reais_2c49e6f9}"
+							          IsVisible="{Binding IsDevKitMode, FallbackValue=False}"
+							          IsChecked="{Binding ShowTechnicalNames, Mode=TwoWay}" />
+						</Grid>
+						<TextBlock Classes="muted" TextWrapping="Wrap"
+						           Text="{x:Static res:Strings.U_aqui_voce_escolhe_payload_troca_acoes_duplica_ac_2a3c4fea}" />
+						<Border Padding="10"
+						        Background="{DynamicResource AccentShellFillBrush}"
+						        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+						        BorderThickness="1"
+						        CornerRadius="{DynamicResource RadiusSm}"
+						        IsVisible="{Binding HasBatchSelection, FallbackValue=False}">
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Text="{Binding BatchActionSummary}" TextWrapping="Wrap" VerticalAlignment="Center" />
+								<WrapPanel Grid.Column="1" Margin="12,0,0,0">
+								<Button Margin="0,0,8,0" Classes="secondaryAction accentMove"
+								        Click="Button_MoveBatchUp" Content="{x:Static res:Strings.U_grupo_e00e3a77}" />
+								<Button Margin="0,0,8,0" Classes="secondaryAction accentMove"
+								        Click="Button_MoveBatchDown" Content="{x:Static res:Strings.U_grupo_40a5ca42}" />
+								<Button Classes="secondaryAction accentUndo"
+								        Click="Button_ClearBatchSelection" Content="{x:Static res:Strings.CommonClear}" />
+								</WrapPanel>
+							</Grid>
+						</Border>
+
+						<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+							<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+								<StackPanel Spacing="10">
+									<Grid ColumnDefinitions="*,Auto">
+										<StackPanel Spacing="2">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ia_atual_do_monstro_85f296cb}" Foreground="{DynamicResource AccentMoveForegroundBrush}" />
+											<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_clique_numa_acao_buff_stat_para_trocar_status_e__97922ba9}" TextWrapping="Wrap" />
+										</StackPanel>
+										<TextBlock Grid.Column="1" Classes="muted" Text="{Binding RemoveActionSummary}" TextWrapping="Wrap" MaxWidth="420" />
+									</Grid>
+									<Grid ColumnDefinitions="Auto,*">
+										<TextBlock Classes="muted" Text="{x:Static res:Strings.U_tipo_db78ff0a}" VerticalAlignment="Center" Margin="0,0,8,0" />
+										<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" Grid.Column="1" HorizontalAlignment="Stretch"
+										          ItemsSource="{Binding AutomationActionFilters}"
+										          SelectedItem="{Binding SelectedActionFilter, Mode=TwoWay}" />
+									</Grid>
+									<ScrollViewer MaxHeight="390" VerticalScrollBarVisibility="Auto">
+										<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorActionsLabel}" ItemsSource="{Binding AutomationActions}"
+										         SelectedItem="{Binding SelectedAutomationAction, Mode=TwoWay}"
+										         Background="Transparent"
+										         BorderThickness="0"
+										         Padding="0"
+										         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+											<ListBox.ItemTemplate>
+												<DataTemplate>
+													<Border Margin="0,0,0,8"
+													        Padding="{DynamicResource SpacingMd}"
+													        Background="{DynamicResource AccentShellFillBrush}"
+													        BorderBrush="{DynamicResource PanelStrokeBrush}"
+													        BorderThickness="1"
+													        CornerRadius="{DynamicResource RadiusSm}">
+														<Grid ColumnDefinitions="Auto,*">
+															<CheckBox AutomationProperties.Name="{x:Static res:Strings.U_adicionar_esta_acao_ao_lote_9b350c09}" Margin="0,2,12,0"
+															          VerticalAlignment="Top"
+															          IsEnabled="{Binding CanBatchSelect}"
+															          IsChecked="{Binding IsBatchSelected, Mode=TwoWay}"
+															          ToolTip.Tip="{x:Static res:Strings.U_adicionar_esta_acao_ao_lote_9b350c09}" />
+															<StackPanel Grid.Column="1" Spacing="8">
+																<Grid ColumnDefinitions="*,Auto">
+																	<TextBlock FontSize="15"
+																	           FontWeight="SemiBold"
+																	           Text="{Binding HumanTitle}"
+																	           TextWrapping="Wrap" />
+																	<Border Grid.Column="1"
+																	        Margin="10,0,0,0"
+																	        Padding="7,3"
+																	        Background="{Binding SafetyBrush}"
+																	        BorderBrush="{DynamicResource AccentMoveForegroundBrush}"
+																	        BorderThickness="1"
+																	        CornerRadius="6">
+																		<TextBlock FontSize="11" Text="{Binding SafetyLabel}" />
+																	</Border>
+																</Grid>
+																<WrapPanel>
+																	<Border Margin="0,0,8,6"
+																	        Padding="7,3"
+																	        Background="{DynamicResource AccentShellFillBrush}"
+																	        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+																	        BorderThickness="1"
+																	        CornerRadius="6">
+																		<TextBlock FontSize="11" Text="{Binding HumanSubtitle}" TextWrapping="Wrap" />
+																	</Border>
+																	<Border Margin="0,0,8,6"
+																	        Padding="7,3"
+																	        Background="{DynamicResource AccentCycleFillBrush}"
+																	        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+																	        BorderThickness="1"
+																	        CornerRadius="6">
+																		<TextBlock FontSize="11" Text="{Binding WhereHuman}" TextWrapping="Wrap" />
+																	</Border>
+																	<Border Margin="0,0,8,6"
+																	        Padding="7,3"
+																	        Background="{DynamicResource AccentGoldFillBrush}"
+																	        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+																	        BorderThickness="1"
+																	        CornerRadius="6"
+																	        IsVisible="{Binding Action.ForcePerform}">
+																		<TextBlock FontSize="11" Text="{x:Static res:Strings.U_executa_agora_5d0e400d}" />
+																	</Border>
+																	<Border Margin="0,0,8,6"
+																	        Padding="7,3"
+																	        Background="{DynamicResource AccentCycleFillBrush}"
+																	        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+																	        BorderThickness="1"
+																	        CornerRadius="6"
+																	        IsVisible="{Binding HasComboHint}">
+																		<TextBlock FontSize="11" Text="{Binding ComboHint}" TextWrapping="Wrap" />
+																	</Border>
+																	<Border Margin="0,0,8,6"
+																	        Padding="7,3"
+																	        Background="{DynamicResource AccentGoldFillBrush}"
+																	        BorderBrush="{Binding RunContextBrush}"
+																	        BorderThickness="1"
+																	        CornerRadius="6"
+																	        IsVisible="{Binding HasRunContextHint}">
+																		<TextBlock FontSize="11"
+																		           Text="{Binding RunContextHintBadge}"
+																		           TextWrapping="NoWrap"
+																		           ToolTip.Tip="{Binding RunContextHint}" />
+																	</Border>
+																</WrapPanel>
+																<TextBlock Classes="muted" Text="{Binding Sublabel}" TextWrapping="Wrap" IsVisible="{Binding Technical}" />
+															</StackPanel>
+														</Grid>
+													</Border>
+												</DataTemplate>
+											</ListBox.ItemTemplate>
+										</ListBox>
+									</ScrollViewer>
+									<Expander Header="{x:Static res:Strings.U_tabela_de_dispatch_detectada_e54c4dde}"
+									          IsExpanded="False"
+									          HorizontalAlignment="Stretch"
+									          IsVisible="{Binding HasSeymourDispatchData}">
+										<Border Margin="0,8,0,0"
+										        Padding="10"
+										        Classes="cardSoft"
+										        Background="{DynamicResource AccentShellFillBrush}"
+										        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+										        BorderThickness="1">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding DispatchTableSummary}" />
+												<TextBlock TextWrapping="Wrap" Text="{Binding DispatchInterpretationSummary}" />
+												<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonEvidence}" ItemsSource="{Binding DispatchTableRows}"
+												         Background="Transparent"
+												         BorderThickness="0"
+												         MinHeight="72">
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Border Margin="0,0,0,8"
+															        Padding="10"
+															        Background="{DynamicResource AccentCycleFillBrush}"
+															        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+															        BorderThickness="1"
+															        CornerRadius="7">
+																<StackPanel Spacing="4">
+																	<WrapPanel>
+																		<TextBlock Classes="sectionLabel"
+																		           Text="{Binding PhaseLabel}"
+																		           Foreground="{DynamicResource AccentRegenForegroundBrush}"
+																		           VerticalAlignment="Center" />
+																		<ctrl:CapabilityBadge VerticalAlignment="Center" Margin="8,0,0,0" ToolTip.Tip="{x:Static res:Strings.U_receita_atel_oficial_de_rotacao_de_fases_9045f0e1}" />
+																	</WrapPanel>
+																	<TextBlock Text="{Binding SingleCastLabel}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding AeonCastLabel}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding MultiCastLabel}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding PairCastLabel}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding NextStateLabel}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding OffsetSummary}" />
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+												<TextBlock Classes="sectionLabel"
+												           Text="{x:Static res:Strings.U_mapa_de_vars_importantes_a9989afa}"
+												           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+												<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorVariablesLabel}" ItemsSource="{Binding DispatchVarCorpusEntries}"
+												         Background="Transparent"
+												         BorderThickness="0"
+												         MinHeight="72">
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Border Margin="0,0,0,8"
+															        Padding="10"
+															        Background="{DynamicResource AccentShellFillBrush}"
+															        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+															        BorderThickness="1"
+															        CornerRadius="7">
+																<StackPanel Spacing="4">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding VariableName}" />
+																	<TextBlock Text="{Binding RoleSummary}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding EvidenceSummary}" TextWrapping="Wrap" />
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+												<TextBlock Classes="sectionLabel"
+												           Text="{x:Static res:Strings.U_cena_handoff_tecnico_f5adc7ce}"
+												           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+												<TextBlock Classes="muted"
+												           TextWrapping="Wrap"
+												           Text="{Binding SeymourSceneTechSummary}" />
+												<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonEvidence}" ItemsSource="{Binding SeymourSceneTechNotes}"
+												         Background="Transparent"
+												         BorderThickness="0"
+												         MinHeight="72">
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Border Margin="0,0,0,8"
+															        Padding="10"
+															        Background="{DynamicResource AccentShellFillBrush}"
+															        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+															        BorderThickness="1"
+															        CornerRadius="7">
+																<StackPanel Spacing="4">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+																	<TextBlock Classes="muted" Text="{Binding Detail}" TextWrapping="Wrap" />
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+												<TextBlock Classes="sectionLabel"
+												           Text="{x:Static res:Strings.U_preview_autoral_das_unidades_indiretas_d54e43bc}"
+												           Foreground="{DynamicResource AccentGoldForegroundBrush}"
+												           IsVisible="{Binding HasIndirectDispatchUnits}" />
+												<TextBlock Classes="muted"
+												           TextWrapping="Wrap"
+												           Text="{Binding IndirectDispatchUnitSummary}"
+												           IsVisible="{Binding HasIndirectDispatchUnits}" />
+												<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorActionsLabel}" ItemsSource="{Binding IndirectDispatchUnits}"
+												         Background="Transparent"
+												         BorderThickness="0"
+												         MinHeight="72"
+												         IsVisible="{Binding HasIndirectDispatchUnits}">
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Border Margin="0,0,0,8"
+															        Padding="10"
+															        Background="{DynamicResource AccentShellFillBrush}"
+															        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+															        BorderThickness="1"
+															        CornerRadius="7">
+																<StackPanel Spacing="4">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+																	<TextBlock Classes="sectionLabel"
+																	           Text="{Binding TierLabel}"
+																	           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+																	<TextBlock Text="{Binding HookLabel}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding GuardSummary}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding NextStateSummary}" TextWrapping="Wrap" />
+																	<TextBlock Text="{x:Static res:Strings.U_payload_f07e5a81}" FontWeight="SemiBold" />
+																	<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonSummary}" Text="{Binding PayloadSummary}"
+																	         IsReadOnly="True"
+																	         AcceptsReturn="True"
+																	         TextWrapping="Wrap"
+																	         MinHeight="64"
+																	         FontFamily="Cascadia Mono,Consolas,Monospace" />
+																	<TextBlock Text="{x:Static res:Strings.U_consumers_44f67138}" FontWeight="SemiBold" />
+																	<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonSummary}" Text="{Binding ConsumerSummary}"
+																	         IsReadOnly="True"
+																	         AcceptsReturn="True"
+																	         TextWrapping="Wrap"
+																	         MinHeight="56"
+																	         FontFamily="Cascadia Mono,Consolas,Monospace" />
+																	<TextBlock Text="{x:Static res:Strings.U_efeitos_companheiros_b61a75ac}" FontWeight="SemiBold" />
+																	<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonSummary}" Text="{Binding CompanionSummary}"
+																	         IsReadOnly="True"
+																	         AcceptsReturn="True"
+																	         TextWrapping="Wrap"
+																	         MinHeight="72"
+																	         FontFamily="Cascadia Mono,Consolas,Monospace" />
+																	<Button Classes="secondaryAction accentProtect"
+																	        Click="Button_OpenIndirectDispatchUnitEditor"
+																	        Tag="{Binding}"
+																	        IsVisible="{Binding CanEdit}"
+																	        Content="{x:Static res:Strings.U_editar_unidade_db6c7eb8}" />
+																	<TextBlock Classes="muted" Text="{Binding WarningSummary}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding OffsetSummary}" />
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+											</StackPanel>
+										</Border>
+									</Expander>
+									<Expander Header="{x:Static res:Strings.U_relacionado_a_var_do_gerenciador_de_fases_73f29f7a}"
+									          IsExpanded="False"
+									          HorizontalAlignment="Stretch"
+									          IsVisible="{Binding HasFineAiPhaseVariableContext}">
+										<Border Margin="0,8,0,0"
+										        Padding="10"
+										        Classes="cardSoft"
+										        Background="{DynamicResource AccentShellFillBrush}"
+										        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+										        BorderThickness="1">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding FineAiPhaseVariableSummary}" />
+												<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorVariablesLabel}" ItemsSource="{Binding FineAiPhaseVariableBlocks}"
+												         Background="Transparent"
+												         BorderThickness="0"
+												         MinHeight="72">
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Border Margin="0,0,0,8"
+															        Padding="10"
+															        Background="{DynamicResource AccentShellFillBrush}"
+															        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+															        BorderThickness="1"
+															        CornerRadius="7">
+																<StackPanel Spacing="4">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding HookLabel}" />
+																	<TextBlock Classes="sectionLabel"
+																	           Text="{Binding GuardSummary}"
+																	           Foreground="{DynamicResource AccentGoldForegroundBrush}"
+																	           TextWrapping="Wrap" />
+																	<TextBlock Text="{Binding EffectSummary}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding OffsetSummary}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" Text="{Binding TechnicalSummary}" TextWrapping="Wrap" />
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+											</StackPanel>
+										</Border>
+									</Expander>
+									<WrapPanel>
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentShell" Click="Button_ChangeAction" ToolTip.Tip="{x:Static res:Strings.U_troca_so_o_command_id_da_acao_selecionada_4a0bc6e9}" Content="{x:Static res:Strings.U_trocar_habilidade_1c47f6fe}" />
+									<Button Margin="0,0,8,8"
+									        Classes="secondaryAction accentProtect"
+									        Click="Button_OpenSelectedIndirectDispatchUnitEditor"
+									        IsVisible="{Binding CanEditSelectedIndirectDispatchUnit}"
+									        ToolTip.Tip="{x:Static res:Strings.U_abre_o_editor_row_only_da_unidade_indireta_ligad_842c18bb}"
+									        Content="{x:Static res:Strings.U_editar_unidade_indireta_830e67de}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentHaste" Click="Button_DuplicateAction" ToolTip.Tip="{x:Static res:Strings.U_duplica_a_acao_selecionada_com_os_mesmos_alvo_e__871826cb}" Content="{x:Static res:Strings.U_duplicar_acao_34467b72}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentMove" Click="Button_MoveActionUp" Content="{x:Static res:Strings.U_subir_599eda97}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentMove" Click="Button_MoveActionDown" Content="{x:Static res:Strings.U_descer_5ab17761}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentGold" Click="Button_ToggleForce" Content="{x:Static res:Strings.U_modo_fila_agora_e9c9048d}" />
+									<Button Margin="0,0,8,8" Classes="secondaryAction accentCrimson" Click="Button_RemoveAction" Content="{x:Static res:Strings.U_tirar_acao_2375339e}" />
+									<Button Margin="0,0,0,8" Classes="secondaryAction accentUndo" Click="Button_RestoreBackup" ToolTip.Tip="{x:Static res:Strings.U_restaura_o_prev_bak_do_monstro_selecionado_b3743aaa}" Content="{x:Static res:Strings.U_desfazer_backup_3e5ebcd9}" />
+									</WrapPanel>
+<Border Margin="0,2,0,8" Padding="10" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentGoldBorderBrush}" BorderThickness="1" IsVisible="{Binding CanEditBuffStat}">
+<StackPanel Spacing="6">
+<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_editar_esta_acao_status_valor_aqui_mesmo_sem_ass_5ca9c7d7}" />
+<Grid ColumnDefinitions="*,96,Auto">
+<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonField}" HorizontalAlignment="Stretch" MaxDropDownHeight="360" ItemsSource="{Binding BuffStatFieldOptions}" SelectedItem="{Binding SelectedBuffStatField, Mode=TwoWay}">
+<ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Display}" FontFamily="Cascadia Mono,Consolas,Monospace" /></DataTemplate></ComboBox.ItemTemplate>
+</ComboBox>
+<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Column="1" Margin="8,0,0,0" Watermark="{x:Static res:Strings.CommonValue}" Text="{Binding BuffStatValue, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction accentProtect" Click="Button_EditBuffStat">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<PathIcon Data="{DynamicResource IconSave}" Width="14" Height="14" />
+							<TextBlock Text="{x:Static res:Strings.CommonApply}" />
+						</StackPanel>
+					</Button>
+</Grid>
+<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding BuffStatEditSummary}" />
+</StackPanel>
+</Border>
+									<Border Margin="0,2,0,8" Padding="10" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentRegenForegroundBrush}" BorderThickness="1">
+										<StackPanel Spacing="6">
+											<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_gatilho_worker_onde_a_acao_roda_d7c6a10a}" />
+											<WrapPanel>
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.U_worker_10f5ebe6}" VerticalAlignment="Center" Margin="0,0,8,8" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorWorkerLabel}" MinWidth="200" MaxWidth="320" Margin="0,0,12,8" MaxDropDownHeight="360"
+												          ItemsSource="{Binding TemplateWorkers}"
+												          SelectedItem="{Binding SelectedTemplateWorker, Mode=TwoWay}">
+													<ComboBox.ItemTemplate>
+														<DataTemplate><TextBlock Text="{Binding Label}" /></DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonEntrypoint}" VerticalAlignment="Center" Margin="0,0,8,8" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonEntrypoint}" MinWidth="96" Margin="0,0,12,8"
+												          ItemsSource="{Binding TemplateEntrypoints}"
+												          SelectedItem="{Binding SelectedTemplateEntrypoint, Mode=TwoWay}" />
+											<Button Margin="0,0,0,8" Classes="secondaryAction accentHaste"
+											        Click="Button_MoveActionToHook"
+											        ToolTip.Tip="{x:Static res:Strings.U_move_a_acao_selecionada_para_este_worker_entrypo_974cfcef}"
+											        Content="{x:Static res:Strings.U_mover_acao_para_ca_13251e0a}" />
+											</WrapPanel>
+											<TextBlock Classes="muted" TextWrapping="Wrap"
+											           Text="{x:Static res:Strings.U_esse_gatilho_tambem_e_usado_por_adicionar_habili_657d07a1}" />
+										</StackPanel>
+									</Border>
+									<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+										<StackPanel Spacing="8">
+
+										</StackPanel>
+										<StackPanel Grid.Row="1" Margin="0,10,0,0" Spacing="10">
+										<Expander Header="{x:Static res:Strings.U_overdrive_autoral_1437a06f}" IsExpanded="False" HorizontalAlignment="Stretch">
+										<Border Margin="0,8,0,0" Padding="10" Classes="cardSoft" Background="{DynamicResource AccentProtectFillBrush}" BorderBrush="{DynamicResource AccentProtectBorderBrush}" BorderThickness="1">
+											<StackPanel Spacing="10">
+												<Grid ColumnDefinitions="*,Auto">
+													<StackPanel Spacing="1">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.TermOverdrive}" Foreground="{DynamicResource AccentProtectBorderBrush}" />
+														<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_barra_e_forbidden_overdrive_mode_250937fa}" TextWrapping="Wrap" />
+													</StackPanel>
+													<Button Grid.Column="1" Classes="secondaryAction accentProtect" Click="Button_ApplyOverdriveRecipe" Content="{x:Static res:Strings.U_aplicar_receita_a4680164}" />
+												</Grid>
+
+												<Border Padding="{DynamicResource SpacingSm}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="4">
+													<StackPanel Spacing="8">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_barra_0c93167a}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+														<StackPanel Spacing="6"><WrapPanel><CheckBox VerticalAlignment="Center" Content="{x:Static res:Strings.U_mostrar_barra_4da67923}" IsChecked="{Binding OverdriveRecipeShowBar, Mode=TwoWay}" Margin="0,0,10,8" />
+															<TextBlock Margin="0,0,10,8" VerticalAlignment="Center" Classes="muted" Text="{x:Static res:Strings.U_max_da_barra_842a7e88}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.AiAdvancedOverdriveMaximum}" Margin="0,0,10,8" Watermark="100" Text="{Binding OverdriveGaugeMax, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" Width="100" MinWidth="0" />
+															<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" Margin="0,0,10,8" ItemsSource="{Binding OverdriveStartModeChoices}" SelectedItem="{Binding SelectedOverdriveStartMode, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Margin="0,0,10,8" Watermark="{x:Static res:Strings.CommonValue}" Text="{Binding OverdriveRecipeCustomStart, Mode=TwoWay}" IsEnabled="{Binding IsOverdriveStartCustom}" FontFamily="Cascadia Mono,Consolas,Monospace" Width="100" MinWidth="0" />
+													<Button Margin="0,0,10,8" Classes="secondaryAction accentProtect" Click="Button_AddOverdriveGauge" Content="{x:Static res:Strings.U_so_instalar_barra_37bc5f16}" />
+															</WrapPanel><TextBlock Margin="0,8,0,0" Classes="muted" TextWrapping="Wrap" Text="{Binding OverdriveGaugeSummary}" />
+														</StackPanel>
+													</StackPanel>
+												</Border>
+
+												<Border Padding="{DynamicResource SpacingSm}" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="4">
+													<StackPanel Spacing="8">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_forbidden_overdrive_mode_da43be99}" Foreground="{DynamicResource AccentForbiddenForegroundBrush}" />
+														<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_carga_por_condicoes_proibidas_fba46873}" TextWrapping="Wrap" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+														<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding ForbiddenOverdriveModeHint}" />
+														<ctrl:AdaptiveColumnsPanel MinColumnWidth="290" MaxColumns="2"><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_turno_do_monstro_588f3571}" IsChecked="{Binding OverdriveChargePerTurn, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_turno_do_monstro_588f3571}" Text="{Binding OverdriveChargePerTurnAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_ao_apanhar_onhit_fa5fdc23}" IsChecked="{Binding OverdriveChargeOnHit, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_ao_apanhar_onhit_fa5fdc23}" Text="{Binding OverdriveChargeOnHitAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_hp_abaixo_de_4a710022}" IsChecked="{Binding OverdriveChargeHpBelow, Mode=TwoWay}" />
+															<WrapPanel>
+																<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPercentHp}" Width="46" Text="{Binding OverdriveChargeHpPercent, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+																<TextBlock Classes="muted" Text="{x:Static res:Strings.U_x_8eae17ce}" VerticalAlignment="Center" />
+																<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Width="54" Text="{Binding OverdriveChargeHpAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+															</WrapPanel>
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><WrapPanel>
+																<CheckBox Content="{x:Static res:Strings.U_chance_no_turno_1_em_191a0a8d}" IsChecked="{Binding OverdriveChargeChance, Mode=TwoWay}" />
+																<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonChance1In}" Width="58" Text="{Binding OverdriveChargeChanceK, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+															</WrapPanel>
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_chance_no_turno_1_em_191a0a8d}" Text="{Binding OverdriveChargeChanceAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><WrapPanel>
+																<CheckBox Content="{x:Static res:Strings.U_dano_recebido_06ee01f1}" IsChecked="{Binding OverdriveChargeDamageTakenPercent, Mode=TwoWay}" />
+																<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPercentHp}" Width="58" Text="{Binding OverdriveChargeDamageTakenPercentThreshold, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+																<TextBlock Classes="muted" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonPercentHp}" />
+															</WrapPanel>
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_dano_recebido_06ee01f1}" Text="{Binding OverdriveChargeDamageTakenPercentAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+														</StackPanel></Border></ctrl:AdaptiveColumnsPanel>
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_condicoes_extras_a476326c}" Foreground="{DynamicResource AccentForbiddenForegroundBrush}" />
+														<ctrl:AdaptiveColumnsPanel MinColumnWidth="290" MaxColumns="2"><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_apos_a_acao_selecionada_87da7316}" IsChecked="{Binding OverdriveChargeAfterSelectedAction, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_apos_a_acao_selecionada_87da7316}" Text="{Binding OverdriveChargeAfterSelectedActionAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><WrapPanel>
+																<CheckBox Content="{x:Static res:Strings.U_a_cada_110cc308}" IsChecked="{Binding OverdriveChargeEveryNTurns, Mode=TwoWay}" />
+																<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Width="46" Text="{Binding OverdriveChargeEveryNTurnsInterval, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+																<TextBlock Classes="muted" Text="{x:Static res:Strings.U_turnos_contador_a5886452}" VerticalAlignment="Center" />
+															</WrapPanel>
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_a_cada_110cc308}" Text="{Binding OverdriveChargeEveryNTurnsAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><WrapPanel>
+																<CheckBox Content="{x:Static res:Strings.U_hp_entre_2b37e456}" IsChecked="{Binding OverdriveChargeHpRange, Mode=TwoWay}" />
+																<TextBox AutomationProperties.Name="{x:Static res:Strings.AiAdvancedMinimum}" Width="46" Text="{Binding OverdriveChargeHpRangeMin, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+																<TextBlock Classes="muted" Text="e" VerticalAlignment="Center" />
+																<TextBox AutomationProperties.Name="{x:Static res:Strings.AiAdvancedMaximum}" Width="46" Text="{Binding OverdriveChargeHpRangeMax, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+																<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonPercentHp}" VerticalAlignment="Center" />
+															</WrapPanel>
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_hp_entre_2b37e456}" Text="{Binding OverdriveChargeHpRangeAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><WrapPanel>
+																<CheckBox Content="{x:Static res:Strings.U_status_no_monstro_3be7134b}" IsChecked="{Binding OverdriveChargeSelfStatus, Mode=TwoWay}" />
+																<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonStatusLower}" Width="190" ItemsSource="{Binding OverdriveSelfStatusPresets}" SelectedItem="{Binding SelectedOverdriveSelfStatus, Mode=TwoWay}" />
+															</WrapPanel>
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_status_no_monstro_3be7134b}" Text="{Binding OverdriveChargeSelfStatusAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_party_algum_personagem_morto_459f28d7}" IsChecked="{Binding OverdriveChargePartyDead, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_party_algum_personagem_morto_459f28d7}" Text="{Binding OverdriveChargePartyDeadAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_ultimo_atacante_vivo_f10f4692}" IsChecked="{Binding OverdriveChargeLastAttacker, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_ultimo_atacante_vivo_f10f4692}" Text="{Binding OverdriveChargeLastAttackerAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+														</StackPanel></Border></ctrl:AdaptiveColumnsPanel>
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_retaliacao_por_tipo_de_evento_88f368b7}" Foreground="{DynamicResource AccentForbiddenForegroundBrush}" />
+														<ctrl:AdaptiveColumnsPanel MinColumnWidth="290" MaxColumns="2"><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_dano_zero_evitado_lab_f11104c6}" IsChecked="{Binding OverdriveChargeDamageZero, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_dano_zero_evitado_lab_f11104c6}" Text="{Binding OverdriveChargeDamageZeroAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_hit_fisico_lab_906ffec2}" IsChecked="{Binding OverdriveChargePhysicalHitLab, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_hit_fisico_lab_906ffec2}" Text="{Binding OverdriveChargePhysicalHitAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+															</StackPanel></Border><Border Classes="cardSoft" Padding="10" Margin="0,0,10,10"><StackPanel Spacing="8"><CheckBox Content="{x:Static res:Strings.U_hit_magico_lab_a50d5a6a}" IsChecked="{Binding OverdriveChargeMagicalHitLab, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_hit_magico_lab_a50d5a6a}" Text="{Binding OverdriveChargeMagicalHitAmount, Mode=TwoWay}" FontFamily="Cascadia Mono,Consolas,Monospace" MaxWidth="150" HorizontalAlignment="Left" />
+														</StackPanel></Border></ctrl:AdaptiveColumnsPanel>
+														<Expander Header="{x:Static res:Strings.U_pesquisa_baixa_prioridade_1581e753}" IsExpanded="False" Foreground="{DynamicResource AccentMoveForegroundBrush}">
+															<Grid Margin="0,6,0,0" ColumnDefinitions="*,130,*,130" RowDefinitions="Auto,Auto">
+																<CheckBox Grid.Row="0" Grid.Column="0" Content="{x:Static res:Strings.U_reduziu_bloqueou_dano_f2f78825}" IsChecked="{Binding OverdriveChargeReducedHitLab, Mode=TwoWay}" />
+																<TextBlock Grid.Row="0" Grid.Column="1" Margin="8,0,0,0" Classes="muted" Text="{x:Static res:Strings.CommonNoWriter}" VerticalAlignment="Center" />
+																<CheckBox Grid.Row="0" Grid.Column="2" Margin="14,0,0,0" Content="{x:Static res:Strings.U_cura_recebida_da2c03f4}" IsChecked="{Binding OverdriveChargeHealedLab, Mode=TwoWay}" />
+																<TextBlock Grid.Row="0" Grid.Column="3" Margin="8,0,0,0" Classes="muted" Text="{x:Static res:Strings.CommonNoWriter}" VerticalAlignment="Center" />
+																<CheckBox Grid.Row="1" Grid.Column="0" Content="{x:Static res:Strings.U_status_sofrido_671f8b76}" IsChecked="{Binding OverdriveChargeStatusSufferedLab, Mode=TwoWay}" />
+																<TextBlock Grid.Row="1" Grid.Column="1" Margin="8,0,0,0" Classes="muted" Text="{x:Static res:Strings.CommonNoWriter}" VerticalAlignment="Center" />
+															</Grid>
+														</Expander>
+													</StackPanel>
+												</Border>
+
+												<Border Padding="{DynamicResource SpacingSm}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="4">
+													<StackPanel Spacing="8">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_quando_encher_74f9e7f3}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+														<Grid ColumnDefinitions="170,*,Auto">
+															<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" ItemsSource="{Binding OverdriveFinishModeChoices}"
+															          SelectedItem="{Binding SelectedOverdriveFinishMode, Mode=TwoWay}" />
+															<TextBox AutomationProperties.Name="{x:Static res:Strings.U_buscar_habilidade_diamond_dust_mega_flare_ec395cfd}" Grid.Column="1"
+															         Margin="8,0,0,0"
+															         Watermark="{x:Static res:Strings.U_buscar_habilidade_diamond_dust_mega_flare_ec395cfd}"
+															         Text="{Binding OverdriveFinisherSearch, Mode=TwoWay}" />
+													<Button Grid.Column="2"
+													        Margin="8,0,0,0"
+													        Classes="secondaryAction accentProtect"
+													        Click="Button_AddOverdriveFinisher"
+													        Content="{x:Static res:Strings.U_adicionar_fadcf2d5}" />
+														</Grid>
+														<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorAbilityLabel}" HorizontalAlignment="Stretch"
+														          MaxDropDownHeight="320"
+														          ItemsSource="{Binding OverdriveFinisherOptions}"
+														          SelectedItem="{Binding SelectedOverdriveFinisherAbility, Mode=TwoWay}">
+															<ComboBox.ItemTemplate>
+																<DataTemplate>
+																	<TextBlock Text="{Binding Display}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+																</DataTemplate>
+															</ComboBox.ItemTemplate>
+														</ComboBox>
+														<Grid ColumnDefinitions="*,Auto">
+															<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorActionsLabel}" ItemsSource="{Binding OverdriveFinisherSequence}"
+															         SelectedItem="{Binding SelectedOverdriveFinisherStep, Mode=TwoWay}"
+															         MinHeight="72"
+															         MaxHeight="132">
+																<ListBox.ItemTemplate>
+																	<DataTemplate>
+																		<StackPanel Orientation="Horizontal" Spacing="6">
+																			<TextBlock Text="{Binding Display}" FontFamily="Cascadia Mono,Consolas,Monospace" VerticalAlignment="Center" />
+																			<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" ItemsSource="{Binding TargetOptions}"
+																			          SelectedItem="{Binding SelectedTarget, Mode=TwoWay}"
+																			          MinWidth="120" />
+																		</StackPanel>
+																	</DataTemplate>
+																</ListBox.ItemTemplate>
+															</ListBox>
+															<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="6">
+																<Button Classes="secondaryAction" Click="Button_MoveOverdriveFinisherUp" Content="▲" />
+																<Button Classes="secondaryAction" Click="Button_MoveOverdriveFinisherDown" Content="▼" />
+																<Button Classes="secondaryAction" Click="Button_RemoveOverdriveFinisher" Content="{x:Static res:Strings.U_remover_4bd4ea83}" />
+															</StackPanel>
+														</Grid>
+														<CheckBox Content="{x:Static res:Strings.U_usar_assim_que_a_barra_estiver_cheia_fora_do_tur_ae3536f6}" IsChecked="{Binding OverdriveUseWhenFullOutsideTurn, Mode=TwoWay}" />
+														<CheckBox Content="{x:Static res:Strings.U_resetar_barra_depois_da_ultima_acao_d02c1cbc}" IsChecked="{Binding OverdriveResetAfterFinish, Mode=TwoWay}" />
+														<Border Padding="{DynamicResource SpacingSm}" Background="{DynamicResource AccentProtectFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="4">
+															<Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+																<TextBlock Grid.ColumnSpan="2" Classes="muted" TextWrapping="Wrap" Text="{Binding OverdriveExistingSummary}" />
+																<CheckBox Grid.Row="1"
+																          Margin="0,8,0,0"
+																Content="{x:Static res:Strings.U_atualizar_receita_existente_limpar_overdrive_ant_8fb11ae4}"
+																          IsChecked="{Binding OverdriveCleanExistingRecipe, Mode=TwoWay}" />
+											<Button Grid.Row="1"
+											        Grid.Column="1"
+											        Margin="8,8,0,0"
+											        Classes="secondaryAction accentForbidden"
+											        Click="Button_ClearOverdriveLab"
+											        Content="{x:Static res:Strings.U_limpar_overdrive_8fa94da0}" />
+															</Grid>
+														</Border>
+														<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding OverdriveRecipeSummary}" />
+													</StackPanel>
+												</Border>
+											</StackPanel>
+										</Border>
+										</Expander>
+										<Expander Header="{x:Static res:Strings.CommonPlantFieldStat}" IsExpanded="False" HorizontalAlignment="Stretch">
+										<Border Margin="0,8,0,0" Padding="10" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentGoldBorderBrush}" BorderThickness="1">
+											<StackPanel Spacing="7">
+												<Grid ColumnDefinitions="*,Auto">
+													<StackPanel Spacing="1">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPlantFieldStat}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+														<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_setstatfield_no_boss_c6c36be5}" />
+													</StackPanel>
+													<Button Grid.Column="1" Classes="secondaryAction accentGold" Click="Button_AddSetStatField" Content="{x:Static res:Strings.U_aplicar_cb94b832}" />
+												</Grid>
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.U_buscar_field_overdrive_dullhit_hp_show_10335ccf}" Watermark="{x:Static res:Strings.U_buscar_field_overdrive_dullhit_hp_show_10335ccf}"
+												         Text="{Binding PlantFieldSearch, Mode=TwoWay}" />
+												<Grid ColumnDefinitions="*,90">
+													<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonField}" HorizontalAlignment="Stretch"
+													          MaxDropDownHeight="360"
+													          ItemsSource="{Binding PlantFieldOptions}"
+													          SelectedItem="{Binding SelectedPlantField, Mode=TwoWay}">
+														<ComboBox.ItemTemplate>
+															<DataTemplate>
+																<TextBlock Text="{Binding Display}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+															</DataTemplate>
+														</ComboBox.ItemTemplate>
+													</ComboBox>
+													<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Column="1"
+													         Margin="8,0,0,0"
+													         Watermark="{x:Static res:Strings.CommonValue}"
+													         Text="{Binding PlantFieldValue, Mode=TwoWay}"
+													         FontFamily="Cascadia Mono,Consolas,Monospace" />
+												</Grid>
+												<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PlantFieldSummary}" />
+											</StackPanel>
+										</Border>
+										</Expander>
+										</StackPanel>
+									</Grid>
+									<Border Margin="0,4,0,0" Padding="0,8,0,0" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource PanelStrokeBrush}"
+									        IsVisible="{Binding CanChangeTarget}">
+										<StackPanel Spacing="6">
+											<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_mudar_alvo_desta_acao_4939048d}" />
+											<Grid ColumnDefinitions="*,Auto">
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" HorizontalAlignment="Stretch" MaxDropDownHeight="320"
+												          ItemsSource="{Binding TargetOptions}"
+												          SelectedItem="{Binding SelectedTargetOption, Mode=TwoWay}" />
+												<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction accentShell" Click="Button_ChangeTarget" Content="{x:Static res:Strings.U_mudar_alvo_6430d7f3}" />
+											</Grid>
+											<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding TargetSummary}" />
+										</StackPanel>
+									</Border>
+								</StackPanel>
+							</Border>
+
+							<ScrollViewer Grid.Row="1" Margin="0,14,0,0" MaxHeight="620" VerticalScrollBarVisibility="Auto">
+								<StackPanel Spacing="10">
+									<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+										<StackPanel Spacing="10">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_adicionar_trocar_comportamento_2020225d}" Foreground="{DynamicResource AccentMoveForegroundBrush}" />
+											<Border Padding="10" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="6">
+												<Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto">
+													<StackPanel Spacing="2">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_condicao_do_proximo_comportamento_b5a842a2}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+														<TextBlock FontWeight="SemiBold" Text="{Binding YunalescaConditionBadge}" TextWrapping="Wrap" />
+														<TextBlock Classes="muted" TextWrapping="Wrap"
+														           Text="{x:Static res:Strings.U_esta_condicao_vale_para_a_proxima_habilidade_adi_b11fbe15}" />
+													</StackPanel>
+									<Button Grid.Column="1"
+								        Margin="10,0,0,0"
+								        Classes="secondaryAction accentUndo"
+								        MinWidth="142"
+								        Click="Button_YunalescaConditionClear"
+								        Content="{x:Static res:Strings.U_limpar_ultima_condicao_e7006afd}" />
+
+													<Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,10,0,0" ColumnDefinitions="*,*">
+														<StackPanel Spacing="6">
+															<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_montar_condicao_4388b71d}" Foreground="{DynamicResource AccentMoveForegroundBrush}" />
+															<WrapPanel>
+															<Button Margin="0,0,8,8" Classes="secondaryAction accentBuilder" Click="Button_YunalescaConditionOnTurn" Content="{x:Static res:Strings.U_onturn_93a36d58}" />
+															<Button Margin="0,0,8,8" Classes="secondaryAction accentCycle" Click="Button_YunalescaConditionStart" Content="{x:Static res:Strings.U_inicio_fc2c7400}" />
+															<Button Margin="0,0,8,8" Classes="secondaryAction accentShell" Click="Button_YunalescaConditionAlways" Content="{x:Static res:Strings.U_sempre_14d583e4}" />
+															<Button Margin="0,0,8,8" Classes="secondaryAction accentReaction" Click="Button_YunalescaConditionOnHit" Content="{x:Static res:Strings.U_onhit_fd356733}" />
+															<Button Margin="0,0,8,8" Classes="secondaryAction accentReaction" Click="Button_YunalescaConditionAnyHit" Content="{x:Static res:Strings.U_qualquer_hit_a3d8b664}" />
+																<StackPanel Margin="0,0,8,8" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+																	<TextBlock Classes="muted" VerticalAlignment="Center" Text="{x:Static res:Strings.U_hp_lt_c0e67488}" />
+																	<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPercentHp}" Width="58" Text="{Binding YunalescaHpPercentInput, Mode=TwoWay}" />
+																	<TextBlock Classes="muted" VerticalAlignment="Center" Text="%" />
+																	<Button Classes="secondaryAction accentGold" Click="Button_YunalescaConditionHp" Content="HP" />
+																</StackPanel>
+															</WrapPanel>
+														</StackPanel>
+
+														<Border Grid.Column="1" Margin="14,0,0,0" MinHeight="74" Padding="10" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="4">
+															<StackPanel Spacing="4">
+																<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_condicoes_montadas_7a52d6f7}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+																<TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding YunalescaConditionChain}" />
+															</StackPanel>
+														</Border>
+													</Grid>
+												</Grid>
+											</Border>
+											<Border Padding="10" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentRegenForegroundBrush}" BorderThickness="1" CornerRadius="6">
+												<StackPanel Spacing="8">
+													<Grid ColumnDefinitions="*,Auto">
+														<StackPanel Spacing="2">
+															<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_receitas_rapidas_de_ia_e9c62a50}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+															<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_escolha_o_molde_mental_antes_de_adicionar_a_acao_ef65006f}" TextWrapping="Wrap" />
+														</StackPanel>
+														<TextBlock Grid.Column="1" Classes="muted" Text="{x:Static res:Strings.U_nao_salva_sozinho_c67d31d1}" VerticalAlignment="Center" />
+													</Grid>
+													<WrapPanel>
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentBuilder" Click="Button_PrepareTargetRecipe" Content="{x:Static res:Strings.U_alvo_91818671}" />
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentShell" Click="Button_PrepareSimpleActionRecipe" Content="{x:Static res:Strings.U_acao_simples_2009e33b}" />
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentCycle" Click="Button_PrepareSimpleRouletteRecipe" Content="{x:Static res:Strings.U_roleta_simples_2782f277}" />
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentRegen" Click="Button_PrepareCycleRecipe" Content="{x:Static res:Strings.U_ciclo_8278b8f0}" />
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentReaction" Click="Button_PrepareReactionRecipe" Content="{x:Static res:Strings.U_reacao_7f87f034}" />
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentGold" Click="Button_PrepareTurnStateRecipe" Content="{x:Static res:Strings.U_estado_entre_turnos_4477773d}" />
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentCycle" Click="Button_PrepareCompositeActionRecipe"
+													        ToolTip.Tip="{x:Static res:Strings.U_abre_uma_janela_propria_para_montar_duas_acoes_g_14652b73}"
+													        Content="{x:Static res:Strings.U_acao_composta_c38c4031}" />
+													<Button Margin="0,0,8,8" Classes="secondaryAction accentRegen" Click="Button_OpenPhaseRotationManager"
+													        ToolTip.Tip="{x:Static res:Strings.U_abre_o_gerenciador_de_fases_comum_fases_complexa_65a54802}"
+													        Content="{x:Static res:Strings.U_gerenciador_de_fases_comum_e6d5a04a}" />
+													<Button Margin="0,0,0,8" Classes="secondaryAction accentGold" Click="Button_OpenAdvancedPhaseRotationManager"
+													        ToolTip.Tip="{x:Static res:Strings.U_abre_o_gerenciador_de_fases_avancado_para_payloa_ce2b9bba}"
+													        Content="{x:Static res:Strings.U_gerenciador_de_fases_avancado_4c75989c}" />
+													</WrapPanel>
+													<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AuthoringRecipeSummary}" />
+												</StackPanel>
+											</Border>
+											<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_habilidade_escolhida_5218b9cc}" />
+											<Grid ColumnDefinitions="Auto,*">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonCategoryLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonCategory}" Grid.Column="1" HorizontalAlignment="Stretch"
+												          ItemsSource="{Binding AutomationAbilityCategories}"
+												          SelectedItem="{Binding SelectedAbilityCategory, Mode=TwoWay}" />
+											</Grid>
+											<Grid ColumnDefinitions="*,Auto">
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonSearchAbilityByHex}" Watermark="{x:Static res:Strings.CommonSearchAbilityByHex}"
+												         Text="{Binding AbilitySearch, Mode=TwoWay}" />
+												<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0"
+												           Text="{Binding AbilityFilterSummary}" />
+											</Grid>
+											<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorAbilityLabel}" HorizontalAlignment="Stretch" MaxDropDownHeight="360"
+											          ItemsSource="{Binding AutomationAbilityOptions}"
+											          SelectedItem="{Binding SelectedAutomationAbility, Mode=TwoWay}">
+												<ComboBox.ItemTemplate>
+													<DataTemplate><TextBlock Text="{Binding Display}" /></DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+											<Grid ColumnDefinitions="Auto,*">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonNewAbilityTarget}" VerticalAlignment="Center" Margin="0,0,8,0" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonNewAbilityTarget}" Grid.Column="1"
+												          HorizontalAlignment="Stretch"
+												          ItemsSource="{Binding AuthoringTargetOptions}"
+												          SelectedItem="{Binding SelectedAuthoringTarget, Mode=TwoWay}" />
+											</Grid>
+											<TextBlock Classes="muted" TextWrapping="Wrap"
+											           Text="{x:Static res:Strings.U_usado_quando_nenhuma_acao_esta_selecionada_como__768f09b3}" />
+											<Grid ColumnDefinitions="Auto,Auto,120">
+												<CheckBox Content="{x:Static res:Strings.U_talvez_chance_1_em_k_33a88965}" IsChecked="{Binding AutomationWhenRandom, Mode=TwoWay}" />
+												<TextBlock Grid.Column="1" Classes="muted" Text="{x:Static res:Strings.U_1_em_91bdf1ab}" VerticalAlignment="Center" Margin="16,0,8,0"
+												           IsVisible="{Binding AutomationWhenRandom}" />
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonChance1In}" Grid.Column="2" Text="{Binding AutomationRandomK, Mode=TwoWay}"
+												         IsVisible="{Binding AutomationWhenRandom}"
+												         FontFamily="Cascadia Mono,Consolas,Monospace" />
+											</Grid>
+											<Border Padding="{DynamicResource SpacingSm}" Background="{DynamicResource AccentGoldFillBrush}" BorderBrush="{DynamicResource AccentGoldForegroundBrush}" BorderThickness="1" CornerRadius="7">
+												<StackPanel Spacing="4">
+													<CheckBox Content="{x:Static res:Strings.U_pare_aqui_se_esta_acao_rodar_df4fb3ea}"
+													          IsChecked="{Binding AutomationStopAfterAction, Mode=TwoWay}" />
+													<TextBlock Classes="muted" TextWrapping="Wrap"
+													           Text="{x:Static res:Strings.U_use_para_criar_escolha_rota_que_nao_cai_automati_edac28c4}" />
+												</StackPanel>
+											</Border>
+											<Border Padding="{DynamicResource SpacingSm}" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="7">
+												<StackPanel Spacing="4">
+													<CheckBox Content="{x:Static res:Strings.U_vincular_forbidden_rite_a_habilidade_criada_troc_be94bb82}"
+													          IsChecked="{Binding LinkForbiddenRiteToBehavior, Mode=TwoWay}" />
+													<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding ForbiddenRiteLinkSummary}" />
+												</StackPanel>
+											</Border>
+											<WrapPanel>
+											<Button Margin="0,0,8,8" Classes="secondaryAction accentShell" Click="Button_AddAbility"
+											        ToolTip.Tip="{x:Static res:Strings.U_copia_a_acao_selecionada_se_ela_for_simples_sem__a563ad00}"
+											        Content="{x:Static res:Strings.U_adicionar_habilidade_ab5c2540}" />
+											<Button Margin="0,0,8,8" Classes="secondaryAction accentShell" Click="Button_ChangeAction" Content="{x:Static res:Strings.U_trocar_selecionada_3a2d7f1d}" />
+											</WrapPanel>
+											<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AddAbilitySummary}" />
+										</StackPanel>
+									</Border>
+
+									<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1">
+										<StackPanel Spacing="10">
+											<Grid ColumnDefinitions="*,Auto">
+												<StackPanel Spacing="1">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_forbidden_rite_be202dd4}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+													<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_anti_ribbon_status_direto_no_jogador_7c656ab8}" />
+												</StackPanel>
+												<TextBlock Grid.Column="1" Classes="muted" Text="{x:Static res:Strings.U_anti_ribbon_rt2_3d3c0710}" VerticalAlignment="Top" />
+											</Grid>
+											<Grid ColumnDefinitions="Auto,*">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonTargetLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" Grid.Column="1"
+												          HorizontalAlignment="Stretch"
+												          MaxDropDownHeight="260"
+												          ItemsSource="{Binding ForbiddenRiteTargets}"
+												          SelectedItem="{Binding SelectedForbiddenRiteTarget, Mode=TwoWay}" />
+											</Grid>
+											<Grid ColumnDefinitions="Auto,*,Auto,90,Auto">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonStatusLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonStatusLower}" Grid.Column="1"
+												          HorizontalAlignment="Stretch"
+												          MaxDropDownHeight="260"
+												          ItemsSource="{Binding ForbiddenStatusPresets}"
+												          SelectedItem="{Binding SelectedForbiddenStatus, Mode=TwoWay}">
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<TextBlock Text="{Binding Display}" />
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+												<TextBlock Grid.Column="2" Classes="muted" Text="{x:Static res:Strings.CommonValue}" VerticalAlignment="Center" Margin="8,0,8,0" />
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Column="3"
+												         Text="{Binding ForbiddenStatusValue, Mode=TwoWay}"
+												         FontFamily="Cascadia Mono,Consolas,Monospace" />
+										<Button Grid.Column="4"
+									        Margin="8,0,0,0"
+									        Classes="secondaryAction accentForbidden"
+									        Click="Button_AddForbiddenStatusLab"
+									        Content="{x:Static res:Strings.U_aplicar_independente_4bcba606}" />
+											</Grid>
+											<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding ForbiddenRiteSummary}" />
+										</StackPanel>
+									</Border>
+
+									<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+										<StackPanel Spacing="6">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_cadeias_sin_f7afa4d1}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+											<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_proximo_corte_condicoes_encadeadas_948a9f93}" />
+											<TextBlock Classes="muted" TextWrapping="Wrap"
+											           Text="{x:Static res:Strings.U_aqui_entra_depois_o_construtor_de_cadeia_condica_40503c1d}" />
+										</StackPanel>
+									</Border>
+
+									<Expander Header="{x:Static res:Strings.U_sin_spira_instinct_network_galeria_bestial_fc651cc0}" IsExpanded="False">
+										<Border Margin="0,8,0,0" Padding="{DynamicResource SpacingMd}" Classes="cardSoft" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1">
+											<StackPanel Spacing="10">
+												<Grid ColumnDefinitions="Auto,*">
+													<Border Width="66" Height="66" Margin="0,0,12,0" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+														<Grid>
+															<TextBlock Text="{x:Static res:Strings.U_sin_426d5f22}"
+															           HorizontalAlignment="Center"
+															           VerticalAlignment="Center"
+															           FontSize="22"
+															           FontWeight="Bold"
+															           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+															<TextBlock Text="~"
+															           HorizontalAlignment="Right"
+															           VerticalAlignment="Bottom"
+															           Margin="0,0,8,4"
+															           FontSize="22"
+															           Foreground="{DynamicResource AccentForbiddenBorderBrush}" />
+														</Grid>
+													</Border>
+													<StackPanel Grid.Column="1" Spacing="2">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_spira_instinct_network_v2_a2473c78}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+														<TextBlock FontWeight="SemiBold" FontSize="17" Text="{x:Static res:Strings.U_Ai_UniCatalogTitle}" />
+														<TextBlock Classes="muted" TextWrapping="Wrap"
+														           Text="{x:Static res:Strings.U_Ai_UniCatalogNote}" />
+													</StackPanel>
+												</Grid>
+
+												<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+													<TextBox AutomationProperties.Name="{x:Static res:Strings.U_buscar_uni_opening_veil_ward_stack_frost_flood_b_04567f1a}" Watermark="{x:Static res:Strings.U_buscar_uni_opening_veil_ward_stack_frost_flood_b_04567f1a}"
+													         Text="{Binding SinSearchText, Mode=TwoWay}" />
+													<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" Grid.Column="1"
+													          Margin="8,0,0,0"
+													          MinWidth="112"
+													          ItemsSource="{Binding SinTierFilters}"
+													          SelectedItem="{Binding SelectedSinTierFilter, Mode=TwoWay}" />
+													<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" Grid.Column="2"
+													          Margin="8,0,0,0"
+													          MinWidth="96"
+													          ItemsSource="{Binding SinThreatFilters}"
+													          SelectedItem="{Binding SelectedSinThreatFilter, Mode=TwoWay}" />
+													<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" Grid.Column="3"
+													          Margin="8,0,0,0"
+													          MinWidth="120"
+													          ItemsSource="{Binding SinSortModes}"
+													          SelectedItem="{Binding SelectedSinSortMode, Mode=TwoWay}" />
+												</Grid>
+												<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SinCatalogSummary}" />
+
+												<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" ItemsSource="{Binding DisplayedSinPresets}"
+												         SelectedItem="{Binding SelectedSinPreset, Mode=TwoWay}"
+												         Background="{DynamicResource PanelDeepBrush}"
+												         BorderBrush="{DynamicResource AccentForbiddenBorderBrush}"
+												         BorderThickness="1"
+												         Padding="6"
+												         MaxHeight="265"
+												         ScrollViewer.VerticalScrollBarVisibility="Auto">
+													<ListBox.ItemsPanel>
+														<ItemsPanelTemplate>
+															<WrapPanel />
+														</ItemsPanelTemplate>
+													</ListBox.ItemsPanel>
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Border MinWidth="160" MaxWidth="220" MinHeight="124" Margin="0,0,8,8" Padding="10" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+																<StackPanel Spacing="4">
+																	<Grid ColumnDefinitions="*,Auto">
+																		<TextBlock Classes="sectionLabel" Text="{Binding Id}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+																		<TextBlock Grid.Column="1" Classes="sectionLabel" Text="{Binding BadgeLabel}" Foreground="{DynamicResource AccentProtectForegroundBrush}" />
+																	</Grid>
+																	<TextBlock FontWeight="SemiBold" Text="{Binding Name}" TextWrapping="Wrap" />
+																	<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap" Text="{Binding DisplayPreview}" />
+																	<TextBlock Classes="muted" FontSize="10" TextWrapping="Wrap" Text="{Binding LegacyHint}" IsVisible="{Binding LegacyHint, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+																	<TextBlock Classes="muted" FontSize="11" FontFamily="Cascadia Mono,Consolas,Monospace" Text="{Binding Primitives}" TextWrapping="Wrap" />
+																	<Border Padding="6,3" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="5">
+																		<TextBlock Text="{Binding StatusLabel}" FontSize="11" HorizontalAlignment="Center" />
+																	</Border>
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+
+												<Border Padding="10" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+													<StackPanel Spacing="12"><StackPanel Spacing="5">
+															<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_preview_do_pecado_selecionado_e869d49d}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+															<TextBlock FontWeight="SemiBold" Text="{Binding SelectedSinPreset.CardTitle}" TextWrapping="Wrap" />
+															<TextBlock Text="{Binding SelectedSinPreset.DisplayPreview}" TextWrapping="Wrap" />
+															<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedSinPreset.ThreatBandLabel}" />
+															<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedSinPreset.MaterializationLabel}" />
+															<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedSinPreset.Risk}" />
+															<TextBlock Classes="muted" FontFamily="Cascadia Mono,Consolas,Monospace" TextWrapping="Wrap" Text="{Binding SelectedSinPreset.Primitives}" />
+																<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedSinPreset.NextGate}" />
+																<Button Classes="secondaryAction" HorizontalAlignment="Left" Margin="0,8,0,0"
+																        Content="{x:Static res:Strings.U_Ai_UniBakeSelected}" IsEnabled="{Binding CanBakeSelectedUni}"
+																        Click="Button_BakeSelectedUni" />
+																</StackPanel>
+														<Border Margin="0,4,0,4" Padding="12,8" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7" HorizontalAlignment="Left">
+															<StackPanel Spacing="12" Orientation="Horizontal">
+																<TextBlock Text="{Binding SelectedSinPreset.Status}" FontWeight="SemiBold" HorizontalAlignment="Center" />
+																<TextBlock Text="{Binding SelectedSinPreset.ThreatLabel}" Foreground="{DynamicResource AccentGoldForegroundBrush}" HorizontalAlignment="Center" />
+																</StackPanel>
+														</Border>
+													<Expander Header="{x:Static res:Strings.U_Ai_AvailableRecipes}" HorizontalAlignment="Stretch"><WrapPanel Margin="0,10,0,0"><Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_BakeUni001" HorizontalAlignment="Left" ToolTip.Tip="{x:Static res:Strings.U_aplica_uni_001_haste_protect_shell_no_monstro_at_b315099d}" Content="{x:Static res:Strings.U_assar_uni_001_no_monstro_64ea0bea}" />
+																<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_BakeUni002" HorizontalAlignment="Left" ToolTip.Tip="{x:Static res:Strings.U_aplica_uni_002_counter_march_delay_attack_em_las_218e0a88}" Content="{x:Static res:Strings.U_assar_uni_002_counter_march_9e6d8a9a}" />
+																<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_BakeUni004" HorizontalAlignment="Left" ToolTip.Tip="{x:Static res:Strings.U_aplica_uni_004_ward_stack_skill_0x610b_shell_reg_2a29822a}" Content="{x:Static res:Strings.U_assar_uni_004_ward_stack_97f7e3ee}" />
+
+
+
+
+
+
+															</WrapPanel></Expander></StackPanel>
+												</Border>
+											</StackPanel>
+										</Border>
+									</Expander>
+								</StackPanel>
+							</ScrollViewer>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingSm}" Classes="card" Background="{DynamicResource AccentProtectFillBrush}" BorderBrush="{DynamicResource AccentProtectBorderBrush}" BorderThickness="1"
+				        IsVisible="{Binding ShowsAdvancedTools, FallbackValue=False}">
+					<Expander IsExpanded="False" HorizontalAlignment="Stretch" Header="{x:Static res:Strings.U_como_este_monstro_pensa_gatilho_condicao_sequenc_948e3dab}">
+						<StackPanel Spacing="10" Margin="0,8,0,0">
+							<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding BehaviorViewSummary}" />
+							<ItemsControl ItemsSource="{Binding BehaviorGroups}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+											<StackPanel Spacing="6">
+												<TextBlock FontWeight="SemiBold" FontSize="15" Text="{Binding Title}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+												<TextBlock Classes="muted" Text="{Binding WorkerTag}" />
+												<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorActionsLabel}" ItemsSource="{Binding Actions}" Background="Transparent" BorderThickness="0" Padding="0" SelectedItem="{Binding DataContext.SelectedBehaviorAction, RelativeSource={RelativeSource AncestorType=UserControl}, Mode=TwoWay}">
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Grid ColumnDefinitions="96,Auto,*,Auto" Margin="0,2,0,2">
+																<TextBlock Text="{Binding SequenceConnector}" Classes="muted" VerticalAlignment="Center" Foreground="{DynamicResource AccentProtectBorderBrush}" />
+																<TextBlock Grid.Column="1" Text="{Binding Icon}" VerticalAlignment="Center" Margin="6,0,6,0" />
+																<TextBlock Grid.Column="2" Text="{Binding Name}" VerticalAlignment="Center" FontWeight="SemiBold" TextWrapping="Wrap" />
+																<Border Grid.Column="3" Padding="7,2" CornerRadius="6" VerticalAlignment="Center" Background="{Binding ConditionBrush}">
+																	<TextBlock Text="{Binding ConditionBadge}" FontSize="11" Foreground="{DynamicResource PanelDeepBrush}" FontWeight="SemiBold" />
+																</Border>
+															</Grid>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Expander>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1"
+				        IsVisible="{Binding IsDevKitMode, FallbackValue=False}">
+					<StackPanel Spacing="10">
+						<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+							<StackPanel Spacing="2">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_live_battle_target_rt2_lab_5529ec6d}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_aplicar_agora_no_inimigo_runtime_ativo_quando_o__9ed80e5a}" />
+							</StackPanel>
+							<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_RefreshRuntime" Content="{x:Static res:Strings.AiEditorRefreshRuntime}" />
+							<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_ApplyLive" Content="{x:Static res:Strings.AiEditorApplyLive}" />
+							<Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_RestoreLive" Content="{x:Static res:Strings.AiEditorRestoreLive}" />
+						</Grid>
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_cruza_o_m0nn_do_disco_com_o_inimigo_runtime_ativ_817b5b73}"
+						           TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding RuntimeSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding LiveEditSummary}" TextWrapping="Wrap" />
+						<Border Margin="0,4,0,0" Padding="10" Classes="cardSoft" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+							<StackPanel Spacing="8">
+								<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_copiar_ia_de_outro_monstro_restaurar_original_9bf6fd05}" />
+								<Grid ColumnDefinitions="Auto,*,Auto,Auto">
+									<TextBlock Classes="muted" Text="{x:Static res:Strings.U_fonte_a98bc629}" VerticalAlignment="Center" Margin="0,0,8,0" />
+									<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonMonster}" Grid.Column="1" HorizontalAlignment="Stretch" MaxDropDownHeight="360"
+									          ItemsSource="{Binding CopyableSources}"
+									          SelectedItem="{Binding CopySource, Mode=TwoWay}">
+										<ComboBox.ItemTemplate>
+											<DataTemplate><TextBlock Text="{Binding Title}" /></DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+								<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction accentRegen" Click="Button_CopyAi" Content="{x:Static res:Strings.U_copiar_p_este_eb3d7f95}" />
+								<Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction accentRegen" Click="Button_RestoreOriginalAi" Content="{x:Static res:Strings.U_restaurar_original_c38e1f3a}" />
+								</Grid>
+								<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding CopyRestoreSummary}" />
+							</StackPanel>
+						</Border>
+						<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" ItemsSource="{Binding RuntimeTargets}"
+						         SelectedItem="{Binding SelectedRuntimeTarget, Mode=TwoWay}"
+						         MaxHeight="160">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,8" Padding="10" Classes="cardSoft">
+										<StackPanel Spacing="3">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap"
+											           FontFamily="Cascadia Mono,Consolas,Monospace" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="4,2,4,4" Classes="card" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1"
+				        IsVisible="{Binding IsDevKitMode, FallbackValue=False}">
+					<Expander Header="{x:Static res:Strings.U_devkit_devview_ferramentas_tecnicas_d2bafdab}" IsExpanded="False" HorizontalAlignment="Stretch">
+						<StackPanel Spacing="10" Margin="0,8,0,0">
+							<StackPanel Spacing="4" Margin="8,0,8,4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_devkit_devview_6aa9f851}" Foreground="{DynamicResource AccentMoveForegroundBrush}" />
+								<TextBlock Classes="muted" TextWrapping="Wrap"
+								           Text="{x:Static res:Strings.U_workers_operandos_brutos_ai_assembler_modelos_es_d03259eb}" />
+							</StackPanel>
+
+				<Border Padding="4,2,4,4" Classes="card">
+					<Expander Header="{x:Static res:Strings.U_workers_e_entrypoints_tecnico_846314e5}" IsExpanded="False" HorizontalAlignment="Stretch">
+						<ItemsControl Margin="0,8,0,0" ItemsSource="{Binding SelectedWorkers}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,8" Padding="10" Classes="cardSoft">
+										<StackPanel Spacing="3">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Title}" />
+											<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Entrypoints}" TextWrapping="Wrap"
+											           FontFamily="Cascadia Mono,Consolas,Monospace" />
+											<TextBlock Classes="muted" Text="{Binding Jumps}" TextWrapping="Wrap"
+											           FontFamily="Cascadia Mono,Consolas,Monospace" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</Expander>
+				</Border>
+
+				<Border Padding="4,2,4,4" Classes="card">
+					<Expander Header="{x:Static res:Strings.U_editar_operandos_brutos_avancado_d06e8a99}" IsExpanded="False" HorizontalAlignment="Stretch">
+					<StackPanel Spacing="10" Margin="0,8,0,0">
+						<Grid ColumnDefinitions="*,Auto">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_edit_operands_byte_local_writes_the_loose_monste_ef751358}" VerticalAlignment="Center" />
+							<Button Grid.Column="1" Classes="secondaryAction" Click="Button_Save" Content="{x:Static res:Strings.ActionSave}" />
+						</Grid>
+						<TextBlock Classes="muted" TextWrapping="Wrap"
+						           Text="{x:Static res:Strings.U_each_operand_is_a_u16_hex_editing_changes_only_t_bdb1ba20}" />
+							<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_legenda_cada_linha_1_instrucao_offset_opcode_ope_a287c4a1}" />
+						<TextBlock Classes="muted" Text="{Binding PendingEditSummary}" TextWrapping="Wrap" />
+						<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPreview}" Text="{Binding PendingEditPreview}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="NoWrap"
+						         MinHeight="72"
+						         MaxHeight="140"
+						         FontFamily="Cascadia Mono,Consolas,Monospace" />
+						<Grid ColumnDefinitions="*,Auto" Margin="0,2,0,4">
+								<TextBox AutomationProperties.Name="{x:Static res:Strings.U_filtrar_instrucoes_ex_firaga_3049_callpopa_jump_18f8ae31}" Watermark="{x:Static res:Strings.U_filtrar_instrucoes_ex_firaga_3049_callpopa_jump_18f8ae31}"
+								         Text="{Binding InstructionFilter}" />
+								<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0"
+								           Text="{Binding InstructionFilterSummary}" />
+							</Grid>
+							<ScrollViewer MaxHeight="260" HorizontalScrollBarVisibility="Auto">
+							<ItemsControl ItemsSource="{Binding EditableInstructions}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Grid ColumnDefinitions="200,110,160,*" Margin="0,0,0,4">
+											<TextBlock Text="{Binding Label}" VerticalAlignment="Center"
+											           FontFamily="Cascadia Mono,Consolas,Monospace" />
+											<TextBox AutomationProperties.Name="{x:Static res:Strings.AiEditorOperandLabel}" Grid.Column="1" Text="{Binding OperandHex, Mode=TwoWay}"
+											         FontFamily="Cascadia Mono,Consolas,Monospace" />
+											<TextBlock Grid.Column="3" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0"
+												           Text="{Binding Meaning}" ToolTip.Tip="{Binding OpcodeHelp}"
+												           FontFamily="Cascadia Mono,Consolas,Monospace" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorAbilityLabel}" Grid.Column="2" Margin="8,0,0,0" MaxDropDownHeight="360"
+											          HorizontalAlignment="Stretch"
+											          IsVisible="{Binding IsCommandOperand}"
+											          ItemsSource="{Binding CommandOptions}"
+											          SelectedItem="{Binding SelectedCommand, Mode=TwoWay}">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Display}"
+														           FontFamily="Cascadia Mono,Consolas,Monospace" />
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+										</Grid>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</StackPanel>
+					</Expander>
+				</Border>
+
+				<Border Padding="4,2,4,4" Classes="card">
+					<Expander Header="{x:Static res:Strings.U_ai_assembler_edicao_livre_avancado_bf182019}" IsExpanded="False" HorizontalAlignment="Stretch">
+					<StackPanel Spacing="10" Margin="0,8,0,0">
+						<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ai_assembler_free_edit_insert_remove_modify_jump_c825518a}" VerticalAlignment="Center" />
+							<Button Grid.Column="1" Classes="secondaryAction" Click="Button_ValidateAsm" Content="{x:Static res:Strings.AiEditorValidate}" />
+							<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_AutoFixAsm" Content="{x:Static res:Strings.U_tentar_consertar_07d98ca7}" />
+							<Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_SaveAsm" Content="{x:Static res:Strings.AiEditorSaveStructure}" />
+						</Grid>
+						<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding AssemblerSummary}" />
+						<Grid ColumnDefinitions="Auto,120,Auto,120,Auto,Auto" >
+							<TextBlock Classes="muted" Text="{x:Static res:Strings.U_opcode_c6c4b89b}" VerticalAlignment="Center" Margin="0,0,8,0" />
+							<TextBox AutomationProperties.Name="{x:Static res:Strings.AiEditorOpcodeLabel}" Grid.Column="1" Watermark="{x:Static res:Strings.U_hex_e_g_1c_a61dcb38}" Text="{Binding InsertOpcodeHex, Mode=TwoWay}"
+							         FontFamily="Cascadia Mono,Consolas,Monospace" />
+							<TextBlock Grid.Column="2" Classes="muted" Text="{x:Static res:Strings.U_operand_fe4bd618}" VerticalAlignment="Center" Margin="12,0,8,0" />
+							<TextBox AutomationProperties.Name="{x:Static res:Strings.AiEditorOperandLabel}" Grid.Column="3" Watermark="{x:Static res:Strings.U_hex_if_any_1f4c56c2}" Text="{Binding InsertOperandHex, Mode=TwoWay}"
+							         FontFamily="Cascadia Mono,Consolas,Monospace" />
+							<Button Grid.Column="4" Margin="12,0,0,0" Classes="secondaryAction" Click="Button_InsertAsm" Content="{x:Static res:Strings.AiEditorInsertAfter}" />
+							<Button Grid.Column="5" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_RemoveAsm" Content="{x:Static res:Strings.AiEditorRemoveRestore}" />
+						</Grid>
+						<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPreview}" Text="{Binding AssemblerPreview}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="NoWrap"
+						         MinHeight="48"
+						         MaxHeight="90"
+						         FontFamily="Cascadia Mono,Consolas,Monospace" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_validation_pre_flight_sem_escrever_no_disco_save_9ec1766a}" />
+						<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValidation}" Text="{Binding ValidationReport}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="NoWrap"
+						         MinHeight="48"
+						         MaxHeight="160"
+						         FontFamily="Cascadia Mono,Consolas,Monospace" />
+							<ScrollViewer MaxHeight="320" HorizontalScrollBarVisibility="Auto">
+							<ListBox AutomationProperties.Name="{x:Static res:Strings.AiAtelInstructionsLabel}" ItemsSource="{Binding AssemblerInstructions}"
+							         SelectedItem="{Binding SelectedAssemblerRow, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid ColumnDefinitions="220,70,90,*,Auto" Margin="0,0,0,2">
+											<TextBlock Text="{Binding Label}" VerticalAlignment="Center"
+											           FontFamily="Cascadia Mono,Consolas,Monospace" />
+											<TextBox AutomationProperties.Name="{x:Static res:Strings.AiEditorOpcodeLabel}" Grid.Column="1" Text="{Binding OpcodeHex, Mode=TwoWay}"
+											         FontFamily="Cascadia Mono,Consolas,Monospace" />
+											<TextBox AutomationProperties.Name="{x:Static res:Strings.AiEditorOperandLabel}" Grid.Column="2" Margin="6,0,0,0" Text="{Binding OperandHex, Mode=TwoWay}"
+											         FontFamily="Cascadia Mono,Consolas,Monospace" />
+											<TextBlock Grid.Column="3" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0"
+												           Text="{Binding ReadableText}" ToolTip.Tip="{Binding OpcodeHelp}"
+												           FontFamily="Cascadia Mono,Consolas,Monospace" />
+												<CheckBox Grid.Column="4" Margin="10,0,0,0" Content="{x:Static res:Strings.U_remove_db998458}"
+											          IsChecked="{Binding Removed, Mode=TwoWay}" />
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</ScrollViewer>
+					</StackPanel>
+					</Expander>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_devkit_modelos_estruturais_de_comportamento_690567b4}" />
+						<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding LibrarySummary}" />
+						<Grid ColumnDefinitions="2*,5*">
+							<ScrollViewer Grid.Column="0" MaxHeight="280">
+								<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonType}" ItemsSource="{Binding LibrarySnippets}"
+								         SelectedItem="{Binding SelectedSnippet, Mode=TwoWay}">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<Border Margin="0,0,0,6" Padding="{DynamicResource SpacingSm}" Classes="cardSoft">
+												<StackPanel Spacing="2">
+													<TextBlock Classes="sectionLabel" Text="{Binding CategoryLabel}" />
+													<TextBlock FontWeight="SemiBold" Text="{Binding Name}" TextWrapping="Wrap" />
+												</StackPanel>
+											</Border>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+							</ScrollViewer>
+							<StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="10">
+								<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedSnippet.Description}" />
+								<Grid ColumnDefinitions="Auto,150,*" IsVisible="{Binding TemplateUsesCommand}">
+									<TextBlock Classes="muted" Text="{x:Static res:Strings.U_command_1925f793}" VerticalAlignment="Center" Margin="0,0,8,0" />
+									<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonCategory}" Grid.Column="1" HorizontalAlignment="Stretch"
+									          ItemsSource="{Binding CommandCategories}"
+									          SelectedItem="{Binding TemplateCommandCategory, Mode=TwoWay}" />
+									<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorAbilityLabel}" Grid.Column="2" Margin="8,0,0,0" HorizontalAlignment="Stretch" MaxDropDownHeight="360"
+									          ItemsSource="{Binding TemplateCommandOptions}"
+									          SelectedItem="{Binding TemplateCommandOption, Mode=TwoWay}">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Display}" FontFamily="Cascadia Mono,Consolas,Monospace" />
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+								</Grid>
+								<Grid ColumnDefinitions="Auto,160" IsVisible="{Binding TemplateUsesValue}">
+									<TextBlock Classes="muted" Text="{Binding TemplateValueLabel}" VerticalAlignment="Center" Margin="0,0,8,0" />
+									<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Column="1" Text="{Binding TemplateValue, Mode=TwoWay}"
+									         FontFamily="Cascadia Mono,Consolas,Monospace" />
+								</Grid>
+								<Grid ColumnDefinitions="Auto,160" IsVisible="{Binding TemplateUsesValue2}">
+									<TextBlock Classes="muted" Text="{Binding TemplateValue2Label}" VerticalAlignment="Center" Margin="0,0,8,0" />
+									<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Column="1" Text="{Binding TemplateValue2, Mode=TwoWay}"
+									         FontFamily="Cascadia Mono,Consolas,Monospace" />
+								</Grid>
+								<Grid ColumnDefinitions="Auto,*,Auto,120" IsVisible="{Binding TemplateIsGuarded}">
+									<TextBlock Classes="muted" Text="{x:Static res:Strings.U_hook_6bab147e}" VerticalAlignment="Center" Margin="0,0,8,0" />
+									<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorWorkerLabel}" Grid.Column="1" HorizontalAlignment="Stretch"
+									          ItemsSource="{Binding TemplateWorkers}"
+									          SelectedItem="{Binding SelectedTemplateWorker, Mode=TwoWay}">
+										<ComboBox.ItemTemplate>
+											<DataTemplate><TextBlock Text="{Binding Label}" /></DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<TextBlock Grid.Column="2" Classes="muted" Text="{x:Static res:Strings.CommonEntrypoint}" VerticalAlignment="Center" Margin="12,0,8,0" />
+									<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonEntrypoint}" Grid.Column="3" ItemsSource="{Binding TemplateEntrypoints}"
+									          SelectedItem="{Binding SelectedTemplateEntrypoint, Mode=TwoWay}" />
+								</Grid>
+								<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPreview}" Text="{Binding TemplatePreview}" IsReadOnly="True" AcceptsReturn="True"
+								         TextWrapping="NoWrap" MinHeight="72" MaxHeight="200"
+								         FontFamily="Cascadia Mono,Consolas,Monospace" />
+								<Button HorizontalAlignment="Left" Classes="secondaryAction"
+								        Click="Button_InsertTemplate" Content="{Binding TemplateActionLabel}" />
+							</StackPanel>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="4,2,4,4" Classes="card">
+					<Expander Header="{x:Static res:Strings.U_disassembly_atel_completo_tecnico_de3dcdf7}" IsExpanded="False" HorizontalAlignment="Stretch">
+					<StackPanel Spacing="12" Margin="0,8,0,0">
+						<TextBox AutomationProperties.Name="{x:Static res:Strings.AiAtelInstructionsLabel}" Text="{Binding SelectedDisassembly}"
+						         IsReadOnly="True"
+						         AcceptsReturn="True"
+						         TextWrapping="NoWrap"
+						         MinHeight="420"
+						         FontFamily="Cascadia Mono,Consolas,Monospace" />
+					</StackPanel>
+					</Expander>
+				</Border>
+						</StackPanel>
+					</Expander>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+    </ThemeVariantScope>
+</UserControl>

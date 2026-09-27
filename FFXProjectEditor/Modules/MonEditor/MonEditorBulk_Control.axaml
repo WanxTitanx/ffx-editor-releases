@@ -1,0 +1,139 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:FFXProjectEditor"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1080"
+             d:DesignHeight="760"
+             x:Class="FFXProjectEditor.MonEditorBulk_Control">
+
+	<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+		<StackPanel Spacing="14">
+			<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_advanced_batch_authoring_dedc2e62}" />
+					<TextBlock FontSize="28" FontWeight="Bold" Text="{x:Static res:Strings.U_advanced_monster_batch_tool_9f8161ac}" />
+					<TextBlock Classes="muted" Text="{Binding SelectionSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+			</Border>
+
+			<Grid ColumnDefinitions="1.2*,*">
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_targets_e2d039ff}" />
+						<TextBlock Classes="cardTitle" Text="{Binding SelectedMonsterCount, StringFormat='Armed Targets ({0})'}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_this_is_the_heavy_batch_tool_for_the_simpler_wor_0f3a5ddc}" TextWrapping="Wrap" />
+
+						<ScrollViewer MaxHeight="260" HorizontalScrollBarVisibility="Disabled">
+							<ItemsControl ItemsSource="{Binding SelectedMonsterEntries}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Margin="0,0,0,10" Padding="10" Classes="cardSoft">
+											<StackPanel Spacing="4">
+												<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+												<TextBlock Classes="sectionLabel" Text="{Binding BatchStateLabel}" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</ScrollViewer>
+					</StackPanel>
+				</Border>
+
+				<Border Grid.Column="1" Margin="14,0,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_execution_log_075f6f9f}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_last_operation_6324d17a}" />
+						<TextBlock Classes="muted" Text="{Binding LastOperationSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.U_jarvis_is_exposing_safe_batch_writes_here_menu_a_cd3ecf12}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+			</Grid>
+
+			<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+				<StackPanel Spacing="12">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_batch_menu_abilities_9dc16b72}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_apply_the_same_ability_slot_across_every_selecte_86ed65e1}" />
+					<TextBlock Classes="muted" Text="{x:Static res:Strings.U_good_for_fast_loadout_passes_when_several_monste_114499b4}" TextWrapping="Wrap" />
+
+					<Grid ColumnDefinitions="Auto,*">
+						<StackPanel Spacing="8" MinWidth="200">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_target_slot_d1e9b368}" />
+							<ComboBox ItemsSource="{Binding AbilitySlotOptions}"
+									  SelectedItem="{Binding SelectedAbilitySlot}">
+								<ComboBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding DisplayLabel}" />
+									</DataTemplate>
+								</ComboBox.ItemTemplate>
+							</ComboBox>
+						</StackPanel>
+
+						<local:GameIndex_Template Grid.Column="1"
+												  Margin="14,0,0,0"
+												  CategOptions="{Binding CategoryOptions}"
+												  GameIndex_Label="Ability Payload"
+												  GameIndex_Object="{Binding PendingAbility}" />
+					</Grid>
+
+					<WrapPanel Orientation="Horizontal">
+						<Button Click="Button_ApplyAbilitySlot"
+								IsEnabled="{Binding HasSelectedMonsters}">
+							Apply Slot To Selected
+						</Button>
+						<Button Margin="10,0,0,0"
+								Classes="secondaryAction"
+								Click="Button_ClearAbilitySlot"
+								IsEnabled="{Binding HasSelectedMonsters}">
+							Clear Slot
+						</Button>
+					</WrapPanel>
+				</StackPanel>
+			</Border>
+
+			<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+				<StackPanel Spacing="12">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_copy_blocks_from_source_monster_dee4b108}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_blast_a_proven_stat_sheet_section_into_every_tar_d9f6e460}" />
+					<TextBlock Classes="muted" Text="{x:Static res:Strings.U_this_is_the_hard_productivity_move_choose_a_sour_caa251aa}" TextWrapping="Wrap" />
+
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_source_monster_e568f79a}" />
+						<ComboBox ItemsSource="{Binding SourceMonsterOptions}"
+								  SelectedItem="{Binding SelectedSourceMonster}">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Name}" />
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</StackPanel>
+
+					<WrapPanel Orientation="Horizontal">
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyMenuAbilities}">Menu Abilities</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyProperties}">Properties + Poison</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyElementalWeaknesses}">Elemental Weaknesses</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyStatusResistances}">Status Resistances</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyAutoStatusesAndImmunities}">Auto / Immunities</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyIdentifiers}">Identifiers</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyLootEconomyAndDrops}">Loot Economy / Drops</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyLootStealAndBribe}">Loot Steal / Bribe</CheckBox>
+						<CheckBox Margin="0,0,18,10" IsChecked="{Binding CopyLootGearRewards}">Loot Gear Rewards</CheckBox>
+					</WrapPanel>
+
+					<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+						<TextBlock Classes="muted" Text="{Binding CopyBlocksSummary}" TextWrapping="Wrap" />
+					</Border>
+
+					<Button Click="Button_ApplySourceBlocks"
+							IsEnabled="{Binding HasSelectedMonsters}">
+						Apply Selected Blocks
+					</Button>
+				</StackPanel>
+			</Border>
+		</StackPanel>
+	</ScrollViewer>
+</UserControl>

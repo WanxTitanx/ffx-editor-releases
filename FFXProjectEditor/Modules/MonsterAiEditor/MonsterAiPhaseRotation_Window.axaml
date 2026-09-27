@@ -1,0 +1,705 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="1240"
+        d:DesignHeight="820"
+        x:Class="FFXProjectEditor.MonsterAiPhaseRotation_Window"
+        Title="{x:Static res:Strings.U_WinPhaseRotation}"
+        Width="1240"
+        Height="820"
+        MinWidth="1040"
+        MinHeight="660">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,*,Auto">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_ai_gerenciador_de_fases_comum_107503ca}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_audite_contadores_e_monte_ciclos_simples_de4fd657}" />
+					<TextBlock Classes="muted" TextWrapping="Wrap"
+					           Text="{x:Static res:Strings.U_use_esta_janela_para_entender_quais_priv_battlev_c6c89858}" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        AutomationProperties.Name="{x:Static res:Strings.CommonClose}" Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<ScrollViewer Grid.Row="1" Margin="0,14,0,0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+			<StackPanel Spacing="14">
+				<Grid ColumnDefinitions="1.05*,0.95*">
+					<Border Padding="{DynamicResource SpacingMd}" Margin="0,0,7,0" Classes="card">
+						<Grid RowDefinitions="Auto,Auto,*,Auto">
+							<Grid ColumnDefinitions="*,Auto,Auto">
+								<StackPanel Spacing="3">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_biblioteca_de_variaveis_c6228aa1}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+									<TextBlock Classes="muted" TextWrapping="Wrap"
+									           Text="{Binding PhaseRotationAuditSummary}" />
+								</StackPanel>
+								<Button Grid.Column="1"
+								        Margin="12,0,8,0"
+								        Classes="secondaryAction"
+								        IsEnabled="{Binding CanCreatePhasePrivateVarLab}"
+								        Click="Button_CreateFreePrivateVarLab"
+								        Content="{x:Static res:Strings.CommonPlusPrivateVar}" />
+								<Button Grid.Column="2"
+								        Classes="secondaryAction"
+								        Click="Button_RefreshPhaseRotationAudit"
+								        Content="{x:Static res:Strings.CommonReaudit}" />
+							</Grid>
+
+							<Border Grid.Row="1" Margin="0,10,0,10" Padding="10" Background="{DynamicResource AccentCycleFillBrush}" BorderBrush="{DynamicResource AccentCycleBorderBrush}" BorderThickness="1" CornerRadius="7">
+								<TextBlock Classes="muted" TextWrapping="Wrap"
+								           Text="{x:Static res:Strings.U_score_alto_nao_significa_pronto_para_escrever_si_60a1d8d3}" />
+							</Border>
+
+							<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorVariablesLabel}" Grid.Row="2"
+							         MinHeight="280"
+							         MaxHeight="360"
+							         ItemsSource="{Binding PhaseVariableAudits}"
+							         SelectedItem="{Binding SelectedPhaseVariableAudit, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border Margin="0,0,0,8"
+										        Padding="10"
+										        Background="{DynamicResource AccentShellFillBrush}"
+										        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+										        BorderThickness="1"
+										        CornerRadius="7">
+											<Grid ColumnDefinitions="*,Auto">
+												<StackPanel Spacing="4">
+													<TextBlock FontWeight="SemiBold" Text="{Binding VariableName}" />
+													<Border Padding="8,4" CornerRadius="5" BorderThickness="1"
+													        Background="{DynamicResource AccentExperimentalFillBrush}"
+													        BorderBrush="{DynamicResource AccentExperimentalBorderBrush}"
+													        IsVisible="{Binding HasSemanticContext}">
+														<StackPanel Spacing="2">
+															<TextBlock Classes="sectionLabel" Text="{Binding SemanticLabel}"
+															           Foreground="{DynamicResource AccentExperimentalBorderBrush}" />
+															<TextBlock Classes="muted" Text="{Binding SemanticCalculation}"
+															           TextWrapping="Wrap"
+															           IsVisible="{Binding SemanticCalculation, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+														</StackPanel>
+													</Border>
+													<TextBlock Classes="sectionLabel" Text="{Binding AliasLabel}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+													<TextBlock Classes="sectionLabel" Text="{Binding VariableIdLabel}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+													<TextBlock Classes="muted" Text="{Binding ActualVariableIdLabel}" />
+													<TextBlock Classes="muted" Text="{Binding IndexLabel}" />
+													<TextBlock Classes="muted" Text="{Binding EvidenceSummary}" TextWrapping="Wrap" />
+													<TextBlock Classes="muted" Text="{Binding FlowSummary}" TextWrapping="Wrap" />
+													<TextBlock Classes="muted" Text="{Binding WorkersSummary}" TextWrapping="Wrap" />
+												</StackPanel>
+												<StackPanel Grid.Column="1" Spacing="5" HorizontalAlignment="Right">
+													<Border Padding="7,3" Background="{DynamicResource AccentCycleFillBrush}" BorderBrush="{DynamicResource AccentCycleBorderBrush}" BorderThickness="1" CornerRadius="6">
+														<TextBlock FontWeight="SemiBold" FontSize="12" Text="{Binding Badge}" />
+													</Border>
+													<TextBlock Classes="sectionLabel" HorizontalAlignment="Right" Text="{Binding StorageLabel}" />
+													<TextBlock Classes="muted" HorizontalAlignment="Right" Text="{Binding OffsetSummary}" />
+												</StackPanel>
+											</Grid>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</Border>
+
+					<Border Grid.Column="1" Padding="{DynamicResource SpacingMd}" Margin="7,0,0,0" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_contador_escolhido_5b76dab4}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentGoldBorderBrush}" BorderThickness="1" CornerRadius="7">
+								<StackPanel Spacing="6">
+									<TextBlock FontSize="18" FontWeight="SemiBold" Text="{Binding SelectedPhaseVariableAudit.VariableName}" />
+									<TextBlock Classes="sectionLabel" Text="{Binding SelectedPhaseVariableAudit.VariableIdLabel}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.ActualVariableIdLabel}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.IndexLabel}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.StorageLabel}" />
+									<Border Padding="8,4" CornerRadius="5" BorderThickness="1" Margin="0,6,0,0"
+									        Background="{DynamicResource AccentExperimentalFillBrush}"
+									        BorderBrush="{DynamicResource AccentExperimentalBorderBrush}"
+									        IsVisible="{Binding SelectedPhaseVariableAudit.HasSemanticContext}">
+										<StackPanel Spacing="3">
+											<TextBlock Classes="sectionLabel" Text="{Binding SelectedPhaseVariableAudit.SemanticLabel}"
+											           Foreground="{DynamicResource AccentExperimentalBorderBrush}" />
+											<TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.SemanticCalculation}"
+											           TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+									<TextBlock Classes="muted" Text="{Binding SelectedPhaseVariableAudit.WorkerCoverageSummary}" TextWrapping="Wrap" />
+									<TextBlock TextWrapping="Wrap" Text="{Binding SelectedPhaseVariableAudit.Recommendation}" />
+								</StackPanel>
+							</Border>
+
+							<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonVarAlias}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+									<Grid ColumnDefinitions="*,Auto,Auto">
+										<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonVarAlias}" Watermark="{x:Static res:Strings.CommonExCounterHit}"
+										         Text="{Binding PhaseVarAliasInput, Mode=TwoWay}" />
+										<Button Grid.Column="1"
+										        Margin="8,0,0,0"
+										        Classes="primaryAction"
+										        IsEnabled="{Binding CanSavePhaseVarAlias}"
+										        Click="Button_SavePhaseVarAlias"
+										        Content="{x:Static res:Strings.ActionSave}" />
+										<Button Grid.Column="2"
+										        Margin="8,0,0,0"
+										        Classes="secondaryAction"
+										        IsEnabled="{Binding CanSavePhaseVarAlias}"
+										        Click="Button_ClearPhaseVarAlias"
+										        Content="{x:Static res:Strings.CommonClear}" />
+									</Grid>
+									<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseVarAliasSummary}" />
+								</StackPanel>
+							</Border>
+
+							<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonAuthorTemplateId}" Foreground="{DynamicResource AccentCycleBorderBrush}" />
+									<Grid ColumnDefinitions="*,Auto,Auto">
+										<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonIndex}" Watermark="{x:Static res:Strings.CommonEx6Or0x64}"
+										         Text="{Binding PhaseVarAuthoringIndexInput, Mode=TwoWay}" />
+										<Button Grid.Column="1"
+										        Margin="8,0,0,0"
+										        Classes="primaryAction"
+										        IsEnabled="{Binding CanSavePhaseVarAuthoringIndex}"
+										        Click="Button_SavePhaseVarAuthoringIndex"
+										        Content="{x:Static res:Strings.ActionSave}" />
+										<Button Grid.Column="2"
+										        Margin="8,0,0,0"
+										        Classes="secondaryAction"
+										        IsEnabled="{Binding CanSavePhaseVarAuthoringIndex}"
+										        Click="Button_ClearPhaseVarAuthoringIndex"
+										        Content="{x:Static res:Strings.CommonUseReal}" />
+									</Grid>
+									<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseVarAuthoringIndexSummary}" />
+								</StackPanel>
+							</Border>
+
+						</StackPanel>
+					</Border>
+				</Grid>
+
+				<Expander Header="{x:Static res:Strings.U_blocos_ligados_a_esta_var_a431f79f}" IsExpanded="False" HorizontalAlignment="Stretch">
+					<StackPanel Spacing="12">
+						<Border Padding="{DynamicResource SpacingMd}" Classes="card">
+							<StackPanel Spacing="10">
+								<TextBlock Classes="muted"
+								           TextWrapping="Wrap"
+								           Text="{Binding PhaseVariableEvidenceSummary}" />
+								<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonEvidence}" ItemsSource="{Binding PhaseVariableEvidenceBlocks}"
+								         MinHeight="72">
+									<ListBox.ItemTemplate>
+										<DataTemplate>
+											<Border Margin="0,0,0,8"
+											        Padding="{DynamicResource SpacingMd}"
+											        Background="{DynamicResource AccentShellFillBrush}"
+											        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+											        BorderThickness="1"
+											        CornerRadius="7">
+												<Grid ColumnDefinitions="*,Auto">
+													<StackPanel Spacing="4">
+														<TextBlock FontWeight="SemiBold" Text="{Binding HookLabel}" />
+														<TextBlock Classes="sectionLabel"
+														           Text="{Binding GuardSummary}"
+														           Foreground="{DynamicResource AccentGoldForegroundBrush}"
+														           TextWrapping="Wrap" />
+														<TextBlock Text="{Binding EffectSummary}" TextWrapping="Wrap" IsVisible="{Binding HasEffectSummary}" />
+														<StackPanel Spacing="2" IsVisible="{Binding HasWriteSummary}">
+															<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWriteChangeState}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+															<TextBlock Text="{Binding WriteSummary}" TextWrapping="Wrap" />
+														</StackPanel>
+														<StackPanel Spacing="2" IsVisible="{Binding HasConsumerSummary}">
+															<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonConsumedBy}" Foreground="{DynamicResource AccentCycleBorderBrush}" />
+															<TextBlock Text="{Binding ConsumerSummary}" TextWrapping="Wrap" />
+														</StackPanel>
+														<StackPanel Spacing="2" IsVisible="{Binding HasNextStateSummary}">
+															<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonNextStatePt}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+															<TextBlock Text="{Binding NextStateSummary}" TextWrapping="Wrap" />
+														</StackPanel>
+														<StackPanel Spacing="2" IsVisible="{Binding HasNoteSummary}">
+															<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_notas_de_fluxo_d329d484}" Foreground="{DynamicResource AccentShellBorderBrush}" />
+															<TextBlock Classes="muted" Text="{Binding NoteSummary}" TextWrapping="Wrap" />
+														</StackPanel>
+														<TextBlock Classes="muted" Text="{Binding OffsetSummary}" TextWrapping="Wrap" />
+														<TextBlock Classes="muted" Text="{Binding TechnicalSummary}" TextWrapping="Wrap" />
+													</StackPanel>
+													<Border Grid.Column="1"
+													        Margin="10,0,0,0"
+													        Padding="7,3"
+													        Background="{DynamicResource AccentCycleFillBrush}"
+													        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+													        BorderThickness="1"
+													        CornerRadius="6"
+													        VerticalAlignment="Top">
+														<TextBlock FontSize="12" FontWeight="SemiBold" Text="{Binding Badge}" />
+													</Border>
+												</Grid>
+											</Border>
+										</DataTemplate>
+									</ListBox.ItemTemplate>
+								</ListBox>
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</Expander>
+
+				<Border Padding="{DynamicResource SpacingMd}" Classes="card">
+					<Grid RowDefinitions="Auto,Auto,Auto,Auto" ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto">
+						<StackPanel Spacing="3">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_condicao_multivar_livre_30b79d19}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBlock Classes="muted" TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_adicione_quantas_linhas_precisar_para_a_habilida_31355e00}" />
+						</StackPanel>
+						<Button Grid.Column="1"
+						        Margin="12,0,8,0"
+						        Classes="primaryAction"
+						        Click="Button_AddPhaseConditionClause"
+						        Content="{x:Static res:Strings.CommonPlusCondition}" />
+						<Button Grid.Column="2"
+						        Margin="0,0,8,0"
+						        Classes="secondaryAction"
+						        IsEnabled="{Binding CanRemovePhaseConditionClause}"
+						        Click="Button_RemovePhaseConditionClause"
+						        Content="{x:Static res:Strings.CommonRemove}" />
+						<Button Grid.Column="3"
+						        Margin="0,0,8,0"
+						        Classes="secondaryAction"
+						        Click="Button_ClearPhaseConditionClauses"
+						        Content="{x:Static res:Strings.CommonClearLower}" />
+						<Button Grid.Column="4"
+						        Classes="secondaryAction"
+						        Click="Button_ValidatePhaseMultivarCondition"
+						        Content="{x:Static res:Strings.U_validar_condicao_6303c14e}" />
+						<Button Grid.Column="5"
+						        Margin="8,0,0,0"
+						        Classes="primaryAction"
+						        Click="Button_AssignPhaseConditionToSelectedStep"
+						        Content="{x:Static res:Strings.U_usar_na_habilidade_fase_f634f19f}" />
+
+						<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorConditionsLabel}" Grid.Row="1"
+						         Grid.ColumnSpan="6"
+						         Margin="0,12,0,0"
+						         MinHeight="52"
+						         ItemsSource="{Binding PhaseConditionClauses}"
+						         SelectedItem="{Binding SelectedPhaseConditionClause, Mode=TwoWay}">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,10,8"
+									        Padding="{DynamicResource SpacingSm}"
+									        Background="{DynamicResource AccentShellFillBrush}"
+									        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+									        BorderThickness="1"
+									        CornerRadius="7">
+										<Grid ColumnDefinitions="72,230,72,90" RowDefinitions="Auto,Auto">
+											<TextBlock Grid.ColumnSpan="4"
+											           Classes="sectionLabel"
+											           Text="{Binding Label}"
+											           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+											<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorJoinLabel}" Grid.Row="1"
+											          Width="64"
+											          ItemsSource="{Binding JoinOptions}"
+											          SelectedItem="{Binding Join, Mode=TwoWay}"
+											          IsEnabled="{Binding JoinEnabled}" />
+											<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorVariablesLabel}" Grid.Row="1"
+											          Grid.Column="1"
+											          Margin="8,0,0,0"
+											          Width="222"
+											          ItemsSource="{Binding VariableOptions}"
+											          SelectedItem="{Binding SelectedVariable, Mode=TwoWay}" />
+											<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorOperatorLabel}" Grid.Row="1"
+											          Grid.Column="2"
+											          Margin="8,0,0,0"
+											          Width="64"
+											          ItemsSource="{Binding OperatorOptions}"
+											          SelectedItem="{Binding Operator, Mode=TwoWay}" />
+											<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Row="1"
+											         Grid.Column="3"
+											         Margin="8,0,0,0"
+											         Width="82"
+											         Text="{Binding Value, Mode=TwoWay}"
+											         FontFamily="Cascadia Mono,Consolas,Monospace"
+											         Watermark="0" />
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+
+						<Grid Grid.Row="2" Grid.ColumnSpan="6" Margin="0,12,0,0" ColumnDefinitions="*,*">
+							<Border Padding="10" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="7">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHumanPreview}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+									<TextBlock TextWrapping="Wrap" Text="{Binding PhaseConditionPreview}" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Column="1" Margin="10,0,0,0" Padding="10" Background="{DynamicResource AccentCycleFillBrush}" BorderBrush="{DynamicResource AccentCycleBorderBrush}" BorderThickness="1" CornerRadius="7">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonShortTechnicalValidation}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+									<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseConditionTechnicalSummary}" />
+								</StackPanel>
+							</Border>
+						</Grid>
+
+						<Border Grid.Row="3" Grid.ColumnSpan="6" Margin="0,10,0,0" Padding="8"
+						        Background="{DynamicResource AccentShellFillBrush}"
+						        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+						        BorderThickness="1" CornerRadius="6">
+							<StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+								<CheckBox IsChecked="{Binding PhaseConditionUseHpBelowGuard, Mode=TwoWay}" Content="{x:Static res:Strings.CommonRequireHpLess}" />
+								<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPercentHp}" Width="50" Text="{Binding PhaseConditionHpBelowPercentText, Mode=TwoWay}"
+								         FontFamily="Cascadia Mono,Consolas,Monospace" IsEnabled="{Binding PhaseConditionUseHpBelowGuard}" />
+								<TextBlock Classes="muted" Text="%" VerticalAlignment="Center" />
+								<TextBlock Classes="muted" TextWrapping="Wrap" Margin="16,0,0,0"
+								           Text="{x:Static res:Strings.U_este_gate_vale_para_todas_as_habilidades_desta_f_86e6e350}" />
+							</StackPanel>
+						</Border>
+					</Grid>
+				</Border>
+				<Border Padding="{DynamicResource SpacingMd}" Classes="card">
+					<Grid RowDefinitions="Auto,Auto,Auto,Auto">
+						<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+							<StackPanel Spacing="3">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_draft_da_rotacao_888b2f6e}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+								<TextBlock Classes="muted" TextWrapping="Wrap"
+								           Text="{x:Static res:Strings.U_clique_em_uma_fase_para_escolher_a_habilidade_na_b40519eb}" />
+								<TextBlock Classes="muted" TextWrapping="Wrap"
+								           Text="{x:Static res:Strings.U_leitura_conservadora_se_este_monstro_depender_de_0fa92c06}" />
+								<TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{Binding PhaseDraftCounterSummary}" />
+							</StackPanel>
+							<Button Grid.Column="1"
+							        Margin="12,0,8,0"
+							        Classes="primaryAction"
+							        Click="Button_AddPhaseDraftStep"
+							        Content="{x:Static res:Strings.CommonPlusCommonPhase}" />
+							<Button Grid.Column="2"
+							        Margin="0,0,8,0"
+							        Classes="secondaryAction"
+							        IsEnabled="{Binding CanAddPhaseFinalStep}"
+							        Click="Button_AddPhaseFinalDraftStep"
+							        Content="{x:Static res:Strings.CommonPlusLastPhase}" />
+							<Button Grid.Column="3"
+							        Classes="secondaryAction"
+							        IsEnabled="{Binding CanRemovePhaseDraftStep}"
+							        Click="Button_RemovePhaseDraftStep"
+							        Content="{x:Static res:Strings.CommonRemovePhase}" />
+						</Grid>
+
+						<ListBox AutomationProperties.Name="{x:Static res:Strings.AiEditorDraftLabel}" Grid.Row="1"
+						         Margin="0,12,0,0"
+						         ItemsSource="{Binding PhaseDraftSteps}"
+						         SelectedItem="{Binding SelectedPhaseDraftStep, Mode=TwoWay}">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,10,8"
+									        Padding="{DynamicResource SpacingMd}"
+									        MinWidth="190"
+									        MaxWidth="245"
+									        Background="{DynamicResource AccentShellFillBrush}"
+									        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+									        BorderThickness="1"
+									        CornerRadius="7">
+										<StackPanel Spacing="4">
+											<TextBlock Classes="sectionLabel" Text="{Binding StepLabel}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+											<TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+											<TextBlock Classes="sectionLabel" Text="{Binding CounterRuleSummary}" Foreground="{DynamicResource AccentGoldForegroundBrush}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding AdvanceRuleSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Subtitle}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+						<Border Grid.Row="1"
+						        Margin="0,12,0,0"
+						        Padding="14"
+						        Background="{DynamicResource AccentShellFillBrush}"
+						        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+						        BorderThickness="1"
+						        CornerRadius="7"
+						        IsVisible="{Binding IsCommonPhaseDraftEmpty}">
+							<TextBlock Classes="muted"
+							           TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_nenhuma_fase_montada_a_auditoria_acima_so_encont_07ba31ad}" />
+						</Border>
+
+						<Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="0,8,0,0">
+							<Border Padding="{DynamicResource SpacingMd}" Margin="0,0,7,0" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+								<StackPanel Spacing="0">
+								<StackPanel Spacing="8" VerticalAlignment="Top" IsVisible="{Binding ShowPhaseDraftSelectionPlaceholder}">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSelectionEditor}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+									<TextBlock FontWeight="SemiBold" TextWrapping="Wrap" Text="{x:Static res:Strings.CommonSelectSimplePhase}" />
+									<TextBlock Classes="muted" TextWrapping="Wrap"
+									           Text="{x:Static res:Strings.U_este_painel_comum_edita_so_o_fluxo_simples_do_wr_170aa4b4}" />
+								</StackPanel>
+								<StackPanel Spacing="9" IsVisible="{Binding ShowDirectPhaseDraftEditor}">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEditSelectedPhase}" Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+									<Grid ColumnDefinitions="Auto,*">
+										<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonCategoryLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+										<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonCategory}" Grid.Column="1"
+										          HorizontalAlignment="Stretch"
+										          ItemsSource="{Binding AutomationAbilityCategories}"
+										          SelectedItem="{Binding SelectedAbilityCategory, Mode=TwoWay}" />
+									</Grid>
+									<Grid ColumnDefinitions="*,Auto">
+										<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonSearchAbilityByHex}" Watermark="{x:Static res:Strings.CommonSearchAbilityByHex}"
+										         Text="{Binding AbilitySearch, Mode=TwoWay}" />
+										<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Margin="10,0,0,0"
+										           Text="{Binding AbilityFilterSummary}" />
+									</Grid>
+									<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorAbilityLabel}" HorizontalAlignment="Stretch"
+									          MaxDropDownHeight="320"
+									          ItemsSource="{Binding PhaseAbilityOptions}"
+									          SelectedItem="{Binding SelectedPhaseAbility, Mode=TwoWay}">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding Display}" />
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<Grid ColumnDefinitions="Auto,*">
+										<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonPhaseTrigger}" VerticalAlignment="Center" Margin="0,0,8,0" />
+										<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonPhaseTrigger}" Grid.Column="1"
+										          HorizontalAlignment="Stretch"
+										          ItemsSource="{Binding PhaseTriggerOptions}"
+										          SelectedItem="{Binding SelectedPhaseDraftStep.SelectedTriggerOption, Mode=TwoWay}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+										</ComboBox>
+									</Grid>
+									<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SelectedPhaseDraftStep.TriggerSummary}" />
+									<Border Padding="10" Background="{DynamicResource AccentCycleFillBrush}" BorderBrush="{DynamicResource AccentCycleBorderBrush}" BorderThickness="1" CornerRadius="7">
+										<StackPanel Spacing="8">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonAbilityPhaseCondition}" Foreground="{DynamicResource AccentCycleBorderBrush}" />
+											<TextBlock FontWeight="SemiBold"
+											           TextWrapping="Wrap"
+											           Text="{Binding SelectedPhaseDraftStep.GuardModeSummary}" />
+											<Grid ColumnDefinitions="*,72,95,Auto,Auto">
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorVariablesLabel}" ItemsSource="{Binding PhaseVariableAudits}"
+												          SelectedItem="{Binding SelectedPhaseStepGuardVariableAudit, Mode=TwoWay}" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorOperatorLabel}" Grid.Column="1"
+												          Margin="8,0,0,0"
+												          ItemsSource="{Binding PhaseConditionOperators}"
+												          SelectedItem="{Binding PhaseStepGuardOperator, Mode=TwoWay}" />
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Column="2"
+												         Margin="8,0,0,0"
+												         Text="{Binding PhaseStepGuardValue, Mode=TwoWay}"
+												         FontFamily="Cascadia Mono,Consolas,Monospace"
+												         Watermark="0" />
+												<Button Grid.Column="3"
+												        Margin="8,0,0,0"
+												        Classes="secondaryAction"
+												        Click="Button_ApplySimplePhaseCondition"
+												        Content="{x:Static res:Strings.CommonUseCondition}" />
+												<Button Grid.Column="4"
+												        Margin="8,0,0,0"
+												        Classes="secondaryAction"
+												        Click="Button_ClearSimplePhaseCondition"
+												        Content="{x:Static res:Strings.CommonUseFallback}" />
+											</Grid>
+											<TextBlock TextWrapping="Wrap" Text="{Binding PhaseStepGuardPreview}" />
+											<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding PhaseStepGuardTechnicalSummary}" />
+										</StackPanel>
+									</Border>
+									<Border Padding="10" Background="{DynamicResource AccentCycleFillBrush}" BorderBrush="{DynamicResource AccentCycleBorderBrush}" BorderThickness="1" CornerRadius="7">
+										<StackPanel Spacing="8">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonExtraAbilityCondition}" Foreground="{DynamicResource AccentCycleBorderBrush}" />
+											<Grid ColumnDefinitions="Auto,80,Auto,*">
+												<CheckBox Content="{x:Static res:Strings.CommonRequireHpLess}"
+												          IsChecked="{Binding SelectedPhaseDraftStep.UseHpBelowGuard, Mode=TwoWay}" />
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonPercentHp}" Grid.Column="1"
+												         Margin="8,0,0,0"
+												         Text="{Binding SelectedPhaseDraftStep.HpBelowPercentText, Mode=TwoWay}"
+												         FontFamily="Cascadia Mono,Consolas,Monospace"
+												         Watermark="50" />
+												<TextBlock Grid.Column="2"
+												           Classes="muted"
+												           VerticalAlignment="Center"
+												           Margin="6,0,0,0"
+												           Text="%" />
+												<TextBlock Grid.Column="3"
+												           Classes="muted"
+												           VerticalAlignment="Center"
+												           Margin="10,0,0,0"
+												           TextWrapping="Wrap"
+												           Text="{Binding SelectedPhaseDraftStep.HpGuardSummary}" />
+											</Grid>
+											<TextBlock Classes="muted" TextWrapping="Wrap"
+											           Text="{x:Static res:Strings.U_use_o_construtor_multivar_livre_acima_para_varia_87442cb9}" />
+										</StackPanel>
+									</Border>
+									<Grid ColumnDefinitions="Auto,*">
+										<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonNewAbilityTarget}" VerticalAlignment="Center" Margin="0,0,8,0" />
+										<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonNewAbilityTarget}" Grid.Column="1"
+										          HorizontalAlignment="Stretch"
+										          ItemsSource="{Binding AuthoringTargetOptions}"
+										          SelectedItem="{Binding SelectedPhaseDraftStep.SelectedTarget, Mode=TwoWay}" />
+									</Grid>
+									<Grid ColumnDefinitions="Auto,Auto,80,*">
+										<CheckBox Content="{x:Static res:Strings.CommonMaybe}"
+										          IsChecked="{Binding SelectedPhaseDraftStep.UseChance, Mode=TwoWay}" />
+										<TextBlock Grid.Column="1"
+										           Classes="muted"
+										           VerticalAlignment="Center"
+										           Margin="10,0,6,0"
+										           Text="{x:Static res:Strings.CommonChance1In}" />
+										<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonChance1In}" Grid.Column="2"
+										         Text="{Binding SelectedPhaseDraftStep.ChanceKText, Mode=TwoWay}"
+										         FontFamily="Cascadia Mono,Consolas,Monospace"
+										         Watermark="2" />
+										<TextBlock Grid.Column="3"
+										           Classes="muted"
+										           VerticalAlignment="Center"
+										           Margin="10,0,0,0"
+										           TextWrapping="Wrap"
+										           Text="{Binding SelectedPhaseDraftStep.ChanceSummary}" />
+									</Grid>
+									<CheckBox Content="{x:Static res:Strings.CommonStopIfPhaseRuns}"
+									          IsChecked="{Binding SelectedPhaseDraftStep.StopHere, Mode=TwoWay}" />
+									<Border Padding="10" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="7">
+										<StackPanel Spacing="8">
+											<CheckBox Content="{x:Static res:Strings.CommonForbiddenRiteAfter}"
+											          IsChecked="{Binding SelectedPhaseDraftStep.UseForbiddenRite, Mode=TwoWay}" />
+											<Grid ColumnDefinitions="Auto,*,Auto,*,Auto,90">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonTargetLower}" VerticalAlignment="Center" Margin="0,0,8,0" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" Grid.Column="1"
+												          ItemsSource="{Binding PhaseForbiddenRiteTargets}"
+												          SelectedItem="{Binding SelectedPhaseDraftStep.ForbiddenTarget, Mode=TwoWay}"
+												          IsEnabled="{Binding SelectedPhaseDraftStep.UseForbiddenRite}" />
+												<TextBlock Grid.Column="2" Classes="muted" Text="{x:Static res:Strings.CommonStatusLower}" VerticalAlignment="Center" Margin="10,0,8,0" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.CommonStatusLower}" Grid.Column="3"
+												          ItemsSource="{Binding ForbiddenStatusPresets}"
+												          SelectedItem="{Binding SelectedPhaseDraftStep.ForbiddenStatus, Mode=TwoWay}"
+												          IsEnabled="{Binding SelectedPhaseDraftStep.UseForbiddenRite}">
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<TextBlock Text="{Binding Display}" />
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+												<TextBlock Grid.Column="4" Classes="muted" Text="{x:Static res:Strings.CommonValue}" VerticalAlignment="Center" Margin="10,0,8,0" />
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Grid.Column="5"
+												         Text="{Binding SelectedPhaseDraftStep.ForbiddenValue, Mode=TwoWay}"
+												         FontFamily="Cascadia Mono,Consolas,Monospace"
+												         IsEnabled="{Binding SelectedPhaseDraftStep.UseForbiddenRite}" />
+											</Grid>
+											<TextBlock Classes="muted" TextWrapping="Wrap"
+											           Text="{Binding SelectedPhaseDraftStep.ForbiddenRiteSummary}" />
+											<TextBlock Classes="muted" TextWrapping="Wrap"
+											           Text="{x:Static res:Strings.U_isto_adiciona_writechrproperty_depois_da_habilid_7819adda}" />
+										</StackPanel>
+									</Border>
+									<Border Padding="10" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="7">
+										<StackPanel Spacing="8">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPhaseVarChanges}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+											<Grid ColumnDefinitions="Auto,*,Auto,70,Auto,70,Auto,Auto">
+												<TextBlock Classes="muted" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonVar}" />
+												<ComboBox AutomationProperties.Name="{x:Static res:Strings.AiEditorVariablesLabel}" Grid.Column="1"
+												          Margin="8,0"
+												          ItemsSource="{Binding PhaseVariableAudits}"
+												          SelectedItem="{Binding SelectedPhaseAdvanceVariableAudit, Mode=TwoWay}" />
+												<TextBlock Grid.Column="2" Classes="muted" VerticalAlignment="Center" Text="+" />
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.AiAdvancedMinimum}" Grid.Column="3"
+												         Text="{Binding PhaseAdvanceMin, Mode=TwoWay}"
+												         FontFamily="Cascadia Mono,Consolas,Monospace" />
+												<TextBlock Grid.Column="4" Classes="muted" VerticalAlignment="Center" Margin="8,0" Text="{x:Static res:Strings.CommonUpToPlus}" />
+												<TextBox AutomationProperties.Name="{x:Static res:Strings.AiAdvancedMaximum}" Grid.Column="5"
+												         Text="{Binding PhaseAdvanceMax, Mode=TwoWay}"
+												         FontFamily="Cascadia Mono,Consolas,Monospace" />
+												<Button Grid.Column="6"
+												        Margin="8,0,0,0"
+												        Classes="secondaryAction"
+												        Click="Button_AddPhaseVarAdvance"
+												        Content="{x:Static res:Strings.CommonPlusAdvance}" />
+												<Button Grid.Column="7"
+												        Margin="8,0,0,0"
+												        Classes="secondaryAction"
+												        Click="Button_AddPhaseVarReset"
+												        Content="{x:Static res:Strings.CommonResetToZero}" />
+											</Grid>
+											<TextBlock Classes="muted"
+											           TextWrapping="Wrap"
+											           Text="{Binding PhaseAdvanceTargetSummary}" />
+											<ListBox AutomationProperties.Name="{x:Static res:Strings.CommonPhaseVarChanges}" MinHeight="40"
+											         MaxHeight="120"
+											         ItemsSource="{Binding SelectedPhaseDraftStep.VarAdvances}"
+											         SelectedItem="{Binding SelectedPhaseVarAdvance, Mode=TwoWay}">
+												<ListBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Summary}" />
+													</DataTemplate>
+												</ListBox.ItemTemplate>
+											</ListBox>
+											<Grid ColumnDefinitions="*,Auto">
+												<TextBlock Classes="muted"
+												           TextWrapping="Wrap"
+												           Text="{x:Static res:Strings.U_opcional_cada_fase_pode_subir_ou_resetar_nenhuma_e0d18113}" />
+												<Button Grid.Column="1"
+												        Classes="secondaryAction"
+												        IsEnabled="{Binding CanRemovePhaseVarAdvance}"
+												        Click="Button_RemovePhaseVarAdvance"
+												        Content="{x:Static res:Strings.CommonRemoveAdvance}" />
+											</Grid>
+										</StackPanel>
+									</Border>
+								</StackPanel>
+								</StackPanel>
+							</Border>
+
+							<Border Grid.Column="1" Padding="{DynamicResource SpacingMd}" Margin="7,0,0,0" Background="{DynamicResource AccentShellFillBrush}" BorderBrush="{DynamicResource AccentShellBorderBrush}" BorderThickness="1" CornerRadius="7">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHumanPreview}" Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+									<TextBlock TextWrapping="Wrap" Text="{Binding PhaseRotationPreview}" />
+									<TextBlock Classes="muted" TextWrapping="Wrap"
+									           Text="{x:Static res:Strings.U_writer_v1_guarda_a_fase_por_condicao_propria_ou__47baa73b}" />
+								</StackPanel>
+							</Border>
+						</Grid>
+					</Grid>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+
+		<Border Grid.Row="2" Margin="0,14,0,0" Padding="{DynamicResource SpacingMd}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto,Auto">
+				<TextBlock Classes="muted" TextWrapping="Wrap" VerticalAlignment="Center"
+				           Text="{Binding PhaseRotationApplySummary}" />
+				<Button Grid.Column="1"
+				        Margin="12,0,8,0"
+				        Classes="secondaryAction"
+				        Click="Button_ApplyPhaseRotationDraft"
+				        Content="{x:Static res:Strings.CommonApplyToMonster}" />
+				<Button Grid.Column="2"
+				        Classes="secondaryAction"
+				        AutomationProperties.Name="{x:Static res:Strings.CommonClose}" Click="Button_Close"
+				        Content="{x:Static res:Strings.CommonClose}" />
+			</Grid>
+		</Border>
+	</Grid>
+</Window>

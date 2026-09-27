@@ -1,0 +1,372 @@
+<Project Sdk="Microsoft.NET.Sdk" TreatAsLocalProperty="FFXRequestedRuntimeIdentifier;FFXTargetPlatform;FFXUnsupportedRuntimeIdentifier">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <!-- Explicit release RIDs are allowlisted. RID-less builds may infer the local desktop only
+         for developer convenience; an explicit unsupported RID never falls back to the host. -->
+    <FFXRequestedRuntimeIdentifier></FFXRequestedRuntimeIdentifier>
+    <FFXRequestedRuntimeIdentifier Condition="'$(RuntimeIdentifier)' != ''">$(RuntimeIdentifier)</FFXRequestedRuntimeIdentifier>
+    <!-- A runtime-specific dotnet restore supplies RuntimeIdentifiers (plural), whereas build supplies
+         RuntimeIdentifier. Resolve both through one value so restore and compile select one graph. -->
+    <FFXRequestedRuntimeIdentifier Condition="'$(RuntimeIdentifier)' == '' and '$(RuntimeIdentifiers)' != ''">$(RuntimeIdentifiers)</FFXRequestedRuntimeIdentifier>
+    <FFXTargetPlatform></FFXTargetPlatform>
+    <FFXUnsupportedRuntimeIdentifier></FFXUnsupportedRuntimeIdentifier>
+    <FFXTargetPlatform Condition="'$(FFXRequestedRuntimeIdentifier)' == 'linux-x64'">Linux</FFXTargetPlatform>
+    <FFXTargetPlatform Condition="'$(FFXRequestedRuntimeIdentifier)' == 'win-x64'">Windows</FFXTargetPlatform>
+    <FFXUnsupportedRuntimeIdentifier Condition="'$(FFXRequestedRuntimeIdentifier)' != '' and '$(FFXRequestedRuntimeIdentifier)' != 'linux-x64' and '$(FFXRequestedRuntimeIdentifier)' != 'win-x64'">true</FFXUnsupportedRuntimeIdentifier>
+    <FFXTargetPlatform Condition="'$(FFXRequestedRuntimeIdentifier)' == '' and $([MSBuild]::IsOSPlatform('Linux'))">Linux</FFXTargetPlatform>
+    <FFXTargetPlatform Condition="'$(FFXRequestedRuntimeIdentifier)' == '' and $([MSBuild]::IsOSPlatform('Windows'))">Windows</FFXTargetPlatform>
+    <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault>
+    <!-- Developer CLI/LAB entrypoints stay available in normal source builds, but are removed from
+         the official publish assembly. This keeps the product portable without deleting research tools. -->
+    <!-- Publish profiles are imported after this project body. Seed the official profile's value
+         here so the dev conditional symbol and Compile removals are evaluated consistently. -->
+    <FFXIncludeDevTools Condition="'$(FFXIncludeDevTools)' == '' and ('$(PublishProfile)' == 'win-x64-portable' or '$(PublishProfile)' == 'linux-x64-portable')">false</FFXIncludeDevTools>
+    <FFXIncludeDevTools Condition="'$(FFXIncludeDevTools)' == ''">true</FFXIncludeDevTools>
+    <!-- Bundled viewers are product code, not optional developer assets. Keep ordinary Debug/Release
+         builds functional while preserving an explicit false override for specialized build probes. -->
+    <FFXShipProductViewers Condition="'$(FFXShipProductViewers)' == ''">true</FFXShipProductViewers>
+    <!-- vgmstream-cli is product code now: the automatic default-track music import needs the
+         bundled, hash-pinned decoder on every install. Still overridable for slim builds. -->
+    <FFXShipAudioTools Condition="'$(FFXShipAudioTools)' == ''">true</FFXShipAudioTools>
+    <!-- Each platform carries only its own Avalonia backend: Win32 under Windows, X11 under
+         Linux. Avalonia.Desktop is deliberately absent — it would drag the opposite platform's
+         chain (plus the vulnerable Tmds.DBus.Protocol line) into every publish. -->
+    <DefineConstants Condition="'$(FFXIncludeDevTools)' == 'true'">$(DefineConstants);FFX_INCLUDE_DEVTOOLS</DefineConstants>
+    <!-- Each platform extension method compiles only when its package is in the same graph. -->
+    <DefineConstants Condition="'$(FFXTargetPlatform)' == 'Windows'">$(DefineConstants);FFX_ENABLE_WIN32</DefineConstants>
+    <DefineConstants Condition="'$(FFXTargetPlatform)' == 'Linux'">$(DefineConstants);FFX_ENABLE_X11</DefineConstants>
+    <ContinuousIntegrationBuild Condition="'$(FFXIncludeDevTools)' != 'true'">true</ContinuousIntegrationBuild>
+    <Deterministic Condition="'$(FFXIncludeDevTools)' != 'true'">true</Deterministic>
+    <PathMap Condition="'$(FFXIncludeDevTools)' != 'true'">$(MSBuildProjectDirectory)=/_/FFXProjectEditor</PathMap>
+<Version>2.246.0.0</Version>
+	<AssemblyVersion>2.246.0.0</AssemblyVersion>
+	<FileVersion>2.246.0.0</FileVersion>
+	<InformationalVersion>2.246.0.0</InformationalVersion>
+	<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+	<ApplicationIcon>Assets\SpiraReforgeStudio.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(FFXIncludeDevTools)' != 'true'">
+    <Compile Remove="Tools\**\*.cs" />
+    <!-- Product builds must never compile the repo-only NoClip repair helper. It can fetch CDN
+         content and overwrite viewer data, so it remains available only to explicit dev builds. -->
+    <Compile Remove="Modules\Common\ViewerHub\NoclipDataRepair.cs" />
+    <!-- U1 simulation is a research-only API and must not exist in the official product assembly. -->
+    <Compile Remove="FfxLib\MagicDll\MagicU1Simulator.cs" />
+  </ItemGroup>
+  <Target Name="RejectUnsupportedFfxRuntimeIdentifier"
+          BeforeTargets="CollectPackageReferences;PrepareForBuild"
+          Condition="'$(FFXUnsupportedRuntimeIdentifier)' == 'true'">
+    <Error Text="Unsupported RuntimeIdentifier '$(FFXRequestedRuntimeIdentifier)'; only win-x64 and linux-x64 are release targets." />
+  </Target>
+  <ItemGroup>
+    <!-- Keep the five XAML consumers on one stable type name while compiling exactly one concrete
+         host. Unsupported explicit RIDs select neither implementation and fail before compile. -->
+    <Compile Remove="Modules\Common\ViewerShell\WebView2Host.cs"
+             Condition="'$(FFXTargetPlatform)' != 'Windows'" />
+    <Compile Remove="Modules\Common\ViewerShell\WebView2Host.Linux.cs"
+             Condition="'$(FFXTargetPlatform)' != 'Linux'" />
+  </ItemGroup>
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>FFXProjectEditor.Tests</_Parameter1>
+    </AssemblyAttribute>
+
+    <Content Include="Assets\SpiraReforgeStudio.ico" />
+    <AvaloniaResource Include="Assets\spira-reforge-studio-256.png" />
+    <!-- Portabilidade/empacotamento (plano §5.3/§5.4/§7): os assets abaixo são DEV-ONLY e ficam
+         FORA do publish oficial por padrão. Ative explicitamente com -p:FFXShipLocalAudio=true,
+         -p:FFXShipAudioTools=true, -p:FFXShipFfxedJar=true, -p:FFXShipSpiraAssets=true. Nenhum
+         arquivo local é apagado — só não entra no payload self-contained win-x64. -->
+    <Content Include="Assets\Audio\**\*" Condition="'$(FFXShipLocalAudio)' == 'true'">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Keystone.Net selects the native folder from the host process architecture. The official
+         process is x64, so publish one x64 native image rather than root/x64/x86 duplicates. -->
+    <Content Include="..\ExternalLibs\MemorySharp64\x64\keystone.dll">
+      <Link>x64\keystone.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ExternalLibs\FFXED\FFXED.jar"
+             Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipFfxedJar)' == 'true'">
+      <Link>ExternalLibs\FFXED\FFXED.jar</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- FFXED runs only through the pinned app-private Java image. -->
+    <Content Include="..\ExternalLibs\FFXED\runtime\win-x64\**\*"
+             Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipFfxedJar)' == 'true' and Exists('..\ExternalLibs\FFXED\runtime\win-x64')">
+      <Link>runtime\java\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Reviewed offline prerequisites are copied from local inputs only; MSBuild never downloads them. -->
+    <Content Include="..\ExternalLibs\WindowsPrerequisites\WebView2\MicrosoftEdgeWebView2RuntimeInstallerX64.exe"
+             Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipWindowsPrerequisites)' == 'true' and Exists('..\ExternalLibs\WindowsPrerequisites\WebView2\MicrosoftEdgeWebView2RuntimeInstallerX64.exe')">
+      <Link>prerequisites\webview2\MicrosoftEdgeWebView2RuntimeInstallerX64.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ExternalLibs\WindowsPrerequisites\VC2013\vcredist_x64.exe"
+             Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipWindowsPrerequisites)' == 'true' and Exists('..\ExternalLibs\WindowsPrerequisites\VC2013\vcredist_x64.exe')">
+      <Link>prerequisites\vc2013\vcredist_x64.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\scripts\release\install_windows_prerequisites.ps1"
+             Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipWindowsPrerequisites)' == 'true'">
+      <Link>prerequisites\install.ps1</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\release\windows-runtime-prerequisites.json"
+             Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipWindowsPrerequisites)' == 'true'">
+      <Link>prerequisites\windows-runtime-prerequisites.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\release\WINDOWS_FIRST_RUN.txt"
+             Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipWindowsPrerequisites)' == 'true'">
+      <Link>WINDOWS_FIRST_RUN.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\release\THIRD_PARTY_NOTICES.txt">
+      <Link>licenses\THIRD_PARTY_NOTICES.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Product viewers are immutable app code. Game-owned maps/models/NoClip data are never
+         embedded: every viewer reads only the user's validated LocalAppData viewer-data roots. -->
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\app.js;..\RuntimeTools\FFXMapViewerWeb\assetSelection.js;..\RuntimeTools\FFXMapViewerWeb\aurora-overlay.js;..\RuntimeTools\FFXMapViewerWeb\field-explorer-overlay.js;..\RuntimeTools\FFXMapViewerWeb\index.html;..\RuntimeTools\FFXMapViewerWeb\styles.css"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\map\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Aurora Field Explorer needs its tracked field catalog even when optional web viewers are disabled. -->
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\prompts\2026-06-03-map-batch-web-ready\map-entities.csv">
+      <Link>AuroraFieldExplorer\map-entities.csv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\editor\**\*.js"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\map\editor\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\vendor\three\three.module.js;..\RuntimeTools\FFXMapViewerWeb\vendor\three\LICENSE"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\map\vendor\three\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\vendor\three\jsm\controls\OrbitControls.js;..\RuntimeTools\FFXMapViewerWeb\vendor\three\jsm\controls\PointerLockControls.js;..\RuntimeTools\FFXMapViewerWeb\vendor\three\jsm\controls\TransformControls.js"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\map\vendor\three\jsm\controls\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\vendor\three\jsm\loaders\GLTFLoader.js"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\map\vendor\three\jsm\loaders\GLTFLoader.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\vendor\three\jsm\utils\BufferGeometryUtils.js"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\map\vendor\three\jsm\utils\BufferGeometryUtils.js</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMapViewerWeb\vendor\spector\**\*"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\map\vendor\spector\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXModelViewerWeb\*.html;..\RuntimeTools\FFXModelViewerWeb\*.js;..\RuntimeTools\FFXModelViewerWeb\*.css;..\RuntimeTools\FFXModelViewerWeb\modelviewer-catalog.json"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\model\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXModelViewerWeb\vendor\**\*"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\model\vendor\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMagicViewerWeb\app.js;..\RuntimeTools\FFXMagicViewerWeb\index.html;..\RuntimeTools\FFXMagicViewerWeb\styles.css"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\magic\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\RuntimeTools\FFXMagicViewerWeb\vendor\**\*"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\magic\vendor\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ExternalLibs\NoclipViewer\dist-ffxstudio\**\*"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>viewers\noclip\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ExternalLibs\NoclipViewer\LICENSE"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>licenses\noclip.website-LICENSE.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\ExternalLibs\NoclipViewer\PROVENANCE.md"
+             Condition="'$(FFXShipProductViewers)' == 'true'">
+      <Link>licenses\noclip.website-PROVENANCE.md</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- PhyreMapExportLab is a separate self-contained helper because child processes cannot
+         reuse the editor's private .NET host. Its source remains in RuntimeTools for rebuilds. -->
+    <Content Include="..\ExternalLibs\Tools\PhyreMapExportLab\win-x64\**\*"
+             Condition="'$(FFXShipRuntimeTools)' == 'true'">
+      <Link>tools\PhyreMapExportLab\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FfxLib\Save\Generated\ffxed_registry.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FfxLib\Dictionaries\battle-model-catalog.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="FfxLib\Audio\Data\seid_to_fsb_sample.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  <!-- Battle SFX Tier 2: audio tools ship beside the exe, strictly per target platform.
+       Windows keeps its exe/DLL vgmstream bundle plus fsbext/fsbankcl; Linux ships only the
+       pinned static linux-x64 vgmstream-cli + notices (see tools/vgmstream/linux-x64/PROVENANCE.md). -->
+    <Content Include="..\tools\vgmstream\**\*" Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipAudioTools)' == 'true'" Exclude="..\tools\vgmstream\linux-x64\**">
+      <Link>tools\vgmstream\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\tools\vgmstream\linux-x64\**\*" Condition="'$(FFXTargetPlatform)' == 'Linux' and '$(FFXShipAudioTools)' == 'true'">
+      <Link>tools\vgmstream\linux-x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\tools\fsbext\**\*" Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipAudioTools)' == 'true'">
+      <Link>tools\fsbext\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\tools\fsbankcl\**\*" Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXShipAudioTools)' == 'true'">
+      <Link>tools\fsbankcl\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- SPIRA FORGE Fase 0: bridge field_token -> map/<area>/<field> (structural-candidate). Copiado p/ o exe. -->
+    <Content Include="..\docs\reverse\ps3data_graphs_2026-06-03\ps3data-map-btlmap-fieldid-bridge.csv" Condition="'$(FFXShipSpiraForgeAssets)' == 'true'">
+      <Link>SpiraForge\ps3data-map-btlmap-fieldid-bridge.csv</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Field Scout walk manifest (light bundle + optional per-field shards from publish-scout-to-editor.ps1) -->
+    <Content Include="Modules\AuroraFieldExplorer\WalkManifest\walk-bundle.json">
+      <Link>AuroraFieldExplorer\WalkManifest\walk-bundle.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Modules\AuroraFieldExplorer\WalkManifest\fields\**\*" Exclude="Modules\AuroraFieldExplorer\WalkManifest\fields\.gitignore">
+      <Link>AuroraFieldExplorer\WalkManifest\fields\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- SIN v2 catalog â€” ships beside exe so Monster AI gallery loads UNI pool without repo root. -->
+    <Content Include="..\mods\Spira Reforge\arena\spira-sin-catalog\*.csv" Condition="'$(FFXShipSinCatalog)' == 'true'">
+      <Link>mods\Spira Reforge\arena\spira-sin-catalog\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <AvaloniaResource Include="Assets\SpiraReforgeStudio.ico" />
+    <AvaloniaResource Include="Assets\Autosave\*.png" />
+    <AvaloniaResource Include="Assets\Menu\*.png" />
+    <AvaloniaResource Include="Assets\Shop\**\*.*" />
+    <AvaloniaResource Include="Assets\SphereGrid\*.png" />
+    <!-- Jarvis-UI Fase F Â§F4 (v2.162.4.0): i18n foundation. Resources/Strings.resx (neutral=en) +
+         Strings.pt.resx satellite are picked up IMPLICITLY as EmbeddedResource by the .NET SDK
+         (Resources/**/*.resx glob). Access via the Strings accessor class: {x:Static res:Strings.Xxx}.
+         The naming convention (Strings.pt.resx) makes .NET emit the pt satellite assembly. -->
+  </ItemGroup>
+
+  <!-- ResGen do .NET 8 lê .resx como cp1252 no Windows pt-BR (ignora BOM UTF-8) → mojibake nos
+       satellites compilados. Este target gera o .resources de TODOS os satellites (pt/es/fr/de/it/ja/ko/zh)
+       com System.Resources.ResourceWriter (UTF-8 correto), bypassando o ResGen. Ver tools/ResGenFix/. -->
+  <Target Name="GenerateSatelliteResourcesWithWriter" BeforeTargets="GenerateResource">
+    <ItemGroup>
+      <_SatelliteLang Include="pt;es;fr;de;it;ja;ko;zh" />
+    </ItemGroup>
+    <Exec Command="dotnet run --project ..\tools\ResGenFix\ResGenFix.csproj -- &quot;$(MSBuildProjectDirectory)\Resources\Strings.%(_SatelliteLang.Identity).resx&quot; &quot;$(IntermediateOutputPath)FFXProjectEditor.Resources.Strings.%(_SatelliteLang.Identity).resources&quot;" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Win32" Version="11.2.3" Condition="'$(FFXTargetPlatform)' == 'Windows'" />
+    <PackageReference Include="Avalonia.X11" Version="11.2.3" Condition="'$(FFXTargetPlatform)' == 'Linux'" />
+    <!-- GHSA-xrw6-gwf8-vvr9: the transitive 0.20.0 pulled by Avalonia.FreeDesktop is vulnerable;
+         0.21.3 is the fixed release on the <0.22 line (0.22.x–0.92.x stays vulnerable). Only the
+         Linux graph carries the dependency, so the pin shares that condition. -->
+    <PackageReference Include="Tmds.DBus.Protocol" Version="0.21.3" Condition="'$(FFXTargetPlatform)' == 'Linux'" />
+    <PackageReference Include="Avalonia.Skia" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.3" />
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.2.3" />
+    <PackageReference Include="Avalonia.Xaml.Behaviors" Version="11.2.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.7.7" />
+    <!-- The package build target copies both native host architectures. Keep managed/runtime assets,
+         suppress that target, and publish the audited x64 native image explicitly above. -->
+    <PackageReference Include="keystoneengine.csharp" Version="0.9.1.1" ExcludeAssets="build" />
+    <PackageReference Include="Material.Icons.Avalonia" Version="2.1.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.10" />
+    <!-- Embedded Model Viewer: Edge WebView2 hosted in-editor via NativeControlHost (uses the installed Evergreen
+         runtime, no Chromium bundle). See Modules/ModelViewerWeb/WebView2Host.cs. -->
+    <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.4129.50"
+                      GeneratePathProperty="true" ExcludeAssets="all"
+                      Condition="'$(FFXTargetPlatform)' == 'Windows'" />
+    <PackageReference Include="NAudio" Version="2.3.0" />
+    <PackageReference Include="Xe.BinaryMapper" Version="1.5.2" />
+  </ItemGroup>
+
+    <ItemGroup>
+	    <Reference Include="Binarysharp.MSharp">
+		    <HintPath>..\ExternalLibs\MemorySharp64\Binarysharp.MSharp.dll</HintPath>
+	    </Reference>
+    </ItemGroup>
+
+  <!-- This Avalonia NativeControlHost needs only CoreWebView2 and the audited x64 loader. -->
+  <ItemGroup Condition="'$(FFXTargetPlatform)' == 'Windows'">
+    <Reference Include="Microsoft.Web.WebView2.Core">
+      <HintPath>$(PkgMicrosoft_Web_WebView2)\lib_manual\netcoreapp3.0\Microsoft.Web.WebView2.Core.dll</HintPath>
+      <Private>true</Private>
+    </Reference>
+    <Content Include="$(PkgMicrosoft_Web_WebView2)\runtimes\win-x64\native\WebView2Loader.dll">
+      <Link>WebView2Loader.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="RemoveWebView2DocumentationFromProductOutput"
+          AfterTargets="ResolveAssemblyReferences"
+          Condition="'$(FFXTargetPlatform)' == 'Windows' and '$(FFXIncludeDevTools)' != 'true'">
+    <ItemGroup>
+      <ReferenceCopyLocalPaths Remove="@(ReferenceCopyLocalPaths)"
+                               Condition="'%(ReferenceCopyLocalPaths.Filename)%(ReferenceCopyLocalPaths.Extension)' == 'Microsoft.Web.WebView2.Core.xml'" />
+    </ItemGroup>
+  </Target>
+
+  <!-- WHY(GF-02): the frozen Linux package policy denies *.pdb, but the
+       Binarysharp.MSharp NuGet payload ships a .pdb even with DebugType=none.
+       Strip every PDB from the Linux publish output so the shipped tree matches
+       the reconciled studio-core-linux-x64 policy exactly. -->
+  <Target Name="RemovePdbFromLinuxProductOutput"
+          AfterTargets="Publish"
+          Condition="'$(FFXTargetPlatform)' == 'Linux'">
+    <ItemGroup>
+      <_LinuxPdbFiles Include="$(PublishDir)**/*.pdb" />
+    </ItemGroup>
+    <Delete Files="@(_LinuxPdbFiles)" />
+  </Target>
+
+    <ItemGroup>
+      <Compile Update="ControlTemplates\GameIndex_Template.axaml.cs">
+        <DependentUpon>GameIndex_Template.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="ControlTemplates\Loot_Template.axaml.cs">
+        <DependentUpon>Loot_Template.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="ControlTemplates\PropertyBool_Template.axaml.cs">
+        <DependentUpon>PropertyBool_Template.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="ControlTemplates\Property_Template.axaml.cs">
+        <DependentUpon>Property_Template.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
+</Project>

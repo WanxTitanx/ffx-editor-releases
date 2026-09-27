@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             x:Class="FFXProjectEditor.Modules.Common.AtlasEvidenceBadgeStrip">
+	<StackPanel x:Name="Root" Spacing="6">
+		<ItemsControl ItemsSource="{Binding Badges}" IsVisible="{Binding HasBadges}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<WrapPanel />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border Margin="0,0,5,4" Padding="6,2" Background="{Binding Background}" BorderBrush="{Binding BorderBrush}" BorderThickness="1" CornerRadius="6"
+					        ToolTip.Tip="{Binding Tooltip}">
+						<TextBlock FontSize="10" Foreground="{Binding Foreground}" Text="{Binding Text}" />
+					</Border>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+		<TextBlock FontSize="11" Foreground="#9EB0C2" TextWrapping="Wrap"
+		           IsVisible="{Binding HasOrigin}" Text="{Binding OriginText}" />
+		<Expander IsVisible="{Binding HasWhere}" Padding="0" 
+          Background="Transparent" BorderThickness="0" CornerRadius="6">
+			<Expander.Header>
+				<TextBlock FontSize="11" Foreground="#9AD7E2" FontWeight="SemiBold" Text="{x:Static res:Strings.CommonWhereInGame}" />
+			</Expander.Header>
+			<TextBlock FontSize="11" Foreground="#9EB0C2" Margin="0,4,0,0" TextWrapping="Wrap" Text="{Binding WhereText}" />
+		</Expander>
+	</StackPanel>
+</UserControl>

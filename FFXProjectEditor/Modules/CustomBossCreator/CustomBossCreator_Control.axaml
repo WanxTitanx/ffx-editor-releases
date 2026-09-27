@@ -1,0 +1,409 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="800"
+             x:Class="FFXProjectEditor.CustomBossCreator_Control">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width=".8*" MinWidth="260" MaxWidth="380" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ========== LEFT: source picker + identity ========== -->
+        <Border Grid.Column="0" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="12">
+
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_custom_boss_creator_d4f6f565}" />
+                    <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_clonar_editar_monstro_48f1baa1}" />
+                    <TextBlock Classes="muted" TextWrapping="Wrap"
+                               Text="{x:Static res:Strings.U_clona_um_m_bin_existente_aplica_novos_stats_nome_47dc51b6}" />
+
+                    <!-- Source monster -->
+                    <Border Classes="cardSoft" Padding="10">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_1_monstro_base_b6baf3fc}" />
+                            <TextBox Watermark="{x:Static res:Strings.U_filtrar_monstro_base_3abd686e}"
+                                     Text="{Binding SourceFilter, Mode=TwoWay}" />
+                            <ListBox ItemsSource="{Binding SourceMonsters}"
+                                     SelectedItem="{Binding SelectedSource, Mode=TwoWay}"
+                                     MaxHeight="200">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Target ID -->
+                    <Border Classes="cardSoft" Padding="10">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_2_novo_id_slot_do_arquivo_27b0ffdd}" />
+                            <NumericUpDown Value="{Binding TargetId, Mode=TwoWay}"
+                                           Minimum="0" Maximum="999"
+                                           FormatString="0" />
+                            <TextBlock Text="{Binding TargetIdError}"
+                                       Foreground="OrangeRed"
+                                       IsVisible="{Binding TargetIdError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                       TextWrapping="Wrap" />
+                            <TextBlock Classes="muted" Text="{Binding OutputPathPreview}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Display name -->
+                    <Border Classes="cardSoft" Padding="10">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_3_nome_do_boss_d0db6d3f}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_usado_no_formation_editor_e_monster_dictionary_c_c016187a}" />
+                            <TextBox Watermark="{x:Static res:Strings.U_nome_ex_dark_titan_f20cdd27}"
+                                     Text="{Binding DisplayName, Mode=TwoWay}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- AI source -->
+                    <Border Classes="cardSoft" Padding="10">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_4_ia_usada_21c1a18b}" />
+                            <ComboBox ItemsSource="{Binding AiSourceModes}"
+                                      SelectedItem="{Binding SelectedAiSourceMode, Mode=TwoWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <StackPanel Spacing="8" IsVisible="{Binding IsCopyAiMode}">
+                                <TextBox Watermark="{x:Static res:Strings.U_filtrar_fonte_de_ia_3ab81f7b}"
+                                         Text="{Binding AiSourceFilter, Mode=TwoWay}" />
+                                <ListBox ItemsSource="{Binding AiSourceMonsters}"
+                                         SelectedItem="{Binding SelectedAiSource, Mode=TwoWay}"
+                                         MaxHeight="150">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                            <TextBlock Classes="muted" TextWrapping="Wrap" FontSize="12"
+                                       Text="{Binding AiSourceSummary}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Loot source -->
+                    <Border Classes="cardSoft" Padding="10">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_5_loot_usado_0540549c}" />
+                            <ComboBox ItemsSource="{Binding LootSourceModes}"
+                                      SelectedItem="{Binding SelectedLootSourceMode, Mode=TwoWay}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <StackPanel Spacing="8" IsVisible="{Binding IsCopyLootMode}">
+                                <TextBox Watermark="{x:Static res:Strings.U_filtrar_fonte_de_loot_8d403105}"
+                                         Text="{Binding LootSourceFilter, Mode=TwoWay}" />
+                                <ListBox ItemsSource="{Binding LootSourceMonsters}"
+                                         SelectedItem="{Binding SelectedLootSource, Mode=TwoWay}"
+                                         MaxHeight="130">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Label}" TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+                            <TextBlock Classes="muted" TextWrapping="Wrap" FontSize="12"
+                                       Text="{Binding LootSourceSummary}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Boss recipe files -->
+                    <Border Classes="cardSoft" Padding="10">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_6_receita_4556620d}" />
+                            <Grid ColumnDefinitions="*,8,*">
+                                <Button Grid.Column="0"
+                                        Classes="secondaryAction"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        Click="Button_ImportRecipe">
+                                    Importar
+                                </Button>
+                                <Button Grid.Column="2"
+                                        Classes="secondaryAction"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Center"
+                                        Click="Button_ExportRecipe">
+                                    Exportar
+                                </Button>
+                            </Grid>
+                            <TextBlock Classes="muted" FontSize="12" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_bossrecipe_json_reaplica_base_target_ia_loot_sta_c878422f}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Create button -->
+                    <Button Classes="primaryAction"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Center"
+                            Command="{Binding CreateBossCommand}"
+                            IsEnabled="{Binding CanCreate}">
+                        ⚔ Criar Monstro
+                    </Button>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- ========== RIGHT: stats editor + status ========== -->
+        <Border Grid.Column="1" Margin="12,18,18,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                <StackPanel Spacing="14">
+
+                    <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_stats_e_configuracao_6703fb9d}" />
+                    <TextBlock Classes="muted" TextWrapping="Wrap"
+                               Text="{x:Static res:Strings.U_deixe_um_campo_em_branco_ou_com_valor_invalido_p_c963f719}" />
+
+                    <!-- Boss presets -->
+                    <Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                        <StackPanel Spacing="10">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_presets_de_boss_e533dc76}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_preenche_stats_recompensas_a_partir_do_monstro_b_24d1bfbb}" />
+                            <WrapPanel Orientation="Horizontal">
+                                <Button Classes="secondaryAction"
+                                        MinWidth="120"
+                                        Margin="0,0,8,8"
+                                        Command="{Binding ApplyBossPresetCommand}"
+                                        CommandParameter="dark-lite">
+                                    Dark Lite
+                                </Button>
+                                <Button Classes="secondaryAction"
+                                        MinWidth="120"
+                                        Margin="0,0,8,8"
+                                        Command="{Binding ApplyBossPresetCommand}"
+                                        CommandParameter="tank">
+                                    Tanque
+                                </Button>
+                                <Button Classes="secondaryAction"
+                                        MinWidth="120"
+                                        Margin="0,0,8,8"
+                                        Command="{Binding ApplyBossPresetCommand}"
+                                        CommandParameter="glass">
+                                    Canhão
+                                </Button>
+                                <Button Classes="secondaryAction"
+                                        MinWidth="120"
+                                        Margin="0,0,8,8"
+                                        Command="{Binding ApplyBossPresetCommand}"
+                                        CommandParameter="speed">
+                                    Veloz
+                                </Button>
+                                <Button Classes="secondaryAction"
+                                        MinWidth="120"
+                                        Margin="0,0,8,8"
+                                        Command="{Binding ApplyBossPresetCommand}"
+                                        CommandParameter="inherit">
+                                    Herdar tudo
+                                </Button>
+                            </WrapPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Stats grid -->
+                    <Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                        <StackPanel Spacing="10">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_stats_primarios_abe211e5}" />
+                            <StackPanel Spacing="8">
+                                <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="HP" />
+                                        <TextBox Text="{Binding HpText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="MP" />
+                                        <TextBox Text="{Binding MpText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                </ctrl:AdaptiveColumnsPanel>
+                                <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_hp_overkill_9c9ffba0}" />
+                                        <TextBox Text="{Binding HpOverkillText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_model_id_c7eb22a3}" />
+                                        <TextBox Text="{Binding ModelIdText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                </ctrl:AdaptiveColumnsPanel>
+                                <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.CommonStrength}" />
+                                        <TextBox Text="{Binding StrengthText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.CommonDefense}" />
+                                        <TextBox Text="{Binding DefenseText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                </ctrl:AdaptiveColumnsPanel>
+                                <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_magia_9e8b3b54}" />
+                                        <TextBox Text="{Binding MagicText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_def_magica_4a4f21a4}" />
+                                        <TextBox Text="{Binding MagicDefenseText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                </ctrl:AdaptiveColumnsPanel>
+                                <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_agilidade_73c859cc}" />
+                                        <TextBox Text="{Binding AgilityText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_sorte_5a1f7ef5}" />
+                                        <TextBox Text="{Binding LuckText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                </ctrl:AdaptiveColumnsPanel>
+                                <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_evasao_b254d547}" />
+                                        <TextBox Text="{Binding EvasionText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                    <StackPanel Spacing="4" Margin="0,0,12,8">
+                                        <TextBlock Text="{x:Static res:Strings.U_precisao_04712f44}" />
+                                        <TextBox Text="{Binding AccuracyText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                    </StackPanel>
+                                </ctrl:AdaptiveColumnsPanel>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Simple rewards -->
+                    <Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                        <StackPanel Spacing="10">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_recompensas_simples_1e46ddde}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_gil_ap_vazios_ou_invalidos_herdam_do_loot_usado__d6a6dce3}" />
+                            <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="3"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonGil}" />
+                                    <TextBox Text="{Binding RewardGilText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="AP" />
+                                    <TextBox Text="{Binding RewardApText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.U_ap_overkill_591f25e8}" />
+                                    <TextBox Text="{Binding RewardApOverkillText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                            </ctrl:AdaptiveColumnsPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Advanced loot light -->
+                    <Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                        <StackPanel Spacing="10">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_loot_avancado_ae48a96f}" />
+                            <TextBlock Classes="muted" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_opcional_edita_drop1_steal_e_bribe_por_id_de_ite_1e7bd06e}" />
+
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_drop1_db2a8f5f}" />
+                            <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="3"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonChanceRaw}" />
+                                    <TextBox Text="{Binding Drop1ChanceText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonCommonItemId}" />
+                                    <TextBox Text="{Binding Drop1IdText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonCommonQty}" />
+                                    <TextBox Text="{Binding Drop1CountText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                            </ctrl:AdaptiveColumnsPanel>
+                            <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonRareItemId}" />
+                                    <TextBox Text="{Binding Drop1RareIdText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonRareQty}" />
+                                    <TextBox Text="{Binding Drop1RareCountText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                            </ctrl:AdaptiveColumnsPanel>
+
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_steal_e9891292}" />
+                            <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="3"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonChanceRaw}" />
+                                    <TextBox Text="{Binding StealChanceText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonCommonItemId}" />
+                                    <TextBox Text="{Binding StealIdText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonCommonQty}" />
+                                    <TextBox Text="{Binding StealCountText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                            </ctrl:AdaptiveColumnsPanel>
+                            <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonRareItemId}" />
+                                    <TextBox Text="{Binding StealRareIdText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.CommonRareQty}" />
+                                    <TextBox Text="{Binding StealRareCountText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                            </ctrl:AdaptiveColumnsPanel>
+
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBribe}" />
+                            <ctrl:AdaptiveColumnsPanel MinColumnWidth="240" MaxColumns="2"><StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.U_item_id_bf1ebd4d}" />
+                                    <TextBox Text="{Binding BribeIdText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                                <StackPanel Spacing="4" Margin="0,0,12,8">
+                                    <TextBlock Text="{x:Static res:Strings.U_qtd_08d439ae}" />
+                                    <TextBox Text="{Binding BribeCountText, Mode=TwoWay}" Watermark="{x:Static res:Strings.CommonInherited}" />
+                                </StackPanel>
+                            </ctrl:AdaptiveColumnsPanel>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Preview / diff -->
+                    <Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_preview_diff_e8e8e7a2}" />
+                            <TextBlock Text="{Binding BossDiffPreview}"
+                                       TextWrapping="Wrap"
+                                       FontSize="13" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Status / result -->
+                    <Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.TermStatus}" />
+                            <TextBlock Text="{Binding StatusMessage}"
+                                       TextWrapping="Wrap"
+                                       FontSize="13" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Honesty banner -->
+                    <Border Classes="cardSoft" Padding="10">
+                        <TextBlock Classes="muted" TextWrapping="Wrap" FontSize="12"
+                                   Text="{x:Static res:Strings.U_honestidade_cria_o_m_bin_clone_byte_safe_writer__c981102a}" />
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+    </Grid>
+</UserControl>

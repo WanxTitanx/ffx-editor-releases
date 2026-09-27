@@ -1,0 +1,203 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1380"
+             d:DesignHeight="820"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.AeonCustomization_Control">
+
+	<!-- Jarvis-UI Fase E §E9 (v2.161.2.0): migrate hand-rolled 3*,7* grid → ModuleMasterDetail_Shell.
+	     O TabControl externo (Gear / Aeon) e PRESERVADO; dentro de cada TabItem um shell proprio
+	     (2 instancias). Header labels "Gear Recipes" / "Aeon Recipes". Os 2 conjuntos de bindings
+	     (Gear*/Aeon*) ficam isolados no seu shell — sem mistura. DataContext, bindings, handlers,
+	     AutoSaveIndicator, AtlasEvidenceBadgeStrip e IRestorableModule (D2) inalterados. -->
+
+	<UserControl.Styles>
+        <StyleInclude Source="avares://FFXProjectEditor/Styles/EditorForms.axaml" />
+		<Style Selector=":is(UserControl).narrow common|ModuleMasterDetail_Shell">
+			<Setter Property="IsMasterExpanded" Value="False" />
+		</Style>
+	</UserControl.Styles>
+
+	<common:ModuleMasterDetail_Shell MasterHeaderLabel="Aeon Recipes">
+
+				<!-- ===== MASTER: header + filter + ListBox (Aeon) ===== -->
+				<common:ModuleMasterDetail_Shell.MasterHeader>
+					<StackPanel Spacing="4" Margin="2,0,2,2">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_kernel_recipes_0486ef5e}" />
+						<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+						           Text="{x:Static res:Strings.CommonEditSumGrow}" />
+					</StackPanel>
+				</common:ModuleMasterDetail_Shell.MasterHeader>
+
+				<common:ModuleMasterDetail_Shell.MasterList>
+					<Grid RowDefinitions="Auto,*">
+						<StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+							<StackPanel Spacing="8">
+								<TextBox Watermark="{x:Static res:Strings.CommonFilterByCommand}"
+										 Text="{Binding AeonFilterText, Mode=TwoWay}" />
+								<Button HorizontalAlignment="Left" Classes="secondaryAction"
+										Click="Button_Refresh" AutomationProperties.Name="Refresh">Refresh</Button>
+							</StackPanel>
+							<TextBlock Classes="muted" FontSize="11" Text="{Binding AeonLoadSummary}" />
+							<TextBlock Classes="muted" FontSize="11" Text="{Binding AeonScopeSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+
+						<ListBox Grid.Row="1"
+								 ItemsSource="{Binding DisplayedAeonRecipes}"
+								 SelectedItem="{Binding SelectedAeonRecipe, Mode=TwoWay}">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,6" Padding="10" Classes="cardSoft">
+										<StackPanel Spacing="4">
+											<TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding Index, StringFormat='#{0:D3}'}" />
+											<TextBlock Text="{Binding Summary}" TextWrapping="Wrap" />
+											<TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding ModeLabel}" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</Grid>
+				</common:ModuleMasterDetail_Shell.MasterList>
+
+				<!-- ===== DETAIL: hero + session + editor (Aeon) ===== -->
+				<common:ModuleMasterDetail_Shell.Detail>
+					<DockPanel>
+						<Border DockPanel.Dock="Top" Margin="0,0,0,10" Padding="16,12" Classes="cardSoft">
+							<StackPanel Spacing="10">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_session_controls_fecd01a7}" />
+								<StackPanel Spacing="10">
+									<StackPanel Spacing="2" VerticalAlignment="Center">
+										<TextBlock Text="{Binding AeonEditSession.SessionSummary}" TextWrapping="Wrap" FontWeight="SemiBold" />
+										<TextBlock Text="{Binding AeonEditSession.BehaviorSummary}" Classes="muted" TextWrapping="Wrap" />
+									</StackPanel>
+<WrapPanel>
+
+									<CheckBox Classes="flag" Margin="0,0,12,6" VerticalAlignment="Center" IsChecked="{Binding AeonEditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+									<Button Margin="0,0,12,6" VerticalAlignment="Center" Classes="secondaryAction" IsEnabled="{Binding AeonEditSession.CanUndo}" Click="Button_AeonUndo" AutomationProperties.Name="Undo">Undo</Button>
+									<Button Margin="0,0,12,6" VerticalAlignment="Center" Classes="dangerAction" IsEnabled="{Binding AeonEditSession.HasPendingChanges}" Click="Button_AeonDiscard" AutomationProperties.Name="Discard" Content="{x:Static res:Strings.CommonDiscard}" />
+									<Button Margin="0,0,12,6" VerticalAlignment="Center" IsEnabled="{Binding AeonEditSession.HasPendingChanges}" Click="Button_AeonSave" AutomationProperties.Name="Save" Content="{x:Static res:Strings.CommonSave}" />
+								</WrapPanel>
+</StackPanel>
+							</StackPanel>
+						</Border>
+
+						<ScrollViewer Margin="0" HorizontalScrollBarVisibility="Disabled">
+							<StackPanel Classes="editorContent" Spacing="14" Margin="10,10,10,10">
+								<Border Padding="{DynamicResource SpacingXl}" Classes="card">
+									<StackPanel Spacing="8">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_aeon_authoring_surface_f289ec29}" />
+										<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedAeonRecipe.Index, StringFormat='Recipe #{0:D3}'}" />
+										<TextBlock Classes="muted" Text="{Binding SelectedAeonSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+							<Border Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+								<StackPanel Spacing="12">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_recipe_editor_0a9067ee}" />
+									<TextBlock Classes="cardTitle" Text="{Binding SelectedAeonRecipe.Summary}" />
+									<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+									           Text="{x:Static res:Strings.CommonSumGrowShapes}" />
+
+									<!-- Read-only Spira Data Atlas evidence for the selected Aeon recipe (sum_grow.bin). Value-guarded:
+									     hides itself on edit / mismatch / out-of-range. Consumes the Common badge engine; no writer. -->
+									<Expander Header="{x:Static res:Strings.CommonTechnicalDetails}"><common:AtlasEvidenceBadgeStrip Evidence="{Binding SelectedAeonEvidence}" /></Expander>
+
+									<UniformGrid Classes="editorFields summaryFields">
+										<StackPanel Spacing="8">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_target_02994d43}" />
+											<TextBlock Text="{Binding SelectedAeonRecipe.TargetLabel}" FontWeight="SemiBold" />
+											<TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedAeonRecipe.RawTargetHex}" />
+										</StackPanel>
+										<StackPanel Spacing="8">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_recipe_mode_d3f27e79}" />
+											<TextBlock Text="{Binding SelectedAeonRecipe.ModeLabel}" FontWeight="SemiBold" />
+											<TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedAeonRecipe.ModeRawFlag, StringFormat='Raw mode flag: {0}'}" />
+										</StackPanel>
+										<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+											<StackPanel Spacing="6">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_interpretation_be8b37e6}" />
+												<TextBlock FontWeight="SemiBold" Text="{Binding SelectedAeonRecipe.ResultLabel}" />
+												<TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedAeonRecipe.CostLabel}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedAeonRecipe.RawResultHex}" />
+											</StackPanel>
+										</Border>
+									</UniformGrid>
+
+									<StackPanel Spacing="12" MaxWidth="760" IsVisible="{Binding SelectedAeonRecipe.IsAbilityRecipe}">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_taught_command_feafa11d}" />
+										<Grid ColumnDefinitions="90,*">
+											<TextBox Text="{Binding SelectedAeonRecipe.CommandRef.Index, Mode=TwoWay}" />
+											<ComboBox Classes="formChoice" Grid.Column="1"
+													  Margin="12,0,0,0"
+													  ItemsSource="{Binding SelectedAeonRecipe.CommandRef.AvailableOptions}"
+													  SelectedItem="{Binding SelectedAeonRecipe.CommandRef.SelectedOption, Mode=TwoWay}">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Display}" />
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+										</Grid>
+
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonRequiredItemBag}" />
+										<Grid ColumnDefinitions="90,*,120">
+											<TextBox VerticalAlignment="Bottom" Text="{Binding SelectedAeonRecipe.CostItem.Index, Mode=TwoWay}" />
+											<ComboBox Classes="formChoice" Grid.Column="1"
+													  Margin="12,0,0,0"
+													  VerticalAlignment="Bottom" ItemsSource="{Binding SelectedAeonRecipe.CostItem.AvailableOptions}"
+													  SelectedItem="{Binding SelectedAeonRecipe.CostItem.SelectedOption, Mode=TwoWay}">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Display}" />
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+											<StackPanel Grid.Column="2" Margin="12,0,0,0" Spacing="4"><TextBlock Text="{x:Static res:Strings.CommonQuantity}" /><TextBox AutomationProperties.Name="{x:Static res:Strings.CommonQuantity}" Text="{Binding SelectedAeonRecipe.Amount, Mode=TwoWay}" /></StackPanel>
+										</Grid>
+									</StackPanel>
+
+									<StackPanel Spacing="12" MaxWidth="760" IsVisible="{Binding SelectedAeonRecipe.IsStatRecipe}">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_aeon_stat_boost_7fe4efdb}" />
+										<Grid ColumnDefinitions="*,120">
+											<ComboBox Classes="formChoice" VerticalAlignment="Bottom" ItemsSource="{Binding StatOptions}"
+													  SelectedItem="{Binding SelectedAeonRecipe.SelectedStatOption, Mode=TwoWay}">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Display}" />
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+											<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="4"><TextBlock Text="{x:Static res:Strings.CommonValue}" /><TextBox AutomationProperties.Name="{x:Static res:Strings.CommonValue}" Text="{Binding SelectedAeonRecipe.Amount, Mode=TwoWay}" /></StackPanel>
+										</Grid>
+
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonRequiredItemBag}" />
+										<Grid ColumnDefinitions="90,*">
+											<TextBox VerticalAlignment="Bottom" Text="{Binding SelectedAeonRecipe.CostItem.Index, Mode=TwoWay}" />
+											<ComboBox Classes="formChoice" Grid.Column="1"
+													  Margin="12,0,0,0"
+													  VerticalAlignment="Bottom" ItemsSource="{Binding SelectedAeonRecipe.CostItem.AvailableOptions}"
+													  SelectedItem="{Binding SelectedAeonRecipe.CostItem.SelectedOption, Mode=TwoWay}">
+												<ComboBox.ItemTemplate>
+													<DataTemplate>
+														<TextBlock Text="{Binding Display}" />
+													</DataTemplate>
+												</ComboBox.ItemTemplate>
+											</ComboBox>
+										</Grid>
+									</StackPanel>
+								</StackPanel>
+							</Border>
+						</StackPanel>
+					</ScrollViewer>
+					</DockPanel>
+				</common:ModuleMasterDetail_Shell.Detail>
+			</common:ModuleMasterDetail_Shell>
+</UserControl>

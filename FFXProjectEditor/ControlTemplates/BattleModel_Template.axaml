@@ -1,0 +1,55 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:FFXProjectEditor">
+
+  <ControlTheme x:Key="{x:Type controls:BattleModel_Template}" TargetType="controls:BattleModel_Template">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border HorizontalAlignment="Stretch" Margin="4" Padding="8"
+                BorderThickness="1"
+                BorderBrush="{DynamicResource PanelStrokeBrush}"
+                Background="{DynamicResource PanelAltBrush}" CornerRadius="6">
+          <Border.Styles>
+            <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement, TextBox:focus /template/ Border#PART_BorderElement">
+              <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="ComboBox:pointerover /template/ Border#Background, ComboBox:pointerover /template/ Border#PART_BorderElement, ComboBox:focus /template/ Border#Background, ComboBox:focus /template/ Border#PART_BorderElement">
+              <Setter Property="Background" Value="Transparent" />
+            </Style>
+          </Border.Styles>
+          <DockPanel>
+            <TextBlock DockPanel.Dock="Left" Text="{TemplateBinding Label}" VerticalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}" FontWeight="SemiBold" FontSize="12" Width="200" TextWrapping="Wrap"/>
+            
+            <Grid ColumnDefinitions="60, 200, *">
+              <TextBox Grid.Column="0" x:Name="PART_HexTextBox"
+                       VerticalContentAlignment="Center" TextAlignment="Center"
+                       Text="{Binding Picker.Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, Converter={x:Static controls:BattleModelHexConverter.Instance}}" 
+                       Background="Transparent" BorderThickness="0" CornerRadius="4,0,0,4"/>
+              
+              <TextBox Grid.Column="1" x:Name="PART_FilterTextBox"
+                       VerticalContentAlignment="Center"
+                       Watermark="Search..."
+                       Text="{Binding Picker.OptionFilterText, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                       Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource PanelStrokeBrush}" CornerRadius="0"/>
+              
+              <ComboBox Grid.Column="2" x:Name="PART_OptionComboBox"
+                        PlaceholderText="Pick a catalog entry…" HorizontalAlignment="Stretch"
+                        ItemsSource="{Binding Picker.FilteredOptions, RelativeSource={RelativeSource TemplatedParent}}"
+                        SelectedItem="{Binding Picker.SelectedOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                        Background="Transparent" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource PanelStrokeBrush}" CornerRadius="0,4,4,0">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="{Binding Display}" />
+                      <TextBlock Classes="muted" Text="{Binding Warning}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </Grid>
+          </DockPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

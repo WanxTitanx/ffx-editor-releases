@@ -1,0 +1,105 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1420"
+             d:DesignHeight="780"
+             x:Class="FFXProjectEditor.SpiraForgeHub_Control">
+
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*" MinWidth="320" MaxWidth="460" />
+			<ColumnDefinition Width="5*" />
+		</Grid.ColumnDefinitions>
+
+		<!-- LEFT: field picker (bridge CSV) -->
+		<Border Grid.Column="0" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_spira_forge_field_hub_v0_1_3731b9b4}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_field_picker_496beb74}" />
+					<TextBlock Classes="muted" Text="{Binding HonestyBanner}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,10" Spacing="8">
+					<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					<TextBlock Classes="muted" Text="{Binding BridgeSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<TextBox Grid.Row="2"
+				         Margin="0,0,0,12"
+				         Watermark="{x:Static res:Strings.U_filtrar_por_field_token_area_ou_map_lt_area_gt_l_432409a4}"
+				         Text="{Binding FilterText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="3"
+				         ItemsSource="{Binding Fields}"
+				         SelectedItem="{Binding SelectedField, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,8" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="3">
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+									<TextBlock Classes="sectionLabel" Text="{Binding Summary}" />
+									<TextBlock Classes="muted" Text="{Binding DetailSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<!-- RIGHT: shared selection + consumers reacting -->
+		<ScrollViewer Grid.Column="1" Margin="18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selecao_compartilhada_fieldcontext_d24d81fa}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedFieldHeader}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedFieldDetail}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- Consumer A: Map deep-link -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_consumidor_map_deep_link_ffxmapviewerweb_d6c517f0}" />
+						<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding MapDeepLinkUrl}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding MapDeepLinkStatus}" TextWrapping="Wrap" />
+						<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_OpenInMapViewer">Abrir no MapViewer</Button>
+					</StackPanel>
+				</Border>
+
+				<!-- Consumer B: Encounter peek -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_consumidor_encounter_peek_btl_bin_read_only_d9685b63}" />
+						<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding EncounterPeekSummary}" TextWrapping="Wrap" />
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<TextBlock Text="{Binding EncounterPeekDetail}" TextWrapping="Wrap" />
+						</Border>
+
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_battles_deste_field_selecione_e_abra_o_formation_7b988fde}" />
+						<ListBox MaxHeight="170"
+						         ItemsSource="{Binding EncounterBattles}"
+						         SelectedItem="{Binding SelectedEncounterBattle, Mode=TwoWay}">
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock FontWeight="SemiBold" Text="{Binding}" />
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_join_candidato_area_lt_gt_btl_bin_map_bucket_rea_5686cc28}"
+						           TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

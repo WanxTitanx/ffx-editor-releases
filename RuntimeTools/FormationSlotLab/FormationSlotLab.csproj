@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>FormationSlotLab</AssemblyName>
+    <RootNamespace>FormationSlotLab</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Test the REAL production writer (no reimplementation): link the dependency-free files. -->
+  <!-- i18n (v2.234.3.0): linked FfxLib sources use FFXProjectEditor.Resources (Strings); ship the
+       generated accessor + neutral resx so the links compile with identical lookups. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Resources\Strings.cs" Link="Strings.cs" />
+    <EmbeddedResource Include="..\..\FFXProjectEditor\Resources\Strings.resx" LogicalName="FFXProjectEditor.Resources.Strings.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\Battle_File.cs" Link="Battle_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\FormationSlotWriter.cs" Link="FormationSlotWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Dictionaries\Monster_Dictionary.cs" Link="Monster_Dictionary.cs" />
+    <!-- Battle_File.WriteWithMonsterPositions now delegates to FfxLib.BattleMap (Aurora position writer), so the
+         lab must also compile those dependency-free sources or Battle_File.cs won't resolve. -->
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaAnchors_File.cs" Link="BattleArenaAnchors_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaPositionWriter.cs" Link="BattleArenaPositionWriter.cs" />
+  </ItemGroup>
+</Project>

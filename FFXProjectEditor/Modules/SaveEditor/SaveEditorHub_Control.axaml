@@ -1,0 +1,189 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cv="clr-namespace:FFXProjectEditor.Converters"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1380"
+             d:DesignHeight="820"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.SaveEditorHub_Control">
+
+    <!-- Jarvis-UI (Sprint A 2026-06-20, OPT-A1): responsividade. O header agora é StackPanel vertical
+         (título/pills/chip acima, ações Load/Save abaixo com HorizontalAlignment=Right), que empilha
+         naturalmente em qualquer largura sem precisar trocar ColumnDefinitions por Style (que não é
+         AvaloniaProperty). O chip+hash já quebram linha dentro do StackPanel horizontal. -->
+    <UserControl.Styles>
+        <Style Selector="UserControl.narrow StackPanel.headerActions">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Margin" Value="0,8,0,0" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*">
+        <!-- OPT-A2: header card agora heroGradient (mesma família do RuntimeDll/MagicDll); legível contra
+             os TextBlocks muted. OPT-A3: pill READ-ONLY · FFXED port · RT2 via CLI no header (Border.pillReadonly),
+             sinal honesto de escopo igual aos hubs Blitzball. OPT-C1: StatusSummary pinta por severidade. -->
+        <Border Margin="18,18,18,8" Padding="{DynamicResource SpacingLg}" Classes="card heroGradient">
+            <StackPanel Spacing="8">
+                <StackPanel x:Name="HeaderRow" Classes="headerRow" Spacing="6">
+					<Grid ColumnDefinitions="*,Auto">
+						<StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_playthrough_save_071a60fd}" VerticalAlignment="Center" />
+							<Border Classes="pillReadonly" VerticalAlignment="Center">
+								<TextBlock Text="{x:Static res:Strings.U_read_only_ffxed_port_rt2_via_cli_0959f07e}" />
+							</Border>
+						</StackPanel>
+						<ctrl:CapabilityBadge Grid.Column="1" Name="SaveCapabilityBadge" VerticalAlignment="Center" />
+					</Grid>
+                    <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_ffx_save_editor_ffxed_port_1414ac29}" />
+                    <TextBlock Classes="muted" TextWrapping="Wrap"
+                               Text="{x:Static res:Strings.U_edite_saves_de_playthrough_psu_25848_bytes_ffx_p_f9775734}" />
+                    <!-- OPT-C1: StatusSummary pinta por severidade (Danger/Warning/Info) via converter. -->
+                    <TextBlock Text="{Binding StatusSummary}" TextWrapping="Wrap"
+                               Foreground="{Binding StatusSeverity, Converter={x:Static cv:StatusSeverityBrushConverter.Instance}}" />
+
+                    <!-- Jarvis-UI (Save Editor Hub Phase 2 2026-06-20):
+                         P0 — chip Unsaved changes: reutiliza as classes autosaveChip/autosaveOrb/
+                         autosaveLabel do StudioTheme (mesmo visual do AutoSaveIndicator_Control), bindado
+                         ao IsDirty que já existe no DataModel. Sem asset novo: o orb carrega um círculo
+                         sólido em WarningBrush (o "PathIcon Warning" do prompt). IsVisible=IsDirty faz o
+                         chip sumir após Save/Save As (DataModel já zera IsDirty nesses paths).
+                         P1 + OPT-A4: Payload SHA256 curto com copy-on-click (copia os 64 chars do hash
+                         completo p/ o clipboard via PayloadHash_Click no code-behind; feedback é o status). -->
+                    <StackPanel Orientation="Horizontal" Spacing="12" HorizontalAlignment="Left">
+                        <Border Classes="autosaveChip" IsVisible="{Binding IsDirty}">
+                            <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                                <Border Classes="autosaveOrb" Width="20" Height="20" CornerRadius="{DynamicResource RadiusMd}" Padding="0">
+                                    <Ellipse Fill="{DynamicResource WarningBrush}"
+                                             Width="10" Height="10"
+                                             HorizontalAlignment="Center"
+                                             VerticalAlignment="Center" />
+                                </Border>
+                                <TextBlock Classes="autosaveLabel" Text="{x:Static res:Strings.U_unsaved_changes_29267269}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Classes="autosaveChip" IsVisible="{Binding HasSession}"
+                                PointerPressed="PayloadHash_Click"
+                                Cursor="Hand"
+                                ToolTip.Tip="{x:Static res:Strings.U_clique_para_copiar_o_hash_sha256_completo_64_cha_a1cea5aa}">
+                            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                <PathIcon Data="{DynamicResource IconCopy}" Width="12" Height="12"
+                                          Foreground="{DynamicResource TextMutedBrush}"
+                                          VerticalAlignment="Center" />
+                                <TextBlock Classes="muted" FontFamily="Consolas,Cascadia Mono,monospace" FontSize="12"
+                                           VerticalAlignment="Center"
+                                           AutomationProperties.Name="Payload SHA256 fingerprint — clique para copiar">
+                                    <Run Text="{x:Static res:Strings.U_payload_sha256_515011d3}" />
+                                    <Run Text="{Binding PayloadHashShort}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" Spacing="10" IsVisible="{Binding ShowMemoryCardSlotPicker}">
+                        <TextBlock VerticalAlignment="Center" Classes="muted" Text="{x:Static res:Strings.U_mc_slot_278ed17e}" />
+                        <ComboBox x:Name="MemoryCardSlotCombo" MinWidth="280"
+                                  ItemsSource="{Binding MemoryCardSlotLabels}"
+                                  SelectionChanged="MemoryCardSlotCombo_SelectionChanged" />
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Classes="headerActions" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+                    <Button Classes="primaryAction" Click="Button_Load"
+                            AutomationProperties.Name="Load FFX save file">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <PathIcon Data="{DynamicResource IconFolder}" Width="14" Height="14" />
+                            <TextBlock Text="{x:Static res:Strings.CommonLoad}" />
+                        </StackPanel>
+                    </Button>
+                    <Button Classes="secondaryAction" Click="Button_Save" IsEnabled="{Binding HasSession}"
+                            AutomationProperties.Name="Save current FFX save">Save</Button>
+                    <Button Classes="secondaryAction" Click="Button_SaveAs" IsEnabled="{Binding HasSession}"
+                            AutomationProperties.Name="Save FFX save as new file">Save As…</Button>
+                    <Button Classes="secondaryAction" Name="Button_ReviewDiff" Click="Button_ReviewDiff_Click" IsEnabled="{Binding HasSession}"
+                            AutomationProperties.Name="Review Diff">🔍 Diff</Button>
+                    <Button Classes="secondaryAction" Click="Button_LaunchFfxed"
+                            AutomationProperties.Name="Open external FFXED.jar">Open FFXED.jar</Button>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- Jarvis-UI (Save Editor audit 2026-06-20):
+             P0 — empty state: quando HasSession==false, o TabHost é substituído por um Border#EmptyState
+                  com CTA primário "Load…" apontando pro mesmo handler Button_Load. Preferi binding invertido
+                  (!HasSession) em vez de lógica no code-behind, conforme proposta do handoff.
+             P1-A — tab ativo: todos os botões de seção agora são Button.nav base; o estado ativo é aplicado
+                    em SelectTab() via classe tabPillActive (sem mais pill estática no XAML).
+             P1-B — sidebar: a coluna de navegação fixa de 220px vira um Expander colapsável para a esquerda
+                    (ExpandDirection="Left"), mesmo padrão já validado no MonsterAiEditor_Control (Camada 4 do
+                    overhaul v2.148.0.0). Estado persiste em IsSectionsExpanded no DataModel.
+             Lógica FFXED / save / batch / MC intocada — só container visual mudou. -->
+        <Grid Grid.Row="1" Margin="18,0,18,18" ColumnDefinitions="Auto,*">
+            <Expander Grid.Column="0"
+                      IsExpanded="{Binding IsSectionsExpanded, Mode=TwoWay}"
+                      ExpandDirection="Left"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Padding="0"
+                      Margin="0,0,0,0">
+                <Expander.Header>
+                    <StackPanel Orientation="Vertical" Spacing="4" Margin="0,6">
+                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSections}" />
+                    </StackPanel>
+                </Expander.Header>
+
+                <Border Width="230" Classes="card" CornerRadius="{DynamicResource RadiusMd}" Padding="{DynamicResource SpacingSm}">
+                    <StackPanel x:Name="SectionNav" Spacing="6">
+                        <Button Classes="nav" Tag="0" Click="Tab_Click" AutomationProperties.Name="Character">Character</Button>
+                        <Button Classes="nav" Tag="1" Click="Tab_Click" AutomationProperties.Name="Equipment">Equipment</Button>
+                        <Button Classes="nav" Tag="2" Click="Tab_Click" AutomationProperties.Name="Items">Items</Button>
+                        <Button Classes="nav" Tag="3" Click="Tab_Click" AutomationProperties.Name="Blitzball">Blitzball</Button>
+                        <Button Classes="nav" Tag="4" Click="Tab_Click" AutomationProperties.Name="Sphere Grid">Sphere Grid</Button>
+                        <Button Classes="nav" Tag="5" Click="Tab_Click" AutomationProperties.Name="Minigame">Minigame</Button>
+                        <Button Classes="nav" Tag="6" Click="Tab_Click" AutomationProperties.Name="Misc / Import">Misc / Import</Button>
+                        <TextBlock Classes="muted" Margin="0,8,0,0" TextWrapping="Wrap" FontSize="11"
+                                   Text="{x:Static res:Strings.U_rt2_dotnet_run_ffx_save_rt2_lt_save_gt_slot_mc_m_261034a5}" />
+                    </StackPanel>
+                </Border>
+            </Expander>
+
+            <!-- TabHost só aparece quando há sessão; sem sessão, mostra o empty state com CTA. -->
+            <Panel Grid.Column="1">
+                <ContentControl x:Name="TabHost" Margin="14,0,0,0"
+                                IsVisible="{Binding HasSession}" />
+
+                <Border x:Name="EmptyState"
+                        IsVisible="{Binding !HasSession}"
+                        Margin="14,0,0,0">
+                    <StackPanel Spacing="14" MaxWidth="560" HorizontalAlignment="Center">
+                        <PathIcon Data="{DynamicResource IconPackage}" Width="40" Height="40"
+                                  HorizontalAlignment="Center"
+                                  Foreground="{DynamicResource TextMutedBrush}" />
+                        <StackPanel Spacing="4" HorizontalAlignment="Center">
+                            <TextBlock Classes="h2" HorizontalAlignment="Center" Text="{x:Static res:Strings.U_no_save_loaded_8bf17425}" />
+                            <TextBlock Classes="muted" TextAlignment="Center" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_load_a_playthrough_save_to_edit_character_equipm_1036bde5}" />
+                        </StackPanel>
+                        <Button Classes="primaryAction" Click="Button_Load"
+                                HorizontalAlignment="Center"
+                                AutomationProperties.Name="Load FFX save file">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <PathIcon Data="{DynamicResource IconFolder}" Width="14" Height="14" />
+                                <TextBlock Text="{x:Static res:Strings.CommonLoad}" />
+                            </StackPanel>
+                        </Button>
+                        <Button Classes="secondaryAction" Click="Button_LaunchFfxed"
+                                HorizontalAlignment="Center"
+                                AutomationProperties.Name="Open external FFXED.jar">
+                            <TextBlock Text="{x:Static res:Strings.U_open_ffxed_jar_243a4b38}" />
+                        </Button>
+                    </StackPanel>
+                </Border>
+            </Panel>
+        </Grid>
+    </Grid>
+</UserControl>

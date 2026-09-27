@@ -1,0 +1,3134 @@
+{
+  "$comment": "Functional and provenance closure for every executable/helper payload in the reviewed win-x64 package.",
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "keystone-native-x64",
+      "consumer": "MemorySharp in-process assembler",
+      "classification": "BUNDLED_OWNER_ACCEPTED_RISK",
+      "executionModel": "in-process",
+      "provenance": "Preserved existing dependency; owner accepted redistribution risk.",
+      "payloadFileNames": [
+        "Keystone.Net.dll"
+      ],
+      "payloadGlobs": [
+        "x64/keystone.dll"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "Keystone.Net.dll",
+          "sha256": "409e77c96de54f2fc2149710b153eb6dec9429d88646bdda8eb46455596be91a",
+          "bytes": 14336,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "x64/keystone.dll",
+          "sha256": "144508decba543d3a1d0ba5036d3205eb32f9d9ae738ba27ef3dd5fc501723db",
+          "bytes": 5330432,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "ffxed-java-jar",
+      "consumer": "Save editor bridge",
+      "classification": "BUNDLED_OWNER_ACCEPTED_RISK",
+      "executionModel": "child-process",
+      "provenance": "Preserved existing FFXED JAR; owner accepted redistribution risk.",
+      "payloadGlobs": [
+        "ExternalLibs/FFXED/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "ExternalLibs/FFXED/FFXED.jar",
+          "sha256": "f68ce3d9999631a214f51e72a9fc3786a40b3b35d909ceea549bf04c4e358d2e",
+          "bytes": 97610,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "java-private-runtime",
+      "consumer": "Private runtime for FFXED",
+      "classification": "BUNDLED_REDISTRIBUTION_PROVEN",
+      "executionModel": "child-process",
+      "provenance": "Microsoft Build of OpenJDK private jlink runtime.",
+      "payloadGlobs": [
+        "runtime/java/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "runtime/java/bin/api-ms-win-core-console-l1-1-0.dll",
+          "sha256": "6f7890c0e81b4b9aa878e989d3b605a23460a300699fc5728fceefa7a57ea594",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-console-l1-2-0.dll",
+          "sha256": "f87af633c22cf30abc4638bfc4201cdad537c577f596e22d3a8d67d53cbc3cab",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-datetime-l1-1-0.dll",
+          "sha256": "f3ef6683bcfe70f96b2a56a6bbaad35ab7cf07c87a9815efb05201acc48a228f",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-debug-l1-1-0.dll",
+          "sha256": "69933d5003b42aecfd12d47fcd0531554e25a088949c847d10a50791d2f38e9c",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-errorhandling-l1-1-0.dll",
+          "sha256": "3c5d7dda90a93e4de57f29d78c6aa8c415d8036b1720c431db8a52a04b0974a7",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-fibers-l1-1-0.dll",
+          "sha256": "ee1a13bbc99ce1cbb4eac1c43711268a345da28dfb8d366e4737d87aef3a3a60",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-file-l1-1-0.dll",
+          "sha256": "75da00bfa26bd700a5c06b514d478bc50b47b7c7ed95d46048dec794a37e2ae8",
+          "bytes": 26168,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-file-l1-2-0.dll",
+          "sha256": "3af8d793fdad6896eba8ca69862a84d6cf7f18a55b5966241ad2b94ea20cd2f5",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-file-l2-1-0.dll",
+          "sha256": "a569ce7cd3cdbb4faf17f0ddbb945dcbd627251af93657fb654914611ea40f06",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-handle-l1-1-0.dll",
+          "sha256": "76c42f52672d2c169f88e82c67359c0b12e134b916bc7b91281ee0473740ca06",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-heap-l1-1-0.dll",
+          "sha256": "c54a9aa6b9a44880d73a9aefe555b6d975fca7c3d8c735a4989d421f77282c53",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-interlocked-l1-1-0.dll",
+          "sha256": "2cb820741dc39b0ef50a1db9f512b90c18c186c298910a125ac348614ff75dec",
+          "bytes": 22072,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-libraryloader-l1-1-0.dll",
+          "sha256": "02f4d3f2da6e8b6b06353a60088b99e25248da97f6044436e22c4179caa098a0",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-localization-l1-2-0.dll",
+          "sha256": "a46863d7ff5c2df9bc8495271fcb547ee8a2bbf2670fe65b436d335bb7eca694",
+          "bytes": 22080,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-memory-l1-1-0.dll",
+          "sha256": "fa5f0481bb079131358d346a696fd81b834b06443301c6a0fff90aa7635a4cab",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-namedpipe-l1-1-0.dll",
+          "sha256": "d469a828f3e001fe5c479eb862d0ea12ba01ed9b49e749ef5f7bcc67aecc2550",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-processenvironment-l1-1-0.dll",
+          "sha256": "4a477f1c1cf983b2765c96a16f6bb69d8c876752bac7799e57612d0d59054bf8",
+          "bytes": 22080,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-processthreads-l1-1-0.dll",
+          "sha256": "33e8179e4faaa68c11c15aa19410fd452aabe3c1ce4bf78310b5c3406c4fce51",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-processthreads-l1-1-1.dll",
+          "sha256": "51a5ad5cda843ed132aedfcbe71b30480c6f06492db2c8b4d41c9d83039f41fe",
+          "bytes": 22072,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-profile-l1-1-0.dll",
+          "sha256": "57b664739eaeb771ad37a9dd8d143ee02f35e87bd3418124a1c7bc734576dde0",
+          "bytes": 22080,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-rtlsupport-l1-1-0.dll",
+          "sha256": "f2af9e03d4ae7d3554ce8c3140b3f2428c41c4ea5fb618f9a7020b1ddb10cd5a",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-string-l1-1-0.dll",
+          "sha256": "68a11f254690280d07301768b50082810d9cb634db8419481710f082f633c5c6",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-synch-l1-1-0.dll",
+          "sha256": "74dcbd77fb82c127ff94c9a5ccb41f5792b92fb016146526df698c06f9029f37",
+          "bytes": 22072,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-synch-l1-2-0.dll",
+          "sha256": "45adfc83e6f51f61938a39c8bd32b023c3117cb4c2367507323db801948be961",
+          "bytes": 22072,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-sysinfo-l1-1-0.dll",
+          "sha256": "e38daa4b686e7c9484861480134057d736a52561e7404d8bf702960010d5fd44",
+          "bytes": 22080,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-timezone-l1-1-0.dll",
+          "sha256": "4cae166923fd0214aae1c182ae7bf84e20a734d371c99ef311f84dc08b86b453",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-core-util-l1-1-0.dll",
+          "sha256": "a0e81d74ec1a3ac52182b7b1e4e6b8f0d281c3c199ad9170cc41e9ce215cd9d6",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-conio-l1-1-0.dll",
+          "sha256": "b001fcb06409364abadc7468eed0db9f34236cc2f13afcaee449c59d367c7477",
+          "bytes": 22080,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-convert-l1-1-0.dll",
+          "sha256": "74d774baddae333c610329a7b48d06155ea81968c66a02cf21e70dcf035b6646",
+          "bytes": 26192,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-environment-l1-1-0.dll",
+          "sha256": "b4531ca15b74f9db810a2e5f8a013a4702e46f35c58d05360d012879f0d70934",
+          "bytes": 22048,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-filesystem-l1-1-0.dll",
+          "sha256": "6209397239aac843334cbf9cc519b0fbebd85e4c9b1b81a9d754dbecf6170a09",
+          "bytes": 22080,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-heap-l1-1-0.dll",
+          "sha256": "f9f20943a75cc585ef0fc944394e7c8aefff30cc0fd6332bac63d409fac5b5ad",
+          "bytes": 22080,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-locale-l1-1-0.dll",
+          "sha256": "78824396dba84529eb207ebb6c65658a4c3a169ecfda88fc0d05cf8fdcab1f62",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-math-l1-1-0.dll",
+          "sha256": "fb53ebbb0fe0255a38b09bffb9278126cc0ef6c4a18e163ee99ec8cb8f8ddf1e",
+          "bytes": 30272,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-multibyte-l1-1-0.dll",
+          "sha256": "5587061c78546ebca29e283a5f34c7837b8f4bb0ff7cc9284ef315efd481ff1a",
+          "bytes": 30288,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-private-l1-1-0.dll",
+          "sha256": "cad359145c6273e24fce1a731c16cd0c67b317ca133f882a347143a80d999ac7",
+          "bytes": 75328,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-process-l1-1-0.dll",
+          "sha256": "3991360bc2435b4efa5c5c478dd3282d13a90bb86236ee5fad9160259b2e4375",
+          "bytes": 22056,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-runtime-l1-1-0.dll",
+          "sha256": "90cb7f11ccb1d87f6147506344e566b9b04085198b647b81c594f4d3da924923",
+          "bytes": 26168,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-stdio-l1-1-0.dll",
+          "sha256": "36af1cd1db8b87582bf60b176fadd6572b615a23acf8f12c2eea862405bf494f",
+          "bytes": 26152,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-string-l1-1-0.dll",
+          "sha256": "5a545cf2e76b0eceab67fe430875730558fafaa02929d6acacad5b9d62a6a640",
+          "bytes": 26176,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-time-l1-1-0.dll",
+          "sha256": "32a7a6f2ad1c80bfa02719aeefabdd3595ed168cfd95877106a4d83e871f9e50",
+          "bytes": 22096,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/api-ms-win-crt-utility-l1-1-0.dll",
+          "sha256": "4db3bb2ff93d64bb87a26e39eab1c4a30060eb52328f8948bd4373c6f3f9b07f",
+          "bytes": 22072,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/awt.dll",
+          "sha256": "ebce3cfba830fec704179970b4b8e2c26225737ce2cbfafe9e1a18abc356c53c",
+          "bytes": 1488896,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/fontmanager.dll",
+          "sha256": "fb51b7837a9323f55cd5d72d5fc0699f078cbf19ae47e20633a80f66c68f3aac",
+          "bytes": 1014784,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/freetype.dll",
+          "sha256": "04463ddeb3037cd8705d81e3c5ffaf0322a6a860317f062f3aa3f468180eafc4",
+          "bytes": 553472,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/java.dll",
+          "sha256": "936e5bce1b0890c11c2f07eb98d6925ff7d02d6282edd74521cd5274afa97f3b",
+          "bytes": 113664,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/java.exe",
+          "sha256": "23647089d378f9b0c6b8c807ca07f7b27817c7300d2f103376e510766dffe670",
+          "bytes": 39936,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/javajpeg.dll",
+          "sha256": "8f6d344d9d58bdf0d2d5bacc161c185497e0b61be2bb79d045a57401b1486d8b",
+          "bytes": 172032,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/javaw.exe",
+          "sha256": "cace5e7c5896bfa344d1d16de7f4ffb4e12e4cbdcc703d37d77a7c404d055293",
+          "bytes": 39936,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/jawt.dll",
+          "sha256": "d55fbd575759a2919a5f189f11e94d9911cccc409aeec66501a3513b179b2da8",
+          "bytes": 11264,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/jimage.dll",
+          "sha256": "fc0cd2267838f5c83b57da3040b3754b17e1d9da8ad0b8a793878bf440ea34b3",
+          "bytes": 24064,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/jli.dll",
+          "sha256": "22912cfe1d354102f705c6de6a4c3613fd39d0b6abbd7c6edebd7618d389698a",
+          "bytes": 80384,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/jsound.dll",
+          "sha256": "566a5575b855f0f830f3803ab8ad323ba2b2527f343b46809d82e71beecc9ff3",
+          "bytes": 51200,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/keytool.exe",
+          "sha256": "a3017cb5b14461f43fb39082e4e655740b3c1f0efbf1f19c929861a7280ff78d",
+          "bytes": 14336,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/lcms.dll",
+          "sha256": "bd33d0c05bc41dec821a22d308746ce612ea60ee23c62bc360c0f10c64b23c69",
+          "bytes": 252928,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/mlib_image.dll",
+          "sha256": "0479da5431067e49cc165522f8a18045ab7577daaf983d052481152d71ba2713",
+          "bytes": 510976,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/msvcp140.dll",
+          "sha256": "8f141b4454fa78db34bc1f28c571b4da0e00cd2c43f7ad0e282f313036826aae",
+          "bytes": 557648,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/net.dll",
+          "sha256": "b015849b632bb11c9eed9f2f01526fc01d246aa026e2aa7aa76755096470fcc0",
+          "bytes": 50176,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/nio.dll",
+          "sha256": "e9c182024828b4fdbbbd7e2412a8a86e1e1c2c7e82ea408d78df6e2e2dcc2454",
+          "bytes": 71168,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/prefs.dll",
+          "sha256": "80a462ed66245e63a44bbc87c0f4b39e48b159b862abcf84b97d7bbeeb7177cb",
+          "bytes": 15360,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/server/jvm.dll",
+          "sha256": "2be1360f5446d78e84a5b0a72f4ce2bde5a55ba623ca60355f5ef1eac30deb4b",
+          "bytes": 13962240,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/splashscreen.dll",
+          "sha256": "1a0b03c754782bfa0783abac9d80a5db5e634b61a3a57486e5f5cb46d33d716a",
+          "bytes": 208384,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/syslookup.dll",
+          "sha256": "41e07db28a3e839af389736225082698a409157e202624c071c27182ee39e93b",
+          "bytes": 18432,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/ucrtbase.dll",
+          "sha256": "ff995ea3af81fa04506421831e303d3db776bdb7bbe9e6087af8859975fcbfe0",
+          "bytes": 1123896,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/vcruntime140_1.dll",
+          "sha256": "963e45edd064545962e216c12d68071ced94dc8e11862a18f07f14eb2690a57c",
+          "bytes": 49744,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/vcruntime140.dll",
+          "sha256": "0205071c36c17f1efbd70178c852cb7d49985c484202752b8704b7ac6b184e60",
+          "bytes": 124496,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/verify.dll",
+          "sha256": "2a4c78395b94a1201b90571d1018e2ef58274ac628e939ea5f5336934322cf95",
+          "bytes": 45568,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/bin/zip.dll",
+          "sha256": "529dbe0ff1fccca6d53e38c57088bb877e2a3f088f5e9d4eab94c3141cb8a993",
+          "bytes": 77312,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/jaxp.properties",
+          "sha256": "7d95c49465d0c836d608d02856d3b097934dfb5dc4bd2279affaf337d045b708",
+          "bytes": 7302,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/net.properties",
+          "sha256": "56dd1f6095c189c1052f6baa32e457efc09de4832e19cdb82bb236dc8abfee9f",
+          "bytes": 7504,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/java.policy",
+          "sha256": "d51bcab7ed301caeff3779a5e777e6019864cecee5e2abc102ef991b0de77af2",
+          "bytes": 2294,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/java.security",
+          "sha256": "1c92cb397fcfecd340638a16eadbe18fa899d97b1d9a7a1ac16083dc81aba338",
+          "bytes": 71417,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/policy/limited/default_local.policy",
+          "sha256": "2b2627548e61316150d47ffc3e6cad465ca05b3cccd4785eb7d21aa7baa0f441",
+          "bytes": 647,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/policy/limited/default_US_export.policy",
+          "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9",
+          "bytes": 146,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/policy/limited/exempt_local.policy",
+          "sha256": "8c3d7648abcd95a272ce12db870082937f4d7f6878d730d83cb7fbb31eb8b2c9",
+          "bytes": 566,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/policy/README.txt",
+          "sha256": "6da0747334b0fea7592fd92614b2bbc8b126535e129b1fee483774d914e98eb5",
+          "bytes": 2390,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/policy/unlimited/default_local.policy",
+          "sha256": "8d8a318e6d90dfd7e26612d2b6385aa704f686ca6134c551f8928418d92b851a",
+          "bytes": 193,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/security/policy/unlimited/default_US_export.policy",
+          "sha256": "758b930a526fc670ab7537f8c26321527050a31f5f42149a2dda623c56a0a1a9",
+          "bytes": 146,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/conf/sound.properties",
+          "sha256": "299c2360b6155eb28990ec49cd21753f97e43442fe8fab03e04f3e213df43a66",
+          "bytes": 1210,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/ADDITIONAL_LICENSE_INFO",
+          "sha256": "a69bce275ba7a3570af6579cb0f55682cd75fedfcd49e0e8e9022270c447c916",
+          "bytes": 2114,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/aes.md",
+          "sha256": "45c6d4da48325edfbff3dcf71c704e504c057904435ed23c6d57046d551eb69d",
+          "bytes": 1444,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/asm.md",
+          "sha256": "683be15695bd248272d60f5b7fbe5e126a935ea6bf231a624a9aa164733e1d1d",
+          "bytes": 1582,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/ASSEMBLY_EXCEPTION",
+          "sha256": "75292f03bf23d3db7c985aecc191029b93883200721ed23ed34a2e601463df33",
+          "bytes": 1514,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/c-libutl.md",
+          "sha256": "bef40679922d6fdfb7e4ddb223ad6722300f6054ba737bbf6188d60fcec517f9",
+          "bytes": 1556,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/cldr.md",
+          "sha256": "19515e14a240e022640e95b61b5095127fa9690755950b4a2b0a02e783e08163",
+          "bytes": 9601,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/icu.md",
+          "sha256": "1bf28459c6e0af9f3429f4f8becd1668d6544055f8df240277456bc4b3d8a752",
+          "bytes": 30197,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/LICENSE",
+          "sha256": "4b9abebc4338048a7c2dc184e9f800deb349366bdf28eb23c2677a77b4c87726",
+          "bytes": 19274,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/public_suffix.md",
+          "sha256": "861de1e4992a7d28f1de25c73cd50d26a94779ebd749c0643fecfa56442c3429",
+          "bytes": 17783,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/siphash.md",
+          "sha256": "5a792b5a74ad2a5f3d6a7ad8b7a841116e58a772c18bc6e392320a365b222c76",
+          "bytes": 8256,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/unicode.md",
+          "sha256": "6f72f10d166b2c2e8a395e03e734c5afc852b59aeca73ced124f6b9c96268d53",
+          "bytes": 9078,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/wepoll.md",
+          "sha256": "3ac2992770080453b98c42afa807ba4b2c1738ef756b92a55c645f55e7df48f0",
+          "bytes": 1454,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.base/zlib.md",
+          "sha256": "c9c70c36a1f0325e8788771906202d42ba6ab4205caca44ec0f665707e83226b",
+          "bytes": 1010,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.datatransfer/ADDITIONAL_LICENSE_INFO",
+          "sha256": "31cf9d68e91f003b1d332f2a7517c3439e1a6571ff9dc4b740122a53cdcd4f5d",
+          "bytes": 48,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.datatransfer/ASSEMBLY_EXCEPTION",
+          "sha256": "619a29daab4a59e606c31d43bbd3c80dae8cc496559b353b74d85bea91f134ba",
+          "bytes": 43,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.datatransfer/LICENSE",
+          "sha256": "9e4ffc186121534972af9be8632e57b2b2f3cf203a10f2205e5814120f2b5bfb",
+          "bytes": 32,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/ADDITIONAL_LICENSE_INFO",
+          "sha256": "31cf9d68e91f003b1d332f2a7517c3439e1a6571ff9dc4b740122a53cdcd4f5d",
+          "bytes": 48,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/ASSEMBLY_EXCEPTION",
+          "sha256": "619a29daab4a59e606c31d43bbd3c80dae8cc496559b353b74d85bea91f134ba",
+          "bytes": 43,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/colorimaging.md",
+          "sha256": "04d61e3e8e71dd452ebe52008af5378d9f6640d14578aeb515dc5375973b0189",
+          "bytes": 167,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/freetype.md",
+          "sha256": "553e804baecb7de7129d77c7259a6b70037d1893f1c600b41b35201695fb7758",
+          "bytes": 30465,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/giflib.md",
+          "sha256": "206aab89ec75968e48a6a1ed6df7d8b9bfb7aea12cbe4c9345d93e5d97460a25",
+          "bytes": 1689,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/harfbuzz.md",
+          "sha256": "5ec7cba7f8e7fc3a089213140aab6fa1b3bd5bf8a91bf8bddb3b8d315fc5f7d0",
+          "bytes": 3629,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/jpeg.md",
+          "sha256": "c1dfb9719a71ad9f861f8728550542d681e25c8ef40e6393606e6e2a0c1d653a",
+          "bytes": 3474,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/lcms.md",
+          "sha256": "843f9f6fa9c3f8109fcf4d5fe74caf7f2ae8e9bcd92238e4aff2d428c932b24b",
+          "bytes": 2654,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/libpng.md",
+          "sha256": "f73afb394792f3aeecd959e89487603677a430e56b44eba596d8b572accfd540",
+          "bytes": 7519,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/LICENSE",
+          "sha256": "9e4ffc186121534972af9be8632e57b2b2f3cf203a10f2205e5814120f2b5bfb",
+          "bytes": 32,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.desktop/mesa3d.md",
+          "sha256": "63f4e6f75caebbccb95d903fb43e46ac7111b3624d0a34f146b276d7d9e7b152",
+          "bytes": 5732,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.prefs/ADDITIONAL_LICENSE_INFO",
+          "sha256": "31cf9d68e91f003b1d332f2a7517c3439e1a6571ff9dc4b740122a53cdcd4f5d",
+          "bytes": 48,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.prefs/ASSEMBLY_EXCEPTION",
+          "sha256": "619a29daab4a59e606c31d43bbd3c80dae8cc496559b353b74d85bea91f134ba",
+          "bytes": 43,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.prefs/LICENSE",
+          "sha256": "9e4ffc186121534972af9be8632e57b2b2f3cf203a10f2205e5814120f2b5bfb",
+          "bytes": 32,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/ADDITIONAL_LICENSE_INFO",
+          "sha256": "31cf9d68e91f003b1d332f2a7517c3439e1a6571ff9dc4b740122a53cdcd4f5d",
+          "bytes": 48,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/ASSEMBLY_EXCEPTION",
+          "sha256": "619a29daab4a59e606c31d43bbd3c80dae8cc496559b353b74d85bea91f134ba",
+          "bytes": 43,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/bcel.md",
+          "sha256": "cd578186ad93de46cca29ec8ace2b11f9da751987f3f140e6095c528596cc8c1",
+          "bytes": 11196,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/dom.md",
+          "sha256": "6686e8877667584a3a7c07344baadca1a03e29f677162d87c3c0811e990d1148",
+          "bytes": 3761,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/jcup.md",
+          "sha256": "8d5dcfdf50455a3c34c753a98f21e953248af200415a9084e3f102cb6c43b8bf",
+          "bytes": 1448,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/LICENSE",
+          "sha256": "9e4ffc186121534972af9be8632e57b2b2f3cf203a10f2205e5814120f2b5bfb",
+          "bytes": 32,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/xalan.md",
+          "sha256": "c27eb875da4be683d4d7422be986e5e30f636ede31958ff1d39f9cd6109e7a00",
+          "bytes": 13477,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/legal/java.xml/xerces.md",
+          "sha256": "4a6bf6b367193ee68681cb2d9fed30ffc5d62dd2d477bd62e0271707d71b3244",
+          "bytes": 11848,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/classlist",
+          "sha256": "d3bf10121da676f84578687d12dca4d605129a34b8530c599e0b8d78a5ea02cd",
+          "bytes": 77424,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/fontconfig.bfc",
+          "sha256": "c7e2e76b908cb6330823e698889943c162e9861a4575501cbb59c9b830158ab0",
+          "bytes": 4836,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/fontconfig.properties.src",
+          "sha256": "74e6c464ae1e63983ada241869fdc66ef8c28cef403ee2301e0a90db9555b00c",
+          "bytes": 12612,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/jawt.lib",
+          "sha256": "d327b7f9d84e60f3ca839beefb49d0b22068517b17925431fd9e0f79d615818e",
+          "bytes": 1682,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/jrt-fs.jar",
+          "sha256": "8a488656376b4c2446f179dd88f28767a104a89e25cfcfc5bc7ded86a5b04bf2",
+          "bytes": 110116,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/jvm.cfg",
+          "sha256": "aa9efb969444c1484e29adecab55a122458090616e766b2f1230ef05bc3867e0",
+          "bytes": 29,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/jvm.lib",
+          "sha256": "431eb4537b3dbd2b85e07099c9d5493182387881c152622fcbd00a1564a5055b",
+          "bytes": 1191696,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/modules",
+          "sha256": "97cfc4d3d45f139acf88813d3882f8f15d34a3a87f2d5a49b8dce418a325b94c",
+          "bytes": 24045265,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/psfont.properties.ja",
+          "sha256": "5a4bd51b969bf187ff86d94f4a71fdfbfa602762975fa3c73d264b4575f7c78f",
+          "bytes": 3793,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/psfontj2d.properties",
+          "sha256": "780c565d5af3ee6f68b887b75c041cdf46a0592f67012f12eeb691283e92630a",
+          "bytes": 11390,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/security/blocked.certs",
+          "sha256": "96572f243f31c2ef81a6e627542e596f6a9295cff3c7ae095c1b595cb1457ded",
+          "bytes": 2488,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/security/cacerts",
+          "sha256": "40e3c531c5073e079cb541696e50119419c174b7b09ac894c3609573708b9cf9",
+          "bytes": 136706,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/security/default.policy",
+          "sha256": "69790a79bb9d4bef6b544c1878410bfa0c6a92171834c188772a0ba1ca8c0d95",
+          "bytes": 11380,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/security/public_suffix_list.dat",
+          "sha256": "37e71e43c8605f29b9072f152d0ea4708735cdf335a5b68b2bc2f875760806c3",
+          "bytes": 229254,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/tzdb.dat",
+          "sha256": "5906b44e25a8a730131d7ba1beb5d15af27043f6536f1a169ca8a5d8b8bed8f8",
+          "bytes": 102956,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/lib/tzmappings",
+          "sha256": "4862e239d38a4527593c8ebf3624c72a0f97cabc548edcff722419d61f8db733",
+          "bytes": 21684,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "runtime/java/release",
+          "sha256": "43b6959a801b4af939568c2f020bb889dbc2ec359834459eb3ff1b0eb00a5af3",
+          "bytes": 96,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "vgmstream-cli",
+      "consumer": "Audio decode and local music import",
+      "classification": "BUNDLED_REDISTRIBUTION_PROVEN",
+      "executionModel": "child-process",
+      "provenance": "Vendored vgmstream payload with bundled notices.",
+      "payloadGlobs": [
+        "tools/vgmstream/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "tools/vgmstream/avcodec-vgmstream-59.dll",
+          "sha256": "dc6f469c2f1728d8f8809223c190af693ee48e5e005b73711fc356c91b8c3adc",
+          "bytes": 1981952,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/avformat-vgmstream-59.dll",
+          "sha256": "909cf4b58656b0ed6913ff6e9964b76eadeaf65f1396852d90d4c8bc0cc18f05",
+          "bytes": 1053184,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/avutil-vgmstream-57.dll",
+          "sha256": "89ef867a5bb25e203f61bb2d2add2d1b02c672a3706095c4522189f38489cf3c",
+          "bytes": 1381376,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/COPYING",
+          "sha256": "1457b0323191784863916846df32a92a278ec88baef94b57685bdf9bbc67d4ca",
+          "bytes": 1291,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/in_vgmstream.dll",
+          "sha256": "01d9d9609d5a2866c3d1be11d795620b2c3cd674bc186802e52a2dfbf113ca02",
+          "bytes": 2386944,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/libatrac9.dll",
+          "sha256": "baf0d5e741451761b67364485f52b1844df79d1a26e7ce7e655bde7317520bb4",
+          "bytes": 280064,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/libcelt-0061.dll",
+          "sha256": "6421f8c1846d52b1ff43a6e570cfba80cc85c9f032f59af07cb65a35647bb218",
+          "bytes": 101093,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/libcelt-0110.dll",
+          "sha256": "81da4f358d9aef949a6dc23cdbd0bf4432a1a1f43c89fd5dc3a30e712a5f4012",
+          "bytes": 92375,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/libg719_decode.dll",
+          "sha256": "385f1dde89acddebd03fdd61858395703ba7bf146e19a965479ccee702be3069",
+          "bytes": 134656,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/libmpg123-0.dll",
+          "sha256": "2bae5dcb2071b09d9b1c1803ec345954e80046bdc4cae08bc85853040ac6202b",
+          "bytes": 426551,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/libspeex-1.dll",
+          "sha256": "4373dd6b292fe4a65f91d94e50802b7aedff6a4f7544d05274cab105aee08a6a",
+          "bytes": 121633,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/libvorbis.dll",
+          "sha256": "f7b2b3d82abfcfeccf1c1135c7a333eb280c0d1ebf3951281bbb7759c055b092",
+          "bytes": 218112,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/README.md",
+          "sha256": "676e5a0319ee203d6980a80a04e3860b4ee18d716beac654242ebbcbe1d3199b",
+          "bytes": 4908,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/swresample-vgmstream-4.dll",
+          "sha256": "4e3db31079dddf7588c743a2e414f4eeb954acb55b0cd6d04d57f0e4148272e0",
+          "bytes": 576000,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/USAGE.md",
+          "sha256": "f6219c876ae974c3c871cedd86baf0306abc7b09f3ec7cfc41786226eb16b6e5",
+          "bytes": 46715,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/vgmstream-cli.exe",
+          "sha256": "9431ce9a9422257e126ba01a92c26e6244e07894b33056eefc8269a3d1b43df7",
+          "bytes": 2373632,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/xmp-vgmstream.dll",
+          "sha256": "796e418ac459a5c8ca9b7927a82232ed67cedcbb14111dadce902a9c142d9eef",
+          "bytes": 2345984,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/vgmstream/linux-x64/COPYING",
+          "sha256": "1457b0323191784863916846df32a92a278ec88baef94b57685bdf9bbc67d4ca",
+          "bytes": 1291,
+          "kind": "data",
+          "arch": "data",
+          "target": "linux-x64"
+        },
+        {
+          "path": "tools/vgmstream/linux-x64/PROVENANCE.md",
+          "sha256": "bd976ec56f6389336f018f66d6fb1fffde28fe927037c4ff401815d0fb2800d7",
+          "bytes": 936,
+          "kind": "data",
+          "arch": "data",
+          "target": "linux-x64"
+        },
+        {
+          "path": "tools/vgmstream/linux-x64/vgmstream-cli",
+          "sha256": "2b05458f470ac6e051848e08cbd6d31a074e1808a648e2c6007418ad4242fc58",
+          "bytes": 7499656,
+          "kind": "native",
+          "arch": "x64",
+          "target": "linux-x64"
+        }
+      ]
+    },
+    {
+      "id": "fsbext",
+      "consumer": "FSB extraction",
+      "classification": "BUNDLED_OWNER_ACCEPTED_RISK",
+      "executionModel": "child-process",
+      "provenance": "Preserved existing helper; owner accepted redistribution risk.",
+      "payloadGlobs": [
+        "tools/fsbext/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "tools/fsbext/fsbext.exe",
+          "sha256": "84cc08c23ac69234f51a66f85b98d06ec271f83dc62fb723e776834a00d67ed0",
+          "bytes": 102912,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "fsbankcl",
+      "consumer": "FSB authoring",
+      "classification": "BUNDLED_OWNER_ACCEPTED_RISK",
+      "executionModel": "child-process",
+      "provenance": "Preserved existing FMOD-adjacent helper; owner accepted redistribution risk.",
+      "payloadGlobs": [
+        "tools/fsbankcl/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "tools/fsbankcl/celt_encoder.dll",
+          "sha256": "e401a466331d13bf63045acd4e6c06f97f5164ced85d41aa6fb4d9800a23788e",
+          "bytes": 172032,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/fsbankcl.exe",
+          "sha256": "44cf3d7f96f5f3dc2a554f945126bb63655ada90a9339ee09070b02cf682f123",
+          "bytes": 1548800,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/fsbankex.exe",
+          "sha256": "140ce9911c5d53b36fa38d1a0bc98af7a6f41b9a76b102d0fdcc0a12c2bc40f6",
+          "bytes": 1695232,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/fsbankexcl.exe",
+          "sha256": "44cf3d7f96f5f3dc2a554f945126bb63655ada90a9339ee09070b02cf682f123",
+          "bytes": 1548800,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/libmp3lame.dll",
+          "sha256": "f0d6df6ab52ffb650d2f3f9618ccfc72f6e593d25d5b459a8163e79363984169",
+          "bytes": 359936,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/libogg.dll",
+          "sha256": "03157c9a6fbfc379a614f128dd1d3c3f0a1c22d4b176ae292d2dceb7cfec8a3f",
+          "bytes": 17920,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/libogg64.dll",
+          "sha256": "25dab73220132c776812f485af0e5bec7681a5313395426ff9841106c7b75df5",
+          "bytes": 19456,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/libvorbis.dll",
+          "sha256": "460f02e3f558587f5e4af29e432363502e1fdcf4a2aeead329c720d604368dc0",
+          "bytes": 1624064,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/libvorbis64.dll",
+          "sha256": "1a4a6a9c1972b9db03ded69a3049a4ec88871e460a38359be7d424f5d88e2872",
+          "bytes": 1694720,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/libvorbisfile.dll",
+          "sha256": "50ceb8ea7267ab954d41f0acda7ea3c2863819d71d9577a3736771ad1a9f59ee",
+          "bytes": 29184,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/libvorbisfile64.dll",
+          "sha256": "47c2a5f4581348c835907e0d05e248bfd666925a96ec8d87ae326b8c86c8e00e",
+          "bytes": 33280,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/msvcp100.dll",
+          "sha256": "d769fafa2b3232de9fa7153212ba287f68e745257f1c00fafb511e7a02de7adf",
+          "bytes": 421200,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/msvcr100.dll",
+          "sha256": "60c06e0fa4449314da3a0a87c1a9d9577df99226f943637e06f61188e5862efa",
+          "bytes": 773968,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/QtCore4.dll",
+          "sha256": "4f88134839cc838aafa68a3fcec6173a3ad943a128cf09fcfb502d849e2844a1",
+          "bytes": 2349568,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/QtGui4.dll",
+          "sha256": "4966c0561eea652605148692b6fa39b4e2099cb6d6b6b3afa1479757cd6affa9",
+          "bytes": 8502272,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/QtNetwork4.dll",
+          "sha256": "0e965002e1e3a50b92ab6e4a83f2977ebc23d94c54cdbf06467c52feee279ecb",
+          "bytes": 863744,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/QtXML4.dll",
+          "sha256": "813b543ff0cb51881f3b3c4046da095df6b55978ea292ca27d5f83cda49d0fbf",
+          "bytes": 358400,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/README.md",
+          "sha256": "9531432c997f8e6364c519b06f431935aee4f7ab1b140fe4444d82597e57ff8e",
+          "bytes": 570,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/fsbankcl/twolame.dll",
+          "sha256": "299e81ecc695a5828f8cb25a1b8f77ca3250159db505e723e4746592b90b4ad9",
+          "bytes": 221696,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "phyre-map-export-lab",
+      "consumer": "On-demand Phyre map export",
+      "classification": "BUNDLED_HELPER",
+      "executionModel": "child-process",
+      "provenance": "Built from this repository as a self-contained win-x64 helper.",
+      "payloadGlobs": [
+        "tools/PhyreMapExportLab/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "tools/PhyreMapExportLab/clretwrc.dll",
+          "sha256": "cbf4751a780cef63fbae56c3cae61862958b471f69f1959cb3a609d2d3695cc5",
+          "bytes": 310568,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/clrgc.dll",
+          "sha256": "52b2edcd2d22c56e954cd589e112937dd950a0018878cf61caec1463ae404472",
+          "bytes": 667984,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/clrjit.dll",
+          "sha256": "93fb93cd74774247d6382d098b228f504373ef2710fe29a32fd9fb086a3182ff",
+          "bytes": 1778472,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/coreclr.dll",
+          "sha256": "817a9a5e0ea19ec205e3e0792320b8e03b77955a17953f3ab787db1426b0d930",
+          "bytes": 4995880,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/createdump.exe",
+          "sha256": "b90b997d72aaeab1cf18998f3e8de5074a9e63f84e238bd771f84ffddb05f1fb",
+          "bytes": 71512,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/hostfxr.dll",
+          "sha256": "99bdd77e4fe14ab284c4a335ac13affae11c840506b032462d26273143f0b767",
+          "bytes": 366376,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/hostpolicy.dll",
+          "sha256": "a2f6f864b9a41c56ad22490ea882ece574539eb7b23f8913c943613990818e89",
+          "bytes": 406824,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/Microsoft.CSharp.dll",
+          "sha256": "8d3ce78a9b693d124656f7313dc4ddc8ca3e4521c8e9c8b08c7b9f0efa015795",
+          "bytes": 1005352,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/Microsoft.DiaSymReader.Native.amd64.dll",
+          "sha256": "315a61c47c41b8d4c815f4274bb6584c1d24b4640c7eedc354ed5b03a9a1361e",
+          "bytes": 2195504,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/Microsoft.VisualBasic.Core.dll",
+          "sha256": "09b24af28410940e731e72528ee300d889dec47f44e42177d0b03a1fc408e6f6",
+          "bytes": 1247056,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/Microsoft.VisualBasic.dll",
+          "sha256": "f1928da80470e1f7a098a80124adb0d34b103ada30b8e95cd0bd1f4bf18fda61",
+          "bytes": 17232,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/Microsoft.Win32.Primitives.dll",
+          "sha256": "190d9e13ec667b7c311c06213cbfae12e4b90528db2f032456f778891ac170ef",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/Microsoft.Win32.Registry.dll",
+          "sha256": "4b2e3b646a85c9db904647f57763a7134dee6307ba5866f7ce51d32b914ce1cf",
+          "bytes": 120656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/mscordaccore_amd64_amd64_8.0.2826.26413.dll",
+          "sha256": "6f7a3520fb5a30d1c747e7d232b219c1c97a2270429da7aa1f572ac2c60b28be",
+          "bytes": 1348488,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/mscordaccore.dll",
+          "sha256": "6f7a3520fb5a30d1c747e7d232b219c1c97a2270429da7aa1f572ac2c60b28be",
+          "bytes": 1348488,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/mscordbi.dll",
+          "sha256": "b57c375fda5ae1270990d3aaf4fcb61872580efbc313118bb5ff817f3b2786a0",
+          "bytes": 1234272,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/mscorlib.dll",
+          "sha256": "8cc7442f997a6e0de9157b55058e5e85011fa240a903806f2c501f069e8a45a1",
+          "bytes": 59176,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/mscorrc.dll",
+          "sha256": "26ea1e2db343df68ce4018fe7c155e38cfb99f0c6c23ba0e45a00b9801ff0f89",
+          "bytes": 136528,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/msquic.dll",
+          "sha256": "99daf179ee2dfb5c36493543647b64fc58a24aba0b16d5e9232b06003fbc9054",
+          "bytes": 524320,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/netstandard.dll",
+          "sha256": "b7c85ff82edc3db1424e9b387eed0517cbe2c59691951ed70b41d46f79397696",
+          "bytes": 100688,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreMapExportLab.deps.json",
+          "sha256": "104099f576ca3aea7dbedc4dd95b8dddf9c6a466a05430283a94f36d80228146",
+          "bytes": 26705,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreMapExportLab.dll",
+          "sha256": "8fd8906541cd1c73a65fe79672220f836214c84b015504c9c08bbda2c3722696",
+          "bytes": 196096,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreMapExportLab.exe",
+          "sha256": "03270e301e2cbb55776573e946ce795c8d490c13330b503d8b8e3c3566493549",
+          "bytes": 151552,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreMapExportLab.runtimeconfig.json",
+          "sha256": "311e21e53b69436e295288e02a33b8e621a3f39a8435ef3dbf5ee469fd0366f2",
+          "bytes": 358,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreModelExportLab.deps.json",
+          "sha256": "bfeafc37de3934f0b0e291115dbd0e913189dde065fb213792bd30567e96043e",
+          "bytes": 26348,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreModelExportLab.dll",
+          "sha256": "bc6a90b5fc5a0fe6041b4737b8d0843b5c08552cbc821c5c00272e47e918178f",
+          "bytes": 313856,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreModelExportLab.exe",
+          "sha256": "5b765d9fc5a16df1ae433cae83edf242f7e622e47d4a529755d569007090c5eb",
+          "bytes": 152064,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/PhyreModelExportLab.runtimeconfig.json",
+          "sha256": "311e21e53b69436e295288e02a33b8e621a3f39a8435ef3dbf5ee469fd0366f2",
+          "bytes": 358,
+          "kind": "data",
+          "arch": "data",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.AppContext.dll",
+          "sha256": "70d13d4758c1e5413f820342ce7ecac436750c4f82d8e818873a86f861e0a0b1",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Buffers.dll",
+          "sha256": "390601503ffe659946ebe61fa7b6bfd2b6e1084b39da06b7692f5fb05f27c5e0",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Collections.Concurrent.dll",
+          "sha256": "6ffcd942293576dbd3ab66ca6ef2ea0428f9e84bdacec63316bc5c069041f37c",
+          "bytes": 276264,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Collections.dll",
+          "sha256": "f0fe3fc9cecf713d5c29a2fecdf6aafc50b41efb8130a56af54b8c9330c1ffc1",
+          "bytes": 259880,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Collections.Immutable.dll",
+          "sha256": "f134239f34d90e805fd44c26d2b350f31915734b1dc1b008e5ccec89a39a90aa",
+          "bytes": 837416,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Collections.NonGeneric.dll",
+          "sha256": "aba7167d2e95ee23a55a03586588eb01ca3e63942ff2e1392936692bc337c194",
+          "bytes": 104272,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Collections.Specialized.dll",
+          "sha256": "c4b625cf2ec04fc659e86223ca4be5421f843ecac62feb1a2e5e92e7c70eda50",
+          "bytes": 104232,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ComponentModel.Annotations.dll",
+          "sha256": "9f8d4aaea363b146b5484e663d817f0390ff20583b397c124411c50210338ae3",
+          "bytes": 198480,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ComponentModel.DataAnnotations.dll",
+          "sha256": "f4ff4ac0f7f91d66d6ccff7528d962e2bb8c2c91ec97d64fde265534f8d49be6",
+          "bytes": 16720,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ComponentModel.dll",
+          "sha256": "d912b7e2d421a49a4eee9730764047f058a8d72c9b3618dcc195d6f427b55ae8",
+          "bytes": 30544,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ComponentModel.EventBasedAsync.dll",
+          "sha256": "e5b203c21752934ee92e1f2f9aae98f28c0a054f5357072ec7d1a6fd036ae7cf",
+          "bytes": 46888,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ComponentModel.Primitives.dll",
+          "sha256": "3dc8bfbf3b542c45646a7057d3e945374c7b85db69c37f2a16794e88091a5b06",
+          "bytes": 79656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ComponentModel.TypeConverter.dll",
+          "sha256": "534f82e18158a5bf76019b847a1f91dc8f54fb8075561d7678dfcab89c315382",
+          "bytes": 747304,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Configuration.dll",
+          "sha256": "88ad10299f531bb99c250ee7607b5c2c599ca6a48735e151b16e25521b6f73b2",
+          "bytes": 19240,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Console.dll",
+          "sha256": "664163bfa498aa9d683039885da244717b9233fa223fb70254c910c437f362ed",
+          "bytes": 173864,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Core.dll",
+          "sha256": "6e6ad94c694681bf3cab86c60e2a130ba4cfe3c703cd5d5732e5db7740a4edf9",
+          "bytes": 23336,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Data.Common.dll",
+          "sha256": "a357b2ac328f4f4c35af2aa3aa323d519c075b5ce105587a0dc696e5b8e1a996",
+          "bytes": 2860840,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Data.DataSetExtensions.dll",
+          "sha256": "82a930943ca2514878abe2d44dd1f29adab21afbbe8536b6edecf9ba93607af0",
+          "bytes": 15696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Data.dll",
+          "sha256": "191c61bbb9f35c1b6e46525c01f6f9f377f812f4c4ce5f4bc9fb46e988f85005",
+          "bytes": 24872,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.Contracts.dll",
+          "sha256": "67df4b81057d30220b8235fe4d8e987d3b5ae25e70c7195282be299f7885af87",
+          "bytes": 16168,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.Debug.dll",
+          "sha256": "0d321fb174f9acbeec32d9f9b87f1364989b517a5f7a3b30d96a8e0ef0805389",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.DiagnosticSource.dll",
+          "sha256": "8501928426904a1b660447cb5cdeae888ec61a850395910a050fb33ba2541a14",
+          "bytes": 415528,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.FileVersionInfo.dll",
+          "sha256": "6d336f055d3c37aee6a4280a237bc7fb4c2a17f787fa0b7e1bae9e768d63b7b4",
+          "bytes": 46888,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.Process.dll",
+          "sha256": "4ca86970668d670a579db1c5733144048d1e52c2bb2e0892c86f665e39883f8d",
+          "bytes": 337744,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.StackTrace.dll",
+          "sha256": "df1529192900355b5cbf37db6c505142570614d9ab233c2b0063ad22565bd406",
+          "bytes": 46928,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.TextWriterTraceListener.dll",
+          "sha256": "fc734f0bca00d28011486dab75a531d6b987c03edc8afb6eba05c36d6d665453",
+          "bytes": 67368,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.Tools.dll",
+          "sha256": "0113e905fb40fb9b2969f68cb34d13a87252e240545103dde425de35116c18d2",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.TraceSource.dll",
+          "sha256": "953bd83cfa994f088c5dd326c1746dda1db937c9311c3e58f74e030c3190bb1f",
+          "bytes": 145232,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Diagnostics.Tracing.dll",
+          "sha256": "29c0a0cd1d3e39ece9ced18b6216f6e3f582ebaec8afaa2d9835430a4a03e631",
+          "bytes": 16168,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.dll",
+          "sha256": "4dae4c0d59a716ff4261fd54ce34276dfa85b43c312fb6b0573c10c0a79fc171",
+          "bytes": 49960,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Drawing.dll",
+          "sha256": "9c4135ad320b1ecd6fc6018603c0fffe80ff549123f04fa4cdd33c5aada3d311",
+          "bytes": 20304,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Drawing.Primitives.dll",
+          "sha256": "6d056c7523d827c5dd264aea88a97342aeaa8a5e5b9a27c5c4e1886ee18c7d05",
+          "bytes": 132944,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Dynamic.Runtime.dll",
+          "sha256": "5d14e94876139eb7c6e6743562fb3d57b89fb097eacbc9bff346de1add737963",
+          "bytes": 16168,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Formats.Asn1.dll",
+          "sha256": "b556931e2272188fc4b866ae01209adb9800035ce04e97fd107909a350d403eb",
+          "bytes": 243496,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Formats.Tar.dll",
+          "sha256": "aaf83afebd545ca9ba0b29004179f9cfb33ff66685dde3f3431bd33c88c66649",
+          "bytes": 276304,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Globalization.Calendars.dll",
+          "sha256": "228d77b425a2aaaf8573f2acdd54ddd83ab5fabb7b34a0015a93a27b2d3365c2",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Globalization.dll",
+          "sha256": "d4e83506801bb10e7728b8596a1504cf3f2574aea608ce50697289176ee3773e",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Globalization.Extensions.dll",
+          "sha256": "104e16b939fc66a23c6ab029c3bb296eaee5e5be0c5c32658dcf72a1cc3d87da",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.Compression.Brotli.dll",
+          "sha256": "b81ed1f2227cc603e3dabf9ece94d707d8590981f6a1861d2c2ab17e85a97017",
+          "bytes": 83752,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.Compression.dll",
+          "sha256": "7412d41de507d170825bd5a01b9c97322568826676b38da56ca908eb29d3fa75",
+          "bytes": 263976,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.Compression.FileSystem.dll",
+          "sha256": "c9a7e402c148e5b1675242739f605735755c8a64d1adb73cee7ed9c3f82e2261",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.Compression.Native.dll",
+          "sha256": "d8affb69476e2ed41b42d9d954f2478b62ae39f052d7e95bb8482ee4b312ed68",
+          "bytes": 828712,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.Compression.ZipFile.dll",
+          "sha256": "a661c7a32e521144d9c7fe48f65efee31dec593b4b36fc780bc88914fa0206c1",
+          "bytes": 55080,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.dll",
+          "sha256": "6831f01ac858d48c0bfb811618de97ac562395609ccf8e6de29cd9ccb91bbc88",
+          "bytes": 15696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.FileSystem.AccessControl.dll",
+          "sha256": "52ffd727bcef528c33c80e56d8b0c1f333da305ffd89f68c82ec3c1671767fcd",
+          "bytes": 104232,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.FileSystem.dll",
+          "sha256": "efe4f834e06f9b132fa1346ffb1fe7863a545f626c6c83217a6b26a30431c2f4",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.FileSystem.DriveInfo.dll",
+          "sha256": "c95ed9c991eb8ed8e77480e176921d67989bf605b2b157e43c9d38bce64a5964",
+          "bytes": 55080,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.FileSystem.Primitives.dll",
+          "sha256": "e4c0a2bef16acabe4e23e29f81e32178cc762b132188cf5622ee5d165b0266e0",
+          "bytes": 15184,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.FileSystem.Watcher.dll",
+          "sha256": "3ef17d11f598bf64a0e6149bc67ec4c4ec5c7de1cd84448843a1c6d1edeb661b",
+          "bytes": 87848,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.IsolatedStorage.dll",
+          "sha256": "e56276305e3e327dfc62fa167d9edb40b39f248ea1d8c113a16ac02d047ddf34",
+          "bytes": 91944,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.MemoryMappedFiles.dll",
+          "sha256": "32297fc204b5427336017e7addd4e2273a01219622fa9a77ca2de00cd2e6e82f",
+          "bytes": 83752,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.Pipes.AccessControl.dll",
+          "sha256": "124b7cba6f07bc2ed25b792447ace1f66fd84ffde61286fabb77cd699e6534f4",
+          "bytes": 16168,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.Pipes.dll",
+          "sha256": "cb54098e26a320593ccd9d42749ca0a80cb17fd4d2a11414d4a433ed45cccb8a",
+          "bytes": 165672,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.IO.UnmanagedMemoryStream.dll",
+          "sha256": "224e249f692f49280627c74da33aebebfc02386bc43e242bce29bffe022f6f82",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Linq.dll",
+          "sha256": "1b81642c1ee4f21ebbb57213c14e50df59aabcd7bf91de2eebdf4c0d9f32845b",
+          "bytes": 542544,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Linq.Expressions.dll",
+          "sha256": "4ac5e32afad15a081a34c24d438373d9160c088fdafad2705e520328b3b62acb",
+          "bytes": 3675984,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Linq.Parallel.dll",
+          "sha256": "493f9578819d926dc9d6fe45e36225ab971b9cedd3e1fc1bb8f4eb3c1032b2b4",
+          "bytes": 804688,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Linq.Queryable.dll",
+          "sha256": "e1479860bee972bdcbd2808a7e95965b75301afa659e0099098caceee1c78877",
+          "bytes": 173864,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Memory.dll",
+          "sha256": "4d6fe7d23c06b4e81748d83a1314218f31bb1e4ce9b6d1ebc7ba8a78a342833c",
+          "bytes": 157520,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.dll",
+          "sha256": "8a7111b2baaeb5f17996432343b5b082b909d553ce62ab4e8b66de607b340cb8",
+          "bytes": 17192,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Http.dll",
+          "sha256": "8a7638d615e37d1b271c526979ee36b56c1b56193a33f5929dbeb29d1fa6d6e5",
+          "bytes": 1730344,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Http.Json.dll",
+          "sha256": "0df5d295bda269878ed2d10d88b375d3c9eefbbf1769727bfa242a15dcb1eeb0",
+          "bytes": 128808,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.HttpListener.dll",
+          "sha256": "2b628ef109766c39099cfe346d7a276f0fdc16302d5da71629b439ba1fe6ecf6",
+          "bytes": 550696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Mail.dll",
+          "sha256": "445c14d839a9fcaac8a736a326340398d2498f8a3d9544ef4ebbd1d931083040",
+          "bytes": 431912,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.NameResolution.dll",
+          "sha256": "53a3215b359e108f0315e81e4a1c4d9981d5bd3e1adc3891f598dcfd7e4609dc",
+          "bytes": 112464,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.NetworkInformation.dll",
+          "sha256": "8cb2de92583203abf13ab4cbc3a5c65a9b4140b84cf43c22442850c28936f94e",
+          "bytes": 157480,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Ping.dll",
+          "sha256": "414f854ee4fc1b5b099869d6921e14df60a33dc3ea3b904b0ccf253ca7776fa9",
+          "bytes": 96040,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Primitives.dll",
+          "sha256": "ffb439ee971575c80749639eaa2593194de95dfc18eaaaa4011df9a39fb64181",
+          "bytes": 231248,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Quic.dll",
+          "sha256": "2000e89f1efa326911367f24a23068c25c3e22d53f46d104202f2da0eebfb31c",
+          "bytes": 284456,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Requests.dll",
+          "sha256": "3b0fa705aa4a3423ecc56b44fe74ebaf0b9b255aa5974c665113b19fb47edd6a",
+          "bytes": 345896,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Security.dll",
+          "sha256": "4f471c45207ae53ad01cb0d16798c0cd94fb29a8253989da8c2f771e6db5e7b0",
+          "bytes": 669480,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.ServicePoint.dll",
+          "sha256": "101c378d8c485037ce88f0483b2211e00a02c9733248ea4bc7a744b20f16f286",
+          "bytes": 46888,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.Sockets.dll",
+          "sha256": "096c5ca2b8868c50991f183f0cbf8b32326cbf197f9a6cebe132c5ab63513d24",
+          "bytes": 546600,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.WebClient.dll",
+          "sha256": "bd7f9573782982e9bbc797f2995ce26d5c43553b65f596bec459bfd87a80459e",
+          "bytes": 169768,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.WebHeaderCollection.dll",
+          "sha256": "ed63da038fe92fdc9f606f9a4e11a55c0173916f9bc0cf678b990f7ea6c30665",
+          "bytes": 67368,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.WebProxy.dll",
+          "sha256": "c8222a70a4b2ac73fd5df28c8c4ad64360b41cf3f9cfb640dafe118e1f9bca56",
+          "bytes": 42792,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.WebSockets.Client.dll",
+          "sha256": "d400f77af433afd3e0c02ded8835a390edc86e59803bf72fcebc69be68f5f730",
+          "bytes": 100136,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Net.WebSockets.dll",
+          "sha256": "4a99629247a2eac2ce2a8efa7b06e6bba0a2e871ecbf22117a47651679123ad2",
+          "bytes": 190248,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Numerics.dll",
+          "sha256": "38d649ccf88525912fb52b950514587334e44cf87d14bb6e562feda04c8aaf71",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Numerics.Vectors.dll",
+          "sha256": "71ad0892846b23aa85f088a9f3390574ed9e1550c3bed0a834332218aadf7a5d",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ObjectModel.dll",
+          "sha256": "015061c7fea90ceaaabe2669db8b8110249295e19a6a571363c8a581ad9ba7dd",
+          "bytes": 79696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Private.CoreLib.dll",
+          "sha256": "7f48a9493a1d9f6c64a51c3ec357cf8534874ea62240a54c2a1570a5913148a4",
+          "bytes": 13174608,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Private.DataContractSerialization.dll",
+          "sha256": "e5116b63222cc04d7a485d344fd52ce759948ce7ce9f11f90ecd99defc0faf2a",
+          "bytes": 2082600,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Private.Uri.dll",
+          "sha256": "7ce81174fdba93a1e12c596ea3e1ad4bcc9e798710292e1629cbe827ee34458b",
+          "bytes": 259880,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Private.Xml.dll",
+          "sha256": "9f4783f9f82217dc44aae218a5d203b314313305b64ec97a0f8caf4fc53e7d86",
+          "bytes": 7997224,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Private.Xml.Linq.dll",
+          "sha256": "3dfc8c3f32e242ee23a7d7c97a13c5e798248d1aec2212da8291be9898ff82f3",
+          "bytes": 403240,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.DispatchProxy.dll",
+          "sha256": "35d3f0a768434a0fb204e6157768aad21cb0ebdde46f8cda51faa18042a2adde",
+          "bytes": 75560,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.dll",
+          "sha256": "852e28c648500d37a47626f301b86ca48ed466a4106dcc6c15a162591a1dd136",
+          "bytes": 16168,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.Emit.dll",
+          "sha256": "71222005e717ca62691dd223965787338a6487fe832542a37015699735af1051",
+          "bytes": 128808,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.Emit.ILGeneration.dll",
+          "sha256": "a35717fa63d70940fe0e06f9fc06a695b08882dac2d241c40545da9d0b313420",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.Emit.Lightweight.dll",
+          "sha256": "6171cd637066658b9e4efca7c4346df7c3089d2aaa3aae0c1d3a80fcad4ae1a5",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.Extensions.dll",
+          "sha256": "9af49aa85ed80f0824661d52ee5e3793e995708f1368b0f7608c630e3ac05281",
+          "bytes": 15184,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.Metadata.dll",
+          "sha256": "43a726a2f631336922982352f7691cb4aa14224c8ba8805f88f3d0868d97a10f",
+          "bytes": 1115944,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.Primitives.dll",
+          "sha256": "c3b10d98770effd8cc6fac02a79f3de7e911b96904d8f5809c9c77d0b8664c8b",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Reflection.TypeExtensions.dll",
+          "sha256": "55383ffe633bb6ec9a69db0256c60fd1d8739484209aca71b6828434489651aa",
+          "bytes": 42792,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Resources.Reader.dll",
+          "sha256": "57482053896b74ff4a6b6ca788da485918e3c7697ae06b1499c94025ef1ab995",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Resources.ResourceManager.dll",
+          "sha256": "606f989bf9bcdc082db5b3c75f43ead0e3aebcde9d79facfab6bc4a1dbb08958",
+          "bytes": 15696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Resources.Writer.dll",
+          "sha256": "5eec6811dbc64d91c6581c878acb7bd6ad8d66aa570fdacdd6b2ac60020c1e01",
+          "bytes": 50984,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.CompilerServices.Unsafe.dll",
+          "sha256": "e2a149f4d74e6b2156549e44747f5b47be0053eb32a8ec2c2ea2a03c21cdccb7",
+          "bytes": 15184,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.CompilerServices.VisualC.dll",
+          "sha256": "1e0d66e081a78b06ef7a9597c8f6926181c417d006059b04a43b48352edd3f2b",
+          "bytes": 30544,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.dll",
+          "sha256": "1b56f3da3567ff55f013332ae17796ac6cd067018878d8f322f8425b04b70720",
+          "bytes": 43304,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Extensions.dll",
+          "sha256": "57152f7af36bfa9ab33719b25d11940992cf4261edb6ba73fbd24c15e2f3e75b",
+          "bytes": 17744,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Handles.dll",
+          "sha256": "e36b1642d7fde463a1bdbf02d58c4b1636ba90dd40436c081d5d037ec0aeb4ac",
+          "bytes": 15184,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.InteropServices.dll",
+          "sha256": "74a2dd12e1c0f3d9aca3f11e160a1de7a5bd4447ed8be3071377217a516f6874",
+          "bytes": 96080,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.InteropServices.JavaScript.dll",
+          "sha256": "446f1747e8fce35892fe616222329fe59822bc910912a2759549c6fee0899441",
+          "bytes": 51024,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.InteropServices.RuntimeInformation.dll",
+          "sha256": "929732124e6389902baff9d7847560f214272aee487b807748c567e308c81837",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Intrinsics.dll",
+          "sha256": "941b2c84ec076462c6f9bfc53e72667d1a7b839ce12ee42762147cf063a4adfc",
+          "bytes": 16680,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Loader.dll",
+          "sha256": "aaa8559ac0ed0c1c30eae09fd53bb8fe8eb50dfbd090d24c5e2428e4a9e59369",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Numerics.dll",
+          "sha256": "4b8751339f236a7650409364909230bc47da18e84faba4e54e4c3a6ce660b324",
+          "bytes": 329512,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Serialization.dll",
+          "sha256": "c4ee882d228cff020a9f3942b673f25a16232751e6daa218a12c639d4414afa7",
+          "bytes": 16680,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Serialization.Formatters.dll",
+          "sha256": "f965df62cc86231c932be620c1626d9da2884ae356091ef9502654c79393c5a9",
+          "bytes": 309072,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Serialization.Json.dll",
+          "sha256": "a243048643743c28983379cb85bf771a25fe49a1e706c461c4edeaa2f4274b4c",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Serialization.Primitives.dll",
+          "sha256": "93068e07a64ee6933eabb5e2493f24de4de56ab047059b380ffb309be78cf0d6",
+          "bytes": 38696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Runtime.Serialization.Xml.dll",
+          "sha256": "f19419ba2e357188e97cc13a9992435c654fc4c1f2e1814b3fa9b1e4d9cdbee0",
+          "bytes": 16720,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.AccessControl.dll",
+          "sha256": "799ca7586a9a0ffd86fec506c43f40ee3ed16e96f71dcfeaac5fdf46dfc10308",
+          "bytes": 231208,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Claims.dll",
+          "sha256": "20dbae23f8943877ef1b9890bc2d6ae3a2716fbb32e26eb124ad435e9e534737",
+          "bytes": 100136,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.Algorithms.dll",
+          "sha256": "49b6af32f16b17ca6dfc04cc94ff619eebecdfff45c4326501d6ce037bebeeab",
+          "bytes": 17192,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.Cng.dll",
+          "sha256": "1ad6a6db66a506472f284d6cad17034f9968a9041cc511104e67aae195801135",
+          "bytes": 16208,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.Csp.dll",
+          "sha256": "48b1588f7c855fbc9bfed721a6a147d69a25aaa3cc47a9537d3ef6695af83c59",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.dll",
+          "sha256": "a998a46e2379d65412d54bb6f55e0eb5f16c3d856228882311f011c870c668b4",
+          "bytes": 2049832,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.Encoding.dll",
+          "sha256": "36e54b8feee5d0f045a3b1ecb3de1e1f83a9fa380f27bcfc081fee74354d64fd",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.OpenSsl.dll",
+          "sha256": "5ffa779dc744a872f91b2bfcc9355457d812291aacdd912fed445fb477742852",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.Primitives.dll",
+          "sha256": "58d863b9cd93a6ac5da1243cd234bd1a11073326e4efdc6914fdbc003eb8cc65",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Cryptography.X509Certificates.dll",
+          "sha256": "a158300061936820a672609057d8195e79dc82713e3b4614c9996014c5df45d7",
+          "bytes": 16720,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.dll",
+          "sha256": "fb8b75ecb5a673d2b377461f25bedc9f9669bd41d59123220ef5dcd2f0c5d700",
+          "bytes": 18256,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Principal.dll",
+          "sha256": "71b3f78dc069370f6226b241aab927cee726e10c6ed549d284831a208dc293b7",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.Principal.Windows.dll",
+          "sha256": "37858ee4c9cc2d07c175d379321d86851e3e89f2278593153cd12f5e33c6655b",
+          "bytes": 186192,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Security.SecureString.dll",
+          "sha256": "9a46806c81d158205f3801fb74c8dc5cb34509e1b7f3f6b1e75668545340e929",
+          "bytes": 15184,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ServiceModel.Web.dll",
+          "sha256": "44064266276caff2c687efaa36145c1009cfb7c5ec1e3b0ffa1edb3b879d434c",
+          "bytes": 16680,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ServiceProcess.dll",
+          "sha256": "e2feae7bbb12e5c12c3b5f62b61cd09bdf8a7e82aa113e13a02015e7455b1dfc",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Text.Encoding.CodePages.dll",
+          "sha256": "f56854238478325c8e5fc15aa355dde581c697cc0edf1a0d396d7973c86a515a",
+          "bytes": 862032,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Text.Encoding.dll",
+          "sha256": "4dd24836a9c6deb7854b829480c9ffc90440d4eab56a3c47c86ad2b630fc9518",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Text.Encoding.Extensions.dll",
+          "sha256": "e35568fcbddd90781f904f5bbb8d925a35f509c7e1ce626d24e7d43ea6ad2c0a",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Text.Encodings.Web.dll",
+          "sha256": "a6bc1ad954c3213bba9b0e27a3aaae8321adfa0642ec679bf4452f7819c8ad54",
+          "bytes": 132904,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Text.Json.dll",
+          "sha256": "a5deaf26b38846d1f6e904faf4fc6ce50958b1ffb6369f4505e9f6dfc2b37fe2",
+          "bytes": 1500968,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Text.RegularExpressions.dll",
+          "sha256": "6989d5ed58e0c9a7c0f1208496f10607240d4af91886026e661ffa879288e617",
+          "bytes": 1021776,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Channels.dll",
+          "sha256": "96c14e88df23b56fea9bb23d220cbaaf9eb28dc0fd36b573dd68c0fa2c029dda",
+          "bytes": 132904,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.dll",
+          "sha256": "76900e5c96b72e6e74477a90897f86c9f8b78eb2169010298cd4aecec5466ae3",
+          "bytes": 83752,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Overlapped.dll",
+          "sha256": "1caef0a14790f5782c07b18a9d989e86da9d976910461c0ce161680a6fbbbedf",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Tasks.Dataflow.dll",
+          "sha256": "d1c57f9da84fe2e26f62937695fb493eb3a88c30f38dca8e73f0c025ace1f6ca",
+          "bytes": 489256,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Tasks.dll",
+          "sha256": "a7d6e33ddb5fcefe0c812ffe18013bd57ce2cdc19145fd66826d0a6a5144b7af",
+          "bytes": 16680,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Tasks.Extensions.dll",
+          "sha256": "f798ed147b1b2970a07027f388d885e0cb6490d39360500828e96359bd7ee4d2",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Tasks.Parallel.dll",
+          "sha256": "8b44c1f8073e152578f808ed3dc5fc2661767cfd204e47145e43f541da078641",
+          "bytes": 132944,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Thread.dll",
+          "sha256": "565346c61faca21110027638e7af298e0162d587afc3f5bdcb993c80922a1cf0",
+          "bytes": 15696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.ThreadPool.dll",
+          "sha256": "58083250cbbd5d66d7917c1135e65edc5480024a8411ae05cf56f7e9435115ba",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Threading.Timer.dll",
+          "sha256": "4ec9cee7f8051afc436a6a2ead119da234ad313fa44d57c8cbb77e2df5fd5226",
+          "bytes": 15144,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Transactions.dll",
+          "sha256": "9f4aa9799508b7f745dfe6f8c0657527009fa340788033bdd2419c2c240c018d",
+          "bytes": 16168,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Transactions.Local.dll",
+          "sha256": "92d894a79642d9d6acba0b2fb16d2633b6c1892a63475d93910ccc866c302375",
+          "bytes": 661328,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.ValueTuple.dll",
+          "sha256": "a8a237be5654024d968915d4153893ffd89ef738f323ee71808cff3fa13314dc",
+          "bytes": 15184,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Web.dll",
+          "sha256": "c0eff58ef750d856fdd2bcb9667d6c8554b686afc7dfde63507d8ee3686db4d5",
+          "bytes": 15184,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Web.HttpUtility.dll",
+          "sha256": "893edade6796fb65f2d7de2d262b08fdee2dadeed7cda4a25da8be1a022180bd",
+          "bytes": 59176,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Windows.dll",
+          "sha256": "bef65b7cad1cdb87787dd1b8f4a7959ec85119e25b06c921f2cf2f000daf7f07",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.dll",
+          "sha256": "31c2211fde0425fb8ab8c3680bd80cf4af9af4dbceae9c69dfc0f8ca2aa283ce",
+          "bytes": 23376,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.Linq.dll",
+          "sha256": "261bde32f07223e25b62f38bf8735379007fb6d66d07c275b491ae8595e56dd3",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.ReaderWriter.dll",
+          "sha256": "32151d8d938eb388a6a0abc05ab955430f21aba92e960bdb6e5c6029a45d2f34",
+          "bytes": 21800,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.Serialization.dll",
+          "sha256": "5dceea1662d1e3e5ac651c59006d1b873f48b2f9670080848951ab5ede4ab7f2",
+          "bytes": 16208,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.XDocument.dll",
+          "sha256": "d6f34c5ea1bbcc6b136110bf477d11d86d8220658996e321d36ce51a35bff159",
+          "bytes": 15696,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.XmlDocument.dll",
+          "sha256": "35e720eff597c3a80be4efc59d05da3cb04fd6518e6f29c349cd8e7ba6264018",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.XmlSerializer.dll",
+          "sha256": "4451557f85bb30ca5f5327eaae3fe678dca0c781e5b3bfc07da8f753e2d0487d",
+          "bytes": 17704,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.XPath.dll",
+          "sha256": "e7df135b986325852cd542450e322ce7aa403b61c3b2ff0521ba4354646afcfa",
+          "bytes": 15656,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/System.Xml.XPath.XDocument.dll",
+          "sha256": "4b0d8142f4855327f4875cb312954109c297d752503b5c688fa94637dc4946eb",
+          "bytes": 30504,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "tools/PhyreMapExportLab/WindowsBase.dll",
+          "sha256": "36aa643a6f987b90a6110f46f592be3e8dbed6dc60ccddccde76accf23cabee8",
+          "bytes": 16168,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "webview2-sdk-runtime",
+      "consumer": "Embedded ViewerShell",
+      "classification": "IN_PROCESS_BUNDLED",
+      "executionModel": "in-process",
+      "provenance": "Microsoft WebView2 SDK loader and managed core.",
+      "payloadFileNames": [
+        "Microsoft.Web.WebView2.Core.dll",
+        "WebView2Loader.dll"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "Microsoft.Web.WebView2.Core.dll",
+          "sha256": "958efdb7f13a6d1f3079756c96956cc96cf713ae46fa085c8b1e7f44316a4f7e",
+          "bytes": 698208,
+          "kind": "managed",
+          "arch": "managed-any",
+          "target": "win-x64"
+        },
+        {
+          "path": "WebView2Loader.dll",
+          "sha256": "a9a09232c25805323d4cfb3fc8f545a190a9c8a99c93262ea99d0b88df99ec90",
+          "bytes": 164704,
+          "kind": "native",
+          "arch": "x64",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "webview2-offline-installer",
+      "consumer": "Offline WebView2 prerequisite repair",
+      "classification": "BUNDLED_REDISTRIBUTION_PROVEN",
+      "executionModel": "child-process",
+      "provenance": "Official Microsoft Authenticode-signed installer.",
+      "payloadGlobs": [
+        "prerequisites/webview2/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "prerequisites/webview2/MicrosoftEdgeWebView2RuntimeInstallerX64.exe",
+          "sha256": "82b2d8a7013e0c0ea15d48ff4742ee3778ba16bd8b7b4a47876645b3e48d4016",
+          "bytes": 212949712,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "vcpp2013-x64-installer",
+      "consumer": "Keystone VC++ runtime prerequisite",
+      "classification": "BUNDLED_REDISTRIBUTION_PROVEN",
+      "executionModel": "child-process",
+      "provenance": "Official Microsoft Authenticode-signed installer.",
+      "payloadGlobs": [
+        "prerequisites/vc2013/**"
+      ],
+      "approvedPayloads": [
+        {
+          "path": "prerequisites/vc2013/vcredist_x64.exe",
+          "sha256": "a4bba7701e355ae29c403431f871a537897c363e215cafe706615e270984f17c",
+          "bytes": 7200744,
+          "kind": "native",
+          "arch": "x86",
+          "target": "win-x64"
+        }
+      ]
+    },
+    {
+      "id": "vbfextract",
+      "consumer": "Optional archive extraction",
+      "classification": "BLOCKED",
+      "payloadFileNames": [
+        "VBFExtract.exe"
+      ],
+      "payloadGlobs": [
+        "tools/vbfextract/**"
+      ],
+      "provenance": "Not shipped; user-provided extraction or clean-room alternatives only."
+    },
+    {
+      "id": "node-runtime",
+      "consumer": "Build tooling only",
+      "classification": "BUILD_ONLY",
+      "payloadGlobs": [
+        "tools/node/**"
+      ]
+    },
+    {
+      "id": "python-runtime",
+      "consumer": "Development tooling only",
+      "classification": "DEV_ONLY",
+      "payloadGlobs": [
+        "tools/python/**"
+      ]
+    }
+  ],
+  "denyByDefault": [
+    "vbfextract",
+    "node-runtime",
+    "python-runtime",
+    "noesis",
+    "FMOD SDK"
+  ],
+  "pendingFullClosure": false
+}

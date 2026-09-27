@@ -1,0 +1,6 @@
+# Fixed boss → preset when infected. Empty until Macalania boss bake pass.
+# monster_id,preset_id,note
+m126,BOSS-GUADO-001,Guado archer — Macalania Woods
+m130,BOSS-GUADO-001,Guado mage — Macalania Woods
+m124,BOSS-SEYMOUR-001,Seymour — Macalania Temple
+m131,BOSS-SEYMOUR-FLUX-001,Seymour Flux — Mt. Gagazet

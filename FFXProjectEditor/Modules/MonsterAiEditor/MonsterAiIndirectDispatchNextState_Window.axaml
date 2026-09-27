@@ -1,0 +1,134 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="760"
+        d:DesignHeight="500"
+        x:Class="FFXProjectEditor.MonsterAiIndirectDispatchNextState_Window"
+        Title="{x:Static res:Strings.U_WinNextStateEditor}"
+        Width="760"
+        Height="500"
+        MinWidth="640"
+        MinHeight="420">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,*,Auto">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_ai_proximo_passo_da_rota_c9e06b4b}" />
+					<TextBlock Classes="cardTitle" Text="{Binding UnitTitle}" />
+					<TextBlock Classes="muted" Text="{Binding HookSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Margin="0,14,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="12">
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7"
+					        IsVisible="{Binding HasFocusedContext}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonFocusFromV2}"
+							           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<TextBlock Text="{Binding FocusedContextSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentCycleFillBrush}"
+					        BorderBrush="{DynamicResource AccentCycleBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="8">
+							<Border Padding="7,2"
+							        Background="{DynamicResource AccentGoldFillBrush}"
+							        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+							        BorderThickness="1"
+							        CornerRadius="5"
+							        HorizontalAlignment="Left"
+							        IsVisible="{Binding IsNextStateFocused}">
+								<TextBlock FontSize="11" FontWeight="SemiBold" Text="{x:Static res:Strings.CommonFocus}" />
+							</Border>
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_proximo_passo_desta_rota_638cef74}"
+							           Foreground="{DynamicResource AccentCycleBorderBrush}" />
+							<TextBlock TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_este_popup_mexe_so_no_literal_ushort_que_encadei_36eb8f5e}" />
+							<Grid ColumnDefinitions="Auto,160,*">
+								<TextBlock Classes="sectionLabel"
+								           Text="{x:Static res:Strings.CommonNextState}"
+								           VerticalAlignment="Center"
+								           Foreground="{DynamicResource AccentCycleBorderBrush}" />
+								<TextBox Grid.Column="1"
+								         Margin="10,0,0,0"
+								         Text="{Binding NextStateText, Mode=TwoWay}"
+								         FontFamily="Cascadia Mono,Consolas,Monospace" />
+								<TextBlock Grid.Column="2"
+								           Margin="12,0,0,0"
+								           Classes="muted"
+								           VerticalAlignment="Center"
+								           Text="{x:Static res:Strings.U_valor_literal_gravado_no_write_final_da_rota_0deb852d}" />
+							</Grid>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentShellFillBrush}"
+					        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="7">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonPreviewApply}"
+							           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBox Text="{Binding PreviewSummary}"
+							         IsReadOnly="True"
+							         AcceptsReturn="True"
+							         TextWrapping="Wrap"
+							         MinHeight="110"
+							         FontFamily="Cascadia Mono,Consolas,Monospace" />
+						</StackPanel>
+					</Border>
+
+					<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding StatusSummary}" />
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+		<Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="*,Auto,Auto">
+			<TextBlock Classes="muted"
+			           VerticalAlignment="Center"
+			           Text="{x:Static res:Strings.U_troca_rapida_de_proximo_passo_so_fecha_o_encadea_6bc0c738}" />
+			<Button Grid.Column="1"
+			        Margin="12,0,8,0"
+			        Classes="secondaryAction accentProtect"
+			        Click="Button_Apply"
+			        IsEnabled="{Binding HasChanges}"
+			        Content="{x:Static res:Strings.U_aplicar_proximo_passo_f9fd08c2}" />
+			<Button Grid.Column="2"
+			        Classes="secondaryAction"
+			        Click="Button_Close"
+			        Content="{x:Static res:Strings.CommonClose}" />
+		</Grid>
+	</Grid>
+</Window>

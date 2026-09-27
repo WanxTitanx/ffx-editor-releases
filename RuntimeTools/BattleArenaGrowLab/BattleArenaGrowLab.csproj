@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>BattleArenaGrowLab</AssemblyName>
+    <RootNamespace>BattleArenaGrowLab</RootNamespace>
+  </PropertyGroup>
+
+  <!-- 🌅 Aurora structural GROW gate — links the REAL reader + writers (no reimplementation), all dependency-free. -->
+  <!-- i18n (v2.234.3.0): linked FfxLib sources use FFXProjectEditor.Resources (Strings); ship the
+       generated accessor + neutral resx so the links compile with identical lookups. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Resources\Strings.cs" Link="Strings.cs" />
+    <EmbeddedResource Include="..\..\FFXProjectEditor\Resources\Strings.resx" LogicalName="FFXProjectEditor.Resources.Strings.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaAnchors_File.cs" Link="BattleArenaAnchors_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaPositionWriter.cs" Link="BattleArenaPositionWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaGrowWriter.cs" Link="BattleArenaGrowWriter.cs" />
+    <!-- author orchestrator (add/remove monster = chunk3 grow + chunk2 formation slot) + its deps. -->
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\BattleMap\BattleArenaAuthor.cs" Link="BattleArenaAuthor.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\Battle_File.cs" Link="Battle_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Dictionaries\Monster_Dictionary.cs" Link="Monster_Dictionary.cs" />
+  </ItemGroup>
+</Project>

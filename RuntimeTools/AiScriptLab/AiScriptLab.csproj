@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>AiScriptLab</AssemblyName>
+    <RootNamespace>AiScriptLab</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Test the REAL production codec + AI Assembler surface (no reimplementation): link the dependency-free
+       FfxLib/Ai files and the two command dictionaries AiCommandId reads. -->
+  <!-- The i18n migration (v2.234.3.0) added `using FFXProjectEditor.Resources` (Strings) to the linked
+       FfxLib sources; ship the generated accessor + neutral resx so the linked files compile and the
+       Strings lookups resolve exactly as they do inside the editor. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Resources\Strings.cs" Link="Strings.cs" />
+    <EmbeddedResource Include="..\..\FFXProjectEditor\Resources\Strings.resx" LogicalName="FFXProjectEditor.Resources.Strings.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Resources\Strings.cs" Link="Resources\Strings.cs" />
+    <EmbeddedResource Include="..\..\FFXProjectEditor\Resources\Strings.resx" LogicalName="FFXProjectEditor.Resources.Strings.resources" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiScript_File.cs" Link="AiScript_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiScript_Diff.cs" Link="AiScript_Diff.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiPatchGuard.cs" Link="AiPatchGuard.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiValidator.cs" Link="AiValidator.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiStackModel.cs" Link="AiStackModel.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiCommandId.cs" Link="AiCommandId.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiSnippetLibrary.cs" Link="AiSnippetLibrary.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.cs" Link="AiAutomation.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.BattleCallReader.cs" Link="AiAutomation.BattleCallReader.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.AbilityBuilders.cs" Link="AiAutomation.AbilityBuilders.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.UnitBuilders.cs" Link="AiAutomation.UnitBuilders.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.EditableSlots.cs" Link="AiAutomation.EditableSlots.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.Detection.cs" Link="AiAutomation.Detection.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.ActionEditing.cs" Link="AiAutomation.ActionEditing.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAutomation.IndirectDispatchStructuralWriter.cs" Link="AiAutomation.IndirectDispatchStructuralWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiComplexFamilyAuthoringPromotion.cs" Link="AiComplexFamilyAuthoringPromotion.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiFluxNativeThresholdWriter.cs" Link="AiFluxNativeThresholdWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiRoundScriptedBossWriter.cs" Link="AiRoundScriptedBossWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiAnimaOdThresholdWriter.cs" Link="AiAnimaOdThresholdWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiNativeConditionWriter.cs" Link="AiNativeConditionWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiDirectCommandSites.cs" Link="AiDirectCommandSites.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiOmnisClusterWriter.cs" Link="AiOmnisClusterWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMortibodySupportAccumulatorWriter.cs" Link="AiMortibodySupportAccumulatorWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMortiorchisCompanionWriter.cs" Link="AiMortiorchisCompanionWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiReactiveSensorWriter.cs" Link="AiReactiveSensorWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiIndirectDispatchRowOnlyEditor.cs" Link="AiIndirectDispatchRowOnlyEditor.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiTargetRecipeWriter.cs" Link="AiTargetRecipeWriter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiCallNameCatalog.cs" Link="AiCallNameCatalog.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AtelScript\AtelAst.cs" Link="AtelScript\AtelAst.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AtelScript\AtelLexer.cs" Link="AtelScript\AtelLexer.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AtelScript\AtelParser.cs" Link="AtelScript\AtelParser.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AtelScript\AtelEmitter.cs" Link="AtelScript\AtelEmitter.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AtelScript\AtelProgramCompiler.cs" Link="AtelScript\AtelProgramCompiler.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiVarConditionBuilder.cs" Link="AiVarConditionBuilder.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiPhaseRotationRecipe.cs" Link="AiPhaseRotationRecipe.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiWorkerMapping.cs" Link="AiWorkerMapping.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiCommandLabels.cs" Link="AiCommandLabels.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiChrPropertyNames.cs" Link="AiChrPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMotionPropertyNames.cs" Link="AiMotionPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMovePropertyNames.cs" Link="AiMovePropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiSaveDataVariableNames.cs" Link="AiSaveDataVariableNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiTargetNames.cs" Link="AiTargetNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Dictionaries\CommandCharacter_Dictionary.cs" Link="CommandCharacter_Dictionary.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Dictionaries\CommandMonster1_Dictionary.cs" Link="CommandMonster1_Dictionary.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Dictionaries\CommandMonster2_Dictionary.cs" Link="CommandMonster2_Dictionary.cs" />
+  </ItemGroup>
+</Project>

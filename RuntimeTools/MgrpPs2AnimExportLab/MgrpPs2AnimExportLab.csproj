@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    MgrpPs2AnimExportLab — read-only RE lab tool.
+    Exports an ANIMATED glTF from a FFX PS2 `.mgrp` body-motion clip (+ sibling `.chr` for bone count).
+    The keyframe codec is decoded faithfully from the FFX HD native reimplementation (FFX.exe):
+      FFX_Mseq_InitChannelTracks (0x839A00), FFX_Mseq_EvaluateKeyedChannelsAtFrame (0x839440),
+      FFX_Mseq_WriteSampledTransformChannels (0x838300), FFX_Mseq_AdvanceKeyedChannelCursors (0x839550).
+    Model: per record -> group; group.ptrB = a self-describing sub-clip:
+      [u16 frameCount][u16 targetCount][u16 7680][u16 v5][u32 modeOff][u32 valueOff].
+      9 channels per target, order [rotX,rotY,rotZ, transX,transY,transZ, scaleX,scaleY,scaleZ].
+      2-bit modes: 0=const0, 1=const1, 2=static s16, 3=keyed delta-RLE [u16 byteLen][stream].
+      dequant: rot = wrap(2*pi*v); trans = v*instScale*4096; scale = v   (v = sample/4096).
+    Skeleton here is MOTION-DERIVED (one node per animated target). The real `.chr` bind-pose
+    hierarchy + channel->bone remap are a labeled refinement (research-only, see docs).
+    No game files are modified. Validated in F3D 3.5.0.
+    Usage: MgrpPs2AnimExportLab in.mgrp out.gltf [flags: chr, record, group, fps, trans-scale]
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>MgrpPs2AnimExportLab</AssemblyName>
+    <RootNamespace>MgrpPs2AnimExportLab</RootNamespace>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,650 @@
+:root {
+  color-scheme: dark;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #161a1d;
+  color: #eef3f0;
+  --panel: #20262a;
+  --panel-2: #252d31;
+  --line: #39444a;
+  --muted: #aab6b0;
+  --accent: #56b8a8;
+  --accent-2: #d9a441;
+  --danger: #e07162;
+  --ok: #72c57f;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  border: 1px solid var(--line);
+  background: #2b3338;
+  color: #eef3f0;
+  border-radius: 6px;
+  min-height: 34px;
+  padding: 0 11px;
+  cursor: pointer;
+}
+
+button:hover {
+  border-color: var(--accent);
+}
+
+button[aria-pressed="true"],
+.assetButton.active,
+.mapButton.active {
+  background: rgba(86, 184, 168, 0.18);
+  border-color: var(--accent);
+}
+
+.appShell {
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(250px, 310px) minmax(420px, 1fr) minmax(250px, 320px);
+}
+
+.sidePanel,
+.detailPanel {
+  min-width: 0;
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  overflow: auto;
+}
+
+.detailPanel {
+  border-right: 0;
+  border-left: 1px solid var(--line);
+  padding: 16px;
+}
+
+.brand {
+  padding: 18px;
+  border-bottom: 1px solid var(--line);
+}
+
+.brand h1 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.brand p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.panelBlock {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+h2 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.mapSearch {
+  width: 100%;
+  min-height: 36px;
+  margin-bottom: 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #171c1f;
+  color: #eef3f0;
+  padding: 0 10px;
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.filterRow label {
+  display: grid;
+  gap: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mapSelect {
+  width: 100%;
+  min-height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #171c1f;
+  color: #eef3f0;
+  padding: 0 8px;
+}
+
+.mapList {
+  max-height: 300px;
+  display: grid;
+  gap: 7px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.assetButton,
+.mapButton {
+  width: 100%;
+  min-height: 54px;
+  display: grid;
+  gap: 4px;
+  text-align: left;
+  align-content: center;
+}
+
+.assetButton span,
+.assetButton strong,
+.mapButton span,
+.mapButton strong {
+  overflow-wrap: anywhere;
+}
+
+.assetButton strong,
+.mapButton strong {
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.assetButton small,
+.mapButton small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.mapButton[disabled] {
+  cursor: default;
+  opacity: 0.74;
+}
+
+.mapButton[disabled] strong {
+  color: var(--danger);
+}
+
+.segmented,
+.gridButtons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.wideButton {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.stackButtons {
+  display: grid;
+  gap: 8px;
+}
+
+.stackButtons .wideButton {
+  margin-top: 0;
+}
+
+.toggleRow,
+.rangeRow {
+  min-height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #dfe8e3;
+}
+
+.rangeRow input {
+  min-width: 0;
+  flex: 1;
+}
+
+.rangeRow output {
+  width: 32px;
+  text-align: right;
+  color: var(--accent);
+}
+
+.statusGrid,
+.metricGrid {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.statusGrid div,
+.metricGrid div {
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel-2);
+}
+
+dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.viewerColumn {
+  min-width: 0;
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 48px minmax(0, 1fr);
+  background: #101315;
+  position: relative;
+}
+
+.topBar {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--line);
+  background: #1b2023;
+}
+
+.topBar > div {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+#currentAsset {
+  overflow-wrap: anywhere;
+}
+
+.badge {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(86, 184, 168, 0.6);
+  color: #b8fff3;
+  background: rgba(86, 184, 168, 0.12);
+  border-radius: 6px;
+  padding: 0 8px;
+  font-size: 12px;
+  overflow-wrap: anywhere;
+}
+
+.keyHints {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.keyHints span {
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 3px 6px;
+}
+
+.viewport {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  outline: none;
+}
+
+.viewport canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.toast {
+  position: absolute;
+  left: 50%;
+  bottom: 18px;
+  transform: translateX(-50%);
+  max-width: min(620px, calc(100vw - 40px));
+  padding: 10px 13px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: rgba(20, 24, 27, 0.9);
+  color: #eef3f0;
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.detailPanel section + section {
+  margin-top: 18px;
+}
+
+.infoText {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.breakdownList {
+  display: grid;
+  gap: 8px;
+}
+
+.breakdownItem {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 9px;
+  background: var(--panel-2);
+  display: grid;
+  gap: 4px;
+}
+
+.breakdownItem[data-tone="ok"] {
+  border-color: rgba(114, 197, 127, 0.45);
+}
+
+.breakdownItem[data-tone="warn"] {
+  border-color: rgba(217, 164, 65, 0.45);
+}
+
+.breakdownItem[data-tone="danger"] {
+  border-color: rgba(224, 113, 98, 0.5);
+}
+
+.breakdownItem[data-tone="muted"] {
+  border-color: rgba(83, 112, 108, 0.45);
+}
+
+.breakdownHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.breakdownHead strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.breakdownCount {
+  color: #eef3f0;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.breakdownNote {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.fileList {
+  display: grid;
+  gap: 8px;
+}
+
+.fileItem {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 9px;
+  background: var(--panel-2);
+}
+
+.fileItem strong,
+.fileItem span {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+.fileItem span {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.debugSelectLabel {
+  display: grid;
+  gap: 6px;
+  margin-bottom: 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.debugFacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.debugTexturePanels {
+  display: grid;
+  gap: 10px;
+}
+
+.debugPanelCard {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 10px;
+  background: var(--panel-2);
+  display: grid;
+  gap: 8px;
+}
+
+.debugPanelHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.debugPanelHead strong,
+.debugPanelHead span {
+  overflow-wrap: anywhere;
+}
+
+.debugPanelHead strong {
+  font-size: 12px;
+}
+
+.debugPanelMeta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.debugPanelPreview {
+  width: 100%;
+  min-height: 112px;
+  max-height: 180px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(83, 112, 108, 0.45);
+  border-radius: 6px;
+  background: #171c1f;
+  overflow: hidden;
+}
+
+.debugPanelPreview canvas,
+.debugPanelPreview img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+.debugPanelEmpty {
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 12px;
+}
+
+.debugPanelList {
+  margin: 0;
+  padding-left: 18px;
+  color: #d7ded9;
+  font-size: 12px;
+}
+
+.debugPanelList li + li {
+  margin-top: 4px;
+}
+
+.debugChipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.debugChip {
+  min-height: 24px;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(86, 184, 168, 0.32);
+  border-radius: 999px;
+  padding: 0 9px;
+  background: rgba(86, 184, 168, 0.08);
+  color: #d8f8f0;
+  font-size: 12px;
+}
+
+.limitList {
+  margin: 0;
+  padding-left: 19px;
+  color: #d7ded9;
+}
+
+.limitList li + li {
+  margin-top: 6px;
+}
+
+/* ── Material / Light override panel (editor/materialLightPanel.js) ── */
+.mlPanel {
+  display: grid;
+  gap: 8px;
+}
+
+.mlHeading {
+  margin: 0 0 2px;
+  font-size: 12px;
+  color: var(--accent);
+  overflow-wrap: anywhere;
+}
+
+.mlNote {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.mlRow {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+}
+
+.mlLabel {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.mlColor {
+  width: 100%;
+  min-height: 28px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #171c1f;
+  cursor: pointer;
+}
+
+.mlRange {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mlRange input[type="range"] {
+  min-width: 0;
+  flex: 1;
+}
+
+.mlRangeOut {
+  width: 40px;
+  text-align: right;
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.mlCheck {
+  width: 18px;
+  height: 18px;
+  justify-self: start;
+}
+
+@media (max-width: 1050px) {
+  .appShell {
+    grid-template-columns: minmax(230px, 290px) minmax(360px, 1fr);
+  }
+
+  .detailPanel {
+    display: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .appShell {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .sidePanel {
+    grid-row: 2;
+    max-height: 42vh;
+    border-top: 1px solid var(--line);
+    border-right: 0;
+  }
+
+  .viewerColumn {
+    grid-row: 1;
+  }
+
+  .filterRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Aurora owns the sidebar; laboratory controls must not sit underneath it. */
+.aurora-mode .appShell { grid-template-columns: minmax(240px, 300px) minmax(0, 1fr); }
+.aurora-mode .sidePanel > :not(#auroraOverlayPanel),
+.aurora-mode .detailPanel { display: none; }
+.aurora-mode #auroraOverlayPanel { box-sizing: border-box; }
+.aurora-mode #auroraOverlayPanel [hidden] { display: none !important; }
+.aurora-mode #auroraOverlayPanel summary { cursor: pointer; padding-block: 8px; }
+@media (max-width: 720px) {
+  .aurora-mode .appShell { grid-template-columns: minmax(180px, 220px) minmax(0, 1fr); }
+}

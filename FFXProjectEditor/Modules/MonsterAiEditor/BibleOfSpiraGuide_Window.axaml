@@ -1,0 +1,406 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="1100"
+        d:DesignHeight="760"
+        x:Class="FFXProjectEditor.BibleOfSpiraGuide_Window"
+        Title="BIBLE OF SPIRA"
+        Width="1100"
+        Height="760"
+        MinWidth="900"
+        MinHeight="600">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,*">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBibleOfSpira}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_atel_monster_ai_guide_e3e7a6b8}" />
+					<WrapPanel>
+						<Border Margin="0,6,6,0" Padding="8,4" Background="{DynamicResource AccentProtectFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+							<TextBlock FontSize="11" Foreground="{DynamicResource AccentProtectForegroundBrush}" Text="{x:Static res:Strings.U_read_only_1d8d39a6}" />
+						</Border>
+						<Border Margin="0,6,6,0" Padding="8,4" Background="{DynamicResource AccentGoldFillBrush}" BorderBrush="{DynamicResource AccentGoldFillBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+							<TextBlock FontSize="11" Foreground="{DynamicResource AccentGoldForegroundBrush}" Text="{x:Static res:Strings.CommonNoWriter}" />
+						</Border>
+						<Border Margin="0,6,6,0" Padding="8,4" Background="{DynamicResource AccentCycleFillBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+							<TextBlock FontSize="11" Foreground="{DynamicResource AccentCoolBrush}" Text="{x:Static res:Strings.U_corpus_backed_94494baf}" />
+						</Border>
+					</WrapPanel>
+				</StackPanel>
+
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.U_fechar_guia_244e9081}">X</Button>
+			</Grid>
+		</Border>
+
+		<Grid Grid.Row="1" Margin="0,14,0,0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="2*" MinWidth="300" MaxWidth="420" />
+				<ColumnDefinition Width="5*" />
+			</Grid.ColumnDefinitions>
+			<Border Grid.Column="0" Padding="14" Classes="card">
+				<Grid RowDefinitions="Auto,Auto,Auto,Auto,Auto,*">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_buscar_e_navegar_495feb90}" />
+						<TextBox Watermark="{x:Static res:Strings.U_nome_hex_dominio_evidencia_ou_conceito_31214acb}"
+						         Text="{Binding SearchText, Mode=TwoWay}" />
+						<TextBlock Classes="muted" Text="{Binding OverviewText}" TextWrapping="Wrap" />
+					</StackPanel>
+
+					<Border Grid.Row="1" Margin="0,12,0,0" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_contexto_selecionado_124e0d4b}" />
+							<TextBlock Classes="muted" Text="{Binding ContextSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<ListBox Grid.Row="2"
+					         Margin="0,12,0,0"
+					         MaxHeight="210"
+					         ItemsSource="{Binding KindFilters}"
+					         SelectedItem="{Binding SelectedKindFilter, Mode=TwoWay}">
+						<ListBox.ItemsPanel>
+							<ItemsPanelTemplate>
+								<WrapPanel />
+							</ItemsPanelTemplate>
+						</ListBox.ItemsPanel>
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,8,8" Padding="10,7" MinWidth="112" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+									<Grid ColumnDefinitions="*,Auto">
+										<TextBlock Text="{Binding Label}" />
+										<Border Grid.Column="1" Margin="8,0,0,0" Padding="6,1" Background="{DynamicResource AccentCycleFillBrush}" CornerRadius="{DynamicResource RadiusSm}">
+											<TextBlock FontSize="11" Foreground="{DynamicResource AccentCoolBrush}" Text="{Binding Count}" />
+										</Border>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+
+					<StackPanel Grid.Row="3" Margin="0,4,0,0" Spacing="6">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_dominios_0f444529}" />
+						<ListBox MaxHeight="130"
+						         ItemsSource="{Binding DomainFilters}"
+						         SelectedItem="{Binding SelectedDomainFilter, Mode=TwoWay}">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,8,8" Padding="9,6" MinWidth="116" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+										<Grid ColumnDefinitions="*,Auto">
+											<TextBlock Text="{Binding Label}" TextWrapping="NoWrap" />
+											<Border Grid.Column="1" Margin="8,0,0,0" Padding="6,1" Background="{DynamicResource AccentCycleFillBrush}" CornerRadius="{DynamicResource RadiusSm}">
+												<TextBlock FontSize="11" Foreground="{DynamicResource AccentRegenForegroundBrush}" Text="{Binding Count}" />
+											</Border>
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+					</StackPanel>
+
+					<StackPanel Grid.Row="4" Margin="0,12,0,8" Spacing="6">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_evidencia_139050cd}" />
+						<ListBox MaxHeight="96"
+						         ItemsSource="{Binding EvidenceFilters}"
+						         SelectedItem="{Binding SelectedEvidenceFilter, Mode=TwoWay}">
+							<ListBox.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ListBox.ItemsPanel>
+							<ListBox.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,8,8" Padding="9,6" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+										<TextBlock FontSize="11" Text="{Binding Display}" TextWrapping="NoWrap" />
+									</Border>
+								</DataTemplate>
+							</ListBox.ItemTemplate>
+						</ListBox>
+						<TextBlock Classes="sectionLabel" Margin="0,6,0,0" Text="{x:Static res:Strings.U_resultados_b164a1ab}" />
+						<TextBlock Classes="muted" Text="{Binding SearchSummary}" TextWrapping="Wrap" />
+						<Border Padding="10" Background="{DynamicResource AccentForbiddenFillBrush}" BorderBrush="{DynamicResource AccentForbiddenBorderBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}"
+						        IsVisible="{Binding HasNoResults}">
+							<TextBlock TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_sugestoes_metadata_only_blocked_rt2_pending_doma_7dbf9bc8}" />
+						</Border>
+					</StackPanel>
+
+					<ListBox Grid.Row="5"
+					         ItemsSource="{Binding Entries}"
+					         SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,8" Padding="10" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+									<StackPanel Spacing="5">
+										<WrapPanel>
+											<Border Margin="0,0,6,4" Padding="7,3" Background="{Binding KindBrush}" CornerRadius="7">
+												<TextBlock FontSize="10" Text="{Binding KindLabel}" />
+											</Border>
+											<ItemsControl ItemsSource="{Binding BadgesTop}">
+												<ItemsControl.ItemsPanel>
+													<ItemsPanelTemplate>
+														<WrapPanel />
+													</ItemsPanelTemplate>
+												</ItemsControl.ItemsPanel>
+												<ItemsControl.ItemTemplate>
+													<DataTemplate>
+														<Border Margin="0,0,5,4" Padding="6,2" Background="{Binding Background}" BorderBrush="{Binding BorderBrush}" BorderThickness="1" CornerRadius="6"
+														        ToolTip.Tip="{Binding Tooltip}">
+															<TextBlock FontSize="10" Foreground="{Binding Foreground}" Text="{Binding Text}" />
+														</Border>
+													</DataTemplate>
+												</ItemsControl.ItemTemplate>
+											</ItemsControl>
+											<Border Margin="8,0,0,4" Padding="6,2" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7"
+											        IsVisible="{Binding HasDomain}">
+												<TextBlock FontSize="10" Classes="muted" Text="{Binding DomainLabel}" />
+											</Border>
+										</WrapPanel>
+										<ItemsControl ItemsSource="{Binding TitleRuns}">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<WrapPanel />
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock FontWeight="SemiBold"
+													           Text="{Binding Text}"
+													           Background="{Binding Background}"
+													           Foreground="{Binding Foreground}" />
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</Border>
+
+			<Border Grid.Column="1" Margin="14,0,0,0" Padding="18" Classes="card">
+				<Grid RowDefinitions="Auto,*" IsVisible="{Binding HasSelection}">
+					<StackPanel Grid.Row="0" Spacing="12">
+						<WrapPanel>
+							<Border Margin="0,0,8,6" Padding="10,5" Background="{Binding SelectedEntry.KindBrush}" BorderBrush="#44FFFFFF" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+								<TextBlock FontSize="12" FontWeight="SemiBold" Text="{Binding SelectedEntry.KindLabel}" />
+							</Border>
+							<ItemsControl ItemsSource="{Binding SelectedEntry.Badges}">
+								<ItemsControl.ItemsPanel>
+									<ItemsPanelTemplate>
+										<WrapPanel />
+									</ItemsPanelTemplate>
+								</ItemsControl.ItemsPanel>
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Margin="0,0,8,6" Padding="10,5" Background="{Binding Background}" BorderBrush="{Binding BorderBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}"
+										        ToolTip.Tip="{Binding Tooltip}">
+											<TextBlock FontSize="12" Foreground="{Binding Foreground}" Text="{Binding Text}" />
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+							<Border Margin="0,0,8,6" Padding="10,5" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}"
+							        IsVisible="{Binding SelectedEntry.HasDomain}">
+								<TextBlock FontSize="12" Foreground="{DynamicResource AccentRegenForegroundBrush}" Text="{Binding SelectedEntry.DomainLabel}" />
+							</Border>
+							<Border Margin="0,0,8,6" Padding="10,5" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+								<TextBlock FontSize="12" FontFamily="Cascadia Mono,Consolas,Monospace" Text="{Binding SelectedEntry.Id}" />
+							</Border>
+						</WrapPanel>
+
+						<ItemsControl ItemsSource="{Binding SelectedEntry.TitleRuns}">
+							<ItemsControl.ItemsPanel>
+								<ItemsPanelTemplate>
+									<WrapPanel />
+								</ItemsPanelTemplate>
+							</ItemsControl.ItemsPanel>
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<TextBlock FontSize="24"
+									           FontWeight="SemiBold"
+									           Text="{Binding Text}"
+									           Background="{Binding Background}"
+									           Foreground="{Binding Foreground}" />
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+
+					<TabControl Grid.Row="1" Margin="0,16,0,0">
+						<TabItem Header="{x:Static res:Strings.U_guia_b56c5054}">
+							<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+								<StackPanel Margin="0,14,0,0" Spacing="14">
+									<Border Padding="14" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+										<StackPanel Spacing="12">
+											<TextBlock FontSize="15" FontWeight="SemiBold" Text="{x:Static res:Strings.U_entenda_em_1_minuto_c67f6242}" />
+											<Grid ColumnDefinitions="*,*,*">
+												<StackPanel Grid.Column="0" Margin="0,0,8,0" Spacing="5">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_o_que_olhar_a5facb62}" />
+													<TextBlock Classes="muted" Text="{Binding SelectedEntry.MinuteWhatText}" TextWrapping="Wrap" />
+												</StackPanel>
+												<StackPanel Grid.Column="1" Margin="8,0" Spacing="5">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonRisk}" />
+													<TextBlock Classes="muted" Text="{Binding SelectedEntry.MinuteRiskText}" TextWrapping="Wrap" />
+												</StackPanel>
+												<StackPanel Grid.Column="2" Margin="8,0,0,0" Spacing="5">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_proximo_passo_00551900}" />
+													<TextBlock Classes="muted" Text="{Binding SelectedEntry.MinuteNextText}" TextWrapping="Wrap" />
+												</StackPanel>
+											</Grid>
+										</StackPanel>
+									</Border>
+
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_o_que_e_1e161c16}" />
+										<TextBlock Text="{Binding SelectedEntry.GuideRole}" TextWrapping="Wrap" />
+									</StackPanel>
+
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_resumo_humano_56e898ad}" />
+										<ItemsControl ItemsSource="{Binding SelectedEntry.SummaryRuns}">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<WrapPanel />
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding Text}"
+													           Background="{Binding Background}"
+													           Foreground="{Binding Foreground}"
+													           TextWrapping="Wrap" />
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+
+									<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource AccentGoldFillBrush}" BorderBrush="{DynamicResource AccentGoldFillBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}"
+									        IsVisible="{Binding SelectedEntry.HasGuardrail}">
+										<StackPanel Spacing="4">
+											<TextBlock Classes="sectionLabel" Foreground="{DynamicResource AccentGoldForegroundBrush}" Text="{x:Static res:Strings.CommonGuardrail}" />
+											<TextBlock Text="{Binding SelectedEntry.Guardrail}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_uso_seguro_3e26044f}" />
+										<TextBlock Classes="muted" Text="{Binding SelectedEntry.SafeUseText}" TextWrapping="Wrap" />
+									</StackPanel>
+
+									<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}"
+									        IsVisible="{Binding SelectedEntry.HasWhereAppears}">
+										<StackPanel Spacing="4">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWhereInGame}" />
+											<TextBlock Classes="muted" Text="{Binding SelectedEntry.WhereAppearsText}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+
+									<Border Padding="14" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}"
+									        IsVisible="{Binding SelectedEntry.IsAtlasEntry}">
+										<StackPanel Spacing="8">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_atlas_origem_e_politica_read_only_83f9ad32}" />
+											<WrapPanel>
+												<Border Margin="0,0,8,6" Padding="8,4" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7">
+													<TextBlock FontSize="11" Foreground="{DynamicResource AccentRegenForegroundBrush}" Text="{Binding SelectedEntry.DomainLabel}" />
+												</Border>
+												<Border Margin="0,0,8,6" Padding="8,4" Background="{DynamicResource PanelAltBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="7"
+												        IsVisible="{Binding SelectedEntry.HasDetailKind}">
+													<TextBlock FontSize="11" Foreground="{DynamicResource TextMutedBrush}" Text="{Binding SelectedEntry.DetailKindLabel}" />
+												</Border>
+											</WrapPanel>
+											<StackPanel Spacing="3">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_writerpolicy_2956cb83}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedEntry.WriterPolicyText}" TextWrapping="Wrap" />
+											</StackPanel>
+											<StackPanel Spacing="3" IsVisible="{Binding SelectedEntry.HasSourcePath}">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_sourcepath_74111f38}" />
+												<TextBlock FontSize="11" FontFamily="Cascadia Mono,Consolas,Monospace" Foreground="{DynamicResource TextMutedBrush}"
+												           Text="{Binding SelectedEntry.SourcePathText}" TextWrapping="Wrap" />
+											</StackPanel>
+										</StackPanel>
+									</Border>
+
+									<Grid ColumnDefinitions="*,*" RowDefinitions="Auto">
+										<StackPanel Grid.Column="0" Margin="0,0,8,0" Spacing="6">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_evidencia_8d330451}" />
+											<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+												<TextBlock Classes="muted" Text="{Binding SelectedEntry.Evidence}" TextWrapping="Wrap" />
+											</Border>
+										</StackPanel>
+										<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="6">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_tags_848eed0f}" />
+											<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+												<TextBlock Classes="muted" Text="{Binding SelectedEntry.TagsText}" TextWrapping="Wrap" />
+											</Border>
+										</StackPanel>
+									</Grid>
+								</StackPanel>
+							</ScrollViewer>
+						</TabItem>
+
+						<TabItem Header="{x:Static res:Strings.U_dev_viewer_e343825b}">
+							<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+								<StackPanel Margin="0,14,0,0" Spacing="14">
+									<TextBlock Classes="muted"
+									           Text="{x:Static res:Strings.U_visao_tecnica_para_quem_esta_montando_snippet_au_d24d85e2}"
+									           TextWrapping="Wrap" />
+
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_assinatura_normalizada_9010e7c8}" />
+										<Border Padding="{DynamicResource SpacingMd}" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="{DynamicResource RadiusSm}">
+											<TextBlock FontFamily="Cascadia Mono,Consolas,Monospace"
+											           Text="{Binding SelectedEntry.NormalizedSignature}"
+											           TextWrapping="Wrap" />
+										</Border>
+									</StackPanel>
+
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_stack_shape_exemplo_atel_d9b1b81e}" />
+										<TextBox Text="{Binding SelectedEntry.StackShape}"
+										         IsReadOnly="True"
+										         AcceptsReturn="True"
+										         TextWrapping="Wrap"
+										         MinHeight="90"
+										         FontFamily="Cascadia Mono,Consolas,Monospace" />
+									</StackPanel>
+
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_pseudocodigo_450b87ad}" />
+										<TextBox Text="{Binding SelectedEntry.Pseudocode}"
+										         IsReadOnly="True"
+										         AcceptsReturn="True"
+										         TextWrapping="Wrap"
+										         MinHeight="90"
+										         FontFamily="Cascadia Mono,Consolas,Monospace" />
+									</StackPanel>
+								</StackPanel>
+							</ScrollViewer>
+						</TabItem>
+					</TabControl>
+				</Grid>
+			</Border>
+		</Grid>
+	</Grid>
+</Window>

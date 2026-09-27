@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1260"
+             d:DesignHeight="760"
+             x:Class="FFXProjectEditor.SubTabHub_Control">
+
+	<!-- Reusable aggregator shell: a code-built tab strip (AddTab) over a lazy-loaded ContentControl.
+	     The outer "Current Module" header stays hub-neutral; the per-tab mode pill below the strip is the
+	     authoritative read-only vs writer signal. Hosts existing controls unchanged — pure navigation. -->
+	<Grid RowDefinitions="Auto,Auto,*">
+
+		<Border Grid.Row="0" Margin="18,16,18,0" Padding="0,0,0,10"
+				BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="0,0,0,1">
+			<WrapPanel x:Name="TabStrip" Orientation="Horizontal" />
+		</Border>
+
+		<StackPanel Grid.Row="1" Orientation="Horizontal" Margin="18,12,18,16" HorizontalAlignment="Left">
+			<Border x:Name="WriterPill" Classes="pillWriter" IsVisible="False">
+				<TextBlock x:Name="WriterPillText" Text="{x:Static res:Strings.U_writer_f818188f}" />
+			</Border>
+			<Border x:Name="ReadonlyPill" Classes="pillReadonly" IsVisible="False">
+				<TextBlock x:Name="ReadonlyPillText" Text="{x:Static res:Strings.U_read_only_7f55235d}" />
+			</Border>
+		</StackPanel>
+
+		<ContentControl Grid.Row="2" x:Name="TabHost" />
+	</Grid>
+</UserControl>

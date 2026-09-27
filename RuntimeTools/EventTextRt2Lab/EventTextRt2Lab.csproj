@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AssemblyName>eventtextrt2</AssemblyName>
+    <!-- Standalone RT2 lab: speaks the ffx-probe.dll MMF protocol directly (no dependency on the shared
+         RuntimeTools/FfxDinput8Probe sources, so it never races the Codex probe lane). -->
+  </PropertyGroup>
+</Project>

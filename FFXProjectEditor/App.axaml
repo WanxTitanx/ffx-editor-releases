@@ -1,0 +1,35 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:conv="clr-namespace:FFXProjectEditor.Converters"
+             x:Class="FFXProjectEditor.App"
+             RequestedThemeVariant="Dark">
+             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+
+    <Application.Styles>
+
+        <FluentTheme />
+		<StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+		<StyleInclude Source="/Styles/StudioTheme.axaml"/>
+
+    </Application.Styles>
+
+	<Application.Resources>
+		<ResourceDictionary>
+			<!-- v2.160.0.0 (Jarvis-UI §17): converters do dashboard data-bound (Workspace Ready). -->
+			<conv:IconKeyToGeometryConverter x:Key="IconKeyToGeometry" />
+			<conv:RequiresProjectEnabledConverter x:Key="RequiresProjectEnabled" />
+			<ResourceDictionary.MergedDictionaries>
+				<ResourceInclude Source="/Styles/StudioTokens.axaml"/>
+				<!-- Camada 11 (overhaul de UI): iconografia real (StreamGeometry) compartilhada. -->
+				<ResourceInclude Source="/Styles/StudioIcons.axaml"/>
+				<ResourceInclude Source="/Modules/MonEditor/MonEditorDrop_Template.axaml"/>
+				<ResourceInclude Source="/ControlTemplates/Property_Template.axaml"/>
+				<ResourceInclude Source="/ControlTemplates/PropertyBool_Template.axaml"/>
+				<ResourceInclude Source="/ControlTemplates/GameIndex_Template.axaml"/>
+				<ResourceInclude Source="/ControlTemplates/BattleModel_Template.axaml"/>
+				<ResourceInclude Source="/ControlTemplates/Loot_Template.axaml"/>
+			</ResourceDictionary.MergedDictionaries>
+		</ResourceDictionary>
+	</Application.Resources>
+
+</Application>

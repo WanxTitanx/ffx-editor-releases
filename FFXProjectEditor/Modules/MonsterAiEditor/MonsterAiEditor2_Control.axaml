@@ -1,0 +1,932 @@
+<!--
+  DESCONTINUADO / NAO EDITAR (2026-06-13):
+  Monster AI Editor 2 foi 100% descontinuado por decisao do usuario.
+  Nao adicionar features, fixes ou refactors aqui. Use o Monster AI Editor principal.
+-->
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignWidth="1440"
+             d:DesignHeight="820"
+             x:Class="FFXProjectEditor.MonsterAiEditor2_Control">
+
+    <Grid RowDefinitions="Auto,*" Background="#071019">
+        <Border Grid.Row="0"
+                Padding="18,12"
+                Background="#102638"
+                BorderBrush="#4B9BC0"
+                BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="*,Auto">
+                <StackPanel Spacing="3">
+                    <TextBlock Classes="sectionLabel" Text="Monster AI Editor 2" Foreground="#68D8C7" />
+                    <TextBlock FontSize="22"
+                               FontWeight="SemiBold"
+                               Text="Editor humano de comportamento"
+                               TextWrapping="Wrap" />
+                    <TextBlock Classes="muted"
+                               Text="Comportamento, alvo, status, valor e ordem ficam na frente. Bytecode, offsets e disassembly ficam no DevKit."
+                               TextWrapping="Wrap" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1"
+                            MinWidth="180"
+                            Spacing="4"
+                            VerticalAlignment="Center">
+                    <TextBlock Classes="sectionLabel" Text="Nivel" HorizontalAlignment="Right" />
+                    <ComboBox ItemsSource="{Binding HumanModeChoices}"
+                              SelectedItem="{Binding SelectedHumanMode, Mode=TwoWay}"
+                              HorizontalAlignment="Stretch" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" ColumnDefinitions="Auto,*">
+            <Border Grid.Column="0"
+                    Margin="16,16,0,16"
+                    Padding="14"
+                    MinWidth="240"
+                    MaxWidth="340"
+                    HorizontalAlignment="Stretch"
+                    Background="#101922"
+                    BorderBrush="#264052"
+                    BorderThickness="1"
+                    CornerRadius="10">
+                <Grid RowDefinitions="Auto,Auto,*">
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="sectionLabel" Text="Monstros" Foreground="#8FD7FF" />
+                        <TextBlock Classes="cardTitle" Text="Escolha quem editar" />
+                        <TextBlock Classes="muted"
+                                   Text="A lista mostra arquivos de monstro carregados. A IA aparece ao lado em linguagem de comportamento."
+                                   TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,14,0,14" Spacing="10">
+                        <WrapPanel>
+                            <Button Margin="0,0,8,8"
+                                    Classes="secondaryAction"
+                                    Click="Button_Refresh"
+                                    Content="Atualizar" />
+                            <Button Margin="0,0,0,8"
+                                    Classes="secondaryAction"
+                                    IsVisible="{Binding IsDevKitMode}"
+                                    Click="Button_RefreshRuntime"
+                                    Content="Runtime" />
+                        </WrapPanel>
+                        <TextBox Watermark="filtrar por id, nome ou caminho"
+                                 Text="{Binding FilterText, Mode=TwoWay}" />
+                        <TextBlock Classes="muted" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <ListBox Grid.Row="2"
+                             ItemsSource="{Binding DisplayedMonsters}"
+                             SelectedItem="{Binding SelectedMonster, Mode=TwoWay}"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,8"
+                                        Padding="10"
+                                        Background="#15212C"
+                                        BorderBrush="#264052"
+                                        BorderThickness="1"
+                                        CornerRadius="8">
+                                    <StackPanel Spacing="3">
+                                        <TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+                                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <ScrollViewer Grid.Column="1"
+                          Margin="14"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto">
+                <StackPanel Spacing="14">
+                    <Border Padding="14"
+                            Background="#0C151D"
+                            BorderBrush="#264052"
+                            BorderThickness="1"
+                            CornerRadius="10">
+                        <Grid RowDefinitions="Auto,Auto">
+                            <StackPanel Spacing="5">
+                                <TextBlock Classes="sectionLabel" Text="Mudancas no arquivo do monstro" Foreground="#8FD7FF" />
+                                <TextBlock FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Text="{Binding SelectedMonster.Title}"
+                                           TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedHeaderSummary}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding HumanModeSummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+
+                            <WrapPanel Grid.Row="1"
+                                       Margin="0,10,0,0"
+                                       VerticalAlignment="Center">
+                                <Button Margin="0,0,8,8"
+                                        Classes="secondaryAction"
+                                        Background="#1E5E45"
+                                        BorderBrush="#6FE3B7"
+                                        IsEnabled="{Binding HasPendingEdits}"
+                                        Click="Button_Save"
+                                        Content="Salvar" />
+                                <Button Margin="0,0,8,8"
+                                        Classes="secondaryAction"
+                                        Background="#4D4966"
+                                        BorderBrush="#C0B8EA"
+                                        IsEnabled="{Binding CanUndoBackup}"
+                                        Click="Button_RestoreBackup"
+                                        Content="Desfazer" />
+                                <Button Margin="0,0,0,8"
+                                        Classes="secondaryAction"
+                                        Background="#4A2730"
+                                        BorderBrush="#C07C86"
+                                        Click="Button_RestoreOriginalAi"
+                                        Content="Restaurar IA original" />
+                            </WrapPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Padding="14"
+                            Background="#123247"
+                            BorderBrush="#50B7D0"
+                            BorderThickness="1"
+                            CornerRadius="10">
+                        <StackPanel Spacing="5">
+                            <TextBlock Classes="sectionLabel" Text="O que este monstro faz" Foreground="#68D8C7" />
+                            <TextBlock FontSize="15"
+                                       Text="{Binding BehaviorSummary}"
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border Padding="14"
+                            Background="#0E2230"
+                            BorderBrush="#2F6F8D"
+                            BorderThickness="1"
+                            CornerRadius="10">
+                        <StackPanel Spacing="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <StackPanel Spacing="4">
+                                    <TextBlock Classes="sectionLabel" Text="O que mudou" Foreground="#8FD7FF" />
+                                    <TextBlock Classes="muted" Text="{Binding HumanDiffSummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <Button Grid.Column="1"
+                                        Margin="12,0,0,0"
+                                        Classes="secondaryAction"
+                                        Background="#15384A"
+                                        BorderBrush="#4B9BC0"
+                                        Click="Button_LoadAiDiff"
+                                        Content="Recarregar diff" />
+                            </Grid>
+
+                            <ListBox ItemsSource="{Binding HumanDiffEntries}"
+                                     MaxHeight="170"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     IsVisible="{Binding HasHumanDiffEntries}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Margin="0,0,0,8"
+                                                Padding="10"
+                                                Background="{Binding ChangeTypeBrush}"
+                                                BorderBrush="#315E78"
+                                                BorderThickness="1"
+                                                CornerRadius="8">
+                                            <StackPanel Spacing="4">
+                                                <Grid ColumnDefinitions="*,Auto">
+                                                    <TextBlock FontWeight="SemiBold" Text="{Binding Summary}" TextWrapping="Wrap" />
+                                                    <Border Grid.Column="1"
+                                                            Margin="8,0,0,0"
+                                                            Padding="7,3"
+                                                            Background="{Binding RiskBrush}"
+                                                            CornerRadius="6">
+                                                        <TextBlock FontSize="11" Text="{Binding RiskLabel}" />
+                                                    </Border>
+                                                </Grid>
+                                                <TextBlock Text="{Binding ActionHuman}" TextWrapping="Wrap" />
+                                                <TextBlock Classes="muted" Text="{Binding RiskSummary}" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                            <TextBlock Classes="muted"
+                                       Text="{Binding HumanDiffEmptyMessage}"
+                                       TextWrapping="Wrap"
+                                       IsVisible="{Binding HasNoHumanDiffEntries}" />
+                            <TextBlock Classes="muted"
+                                       Text="Quer ver instrucao-a-instrucao? Abra o DevKit."
+                                       TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+                        <StackPanel Spacing="12">
+                            <Border Padding="12"
+                                    Background="#0F2432"
+                                    BorderBrush="#2F6F8D"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Spacing="3">
+                                            <TextBlock Classes="sectionLabel" Text="Comportamento do monstro" Foreground="#8FD7FF" />
+                                            <TextBlock FontWeight="SemiBold"
+                                                       Text="Cada card e uma acao. Clique para editar; selecione varias para mover em lote."
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <TextBlock Grid.Column="1"
+                                                   Classes="muted"
+                                                   Text="{Binding BatchActionSummary}"
+                                                   TextWrapping="Wrap"
+                                                   MaxWidth="320" />
+                                    </Grid>
+
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <TextBlock Classes="muted" Text="mostrar" VerticalAlignment="Center" Margin="0,0,8,0" />
+                                        <ComboBox Grid.Column="1"
+                                                  ItemsSource="{Binding AutomationActionFilters}"
+                                                  SelectedItem="{Binding SelectedActionFilter, Mode=TwoWay}"
+                                                  HorizontalAlignment="Stretch" />
+                                    </Grid>
+
+                                    <Border Padding="10"
+                                            Background="#102638"
+                                            BorderBrush="#68D8C7"
+                                            BorderThickness="1"
+                                            CornerRadius="8"
+                                            IsVisible="{Binding HasBatchSelection}">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <StackPanel Spacing="3">
+                                                <TextBlock FontWeight="SemiBold" Text="Editando selecao em lote" />
+                                                <TextBlock Classes="muted" Text="{Binding BatchActionSummary}" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                            <WrapPanel Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center">
+                                                <Button Margin="0,0,8,8"
+                                                        Classes="secondaryAction"
+                                                        Background="#263C55"
+                                                        BorderBrush="#8FD7FF"
+                                                        Click="Button_MoveBatchUp"
+                                                        Content="Subir" />
+                                                <Button Margin="0,0,8,8"
+                                                        Classes="secondaryAction"
+                                                        Background="#263C55"
+                                                        BorderBrush="#8FD7FF"
+                                                        Click="Button_MoveBatchDown"
+                                                        Content="Descer" />
+                                                <Button Margin="0,0,0,8"
+                                                        Classes="secondaryAction"
+                                                        Background="#4D4966"
+                                                        BorderBrush="#C0B8EA"
+                                                        Click="Button_ClearBatchSelection"
+                                                        Content="Limpar" />
+                                            </WrapPanel>
+                                        </Grid>
+                                    </Border>
+
+                                    <ScrollViewer MaxHeight="610"
+                                                  VerticalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Disabled">
+                                        <ListBox ItemsSource="{Binding AutomationActions}"
+                                                 SelectedItem="{Binding SelectedAutomationAction, Mode=TwoWay}"
+                                                 Background="Transparent"
+                                                 BorderThickness="0"
+                                                 Padding="0">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Margin="0,0,0,8"
+                                                            Padding="12"
+                                                            Background="#0E2230"
+                                                            BorderBrush="#2F6F8D"
+                                                            BorderThickness="1"
+                                                            CornerRadius="10"
+                                                            DragDrop.AllowDrop="True"
+                                                            DragDrop.DragOver="ActionCard_DragOver"
+                                                            DragDrop.Drop="ActionCard_Drop">
+                                                        <Grid ColumnDefinitions="Auto,Auto,Auto,*">
+                                                            <Border Width="28"
+                                                                    MinWidth="28"
+                                                                    Height="38"
+                                                                    Margin="0,0,10,0"
+                                                                    Background="#132B3A"
+                                                                    BorderBrush="#315E78"
+                                                                    BorderThickness="1"
+                                                                    CornerRadius="6"
+                                                                    PointerPressed="ActionCard_DragHandlePointerPressed"
+                                                                    PointerMoved="ActionCard_DragHandlePointerMoved"
+                                                                    PointerReleased="ActionCard_DragHandlePointerReleased"
+                                                                    ToolTip.Tip="Arrastar para reordenar esta acao ou o grupo selecionado">
+                                                                <TextBlock HorizontalAlignment="Center"
+                                                                           VerticalAlignment="Center"
+                                                                           Classes="muted"
+                                                                           Text="::" />
+                                                            </Border>
+                                                            <CheckBox Grid.Column="1"
+                                                                      Margin="0,2,10,0"
+                                                                      VerticalAlignment="Top"
+                                                                      IsEnabled="{Binding CanBatchSelect}"
+                                                                      IsChecked="{Binding IsBatchSelected, Mode=TwoWay}"
+                                                                      ToolTip.Tip="Selecionar para mover em grupo" />
+                                                            <TextBlock Grid.Column="2"
+                                                                       Margin="0,1,10,0"
+                                                                       FontSize="18"
+                                                                       Text="{Binding Icon}" />
+                                                            <StackPanel Grid.Column="3" Spacing="6">
+                                                                <TextBlock FontSize="15"
+                                                                           FontWeight="SemiBold"
+                                                                           Text="{Binding HumanTitle}"
+                                                                           TextWrapping="Wrap" />
+                                                                <TextBlock Classes="muted"
+                                                                           Text="{Binding HumanSubtitle}"
+                                                                           TextWrapping="Wrap" />
+                                                                <WrapPanel>
+                                                                    <Border Margin="0,0,8,6"
+                                                                            Padding="7,3"
+                                                                            Background="#182C3C"
+                                                                            BorderBrush="#68D8C7"
+                                                                            BorderThickness="1"
+                                                                            CornerRadius="6">
+                                                                        <TextBlock FontSize="11" Text="{Binding WhereHuman}" TextWrapping="Wrap" />
+                                                                    </Border>
+                                                                    <Border Margin="0,0,8,6"
+                                                                            Padding="7,3"
+                                                                            Background="#1A1119"
+                                                                            BorderBrush="{Binding SafetyBrush}"
+                                                                            BorderThickness="1"
+                                                                            CornerRadius="6">
+                                                                        <TextBlock FontSize="11" Text="{Binding SafetyLabel}" />
+                                                                    </Border>
+                                                                    <Border Margin="0,0,8,6"
+                                                                            Padding="7,3"
+                                                                            Background="#3A301C"
+                                                                            BorderBrush="#D7B25C"
+                                                                            BorderThickness="1"
+                                                                            CornerRadius="6"
+                                                                            IsVisible="{Binding Action.ForcePerform}">
+                                                                        <TextBlock FontSize="11" Text="executa agora" />
+                                                                    </Border>
+                                                                    <Border Margin="0,0,8,6"
+                                                                            Padding="7,3"
+                                                                            Background="#263857"
+                                                                            BorderBrush="#AAB4FF"
+                                                                            BorderThickness="1"
+                                                                            CornerRadius="6"
+                                                                            IsVisible="{Binding HasComboHint}">
+                                                                        <TextBlock FontSize="11" Text="{Binding ComboHint}" TextWrapping="Wrap" />
+                                                                    </Border>
+                                                                    <Border Margin="0,0,8,6"
+                                                                            Padding="7,3"
+                                                                            Background="#3B2719"
+                                                                            BorderBrush="{Binding RunContextBrush}"
+                                                                            BorderThickness="1"
+                                                                            CornerRadius="6"
+                                                                            IsVisible="{Binding HasRunContextHint}">
+                                                                        <TextBlock FontSize="11" Text="{Binding RunContextHint}" TextWrapping="Wrap" />
+                                                                    </Border>
+                                                                </WrapPanel>
+                                                            </StackPanel>
+                                                        </Grid>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </ScrollViewer>
+
+                                    <WrapPanel>
+                                        <Button Margin="0,0,8,8"
+                                                Classes="secondaryAction"
+                                                Background="#1A5E73"
+                                                BorderBrush="#66D8F0"
+                                                Click="Button_ChangeAction"
+                                                Content="Trocar" />
+                                        <Button Margin="0,0,8,8"
+                                                Classes="secondaryAction"
+                                                Background="#28556B"
+                                                BorderBrush="#88C8E8"
+                                                Click="Button_DuplicateAction"
+                                                Content="Duplicar" />
+                                        <Button Margin="0,0,8,8"
+                                                Classes="secondaryAction"
+                                                Background="#3D4F78"
+                                                BorderBrush="#AAB4FF"
+                                                Click="Button_InsertSecond"
+                                                Content="2ª ação" />
+                                        <Button Margin="0,0,8,8"
+                                                Classes="secondaryAction"
+                                                Background="#4D3E24"
+                                                BorderBrush="#E6CB71"
+                                                Click="Button_MoveActionToHook"
+                                                Content="Mover para..." />
+                                        <Button Margin="0,0,8,8"
+                                                Classes="secondaryAction"
+                                                Background="#4D3E24"
+                                                BorderBrush="#E6CB71"
+                                                Click="Button_ToggleForce"
+                                                Content="Imediato/Fila" />
+                                        <Button Margin="0,0,0,8"
+                                                Classes="secondaryAction"
+                                                Background="#4A2730"
+                                                BorderBrush="#C07C86"
+                                                Click="Button_RemoveAction"
+                                                Content="Remover" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Padding="12"
+                                    Background="#132B3A"
+                                    BorderBrush="#315E78"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    IsVisible="{Binding ShowsAdvancedTools}">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Classes="sectionLabel" Text="YUNALESCA - ritos rapidos" Foreground="#F2D38B" />
+                                    <TextBlock Classes="muted" Text="{Binding PresetSummary}" TextWrapping="Wrap" />
+                                    <WrapPanel>
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#1A4A67" BorderBrush="#66D8F0" Click="Button_PresetHaste" Content="Haste" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#21506A" BorderBrush="#66D8F0" Click="Button_PresetProtect" Content="Protect" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#21506A" BorderBrush="#66D8F0" Click="Button_PresetShell" Content="Shell" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#253F62" BorderBrush="#8FB7FF" Click="Button_PresetReflect" Content="Reflect" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#224D43" BorderBrush="#6FE3B7" Click="Button_PresetRegen" Content="Regen" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#25495D" BorderBrush="#A6E2FF" Click="Button_PresetNulAll" Content="NulAll" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#4A4226" BorderBrush="#E6CB71" Click="Button_PresetDefensive" Content="Defensivo P+H" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#5A2D3A" BorderBrush="#E38AA0" Click="Button_PresetAggressive" Content="Agressivo" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#5A3429" BorderBrush="#E6A66F" Click="Button_PresetEnrage" Content="Enrage" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#3C406A" BorderBrush="#AAB4FF" Click="Button_PresetAlternate" Content="Revezar 1/2" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#3C406A" BorderBrush="#AAB4FF" Click="Button_PresetAlternate3" Content="Revezar 1/3" />
+                                        <Button Margin="0,0,8,8" Classes="secondaryAction" Background="#304E65" BorderBrush="#88C8E8" Click="Button_PresetDuplicate" Content="Repetir cast" />
+                                        <Button Margin="0,0,0,8" Classes="secondaryAction" Background="#304E65" BorderBrush="#88C8E8" Click="Button_PresetMultiCast" Content="2 ações diretas" />
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="1"
+                                    Margin="0,12,0,0"
+                                    Spacing="12">
+                            <Border Padding="12"
+                                    Background="#183244"
+                                    BorderBrush="#D7B25C"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                <StackPanel Spacing="10">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <StackPanel Spacing="3">
+                                            <TextBlock Classes="sectionLabel" Text="Editar esta acao" Foreground="#F2D38B" />
+                                            <TextBlock FontWeight="SemiBold"
+                                                       Text="{Binding SelectedAutomationAction.HumanTitle}"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                        <Border Grid.Column="1"
+                                                Margin="8,0,0,0"
+                                                Padding="8,4"
+                                                Background="#1A1119"
+                                                BorderBrush="{Binding SelectedAutomationAction.SafetyBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="6">
+                                            <TextBlock FontSize="11" Text="{Binding SelectedAutomationAction.SafetyLabel}" />
+                                        </Border>
+                                    </Grid>
+                                    <TextBlock Classes="muted"
+                                               Text="{Binding SelectedAutomationAction.HumanSubtitle}"
+                                               TextWrapping="Wrap" />
+                                    <TextBlock Classes="muted"
+                                               Text="{Binding SelectedAutomationAction.WhereHuman}"
+                                               TextWrapping="Wrap" />
+                                    <Border Padding="9,5"
+                                            Background="#3B2719"
+                                            BorderBrush="{Binding SelectedAutomationAction.RunContextBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="7"
+                                            IsVisible="{Binding SelectedAutomationAction.HasRunContextHint}">
+                                        <TextBlock FontSize="12"
+                                                   Text="{Binding SelectedAutomationAction.RunContextHint}"
+                                                   TextWrapping="Wrap" />
+                                    </Border>
+
+                                    <Border Padding="10"
+                                            Background="#102638"
+                                            BorderBrush="#D7B25C"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                        <StackPanel Spacing="8">
+                                            <TextBlock FontWeight="SemiBold" Text="Status/stat e valor" />
+                                            <Grid ColumnDefinitions="*,82,Auto">
+                                                <ComboBox ItemsSource="{Binding BuffStatFieldOptions}"
+                                                          SelectedItem="{Binding SelectedBuffStatField, Mode=TwoWay}"
+                                                          IsEnabled="{Binding CanEditBuffStat}"
+                                                          HorizontalAlignment="Stretch" />
+                                                <TextBox Grid.Column="1"
+                                                         Margin="8,0,0,0"
+                                                         Text="{Binding BuffStatValue, Mode=TwoWay}"
+                                                         IsEnabled="{Binding CanEditBuffStat}" />
+                                                <Button Grid.Column="2"
+                                                        Margin="8,0,0,0"
+                                                        Classes="secondaryAction"
+                                                        Background="#1E5E45"
+                                                        BorderBrush="#6FE3B7"
+                                                        IsEnabled="{Binding CanEditBuffStat}"
+                                                        Click="Button_EditBuffStat"
+                                                        Content="Aplicar" />
+                                            </Grid>
+                                            <TextBlock Classes="muted"
+                                                       Text="{Binding BuffStatEditSummary}"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Padding="10"
+                                            Background="#172F3D"
+                                            BorderBrush="#3B7185"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Classes="sectionLabel" Text="Adicionar / trocar comportamento" Foreground="#8FD7FF" />
+                                            <ComboBox ItemsSource="{Binding AutomationAbilityCategories}"
+                                                      SelectedItem="{Binding SelectedAbilityCategory, Mode=TwoWay}" />
+                                            <TextBox Watermark="buscar habilidade"
+                                                     Text="{Binding AbilitySearch, Mode=TwoWay}" />
+                                            <ComboBox ItemsSource="{Binding AutomationAbilityOptions}"
+                                                      SelectedItem="{Binding SelectedAutomationAbility, Mode=TwoWay}" />
+                                            <CheckBox IsChecked="{Binding AutomationWhenRandom, Mode=TwoWay}"
+                                                      Content="As vezes" />
+                                            <Grid ColumnDefinitions="Auto,72,*">
+                                                <TextBlock Classes="muted" Text="1 em" VerticalAlignment="Center" />
+                                                <TextBox Grid.Column="1"
+                                                         Margin="8,0,8,0"
+                                                         Text="{Binding AutomationRandomK, Mode=TwoWay}" />
+                                                <TextBlock Grid.Column="2"
+                                                           Classes="muted"
+                                                           Text="{Binding AbilityFilterSummary}"
+                                                           VerticalAlignment="Center"
+                                                           TextWrapping="Wrap" />
+                                            </Grid>
+                                            <WrapPanel>
+                                                <Button Margin="0,0,8,8"
+                                                        Classes="secondaryAction"
+                                                        Background="#1A5E73"
+                                                        BorderBrush="#66D8F0"
+                                                        Click="Button_AddAbility"
+                                                        Content="Adicionar" />
+                                                <Button Margin="0,0,8,8"
+                                                        Classes="secondaryAction"
+                                                        Background="#1A5E73"
+                                                        BorderBrush="#66D8F0"
+                                                        Click="Button_ChangeAction"
+                                                        Content="Trocar selecionada" />
+                                                <Button Margin="0,0,0,8"
+                                                        Classes="secondaryAction"
+                                                        Background="#3D4F78"
+                                                        BorderBrush="#AAB4FF"
+                                                        Click="Button_InsertSecond"
+                                                        Content="2ª ação" />
+                                            </WrapPanel>
+                                            <TextBlock Classes="muted"
+                                                       Text="{Binding AddAbilitySummary}"
+                                                       TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Padding="10"
+                                            Background="#172F3D"
+                                            BorderBrush="#3B7185"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Classes="sectionLabel" Text="Alvo e modo" Foreground="#8FD7FF" />
+                                            <Grid ColumnDefinitions="*,Auto">
+                                                <ComboBox ItemsSource="{Binding TargetOptions}"
+                                                          SelectedItem="{Binding SelectedTargetOption, Mode=TwoWay}"
+                                                          IsEnabled="{Binding CanChangeTarget}" />
+                                                <Button Grid.Column="1"
+                                                        Margin="8,0,0,0"
+                                                        Classes="secondaryAction"
+                                                        Background="#1A5E73"
+                                                        BorderBrush="#66D8F0"
+                                                        IsEnabled="{Binding CanChangeTarget}"
+                                                        Click="Button_ChangeTarget"
+                                                        Content="Mudar alvo" />
+                                            </Grid>
+                                            <TextBlock Classes="muted" Text="{Binding TargetSummary}" TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Padding="12"
+                                    Background="#172F3D"
+                                    BorderBrush="#3B7185"
+                                    BorderThickness="1"
+                                    CornerRadius="10"
+                                    IsVisible="{Binding ShowsAdvancedTools}">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Classes="sectionLabel" Text="Buff inicial / status proprio" Foreground="#8FD7FF" />
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <ComboBox ItemsSource="{Binding SelfBuffPresets}"
+                                                  SelectedItem="{Binding SelectedSelfBuff, Mode=TwoWay}" />
+                                        <Button Grid.Column="1"
+                                                Margin="8,0,0,0"
+                                                Classes="secondaryAction"
+                                                Background="#224D43"
+                                                BorderBrush="#6FE3B7"
+                                                Click="Button_AddSelfBuff"
+                                                Content="Aplicar" />
+                                    </Grid>
+                                    <TextBlock Classes="muted" Text="{Binding SelfBuffSummary}" TextWrapping="Wrap" />
+
+                                    <TextBlock Classes="sectionLabel" Text="Plantar field/stat" Foreground="#8FD7FF" />
+                                    <TextBox Watermark="buscar field"
+                                             Text="{Binding PlantFieldSearch, Mode=TwoWay}" />
+                                    <Grid ColumnDefinitions="*,82,Auto">
+                                        <ComboBox ItemsSource="{Binding PlantFieldOptions}"
+                                                  SelectedItem="{Binding SelectedPlantField, Mode=TwoWay}" />
+                                        <TextBox Grid.Column="1"
+                                                 Margin="8,0,0,0"
+                                                 Text="{Binding PlantFieldValue, Mode=TwoWay}" />
+                                        <Button Grid.Column="2"
+                                                Margin="8,0,0,0"
+                                                Classes="secondaryAction"
+                                                Background="#4A4226"
+                                                BorderBrush="#E6CB71"
+                                                Click="Button_AddSetStatField"
+                                                Content="Aplicar" />
+                                    </Grid>
+                                    <TextBlock Classes="muted" Text="{Binding PlantFieldSummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+
+                    <Border Padding="12"
+                            Background="#132B3A"
+                            BorderBrush="#315E78"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            IsVisible="{Binding ShowsAdvancedTools}">
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="BIBLE OF SPIRA" Foreground="#68D8C7" />
+                                <TextBlock Classes="muted" Text="{Binding BibleContextSummary}" TextWrapping="Wrap" />
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <TextBox Watermark="buscar opcode, funcao, field, alvo ou padrao"
+                                             Text="{Binding BibleSearchText, Mode=TwoWay}" />
+                                    <Button Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            Classes="secondaryAction"
+                                            Background="#224D5F"
+                                            BorderBrush="#7EE7F0"
+                                            Click="Button_OpenBibleGuide"
+                                            Content="Abrir guia" />
+                                </Grid>
+                                <ListBox ItemsSource="{Binding BibleEntries}"
+                                         SelectedItem="{Binding SelectedBibleEntry, Mode=TwoWay}"
+                                         MaxHeight="210">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,0,8"
+                                                    Padding="9"
+                                                    Background="#102B3C"
+                                                    BorderBrush="#285B73"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8">
+                                                <StackPanel Spacing="3">
+                                                    <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                                                    <TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Margin="0,14,0,0" Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="Receitas avançadas" Foreground="#F2D38B" />
+                                <Border Padding="10"
+                                        Background="#1A1119"
+                                        BorderBrush="#D04A68"
+                                        BorderThickness="1"
+                                        CornerRadius="8">
+                                    <StackPanel Spacing="8">
+                                        <Grid ColumnDefinitions="*,Auto">
+                                            <StackPanel Spacing="2">
+                                                <TextBlock FontWeight="SemiBold" Text="Forbidden Rite" />
+                                                <TextBlock Classes="muted" Text="Anti-Ribbon: status direto no jogador" />
+                                            </StackPanel>
+                                            <TextBlock Grid.Column="1" Classes="muted" Text="RT2 obrigatorio" />
+                                        </Grid>
+                                        <ComboBox ItemsSource="{Binding ForbiddenRiteTargets}"
+                                                  SelectedItem="{Binding SelectedForbiddenRiteTarget, Mode=TwoWay}" />
+                                        <Grid ColumnDefinitions="*,80,Auto">
+                                            <ComboBox ItemsSource="{Binding ForbiddenStatusPresets}"
+                                                      SelectedItem="{Binding SelectedForbiddenStatus, Mode=TwoWay}" />
+                                            <TextBox Grid.Column="1"
+                                                     Margin="8,0,0,0"
+                                                     Text="{Binding ForbiddenStatusValue, Mode=TwoWay}" />
+                                            <Button Grid.Column="2"
+                                                    Margin="8,0,0,0"
+                                                    Classes="secondaryAction"
+                                                    Background="#6A1932"
+                                                    BorderBrush="#D04A68"
+                                                    Click="Button_AddForbiddenStatusLab"
+                                                    Content="Aplicar" />
+                                        </Grid>
+                                        <TextBlock Classes="muted" Text="{Binding ForbiddenRiteSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Expander Header="SIN v2 — 8 UNI (galeria)" IsExpanded="False">
+                                    <Border Margin="0,8,0,0"
+                                            Padding="10"
+                                            Background="#111A24"
+                                            BorderBrush="#D04A68"
+                                            BorderThickness="1"
+                                            CornerRadius="8">
+                                        <StackPanel Spacing="8">
+                                            <TextBlock Classes="muted" Text="Pool universal.csv — protótipo SIN-001..100 removido da UI." TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" Text="{Binding SinCatalogSummary}" TextWrapping="Wrap" />
+                                            <Grid ColumnDefinitions="*,Auto,Auto">
+                                                <TextBox Watermark="buscar UNI..."
+                                                         Text="{Binding SinSearchText, Mode=TwoWay}" />
+                                                <ComboBox Grid.Column="1"
+                                                          Margin="8,0,0,0"
+                                                          MinWidth="120"
+                                                          ItemsSource="{Binding SinTierFilters}"
+                                                          SelectedItem="{Binding SelectedSinTierFilter, Mode=TwoWay}" />
+                                                <ComboBox Grid.Column="2"
+                                                          Margin="8,0,0,0"
+                                                          MinWidth="120"
+                                                          ItemsSource="{Binding SinThreatFilters}"
+                                                          SelectedItem="{Binding SelectedSinThreatFilter, Mode=TwoWay}" />
+                                            </Grid>
+                                            <ListBox ItemsSource="{Binding DisplayedSinPresets}"
+                                                     SelectedItem="{Binding SelectedSinPreset, Mode=TwoWay}"
+                                                     MaxHeight="180">
+                                                <ListBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Border Margin="0,0,0,8"
+                                                                Padding="9"
+                                                                Background="#1C2632"
+                                                                BorderBrush="#4A596A"
+                                                                BorderThickness="1"
+                                                                CornerRadius="8">
+                                                            <StackPanel Spacing="3">
+                                                                <TextBlock FontWeight="SemiBold" Text="{Binding CardTitle}" TextWrapping="Wrap" />
+                                                                <TextBlock Classes="muted" Text="{Binding DisplayPreview}" TextWrapping="Wrap" />
+                                                                <TextBlock Classes="muted" Text="{Binding StatusLabel}" TextWrapping="Wrap" />
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </DataTemplate>
+                                                </ListBox.ItemTemplate>
+                                            </ListBox>
+                                        </StackPanel>
+                                    </Border>
+                                </Expander>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Border Padding="12"
+                            Background="#172F3D"
+                            BorderBrush="#3B7185"
+                            BorderThickness="1"
+                            CornerRadius="10"
+                            IsVisible="{Binding ShowsAdvancedTools}">
+                        <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="Templates de comportamento" Foreground="#8FD7FF" />
+                                <TextBlock Classes="muted" Text="{Binding BehaviorLibraryVisualSummary}" TextWrapping="Wrap" />
+                                <TextBox Watermark="buscar template"
+                                         Text="{Binding BehaviorLibrarySearchText, Mode=TwoWay}" />
+                                <ListBox ItemsSource="{Binding DisplayedBehaviorTemplates}" MaxHeight="220">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="0,0,0,8"
+                                                    Padding="10"
+                                                    Background="#102B3C"
+                                                    BorderBrush="#285B73"
+                                                    BorderThickness="1"
+                                                    CornerRadius="8">
+                                                <Grid ColumnDefinitions="Auto,*,Auto">
+                                                    <TextBlock FontSize="18" Text="{Binding Icon}" Margin="0,0,8,0" />
+                                                    <StackPanel Grid.Column="1" Spacing="3">
+                                                        <TextBlock FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+                                                        <TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+                                                    </StackPanel>
+                                                    <Button Grid.Column="2"
+                                                            Margin="8,0,0,0"
+                                                            Classes="secondaryAction"
+                                                            Tag="{Binding}"
+                                                            Click="Button_ApplyBehaviorTemplate"
+                                                            Content="Aplicar" />
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </StackPanel>
+
+                            <StackPanel Grid.Row="1" Margin="0,14,0,0" Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="Copiar / restaurar IA" Foreground="#8FD7FF" />
+                                <TextBlock Classes="muted" Text="{Binding CopyRestoreSummary}" TextWrapping="Wrap" />
+                                <Grid ColumnDefinitions="*,Auto,Auto">
+                                    <ComboBox ItemsSource="{Binding CopyableSources}"
+                                              SelectedItem="{Binding CopySource, Mode=TwoWay}" />
+                                    <Button Grid.Column="1"
+                                            Margin="8,0,0,0"
+                                            Classes="secondaryAction"
+                                            Background="#224D43"
+                                            BorderBrush="#6FE3B7"
+                                            Click="Button_CopyAi"
+                                            Content="Copiar" />
+                                    <Button Grid.Column="2"
+                                            Margin="8,0,0,0"
+                                            Classes="secondaryAction"
+                                            Background="#224D43"
+                                            BorderBrush="#6FE3B7"
+                                            Click="Button_RestoreOriginalAi"
+                                            Content="Restaurar" />
+                                </Grid>
+
+                                <TextBlock Classes="sectionLabel" Text="Live Battle Target" Foreground="#68D8C7" />
+                                <WrapPanel>
+                                    <Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_RefreshRuntime" Content="Refresh Runtime" />
+                                    <Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_ApplyLive" Content="Apply Live" />
+                                    <Button Margin="0,0,0,8" Classes="secondaryAction" Click="Button_RestoreLive" Content="Restore Live" />
+                                </WrapPanel>
+                                <TextBlock Classes="muted" Text="{Binding RuntimeSummary}" TextWrapping="Wrap" />
+                                <TextBlock Classes="muted" Text="{Binding LiveEditSummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <Expander Header="DevKit tecnico" IsExpanded="False" IsVisible="{Binding IsDevKitMode}">
+                        <StackPanel Margin="0,8,0,0" Spacing="10">
+                            <Border Padding="12"
+                                    Background="#02070C"
+                                    BorderBrush="#294B62"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Classes="sectionLabel" Text="AEON - diff instrucao-a-instrucao" Foreground="#8FD7FF" />
+                                    <Grid ColumnDefinitions="*,Auto,Auto">
+                                        <TextBlock Classes="muted" Text="{Binding DiffSummary}" TextWrapping="Wrap" />
+                                        <Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_LoadAiDiff" Content="Recarregar diff" />
+                                        <Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanRestoreVanillaAi}" Click="Button_RestoreVanillaDiff" Content="{Binding RestoreVanillaDiffButtonText}" />
+                                    </Grid>
+                                    <TextBlock Classes="muted" Text="{Binding DiffWarning}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Padding="12"
+                                    Background="#02070C"
+                                    BorderBrush="#294B62"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Classes="sectionLabel" Text="Disassembly completo" Foreground="#8FD7FF" />
+                                    <TextBox Text="{Binding SelectedDisassembly}"
+                                             IsReadOnly="True"
+                                             AcceptsReturn="True"
+                                             TextWrapping="NoWrap"
+                                             MinHeight="260"
+                                             FontFamily="Cascadia Mono,Consolas,Monospace" />
+                                </StackPanel>
+                            </Border>
+
+                            <Border Padding="12"
+                                    Background="#0D1822"
+                                    BorderBrush="#294B62"
+                                    BorderThickness="1"
+                                    CornerRadius="10">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Classes="sectionLabel" Text="AI Assembler" Foreground="#8FD7FF" />
+                                    <TextBlock Classes="muted" Text="{Binding AssemblerSummary}" TextWrapping="Wrap" />
+                                    <Grid ColumnDefinitions="90,110,Auto,Auto,Auto">
+                                        <TextBox Text="{Binding InsertOpcodeHex, Mode=TwoWay}" Watermark="opcode" />
+                                        <TextBox Grid.Column="1" Margin="8,0,0,0" Text="{Binding InsertOperandHex, Mode=TwoWay}" Watermark="operando" />
+                                        <Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_InsertAsm" Content="Inserir" />
+                                        <Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_ValidateAsm" Content="Validar" />
+                                        <Button Grid.Column="4" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_SaveAsm" Content="Save Structural" />
+                                    </Grid>
+                                    <TextBox Text="{Binding AssemblerPreview}"
+                                             IsReadOnly="True"
+                                             AcceptsReturn="True"
+                                             TextWrapping="NoWrap"
+                                             MinHeight="140"
+                                             FontFamily="Cascadia Mono,Consolas,Monospace" />
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Expander>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</UserControl>

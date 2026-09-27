@@ -1,0 +1,92 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FFXProjectEditor.Modules.TreasureMapEditor"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             x:Class="FFXProjectEditor.Modules.TreasureMapEditor.TreasureMapEditor_Control">
+  <Grid ColumnDefinitions="220,*,300" RowDefinitions="*,Auto" Margin="8">
+    <!-- Left: Field list -->
+    <Border Grid.Column="0" Classes="card" Padding="8">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Spacing="4" Margin="0,0,0,6">
+          <TextBlock FontWeight="Bold" FontSize="13">Areas</TextBlock>
+          <TextBox Watermark="{x:Static res:Strings.F2_filter_areas_6bddb5eb}" Text="{Binding FilterText, Mode=TwoWay}" FontSize="11"/>
+        </StackPanel>
+        <ListBox x:Name="FieldList" ItemsSource="{Binding Fields}"
+                 SelectedItem="{Binding SelectedField, Mode=TwoWay}"
+                 SelectionChanged="FieldSelected">
+          <ListBox.ItemTemplate>
+            <DataTemplate>
+              <TextBlock Text="{Binding Display}" FontSize="12"/>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </DockPanel>
+    </Border>
+
+    <!-- Center: Map canvas -->
+    <Border Grid.Column="1" Classes="card" Padding="4" Margin="8,0">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="4" Margin="0,0,0,4">
+          <Button Content="{x:Static res:Strings.F2_fit_dab564d8}" Click="Fit_Click" FontSize="11" Padding="6,2"/>
+          <Button Content="-" Click="ZoomOut_Click" FontSize="11" Padding="6,2"/>
+          <Button Content="+" Click="ZoomIn_Click" FontSize="11" Padding="6,2"/>
+          <TextBlock Text="{Binding ZoomPercent, StringFormat={}{0}%}" VerticalAlignment="Center" FontSize="11" Margin="4,0"/>
+          <Button Content="{x:Static res:Strings.F2_center_a2391118}" Click="Center_Click" FontSize="11" Padding="6,2"/>
+          <TextBlock Text="{Binding MapStateLabel}" VerticalAlignment="Center" FontSize="11" Margin="8,0,0,0"/>
+          <Button Content="{x:Static res:Strings.F2_lit_b850f3a9}" Click="PrevModel_Click" FontSize="11" Padding="6,2" IsVisible="{Binding HasMultiModel}"/>
+          <Button Content="{x:Static res:Strings.F2_lit_867c2bf8}" Click="NextModel_Click" FontSize="11" Padding="6,2" IsVisible="{Binding HasMultiModel}"/>
+        </StackPanel>
+        <local:TreasureMapCanvas_Control x:Name="MapCanvas"
+            Model="{Binding ActiveModel}" Items="{Binding Chests}"
+            SelectedItem="{Binding SelectedChest, Mode=TwoWay}"/>
+      </DockPanel>
+    </Border>
+
+    <!-- Right: Chest detail -->
+    <Border Grid.Column="2" Classes="card" Padding="8">
+      <DockPanel>
+        <TextBlock DockPanel.Dock="Top" FontWeight="Bold" FontSize="13" Margin="0,0,0,6">Chest</TextBlock>
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" Spacing="6" Margin="0,8,0,0">
+          <Button Content="{x:Static res:Strings.ActionSave}" Click="Save_Click" FontSize="12" Padding="8,4"/>
+          <Button Content="{x:Static res:Strings.ActionDiscard}" Click="Discard_Click" FontSize="12" Padding="8,4"/>
+        </StackPanel>
+        <StackPanel Spacing="10">
+          <ListBox x:Name="ChestList" ItemsSource="{Binding Chests}"
+                   SelectedItem="{Binding SelectedChest, Mode=TwoWay}"
+                   SelectionChanged="ChestSelected" MaxHeight="150">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <StackPanel Spacing="1">
+                  <TextBlock Text="{Binding Label}" FontSize="11"/>
+                  <TextBlock Text="{Binding RewardText}" FontSize="10" Opacity="0.85"
+                             TextTrimming="CharacterEllipsis"/>
+                </StackPanel>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+          <TextBlock Text="{Binding SelectedChest.Confidence, StringFormat=Confidence: {0}}" FontSize="11"/>
+          <StackPanel IsEnabled="{Binding SelectedChest.CanEdit}">
+            <TextBlock Text="{x:Static res:Strings.F2_kind_e00ac23f}" FontSize="11"/>
+            <ComboBox ItemsSource="{Binding SelectedChest.KindOptions}"
+                      SelectedItem="{Binding SelectedChest.SelectedKind, Mode=TwoWay}" FontSize="11"/>
+            <TextBlock Text="{Binding SelectedChest.AmountLabel}" FontSize="11" Margin="0,6,0,0"/>
+            <NumericUpDown Value="{Binding SelectedChest.Quantity, Mode=TwoWay}" Minimum="0" Maximum="255" FontSize="11"/>
+            <TextBlock Text="{x:Static res:Strings.F2_reward_c7d7652e}" FontSize="11" Margin="0,6,0,0" IsVisible="{Binding SelectedChest.SelectedRewardVisible}"/>
+            <ComboBox ItemsSource="{Binding SelectedChest.RewardOptions}"
+                      SelectedItem="{Binding SelectedChest.SelectedReward, Mode=TwoWay}" FontSize="11"
+                      IsVisible="{Binding SelectedChest.SelectedRewardVisible}"/>
+          </StackPanel>
+        </StackPanel>
+      </DockPanel>
+    </Border>
+
+    <!-- Bottom: Status + Progress -->
+    <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" Classes="card" Padding="6,3" Margin="0,6,0,0">
+      <DockPanel>
+        <TextBlock DockPanel.Dock="Left" Text="{Binding Status}" FontSize="11" VerticalAlignment="Center"/>
+        <ProgressBar DockPanel.Dock="Right" Value="{Binding ProgressPercent}" Minimum="0" Maximum="100"
+                     IsVisible="{Binding IsScanning}" Width="120" Height="8" VerticalAlignment="Center" Margin="8,0,0,0"/>
+      </DockPanel>
+    </Border>
+  </Grid>
+</UserControl>

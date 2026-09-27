@@ -1,0 +1,160 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="900"
+             d:DesignHeight="700"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.Modules.Main.MainDashboard_Control">
+
+	<!-- ===== Jarvis-UI (audit 2026-06-19): dashboard data-driven.
+	     Antes era 98 linhas de copy marketing estática. Agora tem:
+	       1. Hero com workspace status (Project/Hook/Empty-state).
+	     2. Quick-launch grid → evolui para Workspace Ready (§17): TODOS os módulos + descrição.
+	     3. Recent projects (Project_Service) → ainda TBD no code-behind.
+	     OBRIGATÓRIO: ver ModuleCatalogPolicy.cs — novo módulo = entrada no catálogo.
+	     Responsivo: 3 colunas em wide, 2 em medium, 1 em narrow. -->
+
+	<UserControl.Styles>
+		<Style Selector="UserControl.medium UniformGrid.quickLaunch">
+			<Setter Property="Columns" Value="2" />
+		</Style>
+		<Style Selector="UserControl.narrow UniformGrid.quickLaunch">
+			<Setter Property="Columns" Value="1" />
+		</Style>
+		<Style Selector="Button.quickTile">
+			<Setter Property="HorizontalContentAlignment" Value="Left" />
+			<Setter Property="VerticalContentAlignment" Value="Stretch" />
+			<Setter Property="Padding" Value="14,10" />
+			<Setter Property="Margin" Value="0,0,10,10" />
+			<Setter Property="Background" Value="{DynamicResource PanelAltBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="10" />
+		</Style>
+		<Style Selector="Button.quickTile:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource NavHoverBrush}" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+			<Setter Property="Transitions">
+				<Setter.Value>
+					<Transitions>
+						<BrushTransition Property="Background" Duration="0:0:0.10" />
+						<BrushTransition Property="BorderBrush" Duration="0:0:0.10" />
+					</Transitions>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Styles>
+
+	<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+		<StackPanel Spacing="14" Margin="18">
+
+			<!-- Hero / empty state: msg muda conforme há projeto carregado. -->
+			<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+				<StackPanel Spacing="10">
+					<TextBlock Classes="label" Text="{x:Static res:Strings.U_ffx_workspace_studio_74f27ceb}" />
+					<TextBlock FontSize="28" FontWeight="Bold"
+					           Text="{Binding DashboardHeroTitle}" />
+					<TextBlock MaxWidth="820"
+					           HorizontalAlignment="Left"
+					           TextWrapping="Wrap"
+					           Classes="muted"
+					           Text="{Binding DashboardHeroSubtitle}" />
+					<!-- Empty-state CTA: só visível quando não há projeto carregado. -->
+					<StackPanel Orientation="Horizontal" Spacing="8" Margin="0,6,0,0"
+					            IsVisible="{Binding !ProjService.IsProjectLoaded}">
+						<Button Classes="primaryAction" Click="Button_OpenWorkspace"
+						        AutomationProperties.Name="{x:Static res:Strings.DashboardCtaOpenWorkspace}">
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<PathIcon Data="{DynamicResource IconFolder}" Width="14" Height="14" />
+								<TextBlock Text="{x:Static res:Strings.DashboardCtaOpenWorkspace}" />
+							</StackPanel>
+						</Button>
+						<TextBlock Classes="muted" VerticalAlignment="Center"
+						           Text="{x:Static res:Strings.DashboardDragDropHint}" />
+					</StackPanel>
+				</StackPanel>
+			</Border>
+
+			<!-- P3-L2 & P0-A: Diagnóstico do Ambiente do Jogo (FFX.exe + Módulos + Probe) -->
+			<ctrl:EnvironmentHealthCard Name="HealthCard" />
+
+			<!-- Workspace Status Card (Source / Output Staging / Capabilities Ativas) -->
+			<ctrl:WorkspaceStatusCard Name="StatusCard" />
+
+			<!-- ===== v2.160.0.0 (Jarvis-UI §17 Workspace Ready): grid data-bound ao ModuleRegistry.
+			     Antes: 6 tiles hardcoded. Agora: TODOS os módulos navegáveis (41) gerados do catálogo.
+			     Cada card: ícone único (via IconKeyToGeometry converter) + Title + Description + pill de Mode.
+			     IsEnabled: MultiBinding RequiresProject × ProjService.IsProjectLoaded.
+			     Click → Button_QuickLaunch(Tag=Id) → QuickLaunchRequested → Main_Window.Dispatch.
+			     Responsivo: 3 colunas wide / 2 medium / 1 narrow. -->
+			<StackPanel Spacing="6">
+				<TextBlock Classes="label" Text="{x:Static res:Strings.DashboardModulesLabel}" />
+				<ItemsControl ItemsSource="{Binding Modules}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<UniformGrid Name="QuickLaunchGrid" Classes="quickLaunch" Columns="3" />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Button Classes="quickTile" Tag="{Binding Id}" Click="Button_QuickLaunch"
+							        AutomationProperties.Name="{Binding LocalizedTitle}">
+								<Button.IsEnabled>
+									<MultiBinding Converter="{StaticResource RequiresProjectEnabled}">
+										<Binding Path="RequiresProject" />
+										<Binding Path="DataContext.ProjService.IsProjectLoaded"
+										         RelativeSource="{RelativeSource AncestorType=UserControl}" />
+									</MultiBinding>
+								</Button.IsEnabled>
+								<StackPanel Spacing="3">
+									<StackPanel Orientation="Horizontal" Spacing="8">
+										<PathIcon Width="16" Height="16"
+										          Data="{Binding IconKey, Converter={StaticResource IconKeyToGeometry}}"
+										          Foreground="{DynamicResource AccentBrush}" />
+										<TextBlock Classes="h3" Text="{Binding LocalizedTitle}" />
+									</StackPanel>
+									<TextBlock Classes="muted" FontSize="11" Text="{Binding LocalizedDescription}" TextWrapping="Wrap" />
+									<Border Classes="pillReadonly" Padding="8,2" Margin="0,3,0,0"
+									        HorizontalAlignment="Left">
+										<TextBlock FontSize="10" Text="{Binding LocalizedMode}" />
+									</Border>
+								</StackPanel>
+							</Button>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</StackPanel>
+
+			<!-- Status panel (preservado do dashboard original, agora alinhado ao novo layout). -->
+			<Border Padding="18" Classes="card">
+				<Grid ColumnDefinitions="*,Auto">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="label" Text="{x:Static res:Strings.DashboardWorkspaceLabel}" />
+						<TextBlock Classes="h3" Text="{x:Static res:Strings.DashboardCurrentRoot}" />
+						<TextBlock Classes="muted" Text="{Binding ProjectPath}" TextTrimming="CharacterEllipsis" />
+					</StackPanel>
+					<StackPanel Margin="18,0,0,0" Spacing="10" HorizontalAlignment="Right">
+						<Border Padding="12,8" Classes="cardSoft">
+							<StackPanel Orientation="Horizontal" Spacing="10">
+								<TextBlock Text="{x:Static res:Strings.DashboardProjectLoaded}" VerticalAlignment="Center" />
+								<CheckBox Classes="statusCheck" IsChecked="{Binding ProjService.IsProjectLoaded}" />
+							</StackPanel>
+						</Border>
+						<Border Padding="12,8" Classes="cardSoft">
+							<StackPanel Orientation="Horizontal" Spacing="10">
+								<TextBlock Text="{x:Static res:Strings.DashboardLiveHook}" VerticalAlignment="Center" />
+								<CheckBox Classes="statusCheck" IsChecked="{Binding ProcService.IsAlive}" />
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</Grid>
+			</Border>
+		</StackPanel>
+	</ScrollViewer>
+
+</UserControl>

@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>BattleEncounterOpenerLab</AssemblyName>
+    <RootNamespace>BattleEncounterOpenerLab</RootNamespace>
+  </PropertyGroup>
+
+  <!-- 🎬 SEYMOUR OPENER — RT0 / read-only gate for the encounter opener / CTB seed reader
+       (FfxLib/Battle/BattleEncounterOpener_File.cs), run against the real per-battle btl corpus.
+       Self-contained: links only the dependency-free reader + the ATEL codec; no editor / Avalonia. -->
+  <!-- i18n (v2.234.3.0): linked FfxLib sources use FFXProjectEditor.Resources (Strings); ship the
+       generated accessor + neutral resx so the links compile with identical lookups. -->
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\Resources\Strings.cs" Link="Strings.cs" />
+    <EmbeddedResource Include="..\..\FFXProjectEditor\Resources\Strings.resx" LogicalName="FFXProjectEditor.Resources.Strings.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Battle\BattleEncounterOpener_File.cs" Link="BattleEncounterOpener_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiScript_File.cs" Link="AiScript_File.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiTargetNames.cs" Link="AiTargetNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiChrPropertyNames.cs" Link="AiChrPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMotionPropertyNames.cs" Link="AiMotionPropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiMovePropertyNames.cs" Link="AiMovePropertyNames.cs" />
+    <Compile Include="..\..\FFXProjectEditor\FfxLib\Ai\AiSaveDataVariableNames.cs" Link="AiSaveDataVariableNames.cs" />
+  </ItemGroup>
+</Project>

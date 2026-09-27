@@ -1,0 +1,114 @@
+{
+  "$comment": "Spira Reforge Studio linux-x64 runtime contract. Derived from the actual linux-x64-portable Diagnostic publish (ldd union over every ELF in the package, plus a 12-second live launch under XWayland). Null hashes are explicit blockers until the final v2.236.0.0 Candidate pins them; never wildcards.",
+  "schemaVersion": 1,
+  "target": {
+    "rid": "linux-x64",
+    "architecture": "x64",
+    "kernelMinimum": "3.2.0",
+    "elfClass": "64",
+    "elfMachine": "x86-64"
+  },
+  "strictModes": [
+    "Candidate",
+    "Release"
+  ],
+  "hostLibraries": {
+    "$evidence": "ldd union of every dynamic ELF in the 2026-09-13 Diagnostic self-contained publish (308 files); zero unresolved symbols.",
+    "mandatory": [
+      { "name": "ld-linux-x86-64.so.2", "role": "dynamic-loader" },
+      { "name": "libc.so.6", "role": "glibc-baseline" },
+      { "name": "libdl.so.2", "role": "glibc-baseline" },
+      { "name": "libm.so.6", "role": "glibc-baseline" },
+      { "name": "libpthread.so.0", "role": "glibc-baseline" },
+      { "name": "librt.so.1", "role": "glibc-baseline" },
+      { "name": "libgcc_s.so.1", "role": "runtime" },
+      { "name": "libstdc++.so.6", "role": "runtime" },
+      { "name": "libz.so.1", "role": "compression" },
+      { "name": "libbz2.so.1.0", "role": "compression" },
+      { "name": "libbrotlicommon.so.1", "role": "compression" },
+      { "name": "libbrotlidec.so.1", "role": "compression" },
+      { "name": "libexpat.so.1", "role": "font-stack" },
+      { "name": "libfontconfig.so.1", "role": "font-stack" },
+      { "name": "libfreetype.so.6", "role": "font-stack" },
+      { "name": "libpng16.so.16", "role": "font-stack" },
+      { "name": "liblttng-ust.so.0", "role": "coreclr-tracing" }
+    ]
+  },
+  "displaySubsystem": {
+    "kind": "X11_XWAYLAND",
+    "dlopenLoaded": true,
+    "$evidence": "Avalonia.X11 dlopens these at runtime (invisible to static ldd). The Diagnostic apphost stayed alive 12s and logged 'Timer started.' under XWayland on 2026-09-13.",
+    "libraries": [
+      { "name": "libX11.so.6", "role": "core-display" },
+      { "name": "libXkbcommon.so.0", "role": "keymap" },
+      { "name": "libXkbcommon-x11.so.0", "role": "keymap-x11" },
+      { "name": "libXrandr.so.2", "role": "display-config" },
+      { "name": "libXi.so.6", "role": "input" },
+      { "name": "libXcursor.so.1", "role": "cursor" },
+      { "name": "libICE.so.6", "role": "session" },
+      { "name": "libSM.so.6", "role": "session" }
+    ]
+  },
+  "payloads": {
+    "dotnetSelfContained": {
+      "kind": "DOTNET_SELF_CONTAINED",
+      "required": true,
+      "delivery": "self-contained-payload",
+      "architecture": "x64",
+      "runtimeConfigPath": "FFXProjectEditor.runtimeconfig.json",
+      "depsPath": "FFXProjectEditor.deps.json",
+      "depsTarget": ".NETCoreApp,Version=v8.0/linux-x64",
+      "forbiddenDependencies": [
+        "Microsoft.Web.WebView2.Core",
+        "Avalonia.Win32"
+      ],
+      "payloadFiles": [
+        { "path": "libcoreclr.so", "elfMachine": "x86-64", "sha256": null },
+        { "path": "libhostfxr.so", "elfMachine": "x86-64", "sha256": null },
+        { "path": "libhostpolicy.so", "elfMachine": "x86-64", "sha256": null },
+        { "path": "System.Private.CoreLib.dll", "architecture": "managed-any", "sha256": null }
+      ]
+    },
+    "vgmstreamLinux": {
+      "kind": "PRIVATE_AUDIO_TOOL",
+      "required": true,
+      "delivery": "app-private-payload",
+      "binary": {
+        "path": "tools/vgmstream/linux-x64/vgmstream-cli",
+        "elfMachine": "x86-64",
+        "linkage": "static",
+        "sha256": "2b05458f470ac6e051848e08cbd6d31a074e1808a648e2c6007418ad4242fc58"
+      },
+      "notices": [
+        "tools/vgmstream/linux-x64/COPYING"
+      ]
+    }
+  },
+  "optionalCapabilities": {
+    "embeddedWeb viewers": { "state": "OPTIONAL_UNAVAILABLE", "reason": "C1 fail-closed facade; no browser payload ships" },
+    "linuxFfxed": { "state": "OPTIONAL_UNAVAILABLE", "reason": "No redistribution authority for FFXED.jar on Linux" },
+    "fsbAuthoring": { "state": "OPTIONAL_UNAVAILABLE", "reason": "fsbext/fsbankcl are Windows-only payloads" },
+    "phyreExport": { "state": "OPTIONAL_UNAVAILABLE", "reason": "Windows-only authoring tool" },
+    "ffxRuntimeHooks": { "state": "OPTIONAL_UNAVAILABLE", "reason": "Game memory/MMF features remain Windows-gated" }
+  },
+  "forbiddenPayloads": {
+    "globally": [
+      "*.exe",
+      "WebView2Loader.dll",
+      "FFXED.jar",
+      "runtime/java/**",
+      "prerequisites/**",
+      "ExternalLibs/FFXED/**"
+    ],
+    "browserBackends": [
+      "WebKit*", "Chromium*", "CefGlue*"
+    ],
+    "userData": [
+      "saves/**", "dumps/**", "work/**"
+    ],
+    "development": [
+      "Tools/**", "labs/**", "research/**"
+    ]
+  }
+}
+

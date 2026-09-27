@@ -1,0 +1,150 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1500"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.BattleCorpusCrosswalkExplorer_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*" MinWidth="280" MaxWidth="420" />
+			<ColumnDefinition Width="5*" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.ColumnSpan="2" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_battle_corpus_crosswalk_ea3625f7}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_formation_actor_row_corpus_overlay_0a89afe4}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Text="{Binding SourceSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" Text="{Binding OverviewSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_battles_2e1adabb}" />
+					<Button Grid.Column="1" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+				</Grid>
+
+				<TextBox Grid.Row="1" Margin="0,10,0,10" Watermark="{x:Static res:Strings.U_search_battle_id_or_formation_806d33be}"
+				         Text="{Binding SearchText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="2"
+				         ItemsSource="{Binding Battles}"
+				         SelectedItem="{Binding SelectedBattle, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{Binding BattleId}" />
+									<TextBlock Text="{Binding FormationLabel}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Spacing="12">
+					<Grid ColumnDefinitions="*,Auto">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_battle_d57d91c8}" />
+							<TextBlock Classes="cardTitle" Text="{Binding SelectedBattleTitle}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedBattlePath}" TextWrapping="Wrap" />
+						</StackPanel>
+						<Button Grid.Column="1" Classes="secondaryAction" Click="Button_OpenSelectedBattle">Open File</Button>
+					</Grid>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_crosswalk_summary_91975b08}" />
+							<TextBlock Text="{Binding SelectedBattleSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding SelectedStrideSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_encounter_opener_ctb_seed_chunk0_hookstart_9641cfe9}" />
+							<TextBlock Classes="muted" Text="{Binding OpenerSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding OpenerFormationMapping}" TextWrapping="Wrap" />
+							<ItemsControl ItemsSource="{Binding OpenerWriteRows}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Classes="cardSoft" Padding="10" Margin="0,0,0,6">
+											<Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto" Margin="0,2">
+												<TextBlock Grid.Column="0" MinWidth="150" FontWeight="SemiBold" Text="{Binding TargetKind}" />
+												<TextBlock Grid.Column="1" MinWidth="110" FontFamily="Consolas,Menlo,monospace" Text="{Binding FieldName}" />
+												<TextBlock Grid.Column="2" MinWidth="30" Text="{Binding Operation}" />
+												<TextBlock Grid.Column="3" MinWidth="40" Text="{Binding ValueText}" />
+												<TextBlock Grid.Column="4" Classes="muted" Text="{Binding SourceOffsetText}" />
+											</Grid>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+							<TextBlock Classes="muted" Text="{Binding OpenerGuardrail}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_actor_surface_rows_513fe28c}" />
+							<ItemsControl ItemsSource="{Binding CrosswalkRows}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+											<StackPanel Spacing="4">
+												<TextBlock FontWeight="SemiBold" Text="{Binding ActorRow}" TextWrapping="Wrap" />
+												<TextBlock Text="{Binding FormationSlot}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" Text="{Binding RawMonsterHex}" />
+												<TextBlock Text="{Binding MonsterLabel}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" Text="{Binding CorpusOverlay}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" Text="{Binding TrustLane}" />
+												<TextBlock Classes="muted" Text="{Binding Note}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_encounter_references_276ac6e5}" />
+							<ItemsControl ItemsSource="{Binding EncounterRows}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate>
+										<StackPanel Margin="0,0,0,8">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Map}" TextWrapping="Wrap" />
+											<TextBlock Text="{Binding Table}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Group}" />
+											<TextBlock Classes="muted" Text="{Binding Battlefield}" />
+											<TextBlock Classes="muted" Text="{Binding Weight}" />
+										</StackPanel>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_guardrails_2dd5f894}" />
+							<TextBlock Text="{Binding SelectedBattleWarnings}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</UserControl>

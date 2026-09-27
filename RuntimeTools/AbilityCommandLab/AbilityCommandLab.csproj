@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Platforms>x64</Platforms>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>AbilityCommandLab</AssemblyName>
+    <RootNamespace>AbilityCommandLab</RootNamespace>
+  </PropertyGroup>
+
+  <!-- Tests the REAL production ability writer (Ability_Command.ReadList/WriteList). Its dependency tree is
+       deep (Xe.BinaryMapper, FfxEncoding, EntryListFile, Ability_Structs, dictionaries, ...), so we reference
+       the editor project instead of re-linking files. The gate only calls static FfxLib methods — no Avalonia. -->
+  <ItemGroup>
+    <ProjectReference Include="..\..\FFXProjectEditor\FFXProjectEditor.csproj" />
+  </ItemGroup>
+</Project>

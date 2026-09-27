@@ -1,0 +1,70 @@
+FFX MOD STUDIO - THIRD-PARTY NOTICES
+====================================
+
+This file records software redistributed by the Windows x64 package. FFX Mod Studio itself is an
+unofficial community modding tool licensed under the GNU General Public License v3.0 (see LICENSE).
+It is not affiliated with or endorsed by Square Enix. No Final Fantasy X game audio, game-data
+corpus, ISO, VBF, FEV, FSB, or extracted asset is included. Those inputs must come from the user's
+own installation or extraction.
+
+The owner's decision to keep the pre-existing third-party tool set is recorded as
+BUNDLED_OWNER_ACCEPTED_RISK. That label is an honest provenance state; it is not a claim that an
+unknown license became permissive. Exact shipped bytes and hashes are recorded by release-manifest.json
+and release/tool-dependencies.json.
+
+OPEN-SOURCE AND REDISTRIBUTABLE COMPONENTS
+------------------------------------------
+
+* Microsoft .NET 8.0.30 self-contained Windows x64 runtime - MIT and accompanying third-party notices.
+  The runtime is embedded by dotnet publish; see https://github.com/dotnet/runtime.
+* Avalonia UI 11.2.3, Avalonia.Xaml.Behaviors 11.2.0 and their managed/native dependencies - MIT or
+  the license identified by each NuGet package. See https://github.com/AvaloniaUI/Avalonia.
+* SkiaSharp 2.88.9 and HarfBuzzSharp 7.3.0.3 - MIT/BSD-style upstream licenses and notices identified
+  by their NuGet packages.
+* CommunityToolkit.Mvvm 8.4.0 - MIT.
+* NAudio 2.3.0 - MIT.
+* System.Reactive 6.0.1 - MIT.
+* Material.Icons / Material.Icons.Avalonia 2.1.10 - MIT and the upstream icon-set licenses described
+  by that project.
+* DialogHost.Avalonia 0.7.7, MicroCom.Runtime 0.11.0 and Xe.BinaryMapper 1.5.2 - licenses identified
+  by their NuGet packages.
+* three.js r165 - MIT. A copy of the license is shipped in each applicable viewer vendor directory.
+* Spector.js 0.9.30 - MIT. The license is shipped at viewers/map/vendor/spector/LICENSE.txt.
+* noclip.website frontend snapshot noclip.website-39605028765aa2cfaf2cea175f01f3a77cd99c2e - MIT.
+  The upstream LICENSE and the Studio provenance/patch note are shipped under licenses/ and the
+  hash-pinned frontend file list is release/noclip-runtime.manifest.json. Game data is not included.
+* vgmstream CLI and codec dependencies - license text is shipped at tools/vgmstream/COPYING; upstream
+  information is in tools/vgmstream/README.md.
+* Microsoft Build of OpenJDK 21.0.12.1 private jlink image - GPLv2 with Classpath Exception plus the
+  third-party terms carried in runtime/java/legal/. Only java.base and java.desktop are included.
+
+MICROSOFT WINDOWS PREREQUISITES
+-------------------------------
+
+* Microsoft Edge WebView2 Evergreen Standalone x64 installer, file version 1.3.257.13. It is shipped
+  unchanged, Authenticode-validated, and used only after explicit user consent.
+* Microsoft Visual C++ 2013 Redistributable x64, version 12.0.40664.0. It is shipped unchanged,
+  Authenticode-validated, and used only after explicit user consent for the Keystone dependency.
+
+PRE-EXISTING COMPONENTS WITH INCOMPLETE PROVENANCE
+--------------------------------------------------
+
+The following components remain because the project owner explicitly accepted the existing set and
+requires functional parity. They are hash-pinned and must not be silently replaced or expanded:
+
+* FFXED.jar - legacy Java save-editor integration. The Studio also contains independently maintained
+  native C# save editing code; the JAR remains for sections not yet ported.
+* Binarysharp.MSharp / MemorySharp64 and Keystone.Net/keystone x64 - memory tooling. Only the x64
+  native payload is shipped; the VC++ 2013 x64 prerequisite is verified separately.
+* fsbext - FSB extraction helper.
+* fsbankcl/fsbankex bundle and its adjacent runtime DLLs - FMOD-adjacent bank tooling.
+
+These entries are marked BUNDLED_OWNER_ACCEPTED_RISK in the dependency ledger. vbfextract is not in
+the package; it remains a user-provided/deferred capability. New third-party tools remain deny-by-default.
+
+PROJECT-OWNED HELPERS
+---------------------
+
+PhyreMapExportLab is built from this repository and shipped as a separate self-contained Windows x64
+helper under tools/PhyreMapExportLab. Its runtime dependencies are inventoried and hash-pinned just
+like the main application.

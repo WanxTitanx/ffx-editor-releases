@@ -1,0 +1,190 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             xmlns:ai="clr-namespace:FFXProjectEditor.Modules.AiAssistant"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="860"
+             x:Class="FFXProjectEditor.Modules.AiAssistant.AiAssistant_Control">
+
+	<Grid Margin="16">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+
+		<!-- Sessão BYOK -->
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="10">
+				<Grid ColumnDefinitions="*,Auto">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAssistant_SessionSection}" />
+						<TextBlock Classes="muted" Text="{x:Static res:Strings.AiAssistant_Splitter}" TextWrapping="Wrap" />
+					</StackPanel>
+					<!-- Pill de status: cor semântica por SessionStatusKind -->
+					<Border Grid.Column="1" VerticalAlignment="Top" CornerRadius="12" Padding="10,4"
+					        Background="{Binding SessionStatusBrush}">
+						<TextBlock FontSize="11" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimaryBrush}"
+						           Text="{Binding SessionStatus}" />
+					</Border>
+				</Grid>
+
+				<Grid ColumnDefinitions="190,*,220">
+					<StackPanel Grid.Column="0" Spacing="6" Margin="0,0,10,0">
+						<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.AiAssistant_ProviderField}" />
+						<ComboBox ItemsSource="{Binding ProviderPresets}"
+						          SelectedIndex="{Binding SelectedProviderIndex, Mode=TwoWay}"
+						          HorizontalAlignment="Stretch" HorizontalContentAlignment="Left">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Label}" />
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</StackPanel>
+					<StackPanel Grid.Column="1" Spacing="6" Margin="0,0,10,0">
+						<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.AiAssistant_EndpointField}" />
+						<TextBox Text="{Binding Endpoint}" Watermark="{x:Static res:Strings.AiAssistant_EndpointField}" />
+					</StackPanel>
+					<StackPanel Grid.Column="2" Spacing="6">
+						<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.AiAssistant_ModelField}" />
+						<TextBox Text="{Binding ModelId}" Watermark="{x:Static res:Strings.AiAssistant_ModelField}" />
+					</StackPanel>
+				</Grid>
+
+				<StackPanel Orientation="Horizontal" Spacing="10">
+					<TextBox Width="280" VerticalAlignment="Center" Text="{Binding ApiKeyText}" PasswordChar="●"
+					         Watermark="{x:Static res:Strings.AiAssistant_ApiKeyField}" />
+					<Button Classes="primaryAction" VerticalAlignment="Center"
+					        Content="{x:Static res:Strings.AiAssistant_ConnectButton}" Click="Button_Connect" />
+					<Button Classes="secondaryAction" VerticalAlignment="Center"
+					        Content="{x:Static res:Strings.AiAssistant_ClearButton}" Click="Button_Clear" />
+				</StackPanel>
+
+				<!-- Gate remoto: mostra o host que está sendo confirmado (contrato: host + confirmação) -->
+				<Border IsVisible="{Binding NeedsRemoteConfirm}" Background="#2B1A14" BorderBrush="#8C4A26"
+				        BorderThickness="1" CornerRadius="6" Padding="12,8">
+					<StackPanel Orientation="Horizontal" Spacing="12">
+						<TextBlock Foreground="{DynamicResource WarningBrush}" VerticalAlignment="Center"
+						           Text="{Binding RemoteHostWarning}" TextWrapping="Wrap" />
+						<CheckBox IsChecked="{Binding RemoteConfirmed}" VerticalAlignment="Center"
+						          Content="{x:Static res:Strings.AiAssistant_ConfirmRemoteCheck}" />
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</Border>
+
+		<!-- Comando -->
+		<Border Grid.Row="1" Classes="card" Padding="{DynamicResource SpacingSm}" Margin="0,0,0,12">
+			<StackPanel Spacing="8">
+				<Grid ColumnDefinitions="Auto,*,Auto,Auto">
+					<StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+						<Button Classes="tabPill" Classes.tabPillActive="{Binding IsChatMode}"
+						        Content="{x:Static res:Strings.AiAssistant_ModeChat}" Click="Mode_Chat" />
+						<Button Classes="tabPill" Classes.tabPillActive="{Binding IsProposalMode}"
+						        Content="{x:Static res:Strings.AiAssistant_ModeProposal}" Click="Mode_Proposal" />
+						<Button Classes="tabPill" Classes.tabPillActive="{Binding IsAgentMode}"
+						        Content="{x:Static res:Strings.AiAssistant_ModeAgent}" Click="Mode_Agent" />
+					</StackPanel>
+					<TextBlock Grid.Column="1" Classes="muted" FontSize="11" VerticalAlignment="Center" Margin="12,0,0,0"
+					           Text="{x:Static res:Strings.AiAssistant_ModeHint}" TextWrapping="Wrap" />
+				</Grid>
+				<Grid ColumnDefinitions="*,Auto,Auto">
+					<TextBox Text="{Binding CommandText}" Watermark="{x:Static res:Strings.AiAssistant_CommandHint}"
+					         AcceptsReturn="False" KeyDown="Command_KeyDown" />
+					<Button Grid.Column="1" Classes="primaryAction" Margin="10,0,0,0"
+					        Content="{x:Static res:Strings.AiAssistant_SendButton}"
+					        IsEnabled="{Binding CanSend}" Click="Button_Send" />
+					<Button Grid.Column="2" Classes="secondaryAction" Margin="8,0,0,0"
+					        Content="{x:Static res:Strings.AiAssistant_CancelButton}"
+					        IsVisible="{Binding IsSending}" Click="Button_Cancel" />
+				</Grid>
+				<!-- Cue estática + movimento: texto "Sending…" + barra indeterminada -->
+				<StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsSending}">
+					<TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center"
+					           Text="{x:Static res:Strings.AiAssistant_SendingLabel}" />
+					<ProgressBar IsIndeterminate="True" Height="3" VerticalAlignment="Center" Width="160" />
+				</StackPanel>
+			</StackPanel>
+		</Border>
+
+		<!-- Proposta pendente: revisão humana obrigatória antes de qualquer escrita -->
+		<Border Grid.Row="2" Classes="card" Padding="{DynamicResource SpacingSm}" Margin="0,0,0,12"
+		        IsVisible="{Binding HasPendingProposal}"
+		        BorderBrush="{DynamicResource WarningBrush}" BorderThickness="1">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Foreground="{DynamicResource WarningBrush}"
+					           Text="{x:Static res:Strings.AiAssistant_PendingProposal}" />
+					<TextBlock FontWeight="SemiBold" Text="{Binding PendingProposalSummary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding PendingProposalDetail}"
+					           FontFamily="Cascadia Mono,Consolas,Monospace" TextWrapping="Wrap" />
+				</StackPanel>
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" Margin="12,0,0,0">
+					<Button Classes="primaryAction" Content="{x:Static res:Strings.AiAssistant_ApproveButton}"
+					        Click="Proposal_Approve" />
+					<Button Classes="secondaryAction" Content="{x:Static res:Strings.AiAssistant_RejectButton}"
+					        Click="Proposal_Reject" />
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<!-- Saída: cresce com a janela; itens com glifo + cor por tipo -->
+		<Border Grid.Row="3" Classes="card" Padding="{DynamicResource SpacingSm}" Margin="0,0,0,12">
+			<Grid RowDefinitions="Auto,*">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAssistant_OutputSection}" />
+				<Border Grid.Row="1" Background="{DynamicResource PanelDeeperBrush}" CornerRadius="6"
+				        Padding="10" Margin="0,8,0,0" MinHeight="120">
+					<ScrollViewer>
+						<ItemsControl ItemsSource="{Binding ResultLines}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Grid ColumnDefinitions="Auto,*" Margin="0,0,0,10">
+										<TextBlock Text="{Binding Glyph}" Margin="0,1,8,0" FontSize="12" />
+										<StackPanel Grid.Column="1" Spacing="2">
+											<TextBlock FontWeight="SemiBold" Foreground="{Binding TitleBrush}"
+											           Text="{Binding Title}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Detail}"
+											           FontFamily="Cascadia Mono,Consolas,Monospace" TextWrapping="Wrap" />
+										</StackPanel>
+									</Grid>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</ScrollViewer>
+				</Border>
+			</Grid>
+		</Border>
+
+		<!-- Histórico (auditoria, sem payload/chave) -->
+		<Border Grid.Row="4" Classes="card" Padding="{DynamicResource SpacingSm}" MaxHeight="230">
+			<Grid RowDefinitions="Auto,*">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAssistant_HistorySection}" />
+				<ScrollViewer Grid.Row="1" Margin="0,4,0,0">
+					<ItemsControl ItemsSource="{Binding History}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Classes="cardSoft" Padding="10" Margin="0,6,0,0">
+									<StackPanel Spacing="2">
+										<TextBlock FontWeight="SemiBold" Text="{Binding ProposalId}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" Text="{Binding SubtitleText}" TextWrapping="Wrap" />
+										<StackPanel Orientation="Horizontal" Spacing="8">
+											<TextBlock FontSize="11" FontWeight="SemiBold"
+											           Foreground="{Binding DecisionBrush}" Text="{Binding DecisionText}" />
+											<TextBlock Classes="muted" FontSize="11" Text="{Binding TimestampText}" />
+										</StackPanel>
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+			</Grid>
+		</Border>
+	</Grid>
+</UserControl>

@@ -1,0 +1,329 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mdl="clr-namespace:FFXProjectEditor.Modules.MagicDllEditor"
+             xmlns:wv="clr-namespace:FFXProjectEditor.Modules.Common.ViewerShell"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="850"
+             x:Class="FFXProjectEditor.Modules.MagicDllEditor.MagicDllEditor_Control"
+             Name="ThisControl">
+
+	<!-- ========================================================================
+	     Magic DLL Editor — UI (Jarvis-PPP-C2C3 · 2026-08-01 · lane PPP Assembler C2/C3).
+	     Layout: DockPanel — toolbar (topo) | log (rodapé) | Grid 2 colunas:
+	     TreeView (Root → Descriptors → Programs → Slots → Fields) | painel de edição.
+	     Estilos: apenas classes/recursos do tema (StudioTheme/StudioTokens) + estilos
+	     locais escopados (padrão MonEditor_Control.axaml linhas 16-29).
+	     Spec: docs/ai/PROMPT_MAGIC_DLL_EDITOR_20260801.md §4 · UI: work/magic_editor/UI_DESIGN.md
+	     ======================================================================== -->
+
+	<UserControl.Resources>
+		<mdl:MagicLogLevelToBrushConverter x:Key="LogLevelToBrush" />
+	</UserControl.Resources>
+
+	<UserControl.Styles>
+		<!-- Texto mono para hex/offsets/records (padrão SphereGridBuilder: Cascadia Mono). -->
+		<Style Selector="TextBlock.mono">
+			<Setter Property="FontFamily" Value="Cascadia Mono,Consolas,Monospace" />
+			<Setter Property="FontSize" Value="12" />
+		</Style>
+		<Style Selector="TextBox.mono">
+			<Setter Property="FontFamily" Value="Cascadia Mono,Consolas,Monospace" />
+			<Setter Property="FontSize" Value="12" />
+		</Style>
+	<Style Selector="TabControl.magicTools TabItem"><Setter Property="FontSize" Value="13" /><Setter Property="Padding" Value="12,8" /></Style>
+	</UserControl.Styles>
+
+	<Grid RowDefinitions="Auto,*,8,210">
+
+		<!-- ===== Toolbar (DockPanel.Dock=Top) — 5 botões + arquivo/efeito + SHA ===== -->
+		<Border Grid.Row="0" Margin="0,0,0,10" Padding="16,12" Classes="cardSoft">
+			<StackPanel Spacing="10">
+
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_magic_dll_editor_b7cd1877}" VerticalAlignment="Center" />
+					<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+						<TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"
+						           Text="{Binding ShaBefore, StringFormat='SHA antes {0}'}"
+						           TextTrimming="CharacterEllipsis" MaxWidth="180" />
+						<TextBlock Classes="mono" FontSize="11" Foreground="{DynamicResource TextMutedBrush}"
+						           Text="{Binding ShaAfter, StringFormat='SHA depois {0}'}"
+						           TextTrimming="CharacterEllipsis" MaxWidth="180" />
+					</StackPanel>
+				</Grid>
+
+				<TextBlock Text="{Binding DocumentTitle}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" />
+				<TextBlock Classes="muted" FontSize="11" Text="{Binding StatusText}" TextWrapping="Wrap" />
+
+				<Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,*">
+					<Button Grid.Column="0" Classes="primaryAction" Command="{Binding OpenCommand}"
+					        AutomationProperties.Name="Open DLL">Open DLL...</Button>
+					<Button Grid.Column="1" Classes="secondaryAction" Margin="6,0,0,6"
+					        Command="{Binding SaveCopyCommand}" IsEnabled="{Binding HasDocument}"
+					        AutomationProperties.Name="Save copy">Save copy...</Button>
+					<Button Grid.Column="2" Classes="secondaryAction" Margin="6,0,0,6"
+					        Command="{Binding CloneMagicCommand}" IsEnabled="{Binding HasDocument}"
+					        AutomationProperties.Name="Clone">Clone</Button>
+
+					<Button Grid.Column="3" Classes="secondaryAction" Margin="6,0,0,6"
+					        Command="{Binding Rt0CheckCommand}" IsEnabled="{Binding HasDocument}"
+					        AutomationProperties.Name="RT0 check">RT0 check</Button>
+					<Border Grid.Column="4" Classes="pillWriter" Margin="10,0,0,0" VerticalAlignment="Center">
+						<TextBlock Text="{x:Static res:Strings.U_writer}" FontSize="10" />
+					</Border>
+					<Button Grid.Column="5" Classes="dangerAction" Margin="6,0,0,6"
+					        Command="{Binding RevertCommand}" IsEnabled="{Binding HasBackup}"
+					        AutomationProperties.Name="Revert">Revert</Button>
+					<Button Grid.Column="6" Classes="secondaryAction" Margin="6,0,0,6"
+					        Command="{Binding PreviewMagicCommand}" IsEnabled="{Binding HasDocument}"
+					        Content="{x:Static res:Strings.U_Md_OpenUpdatePreview}"
+                            ToolTip.Tip="{x:Static res:Strings.U_Md_WorkingPreviewHint}"
+                            AutomationProperties.Name="{x:Static res:Strings.U_Md_OpenUpdatePreview}" />
+
+					<TextBox Grid.Column="7" Classes="mono" Margin="16,0,0,0" Width="220"
+					         Watermark="{x:Static res:Strings.U_filtrar_slots_ex_pppsclmove_rand_draw_4de21efd}"
+					         Text="{Binding SlotFilter, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+					         AutomationProperties.Name="Filter slots" />
+				</Grid>
+
+			</StackPanel>
+		</Border>
+
+
+		<!-- ===== Painel Editor de clone (DockPanel.Dock=Bottom) — diff read-only ===== -->
+
+
+		<!-- ===== Rodapé (DockPanel.Dock=Bottom) — Log &amp; Status ===== -->
+
+
+		<!-- ===== Corpo: TreeView (esquerda) | Painel de edição (direita) ===== -->
+		<Grid Grid.Row="1" ColumnDefinitions=".28*,.72*" Margin="0,4,0,0">
+
+			<!-- 1) TreeView de navegação — hierarquia Root → Descriptors → Programs → Slots → Fields -->
+			<Border Classes="card" Padding="8">
+				<DockPanel>
+					<TextBlock DockPanel.Dock="Top" Classes="sectionLabel" Margin="0,0,0,8" Text="{x:Static res:Strings.U_estruturas_65c3909c}" />
+					<TreeView ItemsSource="{Binding RootNodes}"
+					          SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+					          Background="Transparent"
+					          AutomationProperties.Name="Structure tree" DoubleTapped="OnTreeDoubleTapped">
+						<TreeView.ItemTemplate>
+							<TreeDataTemplate ItemsSource="{Binding Children}">
+								<StackPanel Orientation="Horizontal" Spacing="8">
+									<TextBlock Text="{Binding Label}" FontSize="12" VerticalAlignment="Center" />
+									<TextBlock Classes="mono" FontSize="10"
+									           Foreground="{DynamicResource TextMutedBrush}"
+									           Text="{Binding MetaText}" VerticalAlignment="Center"
+									           TextTrimming="CharacterEllipsis" MaxWidth="220" />
+								</StackPanel>
+							</TreeDataTemplate>
+						</TreeView.ItemTemplate>
+						<TreeView.Styles>
+							<Style Selector="TreeViewItem">
+								<Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+							</Style>
+						</TreeView.Styles>
+					</TreeView>
+				</DockPanel>
+			</Border>
+
+
+			<!-- 2) Painel de edição do nó selecionado (nome/tipo/offset/valor editável) -->
+			<Border Grid.Column="1" Classes="card" Margin="10,0,0,0" Padding="16">
+				<Panel>
+					<TextBlock Text="{x:Static res:Strings.U_selecione_um_no_na_arvore_root_descriptor_progra_7bb9a0ac}"
+					           Classes="muted" HorizontalAlignment="Center" VerticalAlignment="Center"
+					           TextWrapping="Wrap" IsVisible="{Binding NoSelection}" />
+
+					<ContentControl Content="{Binding SelectedNode}" IsVisible="{Binding HasSelection}">
+						<ContentControl.ContentTemplate>
+							<DataTemplate>
+								<!-- ===== Flex do painel: pasta (navegação drill-down) | campo (editor) ===== -->
+								<Panel>
+
+									<!-- Visão de PASTA (nós com filhos: Root/Grupo/Descriptor/Program/Slot) -->
+									<ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"
+									           IsVisible="{Binding IsContainer}">
+										<StackPanel Spacing="10">
+<!-- Breadcrumb: voltar | avançar | caminho -->
+										<Grid ColumnDefinitions="Auto,*,Auto">
+											<StackPanel Orientation="Horizontal" Spacing="4">
+												<Button Classes="secondaryAction" Padding="8,4" Content="{x:Static res:Strings.U_arrow_782_fe98e12b}"
+												        Command="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).NavigateBackCommand}"
+												        IsEnabled="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).CanNavigateBack}"
+												        AutomationProperties.Name="Back" ToolTip.Tip="{x:Static res:Strings.U_back_to_previous_level_45878ba2}" />
+												<Button Classes="secondaryAction" Padding="8,4" Content="{x:Static res:Strings.U_arrow_784_0616fbe7}"
+												        Command="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).NavigateForwardCommand}"
+												        IsEnabled="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).CanNavigateForward}"
+												        AutomationProperties.Name="Forward" ToolTip.Tip="{x:Static res:Strings.U_forward_to_next_level_648c3254}" />
+											</StackPanel>
+											<TextBlock Grid.Column="1" Classes="mono" FontSize="11" Margin="8,0"
+											           Foreground="{DynamicResource TextMutedBrush}"
+											           Text="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).BreadcrumbText}"
+											           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+											<TextBlock Grid.Column="2" Classes="mono" FontSize="11"
+											           Foreground="{DynamicResource TextMutedBrush}" Text="{Binding MetaText}" VerticalAlignment="Center" />
+										</Grid>
+										<!-- Cabeçalho da pasta -->
+										<TextBlock Classes="sectionLabel" Text="{Binding Label}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding DetailText}" TextWrapping="Wrap" />
+										<Separator Margin="0,6" Opacity="0.5" />
+										<Border Background="{DynamicResource ReadonlyFillBrush}" CornerRadius="6" Padding="10" Margin="0,2,0,0" IsVisible="{Binding IsReadOnlyPpp}">
+											<StackPanel Spacing="4">
+												<TextBlock Classes="muted" FontSize="11" FontWeight="SemiBold" Text="{x:Static res:Strings.U_so_leitura_edf2f4a1}" Foreground="{DynamicResource DangerBrush}" />
+												<TextBlock Classes="muted" FontSize="11" Text="{Binding PppReadOnlyReason}" Foreground="{DynamicResource DangerBrush}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+
+
+										<!-- Lista de filhos (o que está DENTRO da pasta) -->
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding ChildrenHint}" />
+										<ItemsControl ItemsSource="{Binding Children}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Button Classes="secondaryAction" HorizontalAlignment="Stretch" Margin="0,2"
+													        HorizontalContentAlignment="Left"
+													        Command="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).NavigateIntoCommand}"
+													        CommandParameter="{Binding}">
+														<StackPanel Orientation="Horizontal" Spacing="8">
+															<TextBlock Text="{Binding Label}" FontSize="12" VerticalAlignment="Center" />
+															<TextBlock Classes="mono" FontSize="10"
+															           Foreground="{DynamicResource TextMutedBrush}"
+															           Text="{Binding MetaText}" VerticalAlignment="Center"
+															           TextTrimming="CharacterEllipsis" MaxWidth="200" />
+															<TextBlock Classes="mono" FontSize="10" Text="{x:Static res:Strings.U_arrow_144_37705c7c}"
+															           Foreground="{DynamicResource TextMutedBrush}" VerticalAlignment="Center" />
+														</StackPanel>
+													</Button>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+										</StackPanel>
+									</ScrollViewer>
+									<!-- Visão de CAMPO (folha: campo editável) -->
+									<StackPanel Spacing="10" IsVisible="{Binding IsNotContainer}">
+<!-- Breadcrumb: voltar | avançar | caminho -->
+										<Grid ColumnDefinitions="Auto,*,Auto">
+											<StackPanel Orientation="Horizontal" Spacing="4">
+												<Button Classes="secondaryAction" Padding="8,4" Content="{x:Static res:Strings.U_arrow_782_fe98e12b}"
+												        Command="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).NavigateBackCommand}"
+												        IsEnabled="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).CanNavigateBack}"
+												        AutomationProperties.Name="Back" ToolTip.Tip="{x:Static res:Strings.U_back_to_previous_level_45878ba2}" />
+												<Button Classes="secondaryAction" Padding="8,4" Content="{x:Static res:Strings.U_arrow_784_0616fbe7}"
+												        Command="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).NavigateForwardCommand}"
+												        IsEnabled="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).CanNavigateForward}"
+												        AutomationProperties.Name="Forward" ToolTip.Tip="{x:Static res:Strings.U_forward_to_next_level_648c3254}" />
+											</StackPanel>
+											<TextBlock Grid.Column="1" Classes="mono" FontSize="11" Margin="8,0"
+											           Foreground="{DynamicResource TextMutedBrush}"
+											           Text="{Binding $parent[UserControl].((mdl:MagicDllEditor_ViewModel)DataContext).BreadcrumbText}"
+											           TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+											<TextBlock Grid.Column="2" Classes="mono" FontSize="11"
+											           Foreground="{DynamicResource TextMutedBrush}" Text="{Binding MetaText}" VerticalAlignment="Center" />
+										</Grid>
+										<TextBlock Classes="sectionLabel" Text="{Binding Label}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding DetailText}" TextWrapping="Wrap" />
+										<Separator Margin="0,6" Opacity="0.5" />
+
+										<!-- Campo: nome + descricao humana + valor editavel -->
+										<Border Background="{DynamicResource PanelAltBrush}" CornerRadius="6" Padding="12" Margin="0,2,0,0">
+											<StackPanel Spacing="8">
+												<TextBlock Text="{Binding Label}" FontWeight="SemiBold" FontSize="14" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" FontSize="11" Text="{Binding DetailText}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" FontSize="11" Text="{Binding TypeHumanLabel}" TextWrapping="Wrap" />
+												<Grid ColumnDefinitions="Auto,*,Auto">
+													<TextBlock Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_valor_4271eb8a}" VerticalAlignment="Center" />
+												<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" Margin="8,0" VerticalAlignment="Center">
+													<NumericUpDown Width="150" Value="{Binding NumericValue, Mode=TwoWay}"
+													               Minimum="{Binding MinValue, FallbackValue=-3.402823E+38}"
+													               Maximum="{Binding MaxValue, FallbackValue=3.402823E+38}"
+													               FormatString="0.#####" IsVisible="{Binding IsNumeric}"
+													               IsEnabled="{Binding IsValueEditable}" />
+														<TextBox Width="150" Classes="mono" Watermark="{x:Static res:Strings.U_0x_23e7daf9}"
+														         Text="{Binding Value, Mode=TwoWay}"
+														         IsReadOnly="{Binding IsReadOnly}"
+														         IsVisible="{Binding UseValueBox}" />
+													</StackPanel>
+													<TextBlock Grid.Column="2" Classes="muted" FontSize="11" Text="{x:Static res:Strings.U_so_leitura_edf2f4a1}"
+													           Foreground="{DynamicResource DangerBrush}" VerticalAlignment="Center"
+													           IsVisible="{Binding IsReadOnlyNoticeVisible}" />
+												</Grid>
+												<TextBlock Classes="muted" FontSize="11" Text="{Binding ReadOnlyReason}"
+												           Foreground="{DynamicResource DangerBrush}" TextWrapping="Wrap"
+												           IsVisible="{Binding IsReadOnlyNoticeVisible}" />
+											</StackPanel>
+										</Border>
+
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding SemanticText}"
+										           TextWrapping="Wrap" IsVisible="{Binding HasSemantic}" />
+									</StackPanel>
+								</Panel>
+							</DataTemplate>
+						</ContentControl.ContentTemplate>
+					</ContentControl>
+				</Panel>
+			</Border>
+
+		</Grid>
+
+
+<Border x:Name="ToolSplitterAnchor" Grid.Row="2" />
+<TabControl Classes="magicTools" Grid.Row="3" SelectedIndex="{Binding PreviewToolTab, Mode=TwoWay}">
+<TabItem Header="{x:Static res:Strings.U_log_amp_status_49323f3e}"><ScrollViewer HorizontalScrollBarVisibility="Disabled"><Border  Margin="0,10,0,0" Padding="12" Classes="card">
+			<DockPanel>
+				<TextBlock DockPanel.Dock="Top" Classes="sectionLabel" Margin="0,0,0,8" Text="{x:Static res:Strings.U_log_amp_status_49323f3e}" />
+				<ListBox ItemsSource="{Binding Log}" Background="Transparent" MaxHeight="150"
+				         AutomationProperties.Name="Status log">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Classes="mono" FontSize="11" TextWrapping="Wrap"
+							           Foreground="{Binding Level, Converter={StaticResource LogLevelToBrush}}"
+							           Text="{Binding Text}" />
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+				<!-- ===== Preview 3D embutido (mini navegador) ? travado na magia em edi??o ===== -->
+
+
+	</DockPanel>
+		</Border></ScrollViewer></TabItem>
+<TabItem Header="{x:Static res:Strings.U_Md_ComparisonTab}"><ScrollViewer HorizontalScrollBarVisibility="Disabled"><Border  Margin="0,10,0,0" Padding="16" Classes="card">
+			<StackPanel Spacing="10">
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_editor_de_clone_mutacao_vs_vanilla_leitura_18e167a5}" VerticalAlignment="Center" />
+					<Button Grid.Column="1" Classes="secondaryAction" VerticalAlignment="Center"
+					        Command="{Binding RefreshCloneDiffCommand}" IsEnabled="{Binding HasDocument}"
+					        AutomationProperties.Name="Refresh clone diff">Refresh diff</Button>
+				</Grid>
+				<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+				           Text="{x:Static res:Strings.U_magic_clone_diff_hint}"
+				           IsVisible="{Binding !HasCloneDiff}" />
+				<TextBlock Classes="mono" FontSize="11" Text="{Binding CloneDiffSummary}" TextWrapping="Wrap"
+				           IsVisible="{Binding HasCloneDiff}" />
+				<TextBlock Classes="mono" FontSize="10" Text="{Binding CloneDiffDetail}"
+				           Foreground="{DynamicResource TextMutedBrush}" TextWrapping="NoWrap"
+				           IsVisible="{Binding HasCloneDiff}" />
+			</StackPanel>
+		</Border></ScrollViewer></TabItem>
+<TabItem Header="{x:Static res:Strings.U_preview_3d_9f2d1c77}" IsVisible="{Binding HasPreviewUrl}"><ScrollViewer HorizontalScrollBarVisibility="Disabled"><Border  Classes="card" Margin="0,10,0,0" IsVisible="{Binding HasPreviewUrl}">
+			<DockPanel>
+				<Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_preview_3d_9f2d1c77}" VerticalAlignment="Center" />
+					<Button Grid.Column="1" Classes="secondaryAction" Padding="8,4" Content="{x:Static res:Strings.U_close_9f2d1c77}"
+					        Command="{Binding ClosePreviewCommand}" AutomationProperties.Name="Close preview" />
+				</Grid>
+				<wv:WebView2Host x:Name="PreviewHost" Height="160" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+				                 IsVisible="{Binding !IsExternalViewer}" />
+				<Border Classes="cardSoft" Padding="16" Margin="8" IsVisible="{Binding IsExternalViewer}">
+					<StackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+						<TextBlock Classes="muted" TextWrapping="Wrap" MaxWidth="480"
+						           Text="{x:Static res:Strings.U_Vh_ExternalViewerManualMessage}" />
+<Button Content="{x:Static res:Strings.U_Md_ReopenPreview}" Command="{Binding ReopenPreviewCommand}" HorizontalAlignment="Center" />
+					</StackPanel>
+				</Border>
+			</DockPanel>
+		</Border></ScrollViewer></TabItem>
+</TabControl>
+</Grid>
+</UserControl>

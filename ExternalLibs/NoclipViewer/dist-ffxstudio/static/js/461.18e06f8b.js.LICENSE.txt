@@ -1,0 +1,125 @@
+/* @preserve The source code to this website is under the MIT license and can be found at https://github.com/magcius/noclip.website */
+
+/*!< Bilinear filtering, discrete mipmap */
+
+/*!< Bilinear filtering, no mipmap */
+
+/*!< Cull back-facing primitives. */
+
+/*!< Cull front-facing primitives. */
+
+/*!< Do not cull any primitives. */
+
+/*!< K0[AAA] register */
+
+/*!< K0[A] register */
+
+/*!< K0[BBB] register */
+
+/*!< K0[B] register */
+
+/*!< K0[GGG] register */
+
+/*!< K0[G] register */
+
+/*!< K0[RGB] register */
+
+/*!< K0[RRR] register */
+
+/*!< K0[R] register */
+
+/*!< K1[AAA] register */
+
+/*!< K1[A] register */
+
+/*!< K1[BBB] register */
+
+/*!< K1[B] register */
+
+/*!< K1[GGG] register */
+
+/*!< K1[G] register */
+
+/*!< K1[RGB] register */
+
+/*!< K1[RRR] register */
+
+/*!< K1[R] register */
+
+/*!< K2[AAA] register */
+
+/*!< K2[A] register */
+
+/*!< K2[BBB] register */
+
+/*!< K2[B] register */
+
+/*!< K2[GGG] register */
+
+/*!< K2[G] register */
+
+/*!< K2[RGB] register */
+
+/*!< K2[RRR] register */
+
+/*!< K2[R] register */
+
+/*!< K3[B] register */
+
+/*!< K3[GGG] register */
+
+/*!< K3[G] register */
+
+/*!< K3[RBB] register */
+
+/*!< K3[RGB] register */
+
+/*!< K3[RRR] register */
+
+/*!< K3[R] register */
+
+/*!< Point sampling, discrete mipmap */
+
+/*!< Point sampling, linear mipmap */
+
+/*!< Point sampling, no mipmap */
+
+/*!< Use the alpha value from previous TEV stage */
+
+/*!< Use the alpha value from rasterizer */
+
+/*!< Use the alpha value from texture */
+
+/*!< Use the alpha value from the color/output register 0 */
+
+/*!< Use the alpha value from the color/output register 1 */
+
+/*!< Use the alpha value from the color/output register 2 */
+
+/*!< Use the color value from previous TEV stage */
+
+/*!< Use the color value from rasterizer */
+
+/*!< Use the color value from texture */
+
+/*!< Use the color value from the color/output register 0 */
+
+/*!< Use the color value from the color/output register 1 */
+
+/*!< Use the color value from the color/output register 2 */
+
+/*!< constant 1.0 */
+
+/*!< constant 1/8 */
+
+/*!< constant 2/8 */
+
+/*!< constant 3/8 */
+
+/*!< constant 4/8 */
+
+/*!< constant 5/8 */
+
+/*!< constant 6/8 */
+
+/*!< constant 7/8 */

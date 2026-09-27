@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FFX Model Preview (T-Pose)</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #222831; color: #d7dee7; font: 12px/1.4 Inter, Segoe UI, sans-serif; }
+    #root { display: grid; grid-template-rows: auto 1fr; height: 100%; }
+    header { padding: 8px 12px; border-bottom: 1px solid #3a4550; }
+    #viewport { position: relative; min-height: 240px; }
+    #viewport canvas { display: block; width: 100%; height: 100%; }
+    #status { opacity: 0.8; }
+  </style>
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "./vendor/three/three.module.js",
+      "three/addons/": "./vendor/three/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+  <div id="root">
+    <header>
+      <div id="title">Model preview</div>
+      <div id="status">Loading…</div>
+    </header>
+    <div id="viewport"></div>
+  </div>
+  <script type="module" src="./model-preview.js"></script>
+</body>
+</html>

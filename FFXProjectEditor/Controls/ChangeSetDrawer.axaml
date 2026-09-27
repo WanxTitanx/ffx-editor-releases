@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="350"
+             x:Class="FFXProjectEditor.Controls.ChangeSetDrawer">
+	<Border Background="#101922" BorderBrush="#264052" BorderThickness="1,1,1,0" CornerRadius="12,12,0,0" Padding="16">
+		<Grid RowDefinitions="Auto,*">
+			<!-- Session Bar Header -->
+			<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,12">
+				<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10">
+					<Border Background="#2B2514" BorderBrush="#8C7326" BorderThickness="1" CornerRadius="12" Padding="10,4">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<TextBlock Text="📝" VerticalAlignment="Center" />
+							<TextBlock Name="PendingChangesText" Text="{x:Static res:Strings.U_ChgPending}" Foreground="#F1F5F9" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" />
+						</StackPanel>
+					</Border>
+					<TextBlock Name="RiskBadgeText" Text="{x:Static res:Strings.U_ChgRiskSafe}" Foreground="#4CAF8A" FontSize="11" VerticalAlignment="Center" FontWeight="SemiBold" />
+				</StackPanel>
+
+				<!-- Action Buttons -->
+				<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+					<Button Name="DiscardButton" Content="{x:Static res:Strings.U_ChgDiscard}" Background="#2B1417" Foreground="#D95A6A" BorderBrush="#8C2633" BorderThickness="1" CornerRadius="4" Padding="12,6" FontSize="11" />
+					<Button Name="SaveButton" Content="{x:Static res:Strings.U_ChgApply}" Background="#142B24" Foreground="#4CAF8A" BorderBrush="#2E7D63" BorderThickness="1" CornerRadius="4" Padding="14,6" FontSize="11" FontWeight="Bold" />
+				</StackPanel>
+			</Grid>
+
+			<!-- Content Area: Diffs / Progress / Receipt -->
+			<Grid Grid.Row="1" RowDefinitions="*,Auto">
+				<!-- Diff Preview -->
+				<ScrollViewer Name="DiffScrollViewer" Grid.Row="0" MaxHeight="240">
+					<ItemsControl Name="DiffItemsControl">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<ctrl:DiffSummaryView Margin="0,0,0,8" />
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+
+				<!-- Progress Indicator -->
+				<StackPanel Name="ProgressPanel" Grid.Row="1" Spacing="6" Margin="0,8,0,0" IsVisible="False">
+					<ProgressBar Name="OperationProgressBar" Minimum="0" Maximum="100" Value="0" Height="6" Foreground="#4CAF8A" Background="#15212C" />
+					<TextBlock Name="ProgressStatusText" Text="{x:Static res:Strings.U_ChgVerifying}" Foreground="#8BA3B5" FontSize="11" HorizontalAlignment="Center" />
+				</StackPanel>
+
+				<!-- Receipt Area -->
+				<ctrl:ReceiptCard Name="ReceiptCardControl" Grid.Row="1" Margin="0,8,0,0" IsVisible="False" />
+			</Grid>
+		</Grid>
+	</Border>
+</UserControl>
