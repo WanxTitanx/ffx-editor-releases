@@ -1,0 +1,40 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "generic-api-key"
+
+[[rules.allowlists]]
+description = "JDK TLS algorithm name"
+condition = "AND"
+paths = ["^ExternalLibs/FFXED/runtime/win\\-x64/conf/security/java\\.security$"]
+regexTarget = "secret"
+regexes = ["^AES/GCM/NoPadding$"]
+
+[[rules.allowlists]]
+description = "Deliberately fake redaction test input"
+condition = "AND"
+paths = ["^FFXProjectEditor\\.Tests/Core/LlmRedactorTests\\.cs$"]
+regexTarget = "secret"
+regexes = ["^sk\\-abc1234567890xyz$"]
+
+[[rules.allowlists]]
+description = "Deliberately fake redaction test input"
+condition = "AND"
+paths = ["^FFXProjectEditor\\.Tests/Core/OperationResilienceTests\\.cs$"]
+regexTarget = "secret"
+regexes = ["^sk\\-abcdef1234567890$"]
+
+[[rules.allowlists]]
+description = "Fake key used by an in-memory HTTP handler"
+condition = "AND"
+paths = ["^FFXProjectEditor\\.Tests/Core/LlmHttpAdapterTests\\.cs$"]
+regexTarget = "secret"
+regexes = ["^sk\\-test\\-1234567890abcdef$"]
+
+[[rules.allowlists]]
+description = "Minified JavaScript parser expression"
+condition = "AND"
+paths = ["^RuntimeTools/FFXMapViewerWeb/vendor/three/jsm/libs/chevrotain\\.module\\.min\\.js$"]
+regexTarget = "secret"
+regexes = ["^ae\\.isRecognitionException=void$"]

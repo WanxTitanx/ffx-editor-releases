@@ -1,0 +1,81 @@
+# NOTICE — third-party and external credits
+
+Spira Reforge Studio (binary name `FFXProjectEditor`) is licensed under the
+GNU General Public License v3.0 — see `LICENSE`.
+
+This project builds upon, embeds, or adapts the following open-source and
+community work. Each entry lists the license of the original work. Nothing
+here is presented as our own.
+
+## Extracted / adapted code (GPL-3.0 lineage)
+
+- **fahrenheit** — vendored reference copy at `Utilities/fahrenheit`
+  (`COPYING` = GPL-3.0). License: GPL-3.0.
+- **ZanarkandWorkshop** — Dragoon803 — https://github.com/Dragoon803/ZanarkandWorkshop
+  - License: GPL-3.0.
+  - ATEL battle-script machinery in `FFXProjectEditor/FfxLib/` was extracted
+    and adapted from this lineage (e.g. the parser notes in
+    `FfxLib/TreasureMap/EventTreasureScanner.cs`, dated 2026-08-06). Per-file
+    provenance comments are kept in the code.
+
+## Embedded viewers (bundled in the package)
+
+- **noclip.website** — Jasper St. Pierre (magcius) and contributors —
+  https://github.com/magcius/noclip.website
+  - License: MIT (upstream LICENSE shipped in `ExternalLibs/NoclipViewer/`
+    and in the package under `licenses/`).
+  - Hash-pinned frontend snapshot; provenance/patch note at
+    `licenses/noclip.website-PROVENANCE.md`, file list at
+    `release/noclip-runtime.manifest.json`. The bundled runtime is forbidden
+    from CDN calls; the C# host performs the CDN bootstrap/fetch-through.
+- **three.js** r165 — MIT — license shipped in each viewer vendor directory.
+- **Spector.js** 0.9.30 — MIT — license at `viewers/map/vendor/spector/LICENSE.txt`.
+
+## .NET dependencies
+
+- **Avalonia UI** 11.2.3, Avalonia.Xaml.Behaviors — MIT — https://avaloniaui.net
+- **SkiaSharp** 2.88.9 / **HarfBuzzSharp** 7.3.0.3 — MIT/BSD-style upstream.
+- **CommunityToolkit.Mvvm** 8.4.0, **NAudio** 2.3.0, **System.Reactive** 6.0.1 —
+  MIT.
+- **Material.Icons / Material.Icons.Avalonia** 2.1.10 — MIT + upstream icon-set
+  licenses.
+- **DialogHost.Avalonia** 0.7.7, **MicroCom.Runtime** 0.11.0,
+  **Xe.BinaryMapper** 1.5.2 — per-package licenses.
+- **.NET 8 runtime** (self-contained in the package) — MIT +
+  https://github.com/dotnet/runtime third-party notices.
+
+## Bundled tools (executables, aggregate)
+
+- **vgmstream CLI** + codec deps — license at `tools/vgmstream/COPYING`.
+- **Microsoft Build of OpenJDK** 21 jlink image — GPLv2 + Classpath Exception,
+  legal texts under `runtime/java/legal/`. Used only to run FFXED.jar.
+- **FFXED.jar** — legacy Java save editor (upstream project FFXED); retained
+  for sections not yet ported. `BUNDLED_OWNER_ACCEPTED_RISK`.
+- **Binarysharp.MSharp / MemorySharp64**, **Keystone.Net/keystone** x64 —
+  memory tooling, x64 native payload only. `BUNDLED_OWNER_ACCEPTED_RISK`.
+- **fsbext**, **fsbankcl/fsbankex** — FSB/FMOD-adjacent extraction helpers.
+  `BUNDLED_OWNER_ACCEPTED_RISK`.
+- Exact shipped bytes/hashes: `release-manifest.json` +
+  `release/tool-dependencies.json` in each package.
+
+## Microsoft Windows prerequisites (user-consented installs)
+
+- Edge **WebView2** Evergreen Standalone x64 (1.3.257.13) — shipped unchanged,
+  Authenticode-validated, installed only after explicit consent.
+- **Visual C++ 2013 Redistributable** x64 (12.0.40664.0) — same terms; required
+  by Keystone.
+
+## Provenance of our own code
+
+- Editor source, `FfxLib` writers/parsers, the NoClip host integration
+  (`?edit=1` sidecar layer), and the release pipeline are this project's own
+  work except where a file-level provenance comment says otherwise.
+- The reverse-engineering knowledge base under `docs/reverse/` is in-house IDA
+  Pro work against the user's own game installation.
+
+## Disclaimer
+
+FINAL FANTASY X/X-2 HD Remaster is a trademark/copyright of Square Enix. This
+project is fan-made tooling; it does not distribute game assets, executable
+game code, ISOs, VBFs, FEV/FSB banks, or extracted corpora — those inputs must
+come from the user's own installation or extraction.
