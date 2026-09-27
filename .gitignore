@@ -1,4 +1,6 @@
 **/bin/
+!ExternalLibs/FFXED/runtime/win-x64/bin/
+!ExternalLibs/FFXED/runtime/win-x64/bin/**
 **/obj/
 **/TestResults/
 **/__pycache__/
