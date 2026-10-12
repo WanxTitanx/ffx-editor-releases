@@ -27,7 +27,7 @@ i.e. end-of-file = 0x152 + 403,997 = 404,335; the offset family matches every
 
 - `/mnt/nvme-samsung` (FFX Extracted FFX+FFX2, FFX Mods): 6,335+ `.fev` scanned — absent;
 - `/mnt/nvme-xpg` (FFX_Data PS4 dump): 4,428 `.fev` scanned — absent;
-- `/mnt/ssd-kingston/ffx-reconstructed` (PS3 FFXX2HDREMASTER + PS4 extractions): included in scan — absent;
+- `<analysis-root>/` (PS3 FFXX2HDREMASTER + PS4 extractions): included in scan — absent;
 - full git history (`git log --all`, 1,267 distinct historical `.fev` blobs) — absent (largest: `0000.fev` 472,330);
 - independent confirmation: `artifacts/2026-09-15/script-validation/battlemap-save-qa.md` §5.2 already concluded "404335B não presente no host".
 
