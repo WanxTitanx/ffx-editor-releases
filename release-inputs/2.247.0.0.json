@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "product": "Spira Reforge Studio",
+  "legacyName": "FFX Mod Studio",
+  "version": "2.247.0.0",
+  "channel": "stable",
+  "platforms": [
+    "windows",
+    "linux"
+  ],
+  "architecture": "x64",
+  "portable": true,
+  "launchExecutableWindows": "FFXProjectEditor.exe",
+  "launchExecutableLinux": "FFXProjectEditor",
+  "sourceRepository": "https://github.com/WanxTitanx/ffx-editor-main",
+  "productCommit": "58b26c0d70a4aa767eeb5180dde623b2067be26a",
+  "windowsPinsCommit": "58b26c0d70a4aa767eeb5180dde623b2067be26a",
+  "sourceTag": "v2.247.0.0",
+  "windowsCodeSigning": "not-signed",
+  "artifact": {
+    "name": "Spira-Reforge-Studio-v2.247.0.0-win-x64.zip",
+    "bytes": 363769345,
+    "sha256": "a3cfbeb857c05a6699e9893a2dfcac329358d83f2e981fd70d9d5494773e3064",
+    "format": "zip",
+    "fileCount": 673
+  },
+  "linuxArtifact": {
+    "name": "studio-core-linux-x64-2.247.0.0.tar.gz",
+    "bytes": 60553581,
+    "sha256": "5e5339c7f3e1d2adfebe4d638128c61302c4a46baa4e351c1f916f5c31a16991",
+    "format": "tar.gz",
+    "fileCount": 309
+  },
+  "validation": {
+    "buildMode": "Candidate",
+    "sourceDirty": false,
+    "localAndNativeVmValidation": true,
+    "fullLinux": {
+      "total": 3189,
+      "passed": 3179,
+      "failed": 0,
+      "skipped": 10
+    },
+    "fullWindows": {
+      "total": 3189,
+      "passed": 3177,
+      "failed": 0,
+      "skipped": 12
+    },
+    "additionalFrozenConsumerLinux": {
+      "passed": 117,
+      "failed": 0,
+      "skipped": 0
+    },
+    "additionalFrozenConsumerWindows": {
+      "passed": 115,
+      "failed": 0,
+      "skipped": 2,
+      "skips": "Linux-specific symlink semantics"
+    },
+    "linuxPublicModules": 30,
+    "linuxLanguages": 9,
+    "windowsGuiAndBundledJavaFfxed": "passed; existing Windows11 VM, not a clean OS",
+    "linuxFirstUse": "passed with nonexistent user-data directories",
+    "windows10": "not-run",
+    "cleanWindowsOs": "not-run",
+    "gameplayRt2": "not-run",
+    "nativeBattleRendering": "not-claimed",
+    "sourceScope": "filtered owned source; binary fixtures and private history excluded",
+    "consumerSourceRevision": "dda5cb45305448d761e5412f3b265e58213d8ce2; offline legacy consumer proof only",
+    "releaseReview": "ACCEPT_PUBLIC_OFFICIAL_RELEASE_2.247.0.0",
+    "independentReviewSha256": "628f996c9109c575b8cf04870a0c222d1404997cbbe2d14ef9f921c05112e716"
+  }
+}

@@ -1,0 +1,40 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1200"
+             d:DesignHeight="860"
+             x:Class="FFXProjectEditor.Modules.Unwired.UnwiredCatalog_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_wave_1_read_only_browser_f341cd2a}" />
+				<TextBlock Classes="cardTitle" Text="{Binding Title}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" FontSize="11" Text="{Binding SourcePath}" TextWrapping="Wrap" />
+				<TextBlock FontSize="11" Foreground="#C9A227" Text="{Binding StatusNote}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="1" Classes="card" Padding="{DynamicResource SpacingSm}">
+			<ScrollViewer>
+				<ItemsControl ItemsSource="{Binding Rows}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,6">
+								<StackPanel Spacing="2">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Title}"
+									           FontFamily="Cascadia Mono,Consolas,Monospace" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Detail}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</UserControl>

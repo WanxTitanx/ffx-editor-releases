@@ -1,0 +1,898 @@
+	<UserControl xmlns="https://github.com/avaloniaui"
+	             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+	             xmlns:cv="clr-namespace:FFXProjectEditor.Converters"
+	             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+	             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+	             d:DesignWidth="1500"
+	             d:DesignHeight="920"
+	             rsp:Responsive.Breakpoints="True"
+	             x:Class="FFXProjectEditor.Modules.Extras.MagicDllBrowser_Control">
+
+	<!-- Jarvis-UI (Magic DLL Browser audit 2026-06-20):
+	     P0 — 9+ hex literais nos badges RT2 / Wave4 guidance sobem a tokens: Wave4 editing
+	          guidance + Value Workbench family warning -> {DynamicResource WarningBrush};
+	          badge rt2-dead -> Classes="pillDanger"; badge rt2-timing PROVED -> Classes="pillWriter";
+	          badge rt2-timing RISK -> fundo PanelAltBrush + WarningBrush (border/foreground). Nenhum
+	          #RRGGBB de chrome sobra no .axaml.
+	     P1 — 2o consumidor do repo de ModuleMasterDetail_Shell (1o = RuntimeDllManager): master =
+	          lista de magic_*.dll; detail = hero de acoes + TabControl denso (Sections/Exports/...).
+	     P2 — EmptyState no detail quando !HasSelectedDll; empty state na master quando !HasDllList
+	          (root ausente ou filtro sem resultado); rsp:Responsive.Breakpoints no root + style
+	          UserControl.narrow colapsa o master (<760px).
+	     P3 — AutomationProperties.Name nos botoes de acao do detail (Open/Extract/Repack/Patch Plan/...).
+	     Escopo respeitado: PE overlay, patch builder, value workbench, logical decompile, deploy clone,
+	          DataModel decompile/repack/patch logic — intocados. So o container visual mudou. -->
+
+	<UserControl.Styles>
+		<!-- Responsividade: em telas estreitas o painel master recolhe por default (o Expander do shell
+		     ainda permite reabrir manualmente; o TwoWay interno persiste a escolha enquanto o controle vive). -->
+		<Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+			<Setter Property="IsMasterExpanded" Value="False" />
+		</Style>
+	</UserControl.Styles>
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<!-- Jarvis-UI (Sprint F 2026-06-20):
+		     OPT-F1 — header card agora Classes="card heroGradient" (alinhado ao hero do RuntimeDllManager;
+		               contraste verificado contra os TextBlocks muted; antes era card puro por decisão de v2.159.4.0).
+		     OPT-F7 — StatusText pinta por severidade (DangerBrush/WarningBrush/WarningBrush default neutro).
+		     OPT-F9 — pill WRITER LAB · native magicFiles DLL · RT2 pending no header (Border.pillWriter),
+		              sinal honesto de escopo igual aos hubs Blitzball. -->
+		<Border Classes="card heroGradient" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<StackPanel Orientation="Horizontal" Spacing="10">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_magic_dlls_ffx_a732620f}" VerticalAlignment="Center" />
+					<Border Classes="pillWriter" VerticalAlignment="Center">
+						<TextBlock Text="{x:Static res:Strings.U_writer_lab_native_magicfiles_dll_rt2_pending_dbe50772}" />
+					</Border>
+				</StackPanel>
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_native_magic_dll_decompiler_compiler_lab_27eec912}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" Text="{Binding BoundarySummary}" TextWrapping="Wrap" />
+				<TextBlock Text="{Binding StatusText}" TextWrapping="Wrap"
+				           Foreground="{Binding StatusSeverity, Converter={x:Static cv:StatusSeverityBrushConverter.Instance}}" />
+			</StackPanel>
+		</Border>
+
+		<common:ModuleMasterDetail_Shell Grid.Row="1" MasterHeaderLabel="Magic DLLs"
+		                                 IsMasterExpanded="{Binding IsMasterExpanded, Mode=TwoWay}">
+
+			<!-- ===== MASTER: titulo + Root/Refresh + Source Root summary + Search + ListBox de DLLs ===== -->
+			<common:ModuleMasterDetail_Shell.MasterHeader>
+				<StackPanel Spacing="6" Margin="2,0,2,2">
+					<Grid ColumnDefinitions="*,Auto,Auto">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_magicfiles_dlls_0134442d}" />
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction"
+						        Click="Button_BrowseRoot"
+						        AutomationProperties.Name="Escolher pasta magicFiles\FFX raiz">Root</Button>
+						<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction"
+						        Click="Button_Refresh"
+						        AutomationProperties.Name="Recarregar lista de magic DLLs">Refresh</Button>
+					</Grid>
+					<Border Classes="cardSoft" Padding="10">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSourceRoot}" />
+							<TextBlock Text="{Binding RootPath, Mode=TwoWay}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+					<TextBox Margin="0,2,0,0"
+					         Watermark="{x:Static res:Strings.U_search_magic_id_or_dll_name_0b7de121}"
+					         AutomationProperties.Name="Filtrar lista de magic DLLs por id ou nome"
+					         Text="{Binding SearchText, Mode=TwoWay}" />
+				</StackPanel>
+			</common:ModuleMasterDetail_Shell.MasterHeader>
+
+			<common:ModuleMasterDetail_Shell.MasterList>
+				<Panel>
+					<ListBox ItemsSource="{Binding Dlls}"
+					         SelectedItem="{Binding SelectedDll, Mode=TwoWay}"
+					         IsVisible="{Binding HasDllList}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+									<StackPanel Spacing="3">
+										<TextBlock FontWeight="SemiBold" Text="{Binding FileName}" />
+										<TextBlock Classes="muted" Text="{Binding Summary}" />
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+
+					<!-- OPT-F6: empty state da master no padrão Border#EmptyState (ícone + copy), paridade com
+					     o detail empty — antes era um cardSoft sem ícone. Root ausente ou nenhum resultado. -->
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingXl}" IsVisible="{Binding !HasDllList}"
+					        HorizontalAlignment="Stretch" VerticalAlignment="Center">
+						<StackPanel Spacing="10">
+							<PathIcon Data="{DynamicResource IconPackage}" Width="28" Height="28"
+							          HorizontalAlignment="Center"
+							          Foreground="{DynamicResource TextMutedBrush}" />
+							<TextBlock Classes="h3" HorizontalAlignment="Center" Text="{x:Static res:Strings.U_no_magic_dlls_1d9b13d4}" />
+							<TextBlock TextAlignment="Center" TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_set_the_magicfiles_ffx_root_the_folder_holding_m_ac24bf99}" />
+						</StackPanel>
+					</Border>
+				</Panel>
+			</common:ModuleMasterDetail_Shell.MasterList>
+
+			<!-- ===== DETAIL: hero de acoes + Wave4 + Patch Builder + TabControl (ou EmptyState) ===== -->
+			<common:ModuleMasterDetail_Shell.Detail>
+				<Panel>
+					<ScrollViewer Margin="14,0,0,0" HorizontalScrollBarVisibility="Disabled"
+					              IsVisible="{Binding HasSelectedDll}">
+						<StackPanel Spacing="12">
+							<Grid ColumnDefinitions="*,Auto">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_dll_c788d8a1}" />
+								<TextBlock Classes="cardTitle" Text="{Binding SelectedDllTitle}" />
+								<TextBlock Classes="muted" Text="{Binding SelectedDllPath}" TextWrapping="Wrap" />
+								<TextBlock Text="{Binding InspectionSummary}" TextWrapping="Wrap" />
+								<TextBlock Classes="muted" Text="{Binding OverlaySummary}" TextWrapping="Wrap" />
+							</StackPanel>
+							<!-- Jarvis-UI (Sprint F 2026-06-20, OPT-F3): de fato 2 linhas de botões — antes era
+							     um WrapPanel único onde a quebra dependia da largura (o comentário dizia "2 linhas"
+							     mas não era garantido). Linha 1 = Open/View; Linha 2 = Author/Patch. -->
+							<StackPanel Grid.Column="1" Spacing="4" VerticalAlignment="Top" MinWidth="190">
+								<StackPanel Orientation="Horizontal" Spacing="4">
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_OpenMagicViewer"
+									        AutomationProperties.Name="Abrir Magic Viewer para esta DLL">Magic Viewer</Button>
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasPhyrePackage}"
+									        Click="Button_OpenPhyrePackage"
+									        AutomationProperties.Name="Abrir Phyre Package I/O do primeiro .dds.phyre">Phyre Package I/O</Button>
+								</StackPanel>
+								<StackPanel Orientation="Horizontal" Spacing="4">
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_OpenDll"
+									        AutomationProperties.Name="Abrir a DLL selecionada no Explorer">Open DLL</Button>
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_Decompile"
+									        AutomationProperties.Name="Extrair recursos da DLL (decompile)">Extract</Button>
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_LogicalDecompile"
+									        AutomationProperties.Name="Gerar relatorio de logical decompile">Logical Decompile</Button>
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_Repack"
+									        AutomationProperties.Name="Rebuild byte-identical da DLL">Repack</Button>
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_ApplyPatchPlan"
+									        AutomationProperties.Name="Aplicar patch plan JSON na DLL">Patch Plan</Button>
+									<Button Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_NativeProject"
+									        AutomationProperties.Name="Gerar projeto C/ASM da DLL">C/ASM Project</Button>
+									<Button Classes="secondaryAction"
+									        Click="Button_SemanticReport"
+									        AutomationProperties.Name="Gerar relatorio de RE semantica">Semantic RE Report</Button>
+								</StackPanel>
+							</StackPanel>
+						</Grid>
+
+						<!-- OPT-F5: bloco "Selected DLL" detail hero agora heroGradient (alinhado ao hero do
+						     RuntimeDllManager). Continua sem card extra — o gradient já é o container visual. -->
+						<Border Classes="heroGradient" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,0" IsVisible="{Binding HasSelectedDll}">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_inspection_d3ce4618}" />
+								<TextBlock Text="{Binding InspectionSummary}" TextWrapping="Wrap" />
+								<TextBlock Classes="muted" Text="{Binding OverlaySummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+							<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<Grid ColumnDefinitions="Auto,120,Auto">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_clone_selected_dll_to_18734dd3}" VerticalAlignment="Center" />
+									<TextBox Grid.Column="1" Margin="10,0,10,0"
+									         Text="{Binding CloneMagicIdText, Mode=TwoWay}" />
+									<Button Grid.Column="2" Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+									        Click="Button_Clone"
+									        AutomationProperties.Name="Clonar a DLL selecionada para um novo magic id">Clone</Button>
+								</Grid>
+							</Border>
+
+							<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}" IsVisible="{Binding ShowWave4AttributionCard}">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_wave4_attribution_offline_re_b9c1107d}" />
+									<TextBlock Classes="muted" Text="{Binding Wave4CatalogSummary}" TextWrapping="Wrap" />
+									<Grid ColumnDefinitions="150,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+										<TextBlock Text="{x:Static res:Strings.CommonCategory}" />
+										<TextBlock Grid.Column="1" FontWeight="SemiBold" Text="{Binding Wave4Category}" />
+										<TextBlock Grid.Row="1" Text="{x:Static res:Strings.U_family_4efb6cb7}" />
+										<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Wave4Family}" />
+										<TextBlock Grid.Row="2" Text="{x:Static res:Strings.U_recommended_9ef93755}" />
+										<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Wave4RecommendedAction}" TextWrapping="Wrap" />
+										<TextBlock Grid.Row="3" Text="{x:Static res:Strings.U_overlay_signature_2d86f56c}" />
+										<TextBlock Grid.Row="3" Grid.Column="1" Classes="muted" Text="{Binding Wave4OverlaySignature}" TextWrapping="Wrap" />
+										<TextBlock Grid.Row="4" Text="{x:Static res:Strings.U_catalog_spells_34f2025e}" />
+										<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Wave4CatalogSpells}" TextWrapping="Wrap" />
+										<TextBlock Grid.Row="5" Text="{x:Static res:Strings.U_rt2_priority_94e1f9c0}" />
+										<TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Wave4Rt2Priority}" />
+										<TextBlock Grid.Row="6" Text="{x:Static res:Strings.U_editing_guidance_c7544609}" />
+										<TextBlock Grid.Row="6" Grid.Column="1"
+										           Foreground="{DynamicResource WarningBrush}"
+										           Text="{Binding Wave4EditingGuidance}" TextWrapping="Wrap" />
+									</Grid>
+									<TextBlock IsVisible="{Binding Wave4ClusterNote, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+									           Classes="muted" Text="{Binding Wave4ClusterNote}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Wave4KernelRefSummary}" TextWrapping="Wrap" />
+									<ItemsControl ItemsSource="{Binding Wave4KernelRefs}" MaxHeight="180">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+									<TextBlock IsVisible="{Binding HasPhyrePackage}"
+									           Classes="muted"
+									           Text="{Binding FirstPhyrePackagePath}"
+									           TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+
+							<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="10">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_direct_patch_builder_20bad0e7}" />
+									<TextBlock Classes="muted" Text="{Binding PatchBuilderSummary}" TextWrapping="Wrap" />
+									<WrapPanel Orientation="Horizontal">
+										<StackPanel Margin="0,0,12,8" MinWidth="150">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_file_offset_533e4435}" />
+											<TextBox Watermark="0x1234"
+											         Text="{Binding PatchFileOffsetText, Mode=TwoWay}" />
+										</StackPanel>
+										<StackPanel Margin="0,0,12,8" MinWidth="150">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonRva}" />
+											<TextBox Watermark="0x2000"
+											         Text="{Binding PatchRvaText, Mode=TwoWay}" />
+										</StackPanel>
+										<StackPanel Margin="0,0,12,8" MinWidth="260">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_hex_bytes_9b4b6c3e}" />
+											<TextBox Watermark="90 90"
+											         Text="{Binding PatchHexBytesText, Mode=TwoWay}" />
+										</StackPanel>
+										<Button Margin="0,18,12,8"
+										        Classes="secondaryAction"
+										        IsEnabled="{Binding HasSelectedDll}"
+										        Click="Button_ApplyInlineBytePatch"
+										        AutomationProperties.Name="Aplicar byte patch na DLL de saida">Apply Byte Patch</Button>
+									</WrapPanel>
+									<WrapPanel Orientation="Horizontal">
+										<StackPanel Margin="0,0,12,8" MinWidth="260">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ascii_text_4a76185f}" />
+											<TextBox Watermark="{x:Static res:Strings.U_new_text_0ef7c651}"
+											         Text="{Binding PatchAsciiText, Mode=TwoWay}" />
+										</StackPanel>
+										<StackPanel Margin="0,0,12,8" MinWidth="150">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_max_length_ecce794d}" />
+											<TextBox Watermark="{x:Static res:Strings.U_auto_0d612c12}"
+											         Text="{Binding PatchAsciiMaxLengthText, Mode=TwoWay}" />
+										</StackPanel>
+										<CheckBox Margin="0,22,12,8"
+										          Content="{x:Static res:Strings.U_null_terminate_ab6ecd3c}"
+										          IsChecked="{Binding PatchAsciiNullTerminate, Mode=TwoWay}" />
+										<Button Margin="0,18,12,8"
+										        Classes="secondaryAction"
+										        IsEnabled="{Binding HasSelectedDll}"
+										        Click="Button_ApplyInlineAsciiPatch"
+										        AutomationProperties.Name="Aplicar patch ASCII na DLL de saida">Apply ASCII Patch</Button>
+									</WrapPanel>
+								</StackPanel>
+							</Border>
+
+							<!-- Seletor de grupo de abas: Estrutura | Runtime | RE (2026-08-02, Jarvis-MAGIC-SHIVA) -->
+							<StackPanel Orientation="Horizontal" Spacing="6" Margin="0,12,0,0">
+								<Button x:Name="GroupPill0" Classes="tabPillActive" Content="{x:Static res:Strings.U_grupo_estrutura}"
+								        Click="Button_SetTabGroup" CommandParameter="0"
+								        AutomationProperties.Name="Grupo Estrutura" />
+								<Button x:Name="GroupPill1" Classes="tabPill" Content="{x:Static res:Strings.ModeRuntime}"
+								        Click="Button_SetTabGroup" CommandParameter="1"
+								        AutomationProperties.Name="Grupo Runtime" />
+								<Button x:Name="GroupPill2" Classes="tabPill" Content="{x:Static res:Strings.U_grupo_re}"
+								        Click="Button_SetTabGroup" CommandParameter="2"
+								        AutomationProperties.Name="Grupo RE" />
+							</StackPanel>
+
+							<TabControl x:Name="Tabs">
+								<TabItem Header="{x:Static res:Strings.CommonSections}">
+									<ItemsControl ItemsSource="{Binding Sections}" Margin="0,10,0,0">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+													<Grid ColumnDefinitions="120,*,*,*,*">
+														<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+														<TextBlock Grid.Column="1" Text="{Binding VirtualAddressDisplay}" />
+														<TextBlock Grid.Column="2" Text="{Binding VirtualSizeDisplay}" />
+														<TextBlock Grid.Column="3" Text="{Binding RawPointerDisplay}" />
+														<TextBlock Grid.Column="4" Text="{Binding RawSizeDisplay}" />
+													</Grid>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_exports_0e165379}">
+									<ItemsControl ItemsSource="{Binding Exports}" Margin="0,10,0,0">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+													<Grid ColumnDefinitions="90,*,160,160">
+														<TextBlock Text="{Binding OrdinalDisplay}" />
+														<TextBlock Grid.Column="1" FontWeight="SemiBold" Text="{Binding Name}" />
+														<TextBlock Grid.Column="2" Text="{Binding RvaDisplay}" />
+														<TextBlock Grid.Column="3" Text="{Binding FileOffsetDisplay}" />
+													</Grid>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_imports_e42328ac}">
+									<ItemsControl ItemsSource="{Binding Imports}" Margin="0,10,0,0">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+													<StackPanel Spacing="3">
+														<TextBlock FontWeight="SemiBold" Text="{Binding Library}" />
+														<TextBlock Text="{Binding CountSummary}" />
+														<TextBlock Classes="muted" Text="{Binding Preview}" TextWrapping="Wrap" />
+													</StackPanel>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_sound_sesep_3eceb2d0}">
+									<StackPanel Margin="0,10,0,0" Spacing="8">
+										<TextBlock Classes="muted" TextWrapping="Wrap"
+										           Text="{x:Static res:Strings.U_embedded_sesep_records_seid_0x08_fmod_battle_str_9413e4eb}" />
+										<ItemsControl ItemsSource="{Binding SeSepRecords}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+														<Grid ColumnDefinitions="40,100,80,80,80,60">
+															<TextBlock Text="{Binding RecordIndex}" />
+															<TextBlock Grid.Column="1" Text="{Binding FileOffsetHex}" />
+															<TextBlock Grid.Column="2" Text="{Binding SeIdText}" />
+															<TextBlock Grid.Column="3" Text="{Binding WaveDataIdText}" />
+															<TextBlock Grid.Column="4" Text="{Binding RecLenText}" />
+															<TextBlock Grid.Column="5" Text="{Binding VoiceCountText}" />
+														</Grid>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_wd3_streams_814832bc}">
+								<StackPanel Margin="0,10,0,0" Spacing="12">
+									<TextBlock Classes="muted" TextWrapping="Wrap"
+									           Text="{x:Static res:Strings.U_wd3_hierarchical_stream_container_5_overlapping__5fe2e42b}" />
+
+									<!-- Empty state: DLL has no WD3 blob -->
+									<Border Classes="cardSoft" Padding="{DynamicResource SpacingXl}"
+									        IsVisible="{Binding !Wd3Streams.HasStreams}"
+									        HorizontalAlignment="Stretch">
+										<StackPanel Spacing="10">
+											<PathIcon Data="{DynamicResource IconPackage}" Width="28" Height="28"
+											          HorizontalAlignment="Center"
+											          Foreground="{DynamicResource TextMutedBrush}" />
+											<TextBlock Classes="h3" HorizontalAlignment="Center" Text="{x:Static res:Strings.U_no_wd3_blob_d290ea33}" />
+											<TextBlock TextAlignment="Center" TextWrapping="Wrap"
+											           Text="{x:Static res:Strings.U_the_selected_dll_does_not_contain_a_wd3_stream_c_5bedf89f}" />
+										</StackPanel>
+									</Border>
+
+									<!-- Streams list + hex preview + recolor button -->
+									<Panel IsVisible="{Binding Wd3Streams.HasStreams}">
+										<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+											<!-- Left: stream ListBox -->
+											<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}" Grid.RowSpan="3">
+												<StackPanel Spacing="8">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_streams_74985da2}" />
+													<TextBlock Classes="muted" Text="{Binding Wd3Streams.BlobSummary}" TextWrapping="Wrap" />
+													<ListBox Height="240"
+													         ItemsSource="{Binding Wd3Streams.Streams}"
+													         SelectedIndex="{Binding Wd3Streams.SelectedStreamIndex, Mode=TwoWay}">
+														<ListBox.ItemTemplate>
+															<DataTemplate>
+																<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+																	<Grid ColumnDefinitions="100,100,80,*">
+																		<TextBlock FontWeight="SemiBold" Text="{Binding StartOffset, StringFormat=0x{0:X}}" />
+																		<TextBlock Grid.Column="1" Text="{Binding EndOffset, StringFormat=0x{0:X}}" />
+																		<TextBlock Grid.Column="2" Text="{Binding Scale, StringFormat={}{0:F2}}" />
+																		<TextBlock Grid.Column="3" Classes="muted" Text="{Binding RangeSummary}" />
+																	</Grid>
+																</Border>
+															</DataTemplate>
+														</ListBox.ItemTemplate>
+													</ListBox>
+												</StackPanel>
+											</Border>
+
+											<!-- Right: hex preview -->
+											<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}" Grid.Column="1" Grid.RowSpan="2">
+												<StackPanel Spacing="8">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_hex_preview_first_256_bytes_8b8745f1}" />
+													<TextBlock Classes="muted" Text="{Binding Wd3Streams.SelectedStream.RangeSummary}" TextWrapping="Wrap" />
+													<Border Classes="cardSoft" Padding="10">
+														<TextBlock FontFamily="Consolas,Courier New,monospace"
+														           Text="{Binding Wd3Streams.SelectedStream.DataPreview}"
+														           TextWrapping="Wrap" />
+													</Border>
+												</StackPanel>
+											</Border>
+
+											<!-- Right bottom: recolor button -->
+											<StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,8,0,0">
+												<Button Classes="secondaryAction"
+												        IsEnabled="{Binding Wd3Streams.HasStreams}"
+												        Click="Button_ApplyWd3Recolor"
+												        AutomationProperties.Name="Aplicar recolor ao stream selecionado">Apply Recolor to Stream</Button>
+											</StackPanel>
+										</Grid>
+									</Panel>
+
+									<!-- Status -->
+									<TextBlock Text="{Binding Wd3Streams.StatusText}" TextWrapping="Wrap"
+									           Foreground="{Binding Wd3Streams.StatusSeverity, Converter={x:Static cv:StatusSeverityBrushConverter.Instance}}" />
+								</StackPanel>
+							</TabItem>
+
+							<TabItem Header="{x:Static res:Strings.U_overlay_slots_ddfc9b10}">
+									<ItemsControl ItemsSource="{Binding OverlaySlots}" Margin="0,10,0,0">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+													<Grid ColumnDefinitions="80,*,*,*,*">
+														<TextBlock Text="{Binding IndexDisplay}" />
+														<TextBlock Grid.Column="1" Text="{Binding Kind}" />
+														<TextBlock Grid.Column="2" Text="{Binding Section}" />
+														<TextBlock Grid.Column="3" Text="{Binding VirtualAddress}" />
+														<TextBlock Grid.Column="4" Text="{Binding Rva}" />
+													</Grid>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_role_candidates_03557be6}">
+									<StackPanel Margin="0,10,0,0" Spacing="12">
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_overlay_callback_slots_aac8f493}" />
+												<ItemsControl ItemsSource="{Binding SlotRoleCandidates}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Border Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+																<Grid ColumnDefinitions="82,260,92,*">
+																	<TextBlock Text="{Binding SlotDisplay}" />
+																	<TextBlock Grid.Column="1" FontWeight="SemiBold" Text="{Binding CandidateName}" />
+																	<TextBlock Grid.Column="2" Text="{Binding Confidence}" />
+																	<StackPanel Grid.Column="3" Spacing="2">
+																		<TextBlock Text="{Binding Meaning}" TextWrapping="Wrap" />
+																		<TextBlock Classes="muted" Text="{Binding Evidence}" TextWrapping="Wrap" />
+																	</StackPanel>
+																</Grid>
+															</Border>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</StackPanel>
+										</Border>
+
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="10">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_candidate_value_workbench_23064f07}" />
+												<TextBlock Classes="muted" Text="{Binding ValueWorkbenchSummary}" TextWrapping="Wrap" />
+												<TextBlock IsVisible="{Binding ShowValueWorkbenchFamilyWarning}"
+												           Foreground="{DynamicResource WarningBrush}"
+												           Text="{Binding ValueWorkbenchFamilyWarning}"
+												           TextWrapping="Wrap" />
+												<Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto,Auto">
+													<TextBox Grid.Column="0"
+													         Margin="0,0,10,10"
+													         Watermark="{x:Static res:Strings.U_filter_rt2_dead_rt2_timing_timing_risk_needs_rt2_ee3d7d62}"
+													         Text="{Binding ValueCandidateSearchText, Mode=TwoWay}" />
+													<Button Grid.Column="1"
+													        Margin="0,0,10,10"
+													        Classes="secondaryAction"
+													        IsEnabled="{Binding CanPatchSelectedValueCandidate}"
+													        Click="Button_StageSelectedValuePatch"
+													        AutomationProperties.Name="Preparar (stage) o patch de valor selecionado">Stage Patch</Button>
+													<Button Grid.Column="2"
+													        Margin="0,0,0,10"
+													        Classes="secondaryAction"
+													        IsEnabled="{Binding CanPatchSelectedValueCandidate}"
+													        Click="Button_ApplySelectedValuePatch"
+													        AutomationProperties.Name="Aplicar patch de valor na DLL de saida">Apply To Output</Button>
+													<ListBox Grid.Row="1"
+													         Grid.ColumnSpan="3"
+													         Height="260"
+													         ItemsSource="{Binding ValueCandidates}"
+													         SelectedItem="{Binding SelectedValueCandidate, Mode=TwoWay}">
+														<ListBox.ItemTemplate>
+															<DataTemplate>
+																<Border Classes="cardSoft" Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+																	<Grid ColumnDefinitions="110,130,150,150,*" RowDefinitions="Auto,Auto,Auto">
+																		<TextBlock FontWeight="SemiBold" Text="{Binding Kind}" />
+																		<TextBlock Grid.Column="1" Text="{Binding CurrentValue}" />
+																		<TextBlock Grid.Column="2" Text="{Binding FileOffsetDisplay}" />
+																		<TextBlock Grid.Column="3" Text="{Binding RvaDisplay}" />
+																		<TextBlock Grid.Column="4" Classes="muted" Text="{Binding Hypothesis}" TextWrapping="Wrap" />
+																		<TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding Confidence}" />
+																		<TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding ByteLengthDisplay}" />
+																		<TextBlock Grid.Row="1" Grid.Column="2" Text="{Binding Section}" />
+																		<TextBlock Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="2" Classes="muted" Text="{Binding ContextHex}" TextWrapping="Wrap" />
+																		<!-- P0 — badges RT2 sobem a pills/WarningBrush do StudioTheme (sem nenhum #RRGGBB). -->
+																		<Border Grid.Row="2"
+																		        Grid.ColumnSpan="5"
+																		        Margin="0,6,0,0"
+																		        Classes="pillDanger"
+																		        Padding="8,3"
+																		        CornerRadius="6"
+																		        IsVisible="{Binding ShowRt2DeadBadge}">
+																			<TextBlock FontSize="11" Text="{Binding Rt2DeadBadgeText}" TextWrapping="Wrap" />
+																		</Border>
+																		<Border Grid.Row="2"
+																		        Grid.ColumnSpan="5"
+																		        Margin="0,6,0,0"
+																		        Classes="pillWriter"
+																		        Padding="8,3"
+																		        CornerRadius="6"
+																		        IsVisible="{Binding ShowRt2TimingProvedBadge}">
+																			<TextBlock FontSize="11" Text="{Binding Rt2TimingProvedBadgeText}" TextWrapping="Wrap" />
+																		</Border>
+																		<Border Grid.Row="2"
+																		        Grid.ColumnSpan="5"
+																		        Margin="0,6,0,0"
+																		        Padding="8,3"
+																		        CornerRadius="6"
+																		        BorderThickness="1"
+																		        Background="{DynamicResource PanelAltBrush}"
+																		        BorderBrush="{DynamicResource WarningBrush}"
+																		        IsVisible="{Binding ShowRt2TimingRiskBadge}">
+																			<TextBlock FontSize="11"
+																			           Foreground="{DynamicResource WarningBrush}"
+																			           Text="{x:Static res:Strings.U_timing_risk_blue_vec4_family_c_d_hipotese_cast_h_45843230}"
+																			           TextWrapping="Wrap" />
+																		</Border>
+																	</Grid>
+																</Border>
+															</DataTemplate>
+														</ListBox.ItemTemplate>
+													</ListBox>
+													<StackPanel Grid.Row="2"
+													            Grid.ColumnSpan="3"
+													            Orientation="Horizontal"
+													            Spacing="10"
+													            Margin="0,10,0,0">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_new_value_82fa9239}" VerticalAlignment="Center" />
+														<TextBox MinWidth="320"
+														         Watermark="{Binding SelectedValueCandidate.EditWatermark}"
+														         Text="{Binding AssistedValueText, Mode=TwoWay}" />
+														<TextBlock Classes="muted"
+														           VerticalAlignment="Center"
+														           Text="{x:Static res:Strings.U_for_vec3_vec4_use_comma_separated_invariant_floa_bd04d55b}"
+														           TextWrapping="Wrap" />
+													</StackPanel>
+												</Grid>
+											</StackPanel>
+										</Border>
+
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_string_families_32537e0c}" />
+												<ItemsControl ItemsSource="{Binding StringFamilies}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Border Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+																<Grid ColumnDefinitions="240,90,*">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding Family}" />
+																	<TextBlock Grid.Column="1" Text="{Binding CountDisplay}" />
+																	<TextBlock Grid.Column="2" Classes="muted" Text="{Binding Examples}" TextWrapping="Wrap" />
+																</Grid>
+															</Border>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</StackPanel>
+										</Border>
+
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="10">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_host_context_initmagicprx_fields_f3c2bac5}" />
+												<TextBlock Classes="muted" Text="{Binding HostReferenceSummary}" TextWrapping="Wrap" />
+												<ComboBox MinWidth="520"
+												          ItemsSource="{Binding HostFieldRoles}"
+												          SelectedItem="{Binding SelectedHostFieldRole, Mode=TwoWay}">
+													<ComboBox.ItemTemplate>
+														<DataTemplate>
+															<Grid ColumnDefinitions="115,310,92,*">
+																<TextBlock Text="{Binding OffsetDisplay}" />
+																<TextBlock Grid.Column="1" FontWeight="SemiBold" Text="{Binding CandidateName}" />
+																<TextBlock Grid.Column="2" Text="{Binding Confidence}" />
+																<TextBlock Grid.Column="3" Classes="muted" Text="{Binding Evidence}" TextWrapping="Wrap" />
+															</Grid>
+														</DataTemplate>
+													</ComboBox.ItemTemplate>
+												</ComboBox>
+												<ListBox Height="220"
+												         ItemsSource="{Binding HostFieldReferences}"
+												         SelectedItem="{Binding SelectedHostReference, Mode=TwoWay}">
+													<ListBox.ItemTemplate>
+														<DataTemplate>
+															<Border Classes="cardSoft" Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+																<Grid ColumnDefinitions="115,260,150,150,*" RowDefinitions="Auto,Auto">
+																	<TextBlock Text="{Binding OffsetDisplay}" />
+																	<TextBlock Grid.Column="1" FontWeight="SemiBold" Text="{Binding CandidateName}" />
+																	<TextBlock Grid.Column="2" Text="{Binding FileOffsetDisplay}" />
+																	<TextBlock Grid.Column="3" Text="{Binding RvaDisplay}" />
+																	<TextBlock Grid.Column="4" Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+																	<TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Classes="muted" Text="{Binding ContextHex}" TextWrapping="Wrap" />
+																</Grid>
+															</Border>
+														</DataTemplate>
+													</ListBox.ItemTemplate>
+												</ListBox>
+												<WrapPanel Orientation="Horizontal">
+													<StackPanel Margin="0,0,12,8" MinWidth="180">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_new_host_offset_fdd29942}" />
+														<TextBox Watermark="0x384"
+														         Text="{Binding AssistedHostOffsetText, Mode=TwoWay}" />
+													</StackPanel>
+													<Button Margin="0,18,12,8"
+													        Classes="secondaryAction"
+													        IsEnabled="{Binding HasSelectedHostReference}"
+													        Click="Button_StageSelectedHostPatch"
+													        AutomationProperties.Name="Preparar (stage) o patch de host offset selecionado">Stage Offset Patch</Button>
+													<Button Margin="0,18,12,8"
+													        Classes="secondaryAction"
+													        IsEnabled="{Binding HasSelectedHostReference}"
+													        Click="Button_ApplySelectedHostPatch"
+													        AutomationProperties.Name="Aplicar patch de host offset na DLL de saida">Apply To Output</Button>
+												</WrapPanel>
+											</StackPanel>
+										</Border>
+									</StackPanel>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_family_comparator_5ecb3017}">
+									<StackPanel Margin="0,10,0,0" Spacing="12">
+										<TextBlock Classes="muted" Text="{Binding FamilyComparatorSummary}" TextWrapping="Wrap" />
+										<WrapPanel Orientation="Horizontal">
+											<Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+											        Click="Button_DeployCloneToMods"
+											        AutomationProperties.Name="Deployar clone ps3data para data/mods">Deploy ps3data clone to data/mods</Button>
+											<Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+											        Click="Button_OpenPs3Magic"
+											        AutomationProperties.Name="Abrir pasta PS3 Magic (HD) da magia">Open PS3 Magic (HD)</Button>
+											<Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedDll}"
+											        Click="Button_OpenMagicViewer"
+											        AutomationProperties.Name="Abrir Magic Viewer para esta DLL">Open Magic Viewer</Button>
+											<Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding HasPhyrePackage}"
+											        Click="Button_OpenPhyrePackage"
+											        AutomationProperties.Name="Abrir Phyre Package I/O do primeiro .dds.phyre">Open Phyre Package I/O</Button>
+											<Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding HasPs3ExtractFolder}"
+											        Click="Button_OpenPs3ExtractFolder"
+											        AutomationProperties.Name="Abrir pasta extract ps3data no Explorer">Open extract ps3data folder</Button>
+											<Button Margin="0,0,8,8" Classes="secondaryAction" IsEnabled="{Binding HasPs3ModsFolder}"
+											        Click="Button_OpenPs3ModsFolder"
+											        AutomationProperties.Name="Abrir pasta mods ps3data no Explorer">Open mods ps3data folder</Button>
+										</WrapPanel>
+										<TextBlock Classes="muted" Text="{Binding Ps3PathSummary}" TextWrapping="Wrap" />
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_spells_using_this_dll_moveanim_45f6e1b2}" />
+												<ItemsControl ItemsSource="{Binding FamilySpells}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Border Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+																<StackPanel Spacing="2">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding DisplayName}" />
+																	<TextBlock Classes="muted" Text="{Binding SourceFile}" />
+																	<TextBlock Text="{Binding MoveAnimSummary}" />
+																	<TextBlock Text="{Binding GameplaySummary}" />
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</StackPanel>
+										</Border>
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_twin_dll_hash_matches_29d15644}" />
+												<ItemsControl ItemsSource="{Binding FamilyTwinDlls}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Border Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+																<Grid ColumnDefinitions="100,*,120">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding MagicIdText}" />
+																	<TextBlock Grid.Column="1" Text="{Binding SampleSpells}" TextWrapping="Wrap" />
+																	<TextBlock Grid.Column="2" Classes="muted" Text="{Binding DllHashPrefix}" />
+																</Grid>
+															</Border>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</StackPanel>
+										</Border>
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_overlay_signature_siblings_5681b953}" />
+												<ItemsControl ItemsSource="{Binding FamilySiblings}">
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Border Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+																<Grid ColumnDefinitions="100,*,120">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding MagicIdText}" />
+																	<TextBlock Grid.Column="1" Text="{Binding OverlaySignature}" TextWrapping="Wrap" />
+																	<TextBlock Grid.Column="2" Text="{Binding DllHashPrefix}" />
+																</Grid>
+															</Border>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+											</StackPanel>
+										</Border>
+									</StackPanel>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_logical_decompile_857beab4}">
+									<StackPanel Margin="0,10,0,0" Spacing="12">
+										<TextBlock Classes="muted" Text="{Binding LogicalDecompileSummary}" TextWrapping="Wrap" />
+										<DataGrid ItemsSource="{Binding LogicalSlots}"
+										          IsReadOnly="True"
+										          AutoGenerateColumns="False"
+										          CanUserReorderColumns="False"
+										          CanUserResizeColumns="True"
+										          CanUserSortColumns="True"
+										          GridLinesVisibility="Horizontal"
+										          IsVisible="{Binding HasLogicalDecompile}">
+											<DataGrid.Columns>
+												<DataGridTextColumn Header="{x:Static res:Strings.CommonSlot}" Binding="{Binding SlotIndex}" Width="50" />
+												<DataGridTextColumn Header="{x:Static res:Strings.CommonKind}" Binding="{Binding Kind}" Width="60" />
+												<DataGridTextColumn Header="{x:Static res:Strings.CommonRva}" Binding="{Binding Rva}" Width="80" />
+												<DataGridTextColumn Header="{x:Static res:Strings.U_role_c3f104d1}" Binding="{Binding RoleName}" Width="140" />
+												<DataGridTextColumn Header="{x:Static res:Strings.U_match_0335207f}" Binding="{Binding MatchLevel}" Width="70" />
+												<DataGridTextColumn Header="{x:Static res:Strings.U_conf_b10b8854}" Binding="{Binding Confidence}" Width="60" />
+												<DataGridTextColumn Header="{x:Static res:Strings.U_host_offsets_37a50d2d}" Binding="{Binding HostOffsets}" Width="*" />
+											</DataGrid.Columns>
+										</DataGrid>
+										<ItemsControl ItemsSource="{Binding LogicalSlots}" IsVisible="{Binding HasLogicalDecompile}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+														<StackPanel Spacing="4">
+															<TextBlock FontWeight="SemiBold"
+															           Text="{Binding SlotIndex, StringFormat=Slot {0}}" />
+															<TextBlock Classes="muted"
+															           Text="{Binding RoleName}" />
+															<TextBlock FontFamily="Consolas,Courier New,monospace"
+															           Text="{Binding Pseudocode}"
+															           TextWrapping="Wrap" />
+														</StackPanel>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.U_strings_3816c4be}">
+									<ItemsControl ItemsSource="{Binding Strings}" Margin="0,10,0,0">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+													<StackPanel Spacing="3">
+														<TextBlock Classes="muted" Text="{Binding FileOffsetDisplay}" />
+														<TextBlock Text="{Binding Value}" TextWrapping="Wrap" />
+													</StackPanel>
+												</Border>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</TabItem>
+
+								<TabItem Header="{x:Static res:Strings.CommonWarnings}">
+								<ItemsControl ItemsSource="{Binding Warnings}" Margin="0,10,0,0">
+								<ItemsControl.ItemTemplate>
+								<DataTemplate>
+								<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<TextBlock Text="{Binding}" TextWrapping="Wrap" />
+								</Border>
+								</DataTemplate>
+								</ItemsControl.ItemTemplate>
+								</ItemsControl>
+								</TabItem>
+
+							<TabItem Header="{x:Static res:Strings.U_ppp_opcodes_70621227}">
+								<StackPanel Margin="0,10,0,0" Spacing="12">
+									<TextBlock Classes="muted" Text="{Binding PppOpcodesSummary}" TextWrapping="Wrap" />
+									<DataGrid ItemsSource="{Binding PppOpcodes}"
+									          SelectedItem="{Binding SelectedPppOpcode, Mode=TwoWay}"
+									          IsReadOnly="True"
+									          AutoGenerateColumns="False"
+									          CanUserReorderColumns="False"
+									          CanUserResizeColumns="True"
+									          CanUserSortColumns="True"
+									          GridLinesVisibility="Horizontal"
+									          IsVisible="{Binding HasPppOpcodes}">
+										<DataGrid.Columns>
+											<DataGridTextColumn Header="{x:Static res:Strings.CommonIndex}" Binding="{Binding Index}" Width="50" />
+											<DataGridTextColumn Header="{x:Static res:Strings.U_opcode_74d23243}" Binding="{Binding OpcodeByte}" Width="60" />
+											<DataGridTextColumn Header="{x:Static res:Strings.CommonName}" Binding="{Binding Name}" Width="160" />
+											<DataGridTextColumn Header="{x:Static res:Strings.CommonHandlerRva}" Binding="{Binding HandlerRvaDisplay}" Width="140" />
+											<DataGridTextColumn Header="{x:Static res:Strings.CommonCategory}" Binding="{Binding Category}" Width="140" />
+											<DataGridTextColumn Header="{x:Static res:Strings.U_m86_rva_c7b5958b}" Binding="{Binding HandlerRvaM86}" Width="100" />
+											<DataGridTextColumn Header="{x:Static res:Strings.U_m87_rva_7aa7a558}" Binding="{Binding HandlerRvaM87}" Width="100" />
+										</DataGrid.Columns>
+									</DataGrid>
+									<Border Classes="cardSoft" Padding="12" Margin="0,0,0,8"
+									        IsVisible="{Binding SelectedPppOpcode}">
+										<StackPanel Spacing="6">
+											<TextBlock FontWeight="SemiBold"
+											           Text="{Binding SelectedPppOpcode.Name, StringFormat=Selected: {0}}" />
+											<Grid ColumnDefinitions="100,*" Margin="0,4,0,0">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonCategory}" />
+												<TextBlock Grid.Column="1" Text="{Binding SelectedPppOpcode.Category}" />
+											</Grid>
+											<Grid ColumnDefinitions="100,*" Margin="0,2,0,0">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.U_opcode_byte_1609caec}" />
+												<TextBlock Grid.Column="1" Text="{Binding SelectedPppOpcode.OpcodeByte}" />
+											</Grid>
+											<Grid ColumnDefinitions="100,*" Margin="0,2,0,0">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonHandlerRva}" />
+												<TextBlock Grid.Column="1" Text="{Binding SelectedPppOpcode.HandlerRvaDisplay}" />
+											</Grid>
+											<Grid ColumnDefinitions="100,*" Margin="0,2,0,0">
+												<TextBlock Classes="muted" Text="{x:Static res:Strings.U_host_resolved_ce656210}" />
+												<TextBlock Grid.Column="1" Text="{Binding SelectedPppOpcode.IsHostResolved}" />
+											</Grid>
+										<TextBlock Classes="muted" Text="{x:Static res:Strings.CommonSignature}" Margin="0,8,0,2" />
+											<TextBlock FontFamily="Consolas,Courier New,monospace"
+											           Text="{Binding SelectedPppOpcode.Signature}"
+											           TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+									<Border Classes="cardSoft" Padding="12" Margin="0,0,0,8"
+									        IsVisible="{Binding !HasPppOpcodes}">
+										<StackPanel Spacing="6">
+											<TextBlock FontWeight="SemiBold" Text="{x:Static res:Strings.U_no_ppp_opcode_data_15075620}" />
+											<TextBlock Classes="muted" TextWrapping="Wrap"
+											           Text="PPP_HANDLER_NAMES.json was not found or could not be loaded. Run the RE pipeline (todo 1) to generate it at docs/reverse/magic_dlls/PPP_HANDLER_NAMES.json." />
+										</StackPanel>
+									</Border>
+								</StackPanel>
+							</TabItem>
+						</TabControl>
+						</StackPanel>
+					</ScrollViewer>
+
+					<!-- Empty state do detail: nenhuma DLL selecionada -->
+					<Border x:Name="EmptyState"
+					        IsVisible="{Binding !HasSelectedDll}"
+					        Margin="14,0,0,0">
+						<StackPanel Spacing="14" MaxWidth="560" HorizontalAlignment="Center">
+							<PathIcon Data="{DynamicResource IconPackage}" Width="40" Height="40"
+							          HorizontalAlignment="Center"
+							          Foreground="{DynamicResource TextMutedBrush}" />
+							<StackPanel Spacing="4" HorizontalAlignment="Center">
+								<TextBlock Classes="h2" HorizontalAlignment="Center" Text="{x:Static res:Strings.U_no_dll_selected_00082489}" />
+								<TextBlock Classes="muted" TextAlignment="Center" TextWrapping="Wrap"
+								           Text="{x:Static res:Strings.U_choose_a_magic_dll_from_the_list_or_set_the_magi_ca9d1d8b}" />
+							</StackPanel>
+						</StackPanel>
+					</Border>
+				</Panel>
+			</common:ModuleMasterDetail_Shell.Detail>
+		</common:ModuleMasterDetail_Shell>
+	</Grid>
+</UserControl>

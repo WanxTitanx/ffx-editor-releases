@@ -1,0 +1,112 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1260"
+             d:DesignHeight="760"
+             x:Class="FFXProjectEditor.AlBhedDictionaryEditor_Control">
+
+    <common:ModuleMasterDetail_Shell>
+        <common:ModuleMasterDetail_Shell.MasterHeader>
+            <StackPanel Margin="0,0,0,14" Spacing="10">
+                <StackPanel Spacing="6">
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_locale_file_c7768311}" />
+                    <ComboBox ItemsSource="{Binding LocaleOptions}" SelectedItem="{Binding SelectedLocale, Mode=TwoWay}" HorizontalAlignment="Stretch" />
+                    <TextBlock Classes="muted" Text="{Binding SourcePathLabel}" TextWrapping="Wrap" FontSize="11" />
+                </StackPanel>
+                <Grid ColumnDefinitions="*,Auto">
+                    <TextBox Watermark="{x:Static res:Strings.U_filter_by_glyph_byte_or_group_b9824ab7}" Text="{Binding FilterText, Mode=TwoWay}" />
+                    <Button Grid.Column="1" Margin="10,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+                </Grid>
+                <TextBlock Classes="muted" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+                <TextBlock Classes="muted" Text="{Binding ScopeSummary}" TextWrapping="Wrap" />
+            </StackPanel>
+        </common:ModuleMasterDetail_Shell.MasterHeader>
+        
+        <common:ModuleMasterDetail_Shell.MasterList>
+            <ListBox
+                ItemsSource="{Binding GlyphRows}"
+                SelectedItem="{Binding SelectedRow, Mode=TwoWay}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+                            <StackPanel Spacing="4">
+                                <TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SourceCharDisplay}" />
+                                <TextBlock Classes="muted" Text="{Binding DescriptionSummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </common:ModuleMasterDetail_Shell.MasterList>
+
+        <common:ModuleMasterDetail_Shell.Detail>
+            <DockPanel>
+                <!-- SESSION CONTROLS (Pinned to Top) -->
+                <Border DockPanel.Dock="Top" Margin="0,0,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+                    <StackPanel Spacing="12">
+                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="{Binding EditSession.SessionSummary}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding EditSession.BehaviorSummary}" Classes="muted" TextWrapping="Wrap" />
+                                <TextBlock Text="{Binding ValidationSummary}" Foreground="#FFB86C" TextWrapping="Wrap"
+                                           IsVisible="{Binding HasValidationErrors}" />
+                            </StackPanel>
+                            <core:AutoSaveIndicator_Control Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Session="{Binding EditSession}" />
+                        </Grid>
+                        <WrapPanel Orientation="Horizontal">
+                            <CheckBox VerticalAlignment="Center" IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+                            <Button Margin="12,0,0,0" Classes="secondaryAction" IsEnabled="{Binding EditSession.CanUndo}" Click="Button_Undo">Undo</Button>
+                            <Button Margin="12,0,0,0" Classes="secondaryAction" IsEnabled="{Binding EditSession.HasPendingChanges}" Click="Button_Discard">Discard</Button>
+                            <Button Margin="12,0,0,0" IsEnabled="{Binding CanSave}" Click="Button_Save">Save</Button>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- SCROLLABLE DETAIL -->
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Spacing="14">
+                        <Border Padding="{DynamicResource SpacingXl}" Classes="card heroTeal">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_mapping_row_09ad88f7}" />
+                                <TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedRow.Title}" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedSummary}" TextWrapping="Wrap" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Padding="{DynamicResource SpacingLg}" Classes="card">
+                            <StackPanel Spacing="12">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_row_editor_ff8efef0}" />
+                                <TextBlock Classes="muted" Text="{x:Static res:Strings.U_source_bytes_stay_fixed_sequential_table_edit_th_febb1947}" TextWrapping="Wrap" />
+
+                                <Grid ColumnDefinitions="*,*,*">
+                                    <StackPanel Spacing="8" MinWidth="140">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_source_glyph_51c995bd}" />
+                                        <TextBox Text="{Binding SelectedRow.SourceGlyph}" IsReadOnly="True" />
+                                        <TextBlock Classes="muted" Text="{Binding SelectedRow.SourceCode, StringFormat='Byte: {0:X2}h'}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="8" MinWidth="140">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_mapped_glyph_e107ca20}" />
+                                        <TextBox Text="{Binding SelectedRow.MappedCharText, Mode=TwoWay}"
+                                                 IsEnabled="{Binding SelectedRow.IsEditable}" MaxLength="8" />
+                                        <TextBlock Classes="muted" Text="{Binding SelectedRow.MappedCode, StringFormat='Byte: {0:X2}h'}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="2" Margin="14,0,0,0" Spacing="8" MinWidth="140">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_group_bucket_0_25_779faeea}" />
+                                        <TextBox Text="{Binding SelectedRow.GroupIndex, Mode=TwoWay}"
+                                                 IsEnabled="{Binding SelectedRow.IsEditable}" />
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </DockPanel>
+        </common:ModuleMasterDetail_Shell.Detail>
+    </common:ModuleMasterDetail_Shell>
+</UserControl>

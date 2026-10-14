@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:wv="clr-namespace:FFXProjectEditor.Modules.Common.ViewerShell"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.AuroraFieldExplorer.AuroraFieldExplorer_Control">
+
+	<Grid ColumnDefinitions="Auto,*">
+
+		<Border Grid.Column="0" MinWidth="300" MaxWidth="420" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,Auto,*,Auto,Auto,Auto">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_aurora_field_explorer_overworld_2293bc43}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_field_picker_map_024d4b52}" />
+					<TextBlock Classes="muted" Text="{Binding HonestyBanner}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,10" Spacing="8">
+					<WrapPanel>
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_Refresh"
+						        IsEnabled="{Binding !IsBusy}" Content="{x:Static res:Strings.U_re_scan_b0ba4a7b}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_PublishScout"
+						        IsEnabled="{Binding !IsBusy}" Content="{x:Static res:Strings.U_publish_scout_b5557abc}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_RefreshWalkMarkers"
+						        IsEnabled="{Binding !IsBusy}" Content="{x:Static res:Strings.U_update_markers_c388fb82}" />
+						<Button Margin="0,0,8,8" Classes="primaryAction" Click="Button_PublishAndOpen"
+						        IsEnabled="{Binding !IsBusy}" Content="{x:Static res:Strings.U_publish_and_open_field_94aa5dd4}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_ValidateVisual"
+						        IsEnabled="{Binding !IsBusy}" Content="{x:Static res:Strings.U_validate_visual_22640fdc}" />
+					</WrapPanel>
+					<TextBlock Classes="muted" Text="{Binding CatalogSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<TextBox Grid.Row="2"
+				         Margin="0,0,0,12"
+				         Watermark="{x:Static res:Strings.U_filtrar_por_field_area_ou_map_2acad13a}"
+				         Text="{Binding FilterText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="3"
+				         ItemsSource="{Binding Fields}"
+				         SelectedItem="{Binding SelectedField, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,8" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="3">
+									<TextBlock FontSize="16" FontWeight="SemiBold"
+									           Text="{Binding DisplayName}" />
+									<TextBlock Classes="sectionLabel"
+									           Text="{Binding Summary}" />
+									<TextBlock Classes="muted" TextWrapping="Wrap"
+									           Text="{Binding DetailWithMount}" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+				<TextBlock Grid.Row="4" Margin="0,12,0,4" Classes="sectionLabel" Text="{x:Static res:Strings.U_field_selecionado_a9c5af85}" />
+				<TextBlock Grid.Row="5" FontWeight="SemiBold" Text="{Binding FieldHeader}" />
+				<StackPanel Grid.Row="6" Margin="0,8,0,0" Spacing="8">
+					<TextBlock Classes="muted" Text="{Binding FieldDetail}" TextWrapping="Wrap" />
+					<TextBlock FontWeight="SemiBold" Text="{Binding EncounterSummary}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding ArenaHint}" TextWrapping="Wrap" />
+					<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_OpenArena"
+					        Content="{x:Static res:Strings.U_abrir_arena_no_aurora_chamber_btlmap_8594f4a4}" />
+					<ListBox MaxHeight="120"
+					         ItemsSource="{Binding EncounterGroups}"
+					         SelectedItem="{Binding SelectedEncounterGroup, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Spacing="2">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Summary}" />
+									<TextBlock Classes="muted" FontSize="11" Text="{Binding MapBucket}" />
+								</StackPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</StackPanel>
+			</Grid>
+		</Border>
+
+		<Grid Grid.Column="1" RowDefinitions="Auto,*" Margin="18">
+			<Border Grid.Row="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+				<Grid ColumnDefinitions="*,Auto">
+					<StackPanel Spacing="6">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_mapviewer_3d_embedded_53798cec}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_exporta_map_lt_area_gt_lt_field_gt_on_demand_e_m_e66b9638}"
+						           TextWrapping="Wrap" />
+						<TextBlock Text="{Binding RenderStatus}" TextWrapping="Wrap" />
+					</StackPanel>
+					<WrapPanel Grid.Column="1" VerticalAlignment="Top">
+						<Button Margin="0,0,8,8" Classes="primaryAction" Click="Button_Render"
+						        IsEnabled="{Binding !IsBusy}" Content="{x:Static res:Strings.U_open_field_83225b39}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_Reexport"
+						        IsEnabled="{Binding !IsBusy}" Content="{x:Static res:Strings.U_re_export_188b8923}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_OpenInBrowser" Content="{x:Static res:Strings.U_browser_ef15fd2f}" />
+						<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_OutputFolder" Content="{x:Static res:Strings.U_export_folder_914f0f5c}" />
+					</WrapPanel>
+				</Grid>
+			</Border>
+
+			<Border Grid.Row="1" Classes="card" Padding="2" ClipToBounds="True">
+				<Panel>
+					<wv:WebView2Host x:Name="ViewerHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+					                 IsVisible="{Binding !IsExternalViewer}" />
+					<Border Classes="cardSoft" Padding="16" Margin="16" VerticalAlignment="Center"
+					        IsVisible="{Binding IsExternalViewer}">
+						<StackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+							<TextBlock Classes="sectionLabel" HorizontalAlignment="Center"
+							           Text="{x:Static res:Strings.U_Vh_ExternalViewerTitle}" />
+							<TextBlock Classes="muted" TextWrapping="Wrap" MaxWidth="520"
+							           Text="{x:Static res:Strings.U_Vh_ExternalViewerManualMessage}" />
+							<Button Classes="primaryAction" HorizontalAlignment="Center"
+							        Click="Button_OpenInBrowser"
+							        Content="{x:Static res:Strings.U_Vh_OpenInBrowser}" />
+						</StackPanel>
+					</Border>
+				</Panel>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

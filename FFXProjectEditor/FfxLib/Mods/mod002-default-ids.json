@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "purpose": "Default MOD-002 hook-only auto-ability IDs; future Hook menu may remap each key after validating installed data.",
+  "abilities": [
+    {"key": "hero_bravery", "default_id": 135, "name": "Hero's Bravery", "gear_type": "weapon"},
+    {"key": "energy_boost", "default_id": 136, "name": "Energy Boost", "gear_type": "weapon"},
+    {"key": "energy_burst", "default_id": 137, "name": "Energy Burst", "gear_type": "weapon"},
+    {"key": "efficiency", "default_id": 138, "name": "Efficiency", "gear_type": "weapon"},
+    {"key": "vampirism", "default_id": 139, "name": "Vampirism", "gear_type": "weapon", "description": "Heals 2% of damage dealt. Hook required."},
+    {"key": "follow_up", "default_id": 140, "name": "Follow Up", "gear_type": "weapon"},
+    {"key": "p_trade", "default_id": 141, "name": "P-Trade", "gear_type": "armor"},
+    {"key": "m_trade", "default_id": 142, "name": "M-Trade", "gear_type": "armor"},
+    {"key": "hero_caution", "default_id": 143, "name": "Hero's Caution", "gear_type": "armor"},
+    {"key": "mp_regen", "default_id": 144, "name": "MP Regen", "gear_type": "armor"},
+    {"key": "elude", "default_id": 145, "name": "Elude", "gear_type": "armor"},
+    {"key": "energy_wall", "default_id": 146, "name": "Energy Wall", "gear_type": "armor"},
+    {"key": "energy_barrier", "default_id": 147, "name": "Energy Barrier", "gear_type": "armor"}
+  ]
+}

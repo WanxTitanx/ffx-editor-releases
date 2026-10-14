@@ -1,0 +1,42 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1100" d:DesignHeight="760"
+             x:Class="FFXProjectEditor.SaveEditorMiscImport_Control">
+    <ScrollViewer>
+        <StackPanel Spacing="12" IsEnabled="{Binding HasSession}">
+            <Border Padding="18" Classes="card">
+                <StackPanel Spacing="10">
+                    <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_misc_world_state_732c5c46}" />
+                    <ItemsControl ItemsSource="{Binding MiscFields}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="2*,*" Margin="0,4">
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding Label}" />
+                                    <TextBox Grid.Column="1" Text="{Binding IntValue, Mode=TwoWay}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Button Classes="primaryAction" Click="ApplyMisc_Click">Apply misc</Button>
+                    <Button Classes="secondaryAction" Click="BatchNgPlus_Click">New Game+ coords (55)</Button>
+                </StackPanel>
+            </Border>
+            <Border Padding="18" Classes="card">
+                <StackPanel Spacing="10">
+                    <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_import_regions_donor_save_bca06070}" />
+                    <TextBlock Classes="muted" TextWrapping="Wrap"
+                               Text="{x:Static res:Strings.U_carregue_outro_save_25848_bytes_como_doador_e_co_810b7155}" />
+                    <Button Classes="secondaryAction" Click="ImportEntire_Click">Import entire save…</Button>
+                    <Button Classes="secondaryAction" Click="ImportSphere_Click">Import sphere grid…</Button>
+                    <Button Classes="secondaryAction" Click="ImportEquip_Click">Import equipment…</Button>
+                    <Button Classes="secondaryAction" Click="ImportItems_Click">Import items…</Button>
+                    <Button Classes="secondaryAction" Click="ImportBlitz_Click">Import blitzball…</Button>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

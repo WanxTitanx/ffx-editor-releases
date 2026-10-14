@@ -1,0 +1,119 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.PresentationContainerBrowser_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="2*" MinWidth="320" MaxWidth="520" />
+			<ColumnDefinition Width="5*" />
+		</Grid.ColumnDefinitions>
+		<Border Grid.ColumnSpan="2" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_presentation_containers_b09cffea}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_presentation_container_browser_ba4a6634}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+			<Grid RowDefinitions="Auto,Auto,Auto,Auto,*">
+				<Grid ColumnDefinitions="*,Auto,Auto">
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_vpa_ebp_omd_sps2_7584a476}" />
+					<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenRoot">Open Root</Button>
+				</Grid>
+
+				<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,10">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSourceRoot}" />
+						<TextBlock Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding OverviewSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<TextBox Grid.Row="2" Margin="0,0,0,10" Watermark="{x:Static res:Strings.U_search_name_path_cohort_or_domain_2ffa854c}"
+				         Text="{Binding SearchText, Mode=TwoWay}" />
+
+				<Grid Grid.Row="3" ColumnDefinitions="*,*" Margin="0,0,0,10">
+					<StackPanel Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonExtension}" />
+						<ComboBox ItemsSource="{Binding ExtensionOptions}" SelectedItem="{Binding SelectedExtensionFilter, Mode=TwoWay}" />
+					</StackPanel>
+					<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="4">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonCohort}" />
+						<ComboBox ItemsSource="{Binding CohortOptions}" SelectedItem="{Binding SelectedCohortFilter, Mode=TwoWay}" />
+					</StackPanel>
+				</Grid>
+
+				<ListBox Grid.Row="4"
+				         ItemsSource="{Binding Records}"
+				         SelectedItem="{Binding SelectedRecord, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+								<StackPanel Spacing="4">
+									<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+									<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+									<TextBlock Text="{Binding Cohort}" />
+									<TextBlock Classes="muted" Text="{Binding Signature}" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+				<StackPanel Spacing="12">
+					<Grid ColumnDefinitions="*,Auto">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_container_bbb6881c}" />
+							<TextBlock Classes="cardTitle" Text="{Binding SelectedTitle}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedPath}" TextWrapping="Wrap" />
+						</StackPanel>
+						<Button Grid.Column="1" Classes="secondaryAction" Click="Button_OpenFile">Open File</Button>
+					</Grid>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_viewer_facet_3557cda9}" />
+							<TextBlock Text="{x:Static res:Strings.U_vpamapindexviewer_ebpchunkbrowser_omdquartetinsp_4bd88566}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding SelectedSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSignature}" />
+							<TextBlock Text="{Binding SelectedSignature}" TextWrapping="Wrap" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHeadHex}" Margin="0,8,0,0" />
+							<TextBlock Text="{Binding SelectedHeadHex}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_companions_759f9cdc}" />
+							<TextBlock Text="{Binding SelectedCompanions}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEvidenceGuardrail}" />
+							<TextBlock Text="{Binding SelectedEvidence}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+	</Grid>
+</UserControl>

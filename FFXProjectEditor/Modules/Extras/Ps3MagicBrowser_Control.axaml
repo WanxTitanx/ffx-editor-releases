@@ -1,0 +1,203 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.Ps3MagicBrowser_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_ps3_magic_hd_0bd1f037}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_phyreengine_magic_effect_texture_viewer_c628d5ec}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" Text="{Binding ReadonlyScopeSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Grid Grid.Row="1" ColumnDefinitions="2*,2*,3*">
+
+			<!-- Column 0: magic_#### folder list -->
+			<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0" MinWidth="280">
+				<Grid RowDefinitions="Auto,Auto,Auto,*">
+					<Grid ColumnDefinitions="*,Auto,Auto">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_magic_effects_5c95732d}" />
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+						<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding HasSelectedMagic}" Click="Button_OpenMagicFolder">Open Folder</Button>
+					</Grid>
+
+					<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,10">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSourceRoot}" />
+							<TextBlock Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding OverviewSummary}" />
+							<TextBlock Classes="muted" Text="{Binding MagicCountSummary}" />
+						</StackPanel>
+					</Border>
+
+					<TextBox Grid.Row="2" Margin="0,0,0,10" Watermark="{x:Static res:Strings.U_search_magic_id_folder_or_texture_name_6d3b6fd5}"
+					         Text="{Binding SearchText, Mode=TwoWay}" />
+
+					<ListBox Grid.Row="3"
+					         ItemsSource="{Binding MagicEntries}"
+					         SelectedItem="{Binding SelectedMagic, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+									<Grid ColumnDefinitions="*,Auto">
+										<StackPanel Spacing="2">
+											<TextBlock FontWeight="SemiBold" Text="{Binding DisplayTitle}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding DisplaySubtitle}" />
+										</StackPanel>
+										<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Text="{Binding CountSummary}" />
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</Border>
+
+			<!-- Column 1: texture gallery for the selected magic -->
+			<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0" MinWidth="260">
+				<Grid RowDefinitions="Auto,Auto,*">
+					<TextBlock Classes="cardTitle" Text="{Binding SelectedMagicTitle}" />
+					<TextBlock Grid.Row="1" Classes="muted" Margin="0,2,0,10" Text="{Binding SelectedMagicCounts}" />
+
+					<ListBox Grid.Row="2"
+					         ItemsSource="{Binding Textures}"
+					         SelectedItem="{Binding SelectedTexture, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingSm}" Margin="0,0,0,8">
+									<Grid ColumnDefinitions="64,*">
+										<Border Width="64" Height="64" Background="#202024">
+											<Image Source="{Binding Thumbnail}" Stretch="Uniform" />
+										</Border>
+										<StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="2" VerticalAlignment="Center">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Name}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding NameDimSummary}" />
+											<TextBlock Classes="muted" Text="{Binding FormatSummary}" />
+											<TextBlock Classes="muted" Text="{Binding StateLabel}" />
+										</StackPanel>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</Border>
+
+			<!-- Column 2: large preview + facts -->
+			<Border Grid.Column="2" Classes="card" Padding="{DynamicResource SpacingLg}">
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Spacing="12">
+						<Grid ColumnDefinitions="*,Auto">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_texture_5c1f6dd0}" />
+								<TextBlock Classes="cardTitle" Text="{Binding SelectedTextureName}" />
+								<TextBlock Classes="muted" Text="{Binding SelectedTextureRelativePath}" TextWrapping="Wrap" />
+							</StackPanel>
+							<WrapPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+								<Button Margin="8,0,0,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedTexture}" Click="Button_OpenTextureFile">Open File</Button>
+								<Button Margin="8,0,0,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedTexture}" Click="Button_ExtractDds">Extract DDS</Button>
+								<Button Margin="8,0,0,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedTexture}" Click="Button_RepackDds">Repack DDS</Button>
+								<Button Margin="8,0,0,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedTexture}" Click="Button_RecolorTexture">Recolor Texture</Button>
+								<Button Margin="8,0,0,8" Classes="secondaryAction" IsEnabled="{Binding HasSelectedMagic}" Click="Button_RecolorFolder">Recolor Folder</Button>
+							</WrapPanel>
+						</Grid>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<Grid ColumnDefinitions="*,Auto">
+								<StackPanel Spacing="6">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_runtime_dll_bfad7417}" />
+									<TextBlock Text="{Binding RuntimeDllPath}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding RuntimeDllSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding RuntimeDllOverlaySummary}" TextWrapping="Wrap" />
+								</StackPanel>
+								<WrapPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+									<Button Margin="8,0,0,8" Classes="secondaryAction" IsEnabled="{Binding HasRuntimeDll}" Click="Button_OpenRuntimeDll">Open DLL</Button>
+									<Button Margin="8,0,0,8" Classes="secondaryAction" IsEnabled="{Binding HasRuntimeDll}" Click="Button_ExtractRuntimeDll">Extract DLL</Button>
+								</WrapPanel>
+							</Grid>
+						</Border>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="8">
+								<Grid ColumnDefinitions="Auto,90,Auto,90,Auto,90,Auto,90">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_color_variant_5afead5c}" VerticalAlignment="Center" />
+									<TextBox Grid.Column="1" Margin="8,0,12,0" Text="{Binding ColorRedScale, Mode=TwoWay}" />
+									<TextBlock Grid.Column="2" Text="G" VerticalAlignment="Center" />
+									<TextBox Grid.Column="3" Margin="8,0,12,0" Text="{Binding ColorGreenScale, Mode=TwoWay}" />
+									<TextBlock Grid.Column="4" Text="B" VerticalAlignment="Center" />
+									<TextBox Grid.Column="5" Margin="8,0,12,0" Text="{Binding ColorBlueScale, Mode=TwoWay}" />
+									<TextBlock Grid.Column="6" Text="A" VerticalAlignment="Center" />
+									<TextBox Grid.Column="7" Margin="8,0,0,0" Text="{Binding ColorAlphaScale, Mode=TwoWay}" />
+								</Grid>
+								<TextBlock Classes="muted" Text="{Binding ColorTransformSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="8">
+								<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPreviewSurface}" VerticalAlignment="Center" />
+									<ToggleButton Grid.Column="1" Margin="8,0,0,0"
+									              IsChecked="{Binding ShowComposite, Mode=TwoWay}">Composite</ToggleButton>
+									<ToggleButton Grid.Column="2" Margin="8,0,0,0"
+									              IsChecked="{Binding CompositeAdditive, Mode=TwoWay}"
+									              Content="{Binding CompositeModeLabel}" />
+									<Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction"
+									        Content="{Binding PlayButtonLabel}" Click="Button_TogglePlay" />
+								</Grid>
+								<Border Background="#202024" Padding="{DynamicResource SpacingSm}" HorizontalAlignment="Stretch">
+									<Viewbox Stretch="Uniform" StretchDirection="DownOnly" HorizontalAlignment="Left">
+										<Grid Width="512" Height="512">
+										<Image IsVisible="{Binding ShowSingle}"
+										       Source="{Binding SelectedPreviewBitmap}"
+										       Stretch="Uniform" />
+										<Image IsVisible="{Binding ShowComposite}"
+										       Source="{Binding CompositePreviewBitmap}"
+										       Stretch="Uniform" />
+									</Grid>
+									</Viewbox>
+								</Border>
+								<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SynthesizedNote}" />
+							</StackPanel>
+						</Border>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_facts_aeff1bc9}" />
+								<TextBlock Text="{Binding SelectedTextureFacts}" TextWrapping="Wrap" />
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPreviewState}" Margin="0,8,0,0" />
+								<TextBlock Text="{Binding SelectedTextureState}" />
+								<TextBlock Classes="muted" Text="{Binding SelectedTextureNote}" TextWrapping="Wrap" />
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_texture_i_o_121c7fae}" Margin="0,8,0,0" />
+								<TextBlock Classes="muted" Text="{Binding AuthoringStatus}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_magic_folder_3ff5f2aa}" />
+								<TextBlock Text="{Binding SelectedMagicTitle}" />
+								<TextBlock Classes="muted" Text="{Binding SelectedMagicPath}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonReadOnlyGuardrail}" />
+								<TextBlock Classes="muted" Text="{Binding ReadonlyScopeSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

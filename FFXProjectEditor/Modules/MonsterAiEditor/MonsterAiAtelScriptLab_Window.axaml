@@ -1,0 +1,57 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="760" d:DesignHeight="560"
+        x:Class="FFXProjectEditor.MonsterAiAtelScriptLab_Window"
+        Title="{x:Static res:Strings.U_WinAtelScriptLab}"
+        Width="760" Height="560"
+        WindowStartupLocation="CenterOwner">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <DockPanel Margin="12">
+        <StackPanel DockPanel.Dock="Top" Spacing="6" Margin="0,0,0,8">
+            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSelectedMonsterAi}" />
+            <TextBlock Classes="cardTitle" Text="{Binding SelectedMonster.Title}" TextWrapping="Wrap" />
+            <TextBlock Classes="muted" TextWrapping="Wrap"
+                       Text="{x:Static res:Strings.U_compila_um_script_de_alto_nivel_contra_o_monstro_7db11e9b}" />
+        </StackPanel>
+        <StackPanel DockPanel.Dock="Bottom" Spacing="8" Margin="0,10,0,0">
+            <WrapPanel>
+                <Button Name="AtelCompilePreview" Margin="0,0,8,4" Classes="secondaryAction" Click="Button_Compile_Click"
+                        Content="{x:Static res:Strings.AiAtelCompilePreview}" />
+                <Button Name="AtelApplySave" Margin="0,0,0,4" Classes="primaryAction" Click="Button_Apply_Click"
+                        Content="{x:Static res:Strings.AiAtelApplySave}" />
+            </WrapPanel>
+            <TextBlock Classes="muted" Text="{Binding AtelScriptResult}" TextWrapping="Wrap" />
+            <TextBlock Classes="muted" Text="{Binding AtelScriptDiffSummary}" TextWrapping="Wrap" />
+        </StackPanel>
+        <Grid RowDefinitions="Auto,*,Auto,*">
+            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.AiAtelSourceLabel}" />
+            <TextBox Name="AtelSourceEditor" Grid.Row="1" AutomationProperties.Name="{x:Static res:Strings.AiAtelSourceLabel}" AcceptsReturn="True" TextWrapping="Wrap"
+                     FontFamily="Consolas, monospace" FontSize="12"
+                     Text="{Binding AtelScriptText}" />
+            <TextBlock Grid.Row="2" Margin="0,8,0,4" Classes="sectionLabel" Text="{x:Static res:Strings.AiAtelInstructionsLabel}" />
+            <ListBox Grid.Row="3" AutomationProperties.Name="{x:Static res:Strings.AiAtelInstructionsLabel}"
+                     ItemsSource="{Binding AtelScriptDiffLines}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     FontFamily="Consolas, monospace" FontSize="11">
+                <ListBox.Styles>
+                    <Style Selector="ListBoxItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                    <DataTemplate><TextBlock Text="{Binding}" TextWrapping="Wrap" /></DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </DockPanel>
+</Window>

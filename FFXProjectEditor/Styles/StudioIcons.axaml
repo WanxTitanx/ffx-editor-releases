@@ -1,0 +1,229 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<!-- ===== Camada 11 (overhaul de UI): iconografia real (Lucide-like) compartilhada.
+	     Set de StreamGeometry prontas pra usar com <PathIcon Data="{DynamicResource IconXxx}" />.
+	     Substitui emojis no IconRail (a entrada principal do app) por formas consistentes.
+	     Emojis permanecem como fallback opcional em listas/itens internos onde jÃ¡ existem.
+
+	     v2.160.0.0 (Jarvis-UI Â§16â€“Â§17): expansÃ£o 14 â†’ ~54 Ã­cones â€” 1 Ã­cone dedicado por mÃ³dulo
+	     roteado. Toda nova ModuleCatalogEntry exige um IconKey resolvido aqui (criar do zero
+	     se faltar). MetÃ¡foras: 16â€“24px, stroke Ãºnico, viewBox 0,0,24,24. ===== -->
+
+	<!-- ============ GENÃ‰RICOS / NAVEGAÃ‡ÃƒO (originais, preservados) ============ -->
+
+	<!-- Home / Workspace -->
+		<StreamGeometry x:Key="IconTreasureMap">M4 6h16v2H4V6zm0 4h16v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8zm3-3l2-4h6l2 4H7zm2 6v2h6v-2H9z</StreamGeometry>
+<StreamGeometry x:Key="IconHome">M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1V9.5z</StreamGeometry>
+
+	<!-- Core Authoring (sword crossed with grid) â€” mantido como fallback do cluster -->
+	<StreamGeometry x:Key="IconSword">M14.5 2.5L21 9l-2 2-7-7 2.5-1.5zM4 22l9-9 1.5 1.5-9 9-1.5-1.5zM3 11L11 3l1.5 1.5L4.5 12.5 3 11z</StreamGeometry>
+
+	<!-- Map / Scenes (compass) â€” preservado -->
+	<StreamGeometry x:Key="IconMap">M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm2.5 12.5l-4 1.5 1.5-4 4-1.5-1.5 4z</StreamGeometry>
+
+	<!-- Live Tools (bolt) â€” preservado -->
+	<StreamGeometry x:Key="IconBolt">M13 2L4.5 13.5H11l-1 8.5L19.5 10H13l0-8z</StreamGeometry>
+
+	<!-- Extras (package) â€” preservado como fallback -->
+	<StreamGeometry x:Key="IconPackage">M21 8L12 3 3 8v8l9 5 9-5V8zm-9 12.5L4.5 17V9.7L12 14v6.5zm0-8.2L4.8 8 12 4.5l7.2 3.5L12 12.3z</StreamGeometry>
+
+	<!-- Wave-1 (question mark in a circle) â€” preservado como fallback -->
+	<StreamGeometry x:Key="IconQuestion">M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 14a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm1-3.5c0-1 1-1.4 1.7-2 .8-.6 1.3-1.2 1.3-2.2 0-1.7-1.4-2.8-3-2.8-1.7 0-3 1.3-3 3h2c0-.6.5-1 1-1s1 .4 1 1c0 .5-.4.8-.9 1.2-.8.6-1.6 1.3-1.6 2.8v.5h2v-.5z</StreamGeometry>
+
+	<!-- Music (note) -->
+	<StreamGeometry x:Key="IconMusic">M9 18V5l11-2v13M9 18a3 3 0 1 1-6 0 3 3 0 0 1 6 0zm11-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0z</StreamGeometry>
+
+	<!-- Hook (anchor) -->
+	<StreamGeometry x:Key="IconAnchor">M12 2a2 2 0 0 0-2 2c0 .9.6 1.7 1.4 1.9V9H9v2h2.4v7.9c-3-.4-5.4-2.8-5.8-5.9H8v-2H3v2h1.6c.5 4 3.9 7 7.4 7s7-3 7.4-7H21v-2h-5v2h2.4c-.4 3.1-2.8 5.5-5.8 5.9V11H16V9h-2.4V5.9C14.4 5.7 15 4.9 15 4a2 2 0 0 0-3-2z</StreamGeometry>
+
+	<!-- Settings (gear) -->
+	<StreamGeometry x:Key="IconSettings">M19.4 13a7.5 7.5 0 0 0 0-2l2-1.5-2-3.4-2.4 1a7.5 7.5 0 0 0-1.7-1L15 3.5H9l-.3 2.6c-.6.3-1.2.6-1.7 1l-2.4-1L2.6 9.5 4.6 11a7.5 7.5 0 0 0 0 2l-2 1.5 2 3.4 2.4-1c.5.4 1.1.7 1.7 1L9 20.5h6l.3-2.6c.6-.3 1.2-.6 1.7-1l2.4 1 2-3.4-2-1.5zM12 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z</StreamGeometry>
+
+	<!-- Back arrow -->
+	<StreamGeometry x:Key="IconBack">M19 12H5M12 19l-7-7 7-7</StreamGeometry>
+
+	<!-- Forward arrow -->
+	<StreamGeometry x:Key="IconForward">M5 12h14M12 5l7 7-7 7</StreamGeometry>
+
+	<!-- Folder (workspace) -->
+	<StreamGeometry x:Key="IconFolder">M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z</StreamGeometry>
+
+	<!-- Refresh -->
+	<StreamGeometry x:Key="IconRefresh">M21 12a9 9 0 1 1-3-6.7M21 4v5h-5</StreamGeometry>
+
+	<!-- Copy / clipboard (Jarvis-UI OPT-A4: copy-on-click do hash SHA256 no Save Editor hub). -->
+	<StreamGeometry x:Key="IconCopy">M16 1H4a2 2 0 0 0-2 2v12h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 14H8V7h11v12z</StreamGeometry>
+
+	<!-- ============ CORE AUTHORING (mÃ³dulos) ============ -->
+
+	<!-- Monster Editor â€” cabeÃ§a de criatura (dentes + chifres) -->
+	<StreamGeometry x:Key="IconMonster">M12 2c-1.5 0-2.8.9-3.4 2.2L7 4l-2 1 .8 2.1C5.3 8 5 8.9 5 10v3l-2 3h4l2 4h6l2-4h4l-2-3v-3c0-1.1-.3-2-.8-2.9L19 5l-2-1-1.6.2C14.8 2.9 13.5 2 12 2zm-2.5 9a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm5 0a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4zm-2.5 4l-1.2 2.4h2.4L12 15z</StreamGeometry>
+
+	<!-- Battle Commands â€” tabela com faÃ­sca (kernel command table) -->
+	<StreamGeometry x:Key="IconCommands">M3 4h18v4H3V4zm0 6h18v10H3V10zm4 3v4m4-4v4m4-4v4M6.5 2L8 4.5M17.5 2 16 4.5</StreamGeometry>
+
+	<!-- Items â€” mochila/saco de itens -->
+	<StreamGeometry x:Key="IconItems">M7 4a3 3 0 0 1 6 0v1h2a3 3 0 0 1 3 3v2H4V8a3 3 0 0 1 3-3V4zM4 10h16v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8zm5 3h2v3H9v-3zm4 0h2v3h-2v-3z</StreamGeometry>
+
+	<!-- Customizations / Aeons â€” mÃ¡scara (gear + aeon) -->
+	<StreamGeometry x:Key="IconCustomizations">M12 2c-3 0-5 2.5-5 5.5 0 1.2.3 2.2.8 3.1L5 13c-.5.7-.5 1.7 0 2.4l2 2.8c.4.5 1 .8 1.6.8h6.8c.6 0 1.2-.3 1.6-.8l2-2.8c.5-.7.5-1.7 0-2.4l-2.8-2.4c.5-.9.8-1.9.8-3.1C17 4.5 15 2 12 2zm0 4a1.8 1.8 0 1 1 0 3.6A1.8 1.8 0 0 1 12 6zm-2.2 8h4.4l-.6 2h-3.2l-.6-2z</StreamGeometry>
+
+	<!-- Stats â€” grÃ¡fico de barras (bar chart growth) -->
+	<StreamGeometry x:Key="IconStats">M5 21V11h2v10H5zm5 0V5h2v16h-2zm5 0V9h2v12h-2zm5 0V13h2v8h-2zM3 21h18v1H3v-1z</StreamGeometry>
+
+	<!-- Enemy Design â€” caveira (AI/boss design) -->
+	<StreamGeometry x:Key="IconEnemyDesign">M12 2a8 8 0 0 0-5 14.3V19a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2.7A8 8 0 0 0 12 2zm-2.5 9a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zm5 0a1.3 1.3 0 1 1 0 2.6 1.3 1.3 0 0 1 0-2.6zM12 17l-1-2h2l-1 2z</StreamGeometry>
+
+	<!-- Sphere Grid â€” grade de nÃ³s ligados (hex grid) -->
+	<StreamGeometry x:Key="IconSphereGrid">M12 2l2.6 1.5v3L12 8 9.4 6.5v-3L12 2zm0 6l2.6 1.5v3L12 14l-2.6-1.5v-3L12 8zm-5.6 3l2.6 1.5v3L6.4 17l-2.6-1.5v-3L6.4 11zm11.2 0l2.6 1.5v3L17.6 17 15 15.5v-3L17.6 11zM12 14l2.6 1.5v3L12 20l-2.6-1.5v-3L12 14z</StreamGeometry>
+
+	<!-- Text Hub â€” documento com linhas (text/reference) -->
+	<StreamGeometry x:Key="IconText">M6 2h8l4 4v16H6V2zm8 0v4h4M8 10h8M8 14h8M8 18h5</StreamGeometry>
+
+	<!-- Blitzball â€” bola com costura -->
+	<StreamGeometry x:Key="IconBlitzball">M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2c1.5 0 3 .4 4.3 1.1L12 7.5l-4.3-2.4C9 4.4 10.5 4 12 4zM5 8.5 9.3 11 9 16l-3.4-2A8 8 0 0 1 5 8.5zm14 0c0 2-.4 3.8-1.4 5.5L14.2 16l-.4-5L18 8.5zM12 13l2 4-2 1-2-1 2-4z</StreamGeometry>
+
+	<!-- Save Editor â€” disquete (salvar jogo) -->
+	<StreamGeometry x:Key="IconSave">M5 3h11l3 3v15H5V3zm2 0v6h8V3H7zm1 1h2v3H8V4zm1 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z</StreamGeometry>
+
+	<!-- ============ MAPAS & CENAS ============ -->
+
+	<!-- Encounters â€” dois cubos colidindo (batalha/formation) -->
+	<StreamGeometry x:Key="IconEncounters">M9 3 4 6v5l5 3 5-3V6L9 3zm0 2.5L11.5 7 9 8.5 6.5 7 9 5.5zM5 13l-3 2v4l3 2 4-2v-4l-4-2zm14 0-3 2v4l3 2 4-2v-4l-4-2zM9 14l4 2.5L9 19l-4-2.5L9 14z</StreamGeometry>
+
+	<!-- Aurora Chamber â€” pÃ´r-do-sol com montanha -->
+	<StreamGeometry x:Key="IconAurora">M3 18h18M5 18a7 7 0 0 1 14 0M2 6l3 2M22 6l-3 2M12 4v2M3 18l4-3 3 2 3-4 3 3 5 2</StreamGeometry>
+
+	<!-- Field Explorer â€” bÃºssola com pin (overworld field) -->
+	<StreamGeometry x:Key="IconFieldExplorer">M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 4a3 3 0 1 1 0 6 3 3 0 0 1 0-6zm-1 3 2-1 1 2-2 1-1-2z</StreamGeometry>
+
+	<!-- Map Scene Editor â€” gizmo 3D (eixos XYZ) -->
+	<StreamGeometry x:Key="IconMapScene">M12 2v20M2 7l10 5 10-5M2 17l10-5 10 5M12 2 7 7m5-5 5 5</StreamGeometry>
+
+	<!-- Battle Explorer â€” escudo com espada cruzada (battle inspection) -->
+	<StreamGeometry x:Key="IconBattle">M12 2 4 5v6c0 5 3.5 8.5 8 11 4.5-2.5 8-6 8-11V5l-8-3zm-2 6 2 2 4-4v9l-4 4-4-4V8z</StreamGeometry>
+
+	<!-- ============ LIVE TOOLS / RUNTIME ============ -->
+
+	<!-- Injected DLLs â€” chip (circuito integrado) -->
+	<StreamGeometry x:Key="IconDll">M9 3h6v4l3 2v8l-3 2v2H9v-2l-3-2V9l3-2V3zm2 2v3l-3 2v6l3 2v1h2v-1l3-2V10l-3-2V5h-2zm0 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z</StreamGeometry>
+
+	<!-- Live Battle Lab â€” laboratÃ³rio (frasco com faÃ­sca) -->
+	<StreamGeometry x:Key="IconLiveBattle">M9 2v6L5 16a4 4 0 0 0 3.6 6h6.8A4 4 0 0 0 19 16l-4-8V2H9zm2 2h2v4.5l3.5 7a2 2 0 0 1-1.8 3.5H8.3A2 2 0 0 1 6.5 15.5L10 8.5V4zm1 7a1 1 0 1 0 0 2 1 1 0 0 0 0-2z</StreamGeometry>
+
+	<!-- Aurora Overlay Lab â€” camadas/overlay -->
+	<StreamGeometry x:Key="IconOverlay">M12 3 2 8l10 5 10-5-10-5zM2 12l10 5 10-5M2 16l10 5 10-5</StreamGeometry>
+
+	<!-- Battle Tracker â€” radar (tracker/telemetria) -->
+	<StreamGeometry x:Key="IconTracker">M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2a8 8 0 0 1 8 8h-2a6 6 0 0 0-6-6V4zm0 4a6 6 0 0 1 6 6h-2a4 4 0 0 0-4-4V8zm0 4a2 2 0 1 1 0 4 2 2 0 0 1 0-4z</StreamGeometry>
+
+	<!-- Inventory Tracker â€” checklist (inventÃ¡rio) -->
+	<StreamGeometry x:Key="IconInventory">M4 3h16v18H4V3zm2 2v14h12V5H6zm2 3h8v2H8V8zm0 4h8v2H8v-2zm0 4h5v2H8v-2zM5 7l1.5 1.5L7 8 5.5 6.5 5 7z</StreamGeometry>
+
+	<!-- Arena Tracker â€” arena/coloiseu (tribunas) -->
+	<StreamGeometry x:Key="IconArena">M12 3 2 9v2h20V9L12 3zM4 12v6H2v2h20v-2h-2v-6h-2v6h-3v-6h-2v6h-2v-6H9v6H6v-6H4z</StreamGeometry>
+
+	<!-- Debug Menu â€” inseto (bug) -->
+	<StreamGeometry x:Key="IconDebug">M12 4a3 3 0 0 0-3 3v1h6V7a3 3 0 0 0-3-3zM7 9a5 5 0 0 0 10 0H7zM3 11h3m12 0h3M4 7l3 1m10-1 3 1M4 15l3-1m10 1 3-1M12 14v6M9 20l3-2 3 2</StreamGeometry>
+
+	<!-- ============ EXTRAS (read-only product line) ============ -->
+
+	<!-- Textures (TM2) â€” imagem/texture checker -->
+	<StreamGeometry x:Key="IconTexture">M3 3h18v18H3V3zm2 2v4h4V5H5zm6 0v4h4V5h-4zm6 0v4h2V5h-2zM5 11v4h4v-4H5zm6 0v4h4v-4h-4zm6 0v4h2v-4h-2zM5 17v2h4v-2H5zm6 0v2h4v-2h-4zm6 0v2h2v-2h-2z</StreamGeometry>
+
+	<!-- BIN-FTC Atlas â€” arquivos empilhados (atlas) -->
+	<StreamGeometry x:Key="IconBinAtlas">M4 4h12l4 4v12H4V4zm12 0v4h4M7 12h10v1H7v-1zm0 3h10v1H7v-1zm0 3h6v1H7v-1z</StreamGeometry>
+
+	<!-- Project / Pipeline â€” fluxo (nodes ligados) -->
+	<StreamGeometry x:Key="IconPipeline">M5 3a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2v6a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2v-6a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2H5zm10 0a2 2 0 0 0-2 2v2h6V5a2 2 0 0 0-2-2h-2zm-1 14v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2h-6z</StreamGeometry>
+
+	<!-- Magic Effects â€” faÃ­sca mÃ¡gica (sparkle) -->
+	<StreamGeometry x:Key="IconMagicEffect">M12 2l2 5 5 2-5 2-2 5-2-5-5-2 5-2 2-5zm6 9l1 2.5 2.5 1-2.5 1L18 18l-1-2.5-2.5-1 2.5-1L18 11zM6 14l1 2 2 1-2 1-1 2-1-2-2-1 2-1 1-2z</StreamGeometry>
+
+	<!-- PS3 Magic (HD) â€” varinha/textura HD (crystal) -->
+	<StreamGeometry x:Key="IconPs3Magic">M12 2 3 8l9 6 9-6-9-6zm0 2.5L17 8l-5 3.5L7 8l5-3.5zM3 12l9 6 9-6M3 16l9 6 9-6</StreamGeometry>
+
+	<!-- Magic DLLs (FFX) â€” bloco de cÃ³digo com engrenagem -->
+	<StreamGeometry x:Key="IconMagicDll">M4 3h16v18H4V3zm2 2v2h2V5H6zm4 0v2h2V5h-2zm4 0v2h2V5h-2zM6 9h12v2H6V9zm6.4 4a3 3 0 0 0-2.4 5l-.7 1.7 1.7-.7a3 3 0 1 0 1.4-6zm0 2a1 1 0 1 1 0 2 1 1 0 0 1 0-2zM6 17h4v2H6v-2z</StreamGeometry>
+
+	<!-- Phyre Package I/O â€” pacote com setas (import/export) -->
+	<StreamGeometry x:Key="IconPhyre">M21 8L12 3 3 8v8l9 5 9-5V8zM5 9.2 11 12v7.4l-6-3.3V9.2zm8 9.8V12l6-2.8v6.9L13 19zm-1-9L6.2 7 12 4.2 17.8 7 12 10z</StreamGeometry>
+
+	<!-- VBF Extract â€” arquivo com seta para fora (extract) -->
+	<StreamGeometry x:Key="IconVbf">M6 2h8l4 4v16H6V2zm8 0v4h4M12 11v8m-3-3 3 3 3-3M8 7h3v3H8V7z</StreamGeometry>
+
+	<!-- Magic Viewer (Web) â€” globo (web/browser) -->
+	<StreamGeometry x:Key="IconMagicViewer">M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 2c2 0 3.8 2.4 4.5 6h-9C8.2 6.4 10 4 12 4zM4.5 12h4c-.3 1.2-.5 2.5-.5 4s.2 2.8.5 4c-2-1.2-3.5-3.4-4-6zm15 0c-.5 2.6-2 4.8-4 6 .3-1.2.5-2.5.5-4s-.2-2.8-.5-4h4zm-9.5 0h6c.3 1.2.5 2.5.5 4s-.2 2.8-.5 4c-1 .3-2 .4-3 .4s-2-.1-3-.4c-.3-1.2-.5-2.5-.5-4s.2-2.8.5-4z</StreamGeometry>
+
+	<!-- Model Viewer (Web) â€” cubo wireframe 3D -->
+	<StreamGeometry x:Key="IconModelWeb">M12 2 2 7v10l10 5 10-5V7L12 2zm0 2.5L19 8l-7 3.5L5 8l7-3.5zM4 9.5l7 3.5v7.5l-7-3.5V9.5zm9 11V13l7-3.5v7.5L13 20.5z</StreamGeometry>
+
+	<!-- Model Viewer (Embedded) â€” cubo dentro de janela -->
+	<StreamGeometry x:Key="IconModelEmbedded">M3 4h18v16H3V4zm2 2v2h14V6H5zm0 4v8h14v-8H5zm7 1 3 2v3l-3 2-3-2v-3l3-2z</StreamGeometry>
+
+	<!-- PS2 Models (RSD) â€” malha poligonal (mesh) -->
+	<StreamGeometry x:Key="IconPs2Model">M12 2 3 8v8l9 5 9-5V8l-9-6zm0 2.3 6.5 4L12 11.5 5.5 8.4 12 4.3zM4 10.5l7 3.6v6L4 16.5v-6zm9 9.6v-6l7-3.6v6L13 20.1z</StreamGeometry>
+
+	<!-- PS2 Audio (.wd) â€” onda de som / alto-falante -->
+	<StreamGeometry x:Key="IconAudio">M4 9v6h4l5 4V5L8 9H4zm12 .5a4 4 0 0 1 0 5M18 7a7 7 0 0 1 0 10M3 11v2h1v-2H3z</StreamGeometry>
+
+	<!-- Presentation Containers â€” camadas empilhadas -->
+	<StreamGeometry x:Key="IconContainers">M12 2 2 7l10 5 10-5-10-5zM2 12l10 5 10-5M2 17l10 5 10-5</StreamGeometry>
+
+	<!-- Battle Corpus Crosswalk â€” duas listas com seta (crosswalk) -->
+	<StreamGeometry x:Key="IconCrosswalk">M3 4h7v16H3V4zm2 2v3h3V6H5zm0 5v3h3v-3H5zm0 5v2h3v-2H5zm9-10h7v16h-7V6zm2 2v3h3V8h-3zm0 5v3h3v-3h-3zm0 5v2h3v-2h-3z</StreamGeometry>
+
+	<!-- PS2 Knowledge â€” livro aberto -->
+	<StreamGeometry x:Key="IconKnowledge">M3 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H3V4zm12 0h6v14h-7a2 2 0 0 0-2 2V7a3 3 0 0 1 3-3z</StreamGeometry>
+
+	<!-- ============ WAVE-1 / ??? ============ -->
+
+	<!-- Translate (Al Bhed Dictionary) â€” globo com letras A/æ–‡ -->
+	<StreamGeometry x:Key="IconTranslate">M4 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4V4zm11 5h5a2 2 0 0 1 2 2v9h-7a2 2 0 0 0-2 2V12a3 3 0 0 1 3-3zM6 8h3v1H6V8zm0 4h3v1H6v-1zm0 4h2v1H6v-1z</StreamGeometry>
+
+	<!-- Pointer / Script Table â€” cursor/pointer com chaves -->
+	<StreamGeometry x:Key="IconScript">M4 3h7l3 3v15H4V3zm7 0v3h3M7 10h4M7 14h4m-4 3h3M16 9l2 2-2 2m3-5 2 2-2 2M16 6l5 5-5 5</StreamGeometry>
+
+	<!-- ============ UTILITÃRIOS (v2.162.1.0, Jarvis-UI Fase F Â§F1)
+	     Substituem emojis em botÃµes de aÃ§Ã£o e estados. Uso com
+	     <PathIcon Data="{DynamicResource IconXxx}" />. ===== -->
+
+	<!-- Search (lupa) -->
+	<StreamGeometry x:Key="IconSearch">M11 4a7 7 0 1 1 0 14 7 7 0 0 1 0-14zm0 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.3 9.9 3.4 3.4-1.4 1.4-3.4-3.4 1.4-1.4z</StreamGeometry>
+
+	<!-- Add (mais em cÃ­rculo) -->
+	<StreamGeometry x:Key="IconAdd">M12 4a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm-1 2h2v3h3v2h-3v3h-2v-3H8v-2h3V8z</StreamGeometry>
+
+	<!-- Remove (menos em cÃ­rculo) -->
+	<StreamGeometry x:Key="IconRemove">M12 4a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm-4 5h8v2H8v-2z</StreamGeometry>
+
+	<!-- Warning (triÃ¢ngulo) -->
+	<StreamGeometry x:Key="IconWarning">M12 3 1 21h22L12 3zm0 4 7.5 12h-15L12 7zm-1 4h2v5h-2v-5zm0 6h2v2h-2v-2z</StreamGeometry>
+
+	<!-- Undo (seta curva anti-horÃ¡ria) -->
+	<StreamGeometry x:Key="IconUndo">M9 8H5l.5-.5A6 6 0 1 1 4 12h2a4 4 0 1 0 1.2-2.8L5 11h4v2H3V7h2v1z</StreamGeometry>
+
+	<!-- Redo (seta curva horÃ¡ria) -->
+	<StreamGeometry x:Key="IconRedo">M15 8h4l-.5-.5A6 6 0 1 0 20 12h-2a4 4 0 1 1-1.2-2.8L19 11h-4v2h6V7h-2v1z</StreamGeometry>
+
+	<!-- Filter (funil) -->
+	<StreamGeometry x:Key="IconFilter">M3 5h18l-7 8v6l-4 2v-8L3 5zm3 2 6 6 6-6H6z</StreamGeometry>
+
+	<!-- Open (pasta com seta / arquivo aberto) -->
+	<StreamGeometry x:Key="IconOpen">M4 4h5l2 2h5a2 2 0 0 1 2 2v2h-2V8h-5.2l-2 2H6v8h5v2H6a2 2 0 0 1-2-2V4zm10 10h4v-2l3 3-3 3v-2h-4v-2z</StreamGeometry>
+
+	<!-- Close (X) -->
+	<StreamGeometry x:Key="IconClose">M6 6l12 12M18 6 6 18</StreamGeometry>
+
+	<!-- ChevronDown -->
+	<StreamGeometry x:Key="IconChevronDown">M6 9l6 6 6-6</StreamGeometry>
+
+	<!-- ChevronRight -->
+	<StreamGeometry x:Key="IconChevronRight">M9 6l6 6-6 6</StreamGeometry>
+
+	<!-- Check (sinal de visto) -->
+	<StreamGeometry x:Key="IconCheck">M5 12l4 4 10-10</StreamGeometry>
+
+	<!-- X (X em cÃ­rculo, confirmaÃ§Ã£o negativa) -->
+	<StreamGeometry x:Key="IconX">M12 4a8 8 0 1 1 0 16 8 8 0 0 1 0-16zm0 2a6 6 0 1 0 0 12 6 6 0 0 0 0-12zm-2.5 3.5L12 12l2.5-2.5 1.4 1.4L13.4 13.4 16 16l-1.4 1.4L12 14.8 9.4 17.4 8 16l2.6-2.6L8 11l1.5-1.5z</StreamGeometry>
+</ResourceDictionary>

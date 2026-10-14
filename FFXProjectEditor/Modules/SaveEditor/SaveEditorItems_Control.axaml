@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1100" d:DesignHeight="760"
+             x:Class="FFXProjectEditor.SaveEditorItems_Control">
+    <Grid ColumnDefinitions="Auto,*">
+        <!-- Jarvis-UI (Sprint C 2026-06-20, OPT-C4): coluna master (Item slots) num Expander colapsável
+             (ExpandDirection="Left", default expandido), mesmo padrão de Character/Equipment. -->
+        <Expander Grid.Column="0" IsExpanded="True" ExpandDirection="Left"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Padding="0" Margin="0,0,14,0">
+            <Expander.Header>
+                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.TermItems}" />
+            </Expander.Header>
+            <Border Padding="14" Classes="card" MinWidth="280" MaxWidth="340">
+                <StackPanel Spacing="8">
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_item_slots_112_0285e730}" />
+                    <ListBox ItemsSource="{Binding ItemSlots}"
+                             SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+                             MinHeight="360">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding DisplayName}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Button Classes="secondaryAction" Click="Batch99_Click">Get 99 of every item</Button>
+                    <Button Classes="secondaryAction" Click="BatchKey_Click">Get all key items</Button>
+                </StackPanel>
+            </Border>
+        </Expander>
+        <ScrollViewer Grid.Column="1">
+            <StackPanel Spacing="12" IsEnabled="{Binding HasSession}">
+                <Border Padding="18" Classes="card">
+                    <StackPanel Spacing="10">
+                        <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_selected_item_96671b55}" />
+                        <TextBlock Text="{x:Static res:Strings.U_item_ecdda59a}" />
+                        <ComboBox ItemsSource="{Binding ItemCatalogLabels}"
+                                  SelectedIndex="{Binding SelectedItem.CatalogIndex, Mode=TwoWay}"
+                                  MinWidth="320" />
+                        <TextBlock Text="{x:Static res:Strings.CommonQuantity}" />
+                        <TextBox Text="{Binding SelectedItem.Quantity, Mode=TwoWay}" />
+                        <Button Classes="primaryAction" Click="ApplyItem_Click">Apply item</Button>
+                    </StackPanel>
+                </Border>
+                <Border Padding="18" Classes="card">
+                    <StackPanel Spacing="10">
+                        <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.CommonGil}" />
+                        <TextBox Text="{Binding Gil, Mode=TwoWay}" />
+                        <Button Classes="primaryAction" Click="ApplyGil_Click">Apply Gil</Button>
+                    </StackPanel>
+                </Border>
+                <Border Padding="18" Classes="card" MaxHeight="320">
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_key_items_9f1f374b}" />
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="240">
+                            <ListBox ItemsSource="{Binding KeyItems}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Label}" IsChecked="{Binding Value, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                        <Button Classes="primaryAction" Click="ApplyKey_Click">Apply key items</Button>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

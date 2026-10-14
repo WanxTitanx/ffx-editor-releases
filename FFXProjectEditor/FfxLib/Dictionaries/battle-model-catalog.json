@@ -1,0 +1,2730 @@
+{
+  "source": "FFXmon enemy data editor v1.4 / FFX models.txt",
+  "entries": {
+    "1": {
+      "id": 1,
+      "hex": "0001",
+      "name": "Tidus",
+      "mainModelName": null,
+      "flags": []
+    },
+    "2": {
+      "id": 2,
+      "hex": "0002",
+      "name": "Yuna",
+      "mainModelName": null,
+      "flags": []
+    },
+    "3": {
+      "id": 3,
+      "hex": "0003",
+      "name": "Auron",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4": {
+      "id": 4,
+      "hex": "0004",
+      "name": "Kimahri",
+      "mainModelName": null,
+      "flags": []
+    },
+    "5": {
+      "id": 5,
+      "hex": "0005",
+      "name": "Wakka",
+      "mainModelName": null,
+      "flags": []
+    },
+    "6": {
+      "id": 6,
+      "hex": "0006",
+      "name": "Lulu",
+      "mainModelName": null,
+      "flags": []
+    },
+    "7": {
+      "id": 7,
+      "hex": "0007",
+      "name": "Rikku",
+      "mainModelName": null,
+      "flags": []
+    },
+    "8": {
+      "id": 8,
+      "hex": "0008",
+      "name": "Seymour",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12289": {
+      "id": 12289,
+      "hex": "3001",
+      "name": "Valefor",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12290": {
+      "id": 12290,
+      "hex": "3002",
+      "name": "Ifrit",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12291": {
+      "id": 12291,
+      "hex": "3003",
+      "name": "Ixion",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12292": {
+      "id": 12292,
+      "hex": "3004",
+      "name": "Shiva",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12294": {
+      "id": 12294,
+      "hex": "3006",
+      "name": "Bahamut",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12295": {
+      "id": 12295,
+      "hex": "3007",
+      "name": "Anima",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12296": {
+      "id": 12296,
+      "hex": "3008",
+      "name": "Yojimbo",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12311": {
+      "id": 12311,
+      "hex": "3017",
+      "name": "Daigoro",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12297": {
+      "id": 12297,
+      "hex": "3009",
+      "name": "Cindy",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12298": {
+      "id": 12298,
+      "hex": "300A",
+      "name": "Sandy",
+      "mainModelName": null,
+      "flags": []
+    },
+    "12299": {
+      "id": 12299,
+      "hex": "300B",
+      "name": "Mindy",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4105": {
+      "id": 4105,
+      "hex": "1009",
+      "name": "Dingo",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4124": {
+      "id": 4124,
+      "hex": "101C",
+      "name": "Condor",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4112": {
+      "id": 4112,
+      "hex": "1010",
+      "name": "Water Flan",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4118": {
+      "id": 4118,
+      "hex": "1016",
+      "name": "Dinonix",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4127": {
+      "id": 4127,
+      "hex": "101F",
+      "name": "Killer Bee",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4173": {
+      "id": 4173,
+      "hex": "104D",
+      "name": "Yellow Element",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4135": {
+      "id": 4135,
+      "hex": "1027",
+      "name": "Ragora",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4106": {
+      "id": 4106,
+      "hex": "100A",
+      "name": "Mi'ihen Fang",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4119": {
+      "id": 4119,
+      "hex": "1017",
+      "name": "Ipiria",
+      "mainModelName": "Dinonix",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4118
+    },
+    "4131": {
+      "id": 4131,
+      "hex": "1023",
+      "name": "Floating Eye",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4174": {
+      "id": 4174,
+      "hex": "104E",
+      "name": "White Element",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4097": {
+      "id": 4097,
+      "hex": "1001",
+      "name": "Raldo",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4098
+    },
+    "4155": {
+      "id": 4155,
+      "hex": "103B",
+      "name": "Vouivre",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4289": {
+      "id": 4289,
+      "hex": "10C1",
+      "name": "Bomb",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4151": {
+      "id": 4151,
+      "hex": "1037",
+      "name": "Dual Horn",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4120": {
+      "id": 4120,
+      "hex": "1018",
+      "name": "Raptor",
+      "mainModelName": "Dinonix",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4118
+    },
+    "4102": {
+      "id": 4102,
+      "hex": "1006",
+      "name": "Gandarewa",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4113": {
+      "id": 4113,
+      "hex": "1011",
+      "name": "Thunder Flan",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4175": {
+      "id": 4175,
+      "hex": "104F",
+      "name": "Red Element",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4156": {
+      "id": 4156,
+      "hex": "103C",
+      "name": "Lamashtu",
+      "mainModelName": "Vouivre",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4155
+    },
+    "4310": {
+      "id": 4310,
+      "hex": "10D6",
+      "name": "Funguar",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4140": {
+      "id": 4140,
+      "hex": "102C",
+      "name": "Garuda",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4107": {
+      "id": 4107,
+      "hex": "100B",
+      "name": "Garm",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4125": {
+      "id": 4125,
+      "hex": "101D",
+      "name": "Simurgh",
+      "mainModelName": "Condor",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4124
+    },
+    "4128": {
+      "id": 4128,
+      "hex": "1020",
+      "name": "Bite Bug",
+      "mainModelName": "Killer Bee",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4127
+    },
+    "4114": {
+      "id": 4114,
+      "hex": "1012",
+      "name": "Snow Flan",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4098": {
+      "id": 4098,
+      "hex": "1002",
+      "name": "Bunyip",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4281": {
+      "id": 4281,
+      "hex": "10B9",
+      "name": "Basilisk",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4285": {
+      "id": 4285,
+      "hex": "10BD",
+      "name": "Ochu",
+      "mainModelName": "Lord Ochu",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4249
+    },
+    "4121": {
+      "id": 4121,
+      "hex": "1019",
+      "name": "Melusine",
+      "mainModelName": "Dinonix",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4118
+    },
+    "4103": {
+      "id": 4103,
+      "hex": "1007",
+      "name": "Aerouge",
+      "mainModelName": "Gandarewa",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4102
+    },
+    "4132": {
+      "id": 4132,
+      "hex": "1024",
+      "name": "Buer",
+      "mainModelName": "Floating Eye",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4131
+    },
+    "4176": {
+      "id": 4176,
+      "hex": "1050",
+      "name": "Gold Element",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4157": {
+      "id": 4157,
+      "hex": "103D",
+      "name": "Kusariqqu",
+      "mainModelName": "Vouivre",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4155
+    },
+    "4305": {
+      "id": 4305,
+      "hex": "10D1",
+      "name": "Larva",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4277": {
+      "id": 4277,
+      "hex": "10B5",
+      "name": "Iron Giant",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4303": {
+      "id": 4303,
+      "hex": "10CF",
+      "name": "Qactuar",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4108": {
+      "id": 4108,
+      "hex": "100C",
+      "name": "Snow Wolf",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4122": {
+      "id": 4122,
+      "hex": "101A",
+      "name": "Iguion",
+      "mainModelName": "Dinonix",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4118
+    },
+    "4129": {
+      "id": 4129,
+      "hex": "1021",
+      "name": "Wasp",
+      "mainModelName": "Killer Bee",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4127
+    },
+    "4133": {
+      "id": 4133,
+      "hex": "1025",
+      "name": "Evil Eye",
+      "mainModelName": "Floating Eye",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4131
+    },
+    "4115": {
+      "id": 4115,
+      "hex": "1013",
+      "name": "Ice Flan",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4177": {
+      "id": 4177,
+      "hex": "1051",
+      "name": "Blue Element",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4099": {
+      "id": 4099,
+      "hex": "1003",
+      "name": "Murussu",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4098
+    },
+    "4100": {
+      "id": 4100,
+      "hex": "1004",
+      "name": "Mafdet",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4098
+    },
+    "4313": {
+      "id": 4313,
+      "hex": "10D9",
+      "name": "Xiphos",
+      "mainModelName": "Klikk",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4254
+    },
+    "4183": {
+      "id": 4183,
+      "hex": "1057",
+      "name": "Chimera",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4109": {
+      "id": 4109,
+      "hex": "100D",
+      "name": "Sand Wolf",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4126": {
+      "id": 4126,
+      "hex": "101E",
+      "name": "Alcyone",
+      "mainModelName": "Condor",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4124
+    },
+    "4158": {
+      "id": 4158,
+      "hex": "103E",
+      "name": "Mushussu",
+      "mainModelName": "Vouivre",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4155
+    },
+    "4141": {
+      "id": 4141,
+      "hex": "102D",
+      "name": "Zu",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4142": {
+      "id": 4142,
+      "hex": "102E",
+      "name": "Sand Worm",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4304": {
+      "id": 4304,
+      "hex": "10D0",
+      "name": "Cactuar",
+      "mainModelName": "Qactuar",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4303
+    },
+    "4110": {
+      "id": 4110,
+      "hex": "100E",
+      "name": "Skoll",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4130": {
+      "id": 4130,
+      "hex": "1022",
+      "name": "Nebiros",
+      "mainModelName": "Killer Bee",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4127
+    },
+    "4116": {
+      "id": 4116,
+      "hex": "1014",
+      "name": "Flame Flan",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4101": {
+      "id": 4101,
+      "hex": "1005",
+      "name": "Shred",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4098
+    },
+    "4282": {
+      "id": 4282,
+      "hex": "10BA",
+      "name": "Anacondaur",
+      "mainModelName": "Basilisk",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4281
+    },
+    "4162": {
+      "id": 4162,
+      "hex": "1042",
+      "name": "Ogre",
+      "mainModelName": "Wendigo",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4308
+    },
+    "4185": {
+      "id": 4185,
+      "hex": "1059",
+      "name": "Coeurl",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4184": {
+      "id": 4184,
+      "hex": "1058",
+      "name": "Chimera Brain",
+      "mainModelName": "Chimera",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4183
+    },
+    "4160": {
+      "id": 4160,
+      "hex": "1040",
+      "name": "Malboro",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4123": {
+      "id": 4123,
+      "hex": "101B",
+      "name": "Yowie",
+      "mainModelName": "Dinonix",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4118
+    },
+    "4104": {
+      "id": 4104,
+      "hex": "1008",
+      "name": "Imp",
+      "mainModelName": "Gandarewa",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4102
+    },
+    "4178": {
+      "id": 4178,
+      "hex": "1052",
+      "name": "Dark Element",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4159": {
+      "id": 4159,
+      "hex": "103F",
+      "name": "Nidhogg",
+      "mainModelName": "Vouivre",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4155
+    },
+    "4311": {
+      "id": 4311,
+      "hex": "10D7",
+      "name": "Thorn",
+      "mainModelName": "Funguar",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4310
+    },
+    "4152": {
+      "id": 4152,
+      "hex": "1038",
+      "name": "Valaha",
+      "mainModelName": "Dual Horn",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4151
+    },
+    "4180": {
+      "id": 4180,
+      "hex": "1054",
+      "name": "Epaaj",
+      "mainModelName": "Klikk",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4254
+    },
+    "4146": {
+      "id": 4146,
+      "hex": "1032",
+      "name": "Ghost",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4319": {
+      "id": 4319,
+      "hex": "10DF",
+      "name": "Tonberry",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4111": {
+      "id": 4111,
+      "hex": "100F",
+      "name": "Bandersnatch",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4134": {
+      "id": 4134,
+      "hex": "1026",
+      "name": "Ahriman",
+      "mainModelName": "Floating Eye",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4131
+    },
+    "4117": {
+      "id": 4117,
+      "hex": "1015",
+      "name": "Dark Flan",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4290": {
+      "id": 4290,
+      "hex": "10C2",
+      "name": "Grenade",
+      "mainModelName": "Bomb",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4289
+    },
+    "4136": {
+      "id": 4136,
+      "hex": "1028",
+      "name": "Grat",
+      "mainModelName": "Ragora",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4135
+    },
+    "4153": {
+      "id": 4153,
+      "hex": "1039",
+      "name": "Grendel",
+      "mainModelName": "Dual Horn",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4151
+    },
+    "4163": {
+      "id": 4163,
+      "hex": "1043",
+      "name": "Bashura",
+      "mainModelName": "Wendigo",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4308
+    },
+    "4286": {
+      "id": 4286,
+      "hex": "10BE",
+      "name": "Mandragora",
+      "mainModelName": "Lord Ochu",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4249
+    },
+    "4181": {
+      "id": 4181,
+      "hex": "1055",
+      "name": "Behemoth",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4169": {
+      "id": 4169,
+      "hex": "1049",
+      "name": "Splasher (underwater)",
+      "mainModelName": "Piranha x1 (underwater)",
+      "flags": [
+        "variant",
+        "underwater"
+      ],
+      "mainModelId": 4164
+    },
+    "4148": {
+      "id": 4148,
+      "hex": "1034",
+      "name": "Achelous (underwater)",
+      "mainModelName": "Phlegyas (underwater)",
+      "flags": [
+        "variant",
+        "underwater"
+      ],
+      "mainModelId": 4147
+    },
+    "4150": {
+      "id": 4150,
+      "hex": "1036",
+      "name": "Maelspike (underwater)",
+      "mainModelName": "Remora (underwater)",
+      "flags": [
+        "variant",
+        "underwater"
+      ],
+      "mainModelId": 4149
+    },
+    "4312": {
+      "id": 4312,
+      "hex": "10D8",
+      "name": "Exoray",
+      "mainModelName": "Funguar",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4310
+    },
+    "4316": {
+      "id": 4316,
+      "hex": "10DC",
+      "name": "Wraith",
+      "mainModelName": "Ghost",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4146
+    },
+    "4278": {
+      "id": 4278,
+      "hex": "10B6",
+      "name": "Gemini (absorbs Fire and Lightning)",
+      "mainModelName": "Iron Giant",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4277
+    },
+    "4280": {
+      "id": 4280,
+      "hex": "10B8",
+      "name": "Gemini (absorbs Ice and Water)",
+      "mainModelName": "Iron Giant",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4277
+    },
+    "4191": {
+      "id": 4191,
+      "hex": "105F",
+      "name": "Demonolith",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4161": {
+      "id": 4161,
+      "hex": "1041",
+      "name": "Great Malboro",
+      "mainModelName": "Malboro",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4160
+    },
+    "4306": {
+      "id": 4306,
+      "hex": "10D2",
+      "name": "Barbatos",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4283": {
+      "id": 4283,
+      "hex": "10BB",
+      "name": "Adamantoise",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4182": {
+      "id": 4182,
+      "hex": "1056",
+      "name": "Behemoth King",
+      "mainModelName": "Behemoth",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4181
+    },
+    "4335": {
+      "id": 4335,
+      "hex": "10EF",
+      "name": "Zaurus",
+      "mainModelName": "Dinonix",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4118
+    },
+    "4338": {
+      "id": 4338,
+      "hex": "10F2",
+      "name": "Floating Death",
+      "mainModelName": "Floating Eye",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4131
+    },
+    "4179": {
+      "id": 4179,
+      "hex": "1053",
+      "name": "Black Element",
+      "mainModelName": "Dark Element",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4178
+    },
+    "4336": {
+      "id": 4336,
+      "hex": "10F0",
+      "name": "Halma",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4098
+    },
+    "4314": {
+      "id": 4314,
+      "hex": "10DA",
+      "name": "Puroboros",
+      "mainModelName": "Bomb",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4289
+    },
+    "4315": {
+      "id": 4315,
+      "hex": "10DB",
+      "name": "Spirit",
+      "mainModelName": "Larva",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4305
+    },
+    "4340": {
+      "id": 4340,
+      "hex": "10F4",
+      "name": "Machea",
+      "mainModelName": "Klikk",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4254
+    },
+    "4186": {
+      "id": 4186,
+      "hex": "105A",
+      "name": "Master Coeurl",
+      "mainModelName": "Coeurl",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4185
+    },
+    "4320": {
+      "id": 4320,
+      "hex": "10E0",
+      "name": "Master Tonberry",
+      "mainModelName": "Tonberry",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4319
+    },
+    "4284": {
+      "id": 4284,
+      "hex": "10BC",
+      "name": "Varuna",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4396": {
+      "id": 4396,
+      "hex": "112C",
+      "name": "Stratoavis",
+      "mainModelName": "Zu",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4141
+    },
+    "4400": {
+      "id": 4400,
+      "hex": "1130",
+      "name": "Malboro Menace",
+      "mainModelName": "Malboro",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4160
+    },
+    "4401": {
+      "id": 4401,
+      "hex": "1131",
+      "name": "Kottos",
+      "mainModelName": "Wendigo",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4308
+    },
+    "4405": {
+      "id": 4405,
+      "hex": "1135",
+      "name": "Coeurlregina",
+      "mainModelName": "Coeurl",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4185
+    },
+    "4407": {
+      "id": 4407,
+      "hex": "1137",
+      "name": "Jormungand",
+      "mainModelName": "Basilisk",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4281
+    },
+    "4410": {
+      "id": 4410,
+      "hex": "113A",
+      "name": "Cactuar King",
+      "mainModelName": "Qactuar",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4303
+    },
+    "4414": {
+      "id": 4414,
+      "hex": "113E",
+      "name": "Espada",
+      "mainModelName": "Klikk",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4254
+    },
+    "4397": {
+      "id": 4397,
+      "hex": "112D",
+      "name": "Abyss Worm",
+      "mainModelName": "Sand Worm",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4142
+    },
+    "4404": {
+      "id": 4404,
+      "hex": "1134",
+      "name": "Chimerageist",
+      "mainModelName": "Chimera",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4183
+    },
+    "4413": {
+      "id": 4413,
+      "hex": "113D",
+      "name": "Don Tonberry",
+      "mainModelName": "Tonberry",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4319
+    },
+    "4403": {
+      "id": 4403,
+      "hex": "1133",
+      "name": "Catobeplas",
+      "mainModelName": "Behemoth",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4181
+    },
+    "4408": {
+      "id": 4408,
+      "hex": "1138",
+      "name": "Abaddon",
+      "mainModelName": "Varuna",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4284
+    },
+    "4411": {
+      "id": 4411,
+      "hex": "113B",
+      "name": "Vorban",
+      "mainModelName": "Barbatos",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4306
+    },
+    "4390": {
+      "id": 4390,
+      "hex": "1126",
+      "name": "Fenrir",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4392": {
+      "id": 4392,
+      "hex": "1128",
+      "name": "Ornitholestes",
+      "mainModelName": "Dinonix",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4118
+    },
+    "4393": {
+      "id": 4393,
+      "hex": "1129",
+      "name": "Pteryx",
+      "mainModelName": "Condor",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4124
+    },
+    "4394": {
+      "id": 4394,
+      "hex": "112A",
+      "name": "Hornet",
+      "mainModelName": "Killer Bee",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4127
+    },
+    "4389": {
+      "id": 4389,
+      "hex": "1125",
+      "name": "Vidatu",
+      "mainModelName": "Gandarewa",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4102
+    },
+    "4395": {
+      "id": 4395,
+      "hex": "112B",
+      "name": "One-Eye",
+      "mainModelName": "Floating Eye",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4131
+    },
+    "4391": {
+      "id": 4391,
+      "hex": "1127",
+      "name": "Jumbo Flan",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4402": {
+      "id": 4402,
+      "hex": "1132",
+      "name": "Nega Elemental",
+      "mainModelName": "Dark Element",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4178
+    },
+    "4388": {
+      "id": 4388,
+      "hex": "1124",
+      "name": "Tanket",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4098
+    },
+    "4399": {
+      "id": 4399,
+      "hex": "112F",
+      "name": "Fafnir",
+      "mainModelName": "Vouivre",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4155
+    },
+    "4412": {
+      "id": 4412,
+      "hex": "113C",
+      "name": "Sleep Sprout",
+      "mainModelName": "Funguar",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4310
+    },
+    "4409": {
+      "id": 4409,
+      "hex": "1139",
+      "name": "Bomb King",
+      "mainModelName": "Bomb",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4289
+    },
+    "4398": {
+      "id": 4398,
+      "hex": "112E",
+      "name": "Juggernaut",
+      "mainModelName": "Dual Horn",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4151
+    },
+    "4406": {
+      "id": 4406,
+      "hex": "1136",
+      "name": "Ironclad",
+      "mainModelName": "Iron Giant",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4277
+    },
+    "4375": {
+      "id": 4375,
+      "hex": "1117",
+      "name": "Earth Eater",
+      "mainModelName": "Chocobo Eater",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4200
+    },
+    "4377": {
+      "id": 4377,
+      "hex": "1119",
+      "name": "Greater Sphere",
+      "mainModelName": "Spherimorph",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4217
+    },
+    "4373": {
+      "id": 4373,
+      "hex": "1115",
+      "name": "Catastrophe",
+      "mainModelName": "Sinspawn Geneaux",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4198
+    },
+    "4378": {
+      "id": 4378,
+      "hex": "111A",
+      "name": "Th'uban",
+      "mainModelName": "Sanctuary Keeper",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4224
+    },
+    "4201": {
+      "id": 4201,
+      "hex": "1069",
+      "name": "Neslug",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4376": {
+      "id": 4376,
+      "hex": "1118",
+      "name": "Ultima Buster",
+      "mainModelName": "Sinspawn Gui",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4213
+    },
+    "4379": {
+      "id": 4379,
+      "hex": "111B",
+      "name": "Shinryu (underwater)",
+      "mainModelName": "Evrae",
+      "flags": [
+        "variant",
+        "underwater"
+      ],
+      "mainModelId": 4215
+    },
+    "4372": {
+      "id": 4372,
+      "hex": "1114",
+      "name": "Nemesis",
+      "mainModelName": "Ultima Weapon",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4195
+    },
+    "4337": {
+      "id": 4337,
+      "hex": "10F1",
+      "name": "Aqua Flan",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4339": {
+      "id": 4339,
+      "hex": "10F3",
+      "name": "Maze Larva",
+      "mainModelName": "Larva",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4305
+    },
+    "4147": {
+      "id": 4147,
+      "hex": "1033",
+      "name": "Phlegyas (underwater)",
+      "mainModelName": null,
+      "flags": [
+        "underwater"
+      ]
+    },
+    "4154": {
+      "id": 4154,
+      "hex": "103A",
+      "name": "Octopus (underwater)",
+      "mainModelName": null,
+      "flags": [
+        "underwater"
+      ]
+    },
+    "4149": {
+      "id": 4149,
+      "hex": "1035",
+      "name": "Remora (underwater)",
+      "mainModelName": null,
+      "flags": [
+        "underwater"
+      ]
+    },
+    "4139": {
+      "id": 4139,
+      "hex": "102B",
+      "name": "Sahagin (land)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4138": {
+      "id": 4138,
+      "hex": "102A",
+      "name": "Sahagin (underwater)",
+      "mainModelName": "Sahagin (Baaj)",
+      "flags": [
+        "variant",
+        "underwater"
+      ],
+      "mainModelId": 4251
+    },
+    "4329": {
+      "id": 4329,
+      "hex": "10E9",
+      "name": "Condor (Besaid)",
+      "mainModelName": "Condor",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4124
+    },
+    "4327": {
+      "id": 4327,
+      "hex": "10E7",
+      "name": "Dingo (Besaid)",
+      "mainModelName": "Mi'ihen Fang",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4106
+    },
+    "4326": {
+      "id": 4326,
+      "hex": "10E6",
+      "name": "Garuda (Besaid)",
+      "mainModelName": "Garuda",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4140
+    },
+    "4253": {
+      "id": 4253,
+      "hex": "109D",
+      "name": "Garuda (Luca)",
+      "mainModelName": "Garuda",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4140
+    },
+    "4330": {
+      "id": 4330,
+      "hex": "10EA",
+      "name": "Ragora (Kilika)",
+      "mainModelName": "Ragora",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4135
+    },
+    "4331": {
+      "id": 4331,
+      "hex": "10EB",
+      "name": "Raldo (Mi'ihen Highroad)",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4098
+    },
+    "4251": {
+      "id": 4251,
+      "hex": "109B",
+      "name": "Sahagin (Baaj)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4252": {
+      "id": 4252,
+      "hex": "109C",
+      "name": "Sahagin Chief (Luca)",
+      "mainModelName": "Sahagin (Baaj)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4251
+    },
+    "4247": {
+      "id": 4247,
+      "hex": "1097",
+      "name": "Vouivre (Luca)",
+      "mainModelName": "Vouivre",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4155
+    },
+    "4328": {
+      "id": 4328,
+      "hex": "10E8",
+      "name": "Water Flan (Besaid)",
+      "mainModelName": "Water Flan",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4112
+    },
+    "4307": {
+      "id": 4307,
+      "hex": "10D3",
+      "name": "??? (Treasure Chest)",
+      "mainModelName": null,
+      "flags": [
+        "special"
+      ]
+    },
+    "4298": {
+      "id": 4298,
+      "hex": "10CA",
+      "name": "Magic Urn",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4347": {
+      "id": 4347,
+      "hex": "10FB",
+      "name": "Mimic (red)",
+      "mainModelName": "Dual Horn",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4151
+    },
+    "4348": {
+      "id": 4348,
+      "hex": "10FC",
+      "name": "Mimic (blue)",
+      "mainModelName": "Worker",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4248
+    },
+    "4349": {
+      "id": 4349,
+      "hex": "10FD",
+      "name": "Mimic (yellow)",
+      "mainModelName": "Zu",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4141
+    },
+    "4352": {
+      "id": 4352,
+      "hex": "1100",
+      "name": "Mimic (green)",
+      "mainModelName": "Basilisk",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4281
+    },
+    "4164": {
+      "id": 4164,
+      "hex": "1044",
+      "name": "Piranha x1 (underwater)",
+      "mainModelName": null,
+      "flags": [
+        "underwater"
+      ]
+    },
+    "4165": {
+      "id": 4165,
+      "hex": "1045",
+      "name": "Piranha x2 (underwater)",
+      "mainModelName": "Piranha x1 (underwater)",
+      "flags": [
+        "variant",
+        "underwater"
+      ],
+      "mainModelId": 4164
+    },
+    "4166": {
+      "id": 4166,
+      "hex": "1046",
+      "name": "Piranha x3 (underwater)",
+      "mainModelName": "Piranha x1 (underwater)",
+      "flags": [
+        "variant",
+        "underwater"
+      ],
+      "mainModelId": 4164
+    },
+    "4243": {
+      "id": 4243,
+      "hex": "1093",
+      "name": "Sinscale (Zanarkand, beginning and Tanker)",
+      "mainModelName": "Sinscale (S.S. Liki)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4203
+    },
+    "4244": {
+      "id": 4244,
+      "hex": "1094",
+      "name": "Sinscale (Zanarkand, alongside Ammes)",
+      "mainModelName": "Sinscale (S.S. Liki)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4203
+    },
+    "4203": {
+      "id": 4203,
+      "hex": "106B",
+      "name": "Sinscale (S.S. Liki)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4211": {
+      "id": 4211,
+      "hex": "1073",
+      "name": "Sinscale (underwater)",
+      "mainModelName": null,
+      "flags": [
+        "underwater"
+      ]
+    },
+    "4144": {
+      "id": 4144,
+      "hex": "1030",
+      "name": "Defender",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4145": {
+      "id": 4145,
+      "hex": "1031",
+      "name": "Defender Z",
+      "mainModelName": "Defender",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4144
+    },
+    "4194": {
+      "id": 4194,
+      "hex": "1062",
+      "name": "Mech Defender",
+      "mainModelName": "Mech Gunner",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4192
+    },
+    "4187": {
+      "id": 4187,
+      "hex": "105B",
+      "name": "Mech Guard",
+      "mainModelName": "Worker",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4248
+    },
+    "4192": {
+      "id": 4192,
+      "hex": "1060",
+      "name": "Mech Gunner",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4193": {
+      "id": 4193,
+      "hex": "1061",
+      "name": "Mech Hunter",
+      "mainModelName": "Mech Gunner",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4192
+    },
+    "4190": {
+      "id": 4190,
+      "hex": "105E",
+      "name": "Mech Leader",
+      "mainModelName": "Worker",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4248
+    },
+    "4188": {
+      "id": 4188,
+      "hex": "105C",
+      "name": "Mech Scouter",
+      "mainModelName": "Worker",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4248
+    },
+    "4189": {
+      "id": 4189,
+      "hex": "105D",
+      "name": "Mech Scouter (burning)",
+      "mainModelName": "Worker",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4248
+    },
+    "4248": {
+      "id": 4248,
+      "hex": "1098",
+      "name": "Worker",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4288": {
+      "id": 4288,
+      "hex": "10C0",
+      "name": "YAT-97",
+      "mainModelName": "YAT-99",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4287
+    },
+    "4287": {
+      "id": 4287,
+      "hex": "10BF",
+      "name": "YAT-99",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4292": {
+      "id": 4292,
+      "hex": "10C4",
+      "name": "YKT-11",
+      "mainModelName": "YKT-63",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4291
+    },
+    "4291": {
+      "id": 4291,
+      "hex": "10C3",
+      "name": "YKT-63",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4346": {
+      "id": 4346,
+      "hex": "10FA",
+      "name": "Belgemine",
+      "mainModelName": "0x600E, crashes the game if used",
+      "flags": [
+        "variant"
+      ]
+    },
+    "4245": {
+      "id": 4245,
+      "hex": "1095",
+      "name": "Cid (invisible)",
+      "mainModelName": null,
+      "flags": [
+        "invisible"
+      ]
+    },
+    "4294": {
+      "id": 4294,
+      "hex": "10C6",
+      "name": "Fallen Monk (rifle)",
+      "mainModelName": "Warrior Monk (rifle)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4293
+    },
+    "4296": {
+      "id": 4296,
+      "hex": "10C8",
+      "name": "Fallen Monk (flamethrower)",
+      "mainModelName": "Warrior Monk (flamethrower)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4295
+    },
+    "4345": {
+      "id": 4345,
+      "hex": "10F9",
+      "name": "Ginnem",
+      "mainModelName": "0x600E\t Crashes the game if used",
+      "flags": [
+        "variant"
+      ]
+    },
+    "4237": {
+      "id": 4237,
+      "hex": "108D",
+      "name": "Guado Guardian (alongside Seymour)",
+      "mainModelName": "Guado Guardian (chasing/Wendigo)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4309
+    },
+    "4309": {
+      "id": 4309,
+      "hex": "10D5",
+      "name": "Guado Guardian (chasing/Wendigo)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4318": {
+      "id": 4318,
+      "hex": "10DE",
+      "name": "Guado Guardian (Home)",
+      "mainModelName": "Guado Guardian (chasing/Wendigo)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4309
+    },
+    "4344": {
+      "id": 4344,
+      "hex": "10F8",
+      "name": "Isaaru",
+      "mainModelName": "Isaaru (invisible)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 24580
+    },
+    "24580": {
+      "id": 24580,
+      "hex": "6004",
+      "name": "Isaaru (invisible)",
+      "mainModelName": null,
+      "flags": [
+        "invisible"
+      ]
+    },
+    "4293": {
+      "id": 4293,
+      "hex": "10C5",
+      "name": "Warrior Monk (rifle)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4295": {
+      "id": 4295,
+      "hex": "10C7",
+      "name": "Warrior Monk (flamethrower)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4350": {
+      "id": 4350,
+      "hex": "10FE",
+      "name": "Valefor (Belgemine/Isaaru)",
+      "mainModelName": "Valefor",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12289
+    },
+    "4380": {
+      "id": 4380,
+      "hex": "111C",
+      "name": "Ifrit (Belgemine/Isaaru)",
+      "mainModelName": "Ifrit",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12290
+    },
+    "4381": {
+      "id": 4381,
+      "hex": "111D",
+      "name": "Ixion (Belgemine)",
+      "mainModelName": "Ixion",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12291
+    },
+    "4382": {
+      "id": 4382,
+      "hex": "111E",
+      "name": "Shiva (Belgemine)",
+      "mainModelName": "Shiva",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12292
+    },
+    "4383": {
+      "id": 4383,
+      "hex": "111F",
+      "name": "Bahamut (Belgemine/Isaaru)",
+      "mainModelName": "Bahamut",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12294
+    },
+    "4361": {
+      "id": 4361,
+      "hex": "1109",
+      "name": "Anima (Belgemine ONLY)",
+      "mainModelName": "Anima",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4221
+    },
+    "4384": {
+      "id": 4384,
+      "hex": "1120",
+      "name": "Yojimbo (Belgemine/Ginnem)",
+      "mainModelName": "Yojimbo",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12296
+    },
+    "4362": {
+      "id": 4362,
+      "hex": "110A",
+      "name": "Daigoro (Belgemine/Ginnem)",
+      "mainModelName": "Daigoro",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12311
+    },
+    "4386": {
+      "id": 4386,
+      "hex": "1122",
+      "name": "Cindy (Belgemine)",
+      "mainModelName": "Cindy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12297
+    },
+    "4385": {
+      "id": 4385,
+      "hex": "1121",
+      "name": "Sandy (Belgemine)",
+      "mainModelName": "Sandy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12298
+    },
+    "4387": {
+      "id": 4387,
+      "hex": "1123",
+      "name": "Mindy (Belgemine)",
+      "mainModelName": "Mindy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12299
+    },
+    "4259": {
+      "id": 4259,
+      "hex": "10A3",
+      "name": "Posessed Valefor",
+      "mainModelName": "Valefor",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12289
+    },
+    "4260": {
+      "id": 4260,
+      "hex": "10A4",
+      "name": "Posessed Ifrit",
+      "mainModelName": "Ifrit",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12290
+    },
+    "4261": {
+      "id": 4261,
+      "hex": "10A5",
+      "name": "Posessed Ixion",
+      "mainModelName": "Ixion",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12291
+    },
+    "4262": {
+      "id": 4262,
+      "hex": "10A6",
+      "name": "Posessed Shiva",
+      "mainModelName": "Shiva",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12292
+    },
+    "4263": {
+      "id": 4263,
+      "hex": "10A7",
+      "name": "Posessed Bahamut",
+      "mainModelName": "Bahamut",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12294
+    },
+    "4264": {
+      "id": 4264,
+      "hex": "10A8",
+      "name": "Posessed Anima",
+      "mainModelName": "Anima",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4221
+    },
+    "4265": {
+      "id": 4265,
+      "hex": "10A9",
+      "name": "Posessed Yojimbo",
+      "mainModelName": "Yojimbo",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12296
+    },
+    "4212": {
+      "id": 4212,
+      "hex": "1074",
+      "name": "Posessed/Dark Daigoro",
+      "mainModelName": "Daigoro",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12311
+    },
+    "4274": {
+      "id": 4274,
+      "hex": "10B2",
+      "name": "Posessed Cindy",
+      "mainModelName": "Cindy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12297
+    },
+    "4275": {
+      "id": 4275,
+      "hex": "10B3",
+      "name": "Posessed Sandy",
+      "mainModelName": "Sandy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12298
+    },
+    "4276": {
+      "id": 4276,
+      "hex": "10B4",
+      "name": "Posessed Mindy",
+      "mainModelName": "Mindy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12299
+    },
+    "4430": {
+      "id": 4430,
+      "hex": "114E",
+      "name": "Dark Valefor",
+      "mainModelName": "Valefor",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12289
+    },
+    "4431": {
+      "id": 4431,
+      "hex": "114F",
+      "name": "Dark Ifrit",
+      "mainModelName": "Ifrit",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12290
+    },
+    "4432": {
+      "id": 4432,
+      "hex": "1150",
+      "name": "Dark Ixion",
+      "mainModelName": "Ixion",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12291
+    },
+    "4433": {
+      "id": 4433,
+      "hex": "1151",
+      "name": "Dark Shiva",
+      "mainModelName": "Shiva",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12292
+    },
+    "4434": {
+      "id": 4434,
+      "hex": "1152",
+      "name": "Dark Bahamut",
+      "mainModelName": "Bahamut",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12294
+    },
+    "4435": {
+      "id": 4435,
+      "hex": "1153",
+      "name": "Dark Anima",
+      "mainModelName": "Anima",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4221
+    },
+    "4436": {
+      "id": 4436,
+      "hex": "1154",
+      "name": "Dark Yojimbo",
+      "mainModelName": "Yojimbo",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12296
+    },
+    "4437": {
+      "id": 4437,
+      "hex": "1155",
+      "name": "Dark Cindy",
+      "mainModelName": "Cindy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12297
+    },
+    "4438": {
+      "id": 4438,
+      "hex": "1156",
+      "name": "Dark Sandy",
+      "mainModelName": "Sandy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12298
+    },
+    "4439": {
+      "id": 4439,
+      "hex": "1157",
+      "name": "Dark Mindy",
+      "mainModelName": "Mindy",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 12299
+    },
+    "4249": {
+      "id": 4249,
+      "hex": "1099",
+      "name": "Lord Ochu",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4195": {
+      "id": 4195,
+      "hex": "1063",
+      "name": "Ultima Weapon",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4196": {
+      "id": 4196,
+      "hex": "1064",
+      "name": "Omega Weapon",
+      "mainModelName": "Ultima Weapon",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4195
+    },
+    "4440": {
+      "id": 4440,
+      "hex": "1158",
+      "name": "Penance",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4442": {
+      "id": 4442,
+      "hex": "115A",
+      "name": "Left Arm (Penance)",
+      "mainModelName": "Right Arm (Penance)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4441
+    },
+    "4441": {
+      "id": 4441,
+      "hex": "1159",
+      "name": "Right Arm (Penance)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4255": {
+      "id": 4255,
+      "hex": "109F",
+      "name": "Sinspawn Ammes",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4266": {
+      "id": 4266,
+      "hex": "10AA",
+      "name": "Tanker",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4205": {
+      "id": 4205,
+      "hex": "106D",
+      "name": "Geosgaeno",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4254": {
+      "id": 4254,
+      "hex": "109E",
+      "name": "Klikk",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4197": {
+      "id": 4197,
+      "hex": "1065",
+      "name": "Tros",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4208": {
+      "id": 4208,
+      "hex": "1070",
+      "name": "Kimahri",
+      "mainModelName": "Kimahri",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4208
+    },
+    "4209": {
+      "id": 4209,
+      "hex": "1071",
+      "name": "Sin's Fin",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4210": {
+      "id": 4210,
+      "hex": "1072",
+      "name": "Sinspawn Echuilles",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4198": {
+      "id": 4198,
+      "hex": "1066",
+      "name": "Sinspawn Geneaux",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4199": {
+      "id": 4199,
+      "hex": "1067",
+      "name": "Geneaux's Tentacle",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4206": {
+      "id": 4206,
+      "hex": "106E",
+      "name": "Oblitzerator",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4229": {
+      "id": 4229,
+      "hex": "1085",
+      "name": "Crane",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4200": {
+      "id": 4200,
+      "hex": "1068",
+      "name": "Chocobo Eater",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4213": {
+      "id": 4213,
+      "hex": "1075",
+      "name": "Sinspawn Gui",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4256": {
+      "id": 4256,
+      "hex": "10A0",
+      "name": "Head (Sinspawn Gui, invisible)",
+      "mainModelName": null,
+      "flags": [
+        "invisible"
+      ]
+    },
+    "4257": {
+      "id": 4257,
+      "hex": "10A1",
+      "name": "Arm (Sinspawn Gui, invisible)",
+      "mainModelName": null,
+      "flags": [
+        "invisible"
+      ]
+    },
+    "4207": {
+      "id": 4207,
+      "hex": "106F",
+      "name": "Extractor",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4217": {
+      "id": 4217,
+      "hex": "1079",
+      "name": "Spherimorph",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4218": {
+      "id": 4218,
+      "hex": "107A",
+      "name": "Crawler",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4219": {
+      "id": 4219,
+      "hex": "107B",
+      "name": "Negator",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4220": {
+      "id": 4220,
+      "hex": "107C",
+      "name": "Seymour",
+      "mainModelName": "Seymour",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4220
+    },
+    "4221": {
+      "id": 4221,
+      "hex": "107D",
+      "name": "Anima",
+      "mainModelName": "Anima",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4221
+    },
+    "4308": {
+      "id": 4308,
+      "hex": "10D4",
+      "name": "Wendigo",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4215": {
+      "id": 4215,
+      "hex": "1077",
+      "name": "Evrae",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4351": {
+      "id": 4351,
+      "hex": "10FF",
+      "name": "(related to Evrae and Altana, invisible)",
+      "mainModelName": null,
+      "flags": [
+        "invisible",
+        "special"
+      ]
+    },
+    "4216": {
+      "id": 4216,
+      "hex": "1078",
+      "name": "Evrae Altana",
+      "mainModelName": "Evrae",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4215
+    },
+    "4258": {
+      "id": 4258,
+      "hex": "10A2",
+      "name": "Gate Lock (1)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4267": {
+      "id": 4267,
+      "hex": "10AB",
+      "name": "Gate Lock (2)",
+      "mainModelName": "Gate Lock (1)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4258
+    },
+    "4222": {
+      "id": 4222,
+      "hex": "107E",
+      "name": "Seymour Natus",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4223": {
+      "id": 4223,
+      "hex": "107F",
+      "name": "Mortibody",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4325": {
+      "id": 4325,
+      "hex": "10E5",
+      "name": "Defender X",
+      "mainModelName": "Defender",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4144
+    },
+    "4230": {
+      "id": 4230,
+      "hex": "1086",
+      "name": "Biran Ronso",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4231": {
+      "id": 4231,
+      "hex": "1087",
+      "name": "Yenke Ronso",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4238": {
+      "id": 4238,
+      "hex": "108E",
+      "name": "Seymour Flux",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4239": {
+      "id": 4239,
+      "hex": "108F",
+      "name": "Mortiorchis (invisible)",
+      "mainModelName": null,
+      "flags": [
+        "invisible"
+      ]
+    },
+    "4224": {
+      "id": 4224,
+      "hex": "1080",
+      "name": "Sanctuary Keeper",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4225": {
+      "id": 4225,
+      "hex": "1081",
+      "name": "Spectral Keeper",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4242": {
+      "id": 4242,
+      "hex": "1092",
+      "name": "Circle (Spectral Keeper)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4226": {
+      "id": 4226,
+      "hex": "1082",
+      "name": "Yunalesca",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4232": {
+      "id": 4232,
+      "hex": "1088",
+      "name": "Left Fin (Sin)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4233": {
+      "id": 4233,
+      "hex": "1089",
+      "name": "Right Fin (Sin)",
+      "mainModelName": "Left Fin (Sin)",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4232
+    },
+    "4234": {
+      "id": 4234,
+      "hex": "108A",
+      "name": "Sin (Core)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4235": {
+      "id": 4235,
+      "hex": "108B",
+      "name": "Sinspawn Genais",
+      "mainModelName": "Sinspawn Geneaux",
+      "flags": [
+        "variant"
+      ],
+      "mainModelId": 4198
+    },
+    "4236": {
+      "id": 4236,
+      "hex": "108C",
+      "name": "Sin (Head)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4227": {
+      "id": 4227,
+      "hex": "1083",
+      "name": "Seymour Omnis",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4202": {
+      "id": 4202,
+      "hex": "106A",
+      "name": "Mortiphasm",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4228": {
+      "id": 4228,
+      "hex": "1084",
+      "name": "Braska's Final Aeon",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4270": {
+      "id": 4270,
+      "hex": "10AE",
+      "name": "Yu Pagoda (A)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4269": {
+      "id": 4269,
+      "hex": "10AD",
+      "name": "Yu Pagoda (B)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4370": {
+      "id": 4370,
+      "hex": "1112",
+      "name": "(related to Possessed Aeons, invisible)",
+      "mainModelName": "Bunyip",
+      "flags": [
+        "variant",
+        "invisible",
+        "special"
+      ],
+      "mainModelId": 4098
+    },
+    "4272": {
+      "id": 4272,
+      "hex": "10B0",
+      "name": "Yu Yevon",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4240": {
+      "id": 4240,
+      "hex": "1090",
+      "name": "Spear (Kimahri)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4359": {
+      "id": 4359,
+      "hex": "1107",
+      "name": "Rifle (Fallen/Warrior Monk)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "4360": {
+      "id": 4360,
+      "hex": "1108",
+      "name": "Flamethrower (Fallen/Warrior Monk)",
+      "mainModelName": null,
+      "flags": []
+    },
+    "20497": {
+      "id": 20497,
+      "hex": "5011",
+      "name": "Beer Bottle",
+      "mainModelName": null,
+      "flags": []
+    },
+    "20504": {
+      "id": 20504,
+      "hex": "5018",
+      "name": "Video Camera",
+      "mainModelName": null,
+      "flags": []
+    },
+    "20507": {
+      "id": 20507,
+      "hex": "501B",
+      "name": "Megaphone",
+      "mainModelName": null,
+      "flags": []
+    },
+    "20544": {
+      "id": 20544,
+      "hex": "5040",
+      "name": "Saw",
+      "mainModelName": null,
+      "flags": []
+    }
+  }
+}

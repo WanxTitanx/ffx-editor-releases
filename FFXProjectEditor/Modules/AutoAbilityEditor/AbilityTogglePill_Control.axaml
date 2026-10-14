@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FFXProjectEditor.Modules.AutoAbilityEditor"
+             x:Class="FFXProjectEditor.Modules.AutoAbilityEditor.AbilityTogglePill_Control">
+	<UserControl.Styles>
+		<Style Selector="ToggleButton.pill">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="{DynamicResource RadiusPill}" />
+			<Setter Property="Padding" Value="12,6" />
+			<Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+		</Style>
+		
+		<Style Selector="ToggleButton.pill:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			<Setter Property="BorderBrush" Value="{DynamicResource TextMutedBrush}" />
+			<Setter Property="Background" Value="#1B2B39" />
+		</Style>
+		
+		<Style Selector="ToggleButton.pill:checked /template/ ContentPresenter#PART_ContentPresenter">
+			<!-- Since we can't dynamically reference FamilyColor via DynamicResource in a style directly easily without a complex binding in Avalonia 11, 
+			     we will bind Background on the ToggleButton directly below, and just set Foreground here -->
+			<Setter Property="Foreground" Value="#10171F" />
+			<Setter Property="FontWeight" Value="SemiBold" />
+		</Style>
+	</UserControl.Styles>
+
+	<ToggleButton Classes="pill" 
+	              IsChecked="{Binding $parent[local:AbilityTogglePill_Control].IsActive, Mode=TwoWay}"
+	              Content="{Binding $parent[local:AbilityTogglePill_Control].Label}"
+	              Margin="0,0,6,6" />
+</UserControl>

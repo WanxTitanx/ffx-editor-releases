@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FFXProjectEditor.Modules.AutoAbilityEditor"
+             x:Class="FFXProjectEditor.Modules.AutoAbilityEditor.AbilityElementBadge_Control">
+	<UserControl.Styles>
+		<Style Selector="Border.badge">
+			<Setter Property="CornerRadius" Value="{DynamicResource RadiusPill}" />
+			<Setter Property="Padding" Value="10,4" />
+			<Setter Property="BorderThickness" Value="1" />
+			<!-- Inactive state -->
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+		</Style>
+		
+		<Style Selector="TextBlock.badgeText">
+			<Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+			<Setter Property="FontWeight" Value="Normal" />
+			<Setter Property="FontSize" Value="12" />
+		</Style>
+	</UserControl.Styles>
+
+	<!-- We use converters or binding trickery to apply the color, but for simplicity we bind an opacity or style -->
+	<Border Classes="badge"
+	        BorderBrush="{Binding $parent[local:AbilityElementBadge_Control].IsActive, Converter={x:Static local:ElementActiveBorderConverter.Instance}}"
+	        Margin="0,0,6,0">
+		<TextBlock Classes="badgeText" 
+		           Text="{Binding $parent[local:AbilityElementBadge_Control].Label}"
+		           Foreground="{Binding $parent[local:AbilityElementBadge_Control].IsActive, Converter={x:Static local:ElementActiveTextConverter.Instance}}" />
+	</Border>
+</UserControl>

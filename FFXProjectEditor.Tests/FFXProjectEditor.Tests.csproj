@@ -1,0 +1,62 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="xunit" Version="2.6.6" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.5.6">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="6.0.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FFXProjectEditor\FFXProjectEditor.csproj" />
+    <!-- Aurora F5: GLB container writer lives in the Phyre export lab (pure converter, no game deps). -->
+    <ProjectReference Include="..\RuntimeTools\PhyreModelExportLab\PhyreModelExportLab.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <!-- FEV-FIX (queue item 6, docs/reverse/FFX_LOST_WORK_RECOVERY_2026-09-15.md):
+         link the research-only FEV parser into the test assembly so the RIFF LIST
+         bound fix stays regression-covered (Core/FevReaderListBoundTests.cs).
+         research_tools/ code is deliberately NOT referenced by any editor build
+         (governance rule in research_tools/README.md); a Compile link here covers
+         the parser without touching the editor project. -->
+    <Compile Include="..\research_tools\Audio\FevReader.cs" Link="Research\Audio\FevReader.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Vanilla monster_*.bin fixtures copied next to the test assembly so round-trip tests
+         can load them via AppContext.BaseDirectory. See Core/MonsterStatSheetRoundTripTests.cs. -->
+    <Content Include="Fixtures\**\*.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!-- Real FMOD FEV banks (same delivery mechanism as the .bin glob above).
+         See Core/FevReaderListBoundTests.cs. -->
+    <Content Include="Fixtures\**\*.fev">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Behavioral audio-tool tests resolve the real bundled Linux vgmstream from the
+         test output; mirror the app's Linux-only payload rule (no Windows exe/DLLs). -->
+    <Content Include="..\tools\vgmstream\linux-x64\**\*" Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+      <Link>tools\vgmstream\linux-x64\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,237 @@
+﻿/.vs/
+/publish/
+/node_modules/
+# Segredos locais (credenciais EXA/Ollama/etc.) - NUNCA versionar (2026-08-13)
+/scripts/.secrets_*.json
+/.secrets_*.json
+/FFXProjectEditor/bin/
+/FFXProjectEditor/obj/
+/FFXProjectEditor/%TEMP%/
+/FFXProjectEditor/Properties/*
+!FFXProjectEditor/Properties/PublishProfiles/
+!/FFXProjectEditor/Properties/PublishProfiles/**
+# Product publish profiles must be versioned: the linux-x64-portable profile owns
+# every Linux payload gate, so a clean clone needs it (review GF-01). Everything
+# else under Properties/ (csproj.user style artifacts) stays local-only.
+!/FFXProjectEditor/Properties/PublishProfiles/
+/FFXProjectEditor/FFXProjectEditor.csproj.user
+# Audio assets (WAV/trilha/SFX) â€” local-only, never uploaded (removed from LFS 2026-08-03)
+/FFXProjectEditor/Assets/Audio/
+/KhLib/
+/TextLabTools/**/bin/
+/TextLabTools/**/obj/
+/TextLabTools/Reports/
+/RuntimeTools/**/bin/
+/RuntimeTools/**/obj/
+/RuntimeTools/**/reports/
+/RuntimeTools/**/smoke-evidence/
+# Tests project (was missing - bin/obj keep dirty-showing every rebuild)
+/FFXProjectEditor.Tests/bin/
+/FFXProjectEditor.Tests/obj/
+/RuntimeTools/FFXMapViewerWeb/public/maps/
+/RuntimeTools/FFXMapViewerWeb/work/
+/RuntimeTools/FFXMagicViewerWeb/public/magic/
+/tools/ida_magicfiles_batch/out/
+/tools/ida_magicfiles_batch/**/*.i64
+/tools/ida_magicfiles_batch/**/*.id0
+/tools/ida_magicfiles_batch/**/*.id1
+/tools/ida_magicfiles_batch/**/*.id2
+/tools/ida_magicfiles_batch/**/*.nam
+/tools/ida_magicfiles_batch/**/*.til
+/tools/ida_magicfiles_batch/**/*.dll
+# scratch / artefatos gerados â€” untracked por convencao (handoff/ledgers tratam work/ como gitignored)
+/work/
+/work/field_scout/
+/FFXProjectEditor/work/
+# Field Scout walk shards (heavy); walk-bundle.json summary may be committed on release promote
+/FFXProjectEditor/Modules/AuroraFieldExplorer/WalkManifest/fields/
+!/FFXProjectEditor/Modules/AuroraFieldExplorer/WalkManifest/fields/.gitignore
+/RuntimeTools/FieldScoutLab/tools/
+# git worktrees criados por workflows (transientes; contem copias de conteudo ja gitignored como public/maps) â€” nunca trackear
+/.claude/worktrees/
+/ProductionAuditTools/**/bin/
+/ProductionAuditTools/**/obj/
+/ProductionAuditTools/Reports/
+/**/TestResults/
+/*.tmp
+/*.bak
+# fsbext stray extracts at repo root (run scripts/cleanup_fsb_audio_scratch.ps1)
+/*.wav
+/dump.dat
+/*.fsb
+*.user
+*.suo
+# Local scratch files at repo root (PowerShell / claude / opencode spills)
+/temp_*.txt
+/token-usage-*.txt
+/.tmp_*
+/_$null
+
+# Toolkit de ferramentas externas (binarios/sources de terceiros) - NAO versionar
+TechToolKit/
+
+# Claude Code agent scratch â€” workflow git worktrees (= copias INTEIRAS do repo, ~80k arquivos!), locks - NAO versionar
+.claude/worktrees/
+.claude/scheduled_tasks.lock
+.claude/*.lock
+
+# Local AI agent state (sessions, memory, configs) â€” varies per host, never version
+/.cortexkit/
+/.cortexkit-work*/
+/.grok/
+/.cache/
+/.cache-work*/
+
+# Claude Code local state: configs, credentials, sessions, locks, file history.
+# Never version these folders (any variant: .claude-work/, .claude-work-hal2/, etc.)
+/.claude-work*/
+.aider*
+
+# Local Verboo/vibe shell helpers.
+/.bashrc_vibe
+/vibe.sh
+/start_vibe.sh
+/vibe.cmd
+/vibe.ps1
+/vibe-code.cmd
+/vibe-code.ps1
+/vibe-code.sh
+/vibe-grok.cmd
+/vibe-grok.ps1
+/vibe-grok.sh
+.memory/
+
+# Local Python scratch: throwaway experiments prefixed with underscore
+# (e.g. _recolor_green2.py, _test_pe_parser.py, _analyze_colors.py)
+/_*.py
+
+# Obsidian vault local config
+.obsidian/
+
+# MCP config local â€” contÃ©m paths absolutos, tokens, credenciais
+.mcp.json
+*.i64
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+# ffx_reconstructed/ â€” removed from gitignore, user wants it tracked
+# ffx_reconstructed/
+ 
+ # OpenCode local state â€” paths absolutos, sessÃµes, cache runtime
+# MantÃ©m versionado: .opencode/skills/, .opencode/plugins/verboo-hooks.ts, .opencode/oh-my-openagent.json
+.opencode/*
+!.opencode/skills/
+!.opencode/plugins/
+.opencode/plugins/*
+!.opencode/plugins/verboo-hooks.ts
+!.opencode/oh-my-openagent.json
+
+# OMO session state (transiente)
+.omo/
+
+# Codegraph cache (local)
+.codegraph/
+
+# Superpowers local state
+.superpowers/
+
+# TUI config local (paths absolutos)
+tui.json
+
+# IDA database local
+.i64.i64
+
+# Script outputs / scratch
+_compile_result.txt
+_pe_out.txt
+cl_out.txt
+cl_stderr.txt
+cl_stdout.txt
+compile_test.bat
+test_cl.rsp
+test_family_a.def
+test_family_a.obj
+
+# Build output (root level)
+/bin/
+
+# Firecrawl CLI cached docs (regenerated on demand)
+.firecrawl/
+
+# IDA Pro scratch output (logs, stderr, stdout)
+ida_*.log
+ida_*.txt
+run_*.log
+run_*.stdout
+
+# Screenshot dumps
+jarvis_screenshot_*.png
+prints inuteis do kimi/
+
+# Test manifests (local runner artifacts)
+/test_manifest.json
+
+# External Utilities remain scratch, except the first-party research harness.
+/Utilities/*
+!/Utilities/FFXResearchTools/
+!/Utilities/FFXResearchTools/**
+!/Utilities/FFXResearchTools.Tests/
+!/Utilities/FFXResearchTools.Tests/**
+
+# Scratch / temp dirs (per-session)
+/_tmp/
+/_tmp/**/
+/cache/
+/decompile.txt
+/decompiled.txt
+
+# Python bytecode caches (anywhere)
+/__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+
+# Output dirs (parecem ser scratch de testes)
+# mods/ â€” removed from gitignore, user wants it tracked
+# mods/
+backups/
+compiled_magic/
+compiled_test/
+params_0241/
+tysson-site/
+
+# Environment
+.env
+
+# Build artifacts (anywhere)
+**/obj/
+**/bin/
+
+# Test results
+TestResults/
+*.trx
+
+# Cline swarm logs
+*b*.log
+*b*.err
+
+
+# Concorrente decompilado (regra do audit: nunca versionar)
+spira_mod_manager_decompiled/
+
+# Vendored de terceiros
+_external/
+
+# Scratch de diagnï¿½stico
+_work/
+*.lnk
+
+# Release payload: FFXED's private Java runtime must include its jlink bin tree.
+# Keep this exception after the repository-wide **/bin/ rule above.
+!/ExternalLibs/FFXED/runtime/win-x64/bin/
+!/ExternalLibs/FFXED/runtime/win-x64/bin/**
+
+# Pre-GF-03 preflight test residue (kept out of history, never recreated)
+/relative/

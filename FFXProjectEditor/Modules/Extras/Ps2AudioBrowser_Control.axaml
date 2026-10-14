@@ -1,0 +1,161 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.Ps2AudioBrowser_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_ps2_audio_wd_b47b0366}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_ps2_wd_sound_bank_browser_279bf0f6}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+				<TextBlock Classes="muted" Text="{Binding ReadonlyScopeSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<Grid Grid.Row="1">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="2*" MinWidth="320" MaxWidth="480" />
+				<ColumnDefinition Width="5*" />
+			</Grid.ColumnDefinitions>
+
+			<!-- Column 0: bank list -->
+			<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+				<Grid RowDefinitions="Auto,Auto,Auto,*">
+					<Grid ColumnDefinitions="*,Auto,Auto">
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_sound_banks_c775d08b}" VerticalAlignment="Center" />
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_SetRoot">Set Root...</Button>
+						<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					</Grid>
+
+					<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,10">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSourceRoot}" />
+							<TextBlock Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding OverviewSummary}" />
+							<TextBlock Classes="muted" Text="{Binding CountSummary}" />
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_decoder_7be2f0f1}" Margin="0,6,0,0" />
+							<TextBlock Classes="muted" Text="{Binding VgmSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<TextBox Grid.Row="2" Margin="0,0,0,10" Watermark="{x:Static res:Strings.U_search_bank_75781723}"
+					         Text="{Binding SearchText, Mode=TwoWay}" />
+
+					<ListBox Grid.Row="3"
+					         ItemsSource="{Binding Banks}"
+					         SelectedItem="{Binding Selected, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+									<Grid ColumnDefinitions="*,Auto">
+										<StackPanel Spacing="2">
+											<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+											<TextBlock Classes="muted" Text="{Binding ListSubtitle}" />
+										</StackPanel>
+										<TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Text="{Binding Status}" />
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</Grid>
+			</Border>
+
+			<!-- Column 1: bank detail -->
+			<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+				<Grid RowDefinitions="Auto,Auto,*,Auto">
+					<Grid ColumnDefinitions="*,Auto,Auto,Auto">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_bank_e4173aad}" />
+							<TextBlock Classes="cardTitle" Text="{Binding SelectedTitle}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedPath}" TextWrapping="Wrap" />
+							<TextBlock Text="{Binding SelectedHeader}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedStatus}" />
+						</StackPanel>
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Probe">Probe</Button>
+						<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_ExportAll">Export All WAV...</Button>
+						<Button Grid.Column="3" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenFolder">Open Folder</Button>
+					</Grid>
+
+					<Border Grid.Row="1" Classes="cardSoft" Padding="{DynamicResource SpacingMd}" Margin="0,12,0,12">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_vgmstream_metadata_638ce115}" />
+							<TextBlock Classes="muted" Text="{Binding SelectedMetadata}" TextWrapping="Wrap" FontFamily="Consolas,monospace" />
+						</StackPanel>
+					</Border>
+
+					<Border Grid.Row="2" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+						<Grid RowDefinitions="Auto,*">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_sample_descriptors_7ea04c48}" />
+							<ListBox Grid.Row="1" Margin="0,8,0,0"
+							         ItemsSource="{Binding SelectedSamples}"
+							         SelectedItem="{Binding SelectedSample, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Grid ColumnDefinitions="120,*" Margin="0,2">
+											<TextBlock Text="{Binding Title}" FontWeight="SemiBold" />
+											<TextBlock Grid.Column="1" Classes="muted" Text="{Binding ByteRange}" />
+										</Grid>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</Border>
+
+					<Border Grid.Row="3" Classes="cardSoft" Padding="{DynamicResource SpacingMd}" Margin="0,12,0,0">
+						<StackPanel Spacing="6">
+							<Grid ColumnDefinitions="*,Auto,Auto">
+								<StackPanel Spacing="2">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_sample_d7a9736b}" />
+									<TextBlock Text="{Binding SelectedSampleTitle}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedSampleBytes}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedSampleEnvelope}" />
+								</StackPanel>
+								<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_PlaySelected">Play</Button>
+								<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Stop">Stop</Button>
+							</Grid>
+							<TextBlock Classes="muted" Text="{Binding PlaybackStatus}" TextWrapping="Wrap" />
+
+							<!-- Volume Controls -->
+							<Border Classes="card" Padding="8" Margin="0,6,0,0">
+								<StackPanel Spacing="6">
+									<TextBlock Classes="sectionLabel" FontSize="13" Text="{x:Static res:Strings.U_volume_controls_397caf0d}" />
+
+									<Grid ColumnDefinitions="Auto,8,*,8,Auto">
+										<TextBlock Classes="sectionLabel" VerticalAlignment="Center" Text="{x:Static res:Strings.U_music_131260cb}" />
+										<Slider Grid.Column="2" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1"
+										        Value="{Binding VolumeMusic, Mode=TwoWay}" />
+										<TextBlock Grid.Column="4" Classes="muted" VerticalAlignment="Center" TextAlignment="Right" MinWidth="40"
+										           Text="{Binding VolumeMusic, StringFormat={}{0:P0}}" />
+									</Grid>
+
+									<Grid ColumnDefinitions="Auto,8,*,8,Auto">
+										<TextBlock Classes="sectionLabel" VerticalAlignment="Center" Text="{x:Static res:Strings.U_sound_fx_a30246ec}" />
+										<Slider Grid.Column="2" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1"
+										        Value="{Binding VolumeFx, Mode=TwoWay}" />
+										<TextBlock Grid.Column="4" Classes="muted" VerticalAlignment="Center" TextAlignment="Right" MinWidth="40"
+										           Text="{Binding VolumeFx, StringFormat={}{0:P0}}" />
+									</Grid>
+
+									<Grid ColumnDefinitions="Auto,8,*,8,Auto">
+										<TextBlock Classes="sectionLabel" VerticalAlignment="Center" Text="{x:Static res:Strings.CommonPreview}" />
+										<Slider Grid.Column="2" Minimum="0" Maximum="1" SmallChange="0.05" LargeChange="0.1"
+										        Value="{Binding VolumePreview, Mode=TwoWay}" />
+										<TextBlock Grid.Column="4" Classes="muted" VerticalAlignment="Center" TextAlignment="Right" MinWidth="40"
+										           Text="{Binding VolumePreview, StringFormat={}{0:P0}}" />
+									</Grid>
+								</StackPanel>
+							</Border>
+						</StackPanel>
+					</Border>
+				</Grid>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

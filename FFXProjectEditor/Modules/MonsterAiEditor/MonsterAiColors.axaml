@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Monster AI keeps the studio hue families while using darker card fills.
+         Small caption text must retain 4.5:1 contrast on those surfaces.
+         Scope this dictionary to the module; other workshops retain their tokens. -->
+    <SolidColorBrush x:Key="AccentHasteFillBrush" Color="#0C202B" />
+    <SolidColorBrush x:Key="AccentProtectFillBrush" Color="#0C1F1F" />
+    <SolidColorBrush x:Key="AccentShellFillBrush" Color="#0C202B" />
+    <SolidColorBrush x:Key="AccentReflectFillBrush" Color="#0F1C2F" />
+    <SolidColorBrush x:Key="AccentRegenFillBrush" Color="#0C1F23" />
+    <SolidColorBrush x:Key="AccentNulAllFillBrush" Color="#0C1F29" />
+    <SolidColorBrush x:Key="AccentGoldFillBrush" Color="#181C18" />
+    <SolidColorBrush x:Key="AccentBuilderFillBrush" Color="#0C1F28" />
+    <SolidColorBrush x:Key="AccentReactionFillBrush" Color="#1F1822" />
+    <SolidColorBrush x:Key="AccentCycleFillBrush" Color="#121F33" />
+    <SolidColorBrush x:Key="AccentCrimsonFillBrush" Color="#1C151E" />
+    <SolidColorBrush x:Key="AccentForbiddenFillBrush" Color="#1C121D" />
+    <SolidColorBrush x:Key="AccentExperimentalFillBrush" Color="#101323" />
+    <SolidColorBrush x:Key="AccentUndoFillBrush" Color="#15192F" />
+    <SolidColorBrush x:Key="AccentRefreshFillBrush" Color="#0C1D28" />
+    <SolidColorBrush x:Key="AccentMoveFillBrush" Color="#0C1F2A" />
+    <SolidColorBrush x:Key="AccentCrimsonForegroundBrush" Color="#C66A79" />
+</ResourceDictionary>

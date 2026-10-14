@@ -1,0 +1,122 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1380"
+             d:DesignHeight="760"
+             x:Class="FFXProjectEditor.MacroExplorer_Control">
+
+	<Grid ColumnDefinitions="2*,3*,4*">
+		<Border Grid.Column="0" MinWidth="240" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_macro_dictionaries_4c97a454}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_macro_dictionary_explorer_d13c9ea2}" />
+					<TextBlock Classes="muted" Text="{x:Static res:Strings.U_edit_the_menu_macro_lookup_tables_regular_simpli_8b3c3d87}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,14" Spacing="10">
+					<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					<TextBlock Classes="muted" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding LoadedSources}"
+						 SelectedItem="{Binding SelectedSource, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" />
+									<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Column="1" MinWidth="300" Margin="18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_macro_entries_caf53d70}" />
+					<TextBlock Classes="cardTitle" Text="{Binding SelectedSource.DisplayName}" />
+					<TextBlock Classes="muted" Text="{Binding SelectedSourceSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<TextBox Grid.Row="1"
+						 Margin="0,14,0,14"
+						 Watermark="{x:Static res:Strings.U_filter_by_macro_id_or_decoded_content_030f8d79}"
+						 Text="{Binding FilterText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding DisplayedEntries}"
+						 SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{Binding ChunkLabel}" />
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding EntryLabel}" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" />
+									<TextBlock Classes="muted" Text="{Binding RegularText}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<ScrollViewer Grid.Column="2" Margin="0,18,18,18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_macro_c1748dc8}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedEntry.EntryLabel}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedEntrySummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+						<TextBlock Classes="muted" Text="{Binding EditorScopeSummary}" TextWrapping="Wrap" />
+						<TextBlock Text="{Binding EditSession.SessionSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding EditSession.BehaviorSummary}" TextWrapping="Wrap" />
+						<WrapPanel>
+							<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_Undo" IsEnabled="{Binding CanUndoCurrentSource}">Undo</Button>
+							<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_Discard" IsEnabled="{Binding CanDiscardCurrentSource}">Discard</Button>
+							<Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_Save" IsEnabled="{Binding CanSaveCurrentSource}">Save</Button>
+						</WrapPanel>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="6">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonValidation}" />
+						<TextBlock Text="{Binding ValidationSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_regular_8d4e4ef3}" />
+						<TextBox Text="{Binding SelectedEntry.RegularText, Mode=TwoWay}" IsReadOnly="{Binding IsSelectedEntryReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_simplified_f965b526}" />
+						<TextBox Text="{Binding SelectedEntry.SimplifiedText, Mode=TwoWay}" IsReadOnly="{Binding IsSelectedEntryReadOnly}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" />
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

@@ -1,0 +1,33 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="FFXProjectEditor.Mon_Control">
+
+	<Grid RowDefinitions="30,*,50">
+		<StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20,0,0,0">
+		</StackPanel>
+		
+		<!-- TABLE -->
+		<WrapPanel Grid.Row="1" Orientation="Horizontal" Margin="20,0,0,0" VerticalAlignment="Top">
+			<Label Margin="0,0,8,8">Name</Label>
+			<TextBox IsReadOnly="True" Text="{Binding Name}" MinWidth="120" Margin="0,0,8,8"></TextBox>
+			<Label Margin="0,0,8,8">HP</Label>
+			<TextBox Text="{Binding Hp}" MinWidth="80" Margin="0,0,8,8"></TextBox>
+			<Label Margin="0,0,8,8">Steal</Label>
+			<TextBox Text="{Binding StealId}" MinWidth="80" Margin="0,0,8,8"></TextBox>
+			<Label Margin="0,0,8,8">Rare Steal</Label>
+			<TextBox Text="{Binding StealRareId}" MinWidth="80" Margin="0,0,8,8"></TextBox>
+		</WrapPanel>
+		
+		<Grid Grid.Row="2" ColumnDefinitions="*,*">
+			<StackPanel Grid.Column="0" Orientation="Horizontal">
+			</StackPanel>
+			<StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+				<Button Click="Button_Save" Margin="0,0,30,0">Save</Button>
+			</StackPanel>
+		</Grid>
+	</Grid>
+	
+</UserControl>

@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="180"
+             x:Class="FFXProjectEditor.Controls.EnvironmentHealthCard">
+	<Border Background="#101922" BorderBrush="#264052" BorderThickness="1" CornerRadius="8" Padding="16">
+		<Grid RowDefinitions="Auto,Auto,Auto,Auto">
+			<!-- Header -->
+			<Grid Grid.Row="0" ColumnDefinitions="Auto,*,Auto" Margin="0,0,0,12">
+				<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8">
+					<Border Name="StatusPill" Background="#142B24" BorderBrush="#2E7D63" BorderThickness="1" CornerRadius="12" Padding="10,4">
+						<StackPanel Orientation="Horizontal" Spacing="6">
+							<TextBlock Name="StatusIcon" Text="✓" Foreground="#4CAF8A" FontWeight="Bold" VerticalAlignment="Center" />
+							<TextBlock Name="StatusText" Text="{x:Static res:Strings.U_EnvHealthy}" Foreground="#F1F5F9" FontWeight="SemiBold" FontSize="12" VerticalAlignment="Center" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+				<TextBlock Grid.Column="2" Name="TimestampText" Text="{x:Static res:Strings.U_EnvLastCheck}" Foreground="#8BA3B5" FontSize="11" VerticalAlignment="Center" />
+			</Grid>
+
+			<!-- Details Row -->
+			<Grid Grid.Row="1" ColumnDefinitions="*,*,*,*" Margin="0,0,0,12">
+				<!-- Game Root -->
+				<StackPanel Grid.Column="0" Spacing="2">
+					<TextBlock Text="{x:Static res:Strings.U_EnvInstallation}" Foreground="#8BA3B5" FontSize="10" FontWeight="Bold" />
+					<TextBlock Name="GameRootText" Text="{x:Static res:Strings.U_EnvNotFound}" Foreground="#F1F5F9" FontSize="12" TextTrimming="CharacterEllipsis" ToolTip.Tip="{Binding Text, RelativeSource={RelativeSource Self}}" />
+				</StackPanel>
+				<!-- Version & Region -->
+				<StackPanel Grid.Column="1" Spacing="2">
+					<TextBlock Text="{x:Static res:Strings.U_EnvVersionRegion}" Foreground="#8BA3B5" FontSize="10" FontWeight="Bold" />
+					<TextBlock Name="VersionRegionText" Text="v1.0.0 (US)" Foreground="#F1F5F9" FontSize="12" />
+				</StackPanel>
+				<!-- Runtime Modules -->
+				<StackPanel Grid.Column="2" Spacing="2">
+					<TextBlock Text="{x:Static res:Strings.U_EnvRuntimeModules}" Foreground="#8BA3B5" FontSize="10" FontWeight="Bold" />
+					<TextBlock Name="ModulesText" Text="ffx-probe.dll / Hooks" Foreground="#F1F5F9" FontSize="12" />
+				</StackPanel>
+				<!-- Live Probe -->
+				<StackPanel Grid.Column="3" Spacing="2">
+					<TextBlock Text="{x:Static res:Strings.F2_live_probe_dfdc7379}" Foreground="#8BA3B5" FontSize="10" FontWeight="Bold" />
+					<TextBlock Name="ProbeStatusText" Text="Inativo" Foreground="#8BA3B5" FontSize="12" />
+				</StackPanel>
+			</Grid>
+
+			<!-- Issues Container -->
+			<ItemsControl Grid.Row="2" Name="IssuesList">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<Border Background="#2B1A14" BorderBrush="#8C4A26" BorderThickness="1" CornerRadius="6" Padding="12,8" Margin="0,0,0,8">
+							<Grid ColumnDefinitions="Auto,*">
+								<TextBlock Grid.Column="0" Text="⚠️" FontSize="14" Margin="0,0,10,0" VerticalAlignment="Top" />
+								<StackPanel Grid.Column="1" Spacing="2">
+									<TextBlock Text="{Binding Message}" Foreground="#F1F5F9" FontWeight="SemiBold" FontSize="12" TextWrapping="Wrap" />
+									<TextBlock Text="{Binding ActionableMessage}" Foreground="#E8943A" FontSize="11" TextWrapping="Wrap" />
+								</StackPanel>
+							</Grid>
+						</Border>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+
+			<!-- Action Footer -->
+			<Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+				<TextBlock Name="FooterNote" Text="{x:Static res:Strings.F2_all_set_for_offline_editing_and_safe_mod_a238ed9a}" Foreground="#8BA3B5" FontSize="11" VerticalAlignment="Center" />
+				<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+					<Button Name="SelectGameFolderButton" Content="{x:Static res:Strings.U_EnvSelectGameFolder}" Background="#15212C" Foreground="#F1F5F9" BorderBrush="#264052" BorderThickness="1" CornerRadius="4" Padding="12,6" FontSize="11" />
+					<Button Name="RefreshButton" Content="{x:Static res:Strings.U_EnvRecheck}" Background="#15212C" Foreground="#F1F5F9" BorderBrush="#264052" BorderThickness="1" CornerRadius="4" Padding="12,6" FontSize="11" />
+				</StackPanel>
+			</Grid>
+		</Grid>
+	</Border>
+</UserControl>

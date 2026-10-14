@@ -1,0 +1,301 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1260"
+             d:DesignHeight="760"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.TreasureEditor_Control">
+
+	<!-- Jarvis-UI Fase E §E4: hand-rolled Auto,* grid → ModuleMasterDetail_Shell.
+	     Treasure tem cards kind-specific no detail (Gil/Item/KeyItem/Gear/Raw). -->
+
+	<UserControl.Styles>
+		<Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+			<Setter Property="IsMasterExpanded" Value="False" />
+		</Style>
+	
+		<!-- Aroma Premium Styles -->
+		<Style Selector="TextBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="ComboBox:pointerover /template/ Border#Background">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox:focus /template/ Border#Background">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="CheckBox.flag">
+			<Setter Property="Width" Value="140" />
+			<Setter Property="Margin" Value="0,0,8,4" />
+		</Style>
+
+    
+		<!-- NumericUpDown Fix for global TextBox styles -->
+		<Style Selector="NumericUpDown">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="MinHeight" Value="20" />
+			<Setter Property="Margin" Value="0" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+
+    </UserControl.Styles>
+
+	<common:ModuleMasterDetail_Shell MasterHeaderLabel="Treasures">
+
+		<common:ModuleMasterDetail_Shell.MasterHeader>
+			<StackPanel Spacing="4" Margin="2,0,2,2">
+				<Grid ColumnDefinitions="*,Auto">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_kernel_treasure_table_dd3ebd0f}" VerticalAlignment="Center" />
+					<ctrl:CapabilityBadge Grid.Column="1" Name="TreasureCapabilityBadge" VerticalAlignment="Center" />
+				</Grid>
+				<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+				           Text="{x:Static res:Strings.U_edit_the_takara_bin_payload_table_that_chest_tre_5b5d7458}" />
+			</StackPanel>
+		</common:ModuleMasterDetail_Shell.MasterHeader>
+
+		<common:ModuleMasterDetail_Shell.MasterList>
+			<Grid RowDefinitions="Auto,*">
+				<StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+					<Grid ColumnDefinitions="*,Auto">
+						<TextBox Watermark="{x:Static res:Strings.U_filter_by_index_kind_or_payload_9060b3c5}" Text="{Binding FilterText, Mode=TwoWay}" />
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh" AutomationProperties.Name="Refresh">Refresh</Button>
+					</Grid>
+					<TextBlock Classes="muted" FontSize="11" Text="{Binding LoadSummary}" />
+				</StackPanel>
+
+				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+					<ListBox ItemsSource="{Binding DisplayedTreasures}"
+					         SelectedItem="{Binding SelectedTreasure, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,6" Padding="10" Classes="cardSoft">
+									<StackPanel Spacing="4">
+										<TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding IndexLabel}" />
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding Summary}" TextWrapping="Wrap" />
+										<TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding KindLabel}" />
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</ScrollViewer>
+			</Grid>
+		</common:ModuleMasterDetail_Shell.MasterList>
+
+		<common:ModuleMasterDetail_Shell.Detail>
+			<DockPanel>
+				<!-- SESSION CONTROLS (Pinned to Top) -->
+				<Border DockPanel.Dock="Top" Margin="0,0,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+							<Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto">
+								<StackPanel Spacing="2" VerticalAlignment="Center">
+									<TextBlock Text="{Binding EditSession.SessionSummary}" FontWeight="SemiBold" />
+									<TextBlock Text="{Binding EditSession.BehaviorSummary}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+									<TextBlock Text="{Binding EditActionSummary}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+								</StackPanel>
+								<core:AutoSaveIndicator_Control Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Session="{Binding EditSession}" />
+								<CheckBox Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+								<Button Grid.Column="3" Margin="12,0,0,0" VerticalAlignment="Center" Classes="secondaryAction" IsEnabled="{Binding EditSession.CanUndo}" Click="Button_Undo">Undo</Button>
+								<Button Grid.Column="4" Margin="12,0,0,0" VerticalAlignment="Center" Classes="secondaryAction" Name="Button_ReviewDiff" Click="Button_ReviewDiff_Click" AutomationProperties.Name="Review Diff">🔍 Diff</Button>
+								<Button Grid.Column="5" Margin="12,0,0,0" VerticalAlignment="Center" IsEnabled="{Binding EditSession.HasPendingChanges}" Click="Button_Save">Save</Button>
+							</Grid>
+					</StackPanel>
+				</Border>
+
+				<!-- SCROLLABLE CONTENT -->
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Spacing="14" Margin="10,0,10,10">
+						<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+							<StackPanel Spacing="8">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_treasure_authoring_surface_4a660360}" />
+								<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedTreasure.IndexLabel}" />
+								<TextBlock Classes="muted" Text="{Binding SelectedTreasureSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+							<StackPanel Spacing="12">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_payload_editor_264cf724}" />
+								<TextBlock Classes="cardTitle" Text="{Binding SelectedTreasure.Summary}" />
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_you_are_editing_the_payload_table_only_scripts_a_881bdf9e}" TextWrapping="Wrap" />
+
+								<Grid ColumnDefinitions="Auto,*">
+									<StackPanel Spacing="8" MinWidth="200" MaxWidth="280">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonKind}" />
+										<ComboBox ItemsSource="{Binding SelectedTreasure.KindOptions}" SelectedItem="{Binding SelectedTreasure.SelectedKindOption, Mode=TwoWay}">
+											<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Spacing="2">
+													<TextBlock Text="{Binding Display}" />
+													<TextBlock Classes="muted" FontSize="11" Text="{Binding Detail}" TextWrapping="Wrap" />
+												</StackPanel>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<TextBox Text="{Binding SelectedTreasure.Kind, Mode=TwoWay}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.KindLabel}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_quick_kinds_a101c51a}" />
+									<WrapPanel Orientation="Horizontal">
+										<Button Classes="secondaryAction" Click="Button_SetGilKind" AutomationProperties.Name="Gil">Gil</Button>
+										<Button Margin="10,0,0,0" Classes="secondaryAction" Click="Button_SetItemKind" AutomationProperties.Name="Item">Item</Button>
+										<Button Margin="10,0,0,0" Classes="secondaryAction" Click="Button_SetGearKind" AutomationProperties.Name="Gear Pickup">Gear Pickup</Button>
+										<Button Margin="10,0,0,0" Classes="secondaryAction" Click="Button_SetKeyItemKind" AutomationProperties.Name="Key Item">Key Item</Button>
+									</WrapPanel>
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.KnownKindSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Grid>
+
+							<Grid ColumnDefinitions="Auto,Auto,*">
+								<StackPanel Spacing="8" MinWidth="180" MaxWidth="240">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonQuantity}" />
+									<TextBox Text="{Binding SelectedTreasure.Quantity, Mode=TwoWay}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.ValuePreview}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="14,0,0,0" Spacing="8" MinWidth="180" MaxWidth="240">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonRawType}" />
+									<TextBox Text="{Binding SelectedTreasure.ItemId, Mode=TwoWay}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.ItemIdHex}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.ResolvedName}" TextWrapping="Wrap" />
+								</StackPanel>
+								<Border Grid.Column="2" Margin="14,0,0,0" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonInterpretation}" />
+										<TextBlock FontWeight="SemiBold" Text="{Binding SelectedTreasure.KindLabel}" />
+										<TextBlock Classes="muted" Text="{Binding SelectedTreasure.Summary}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" Text="{Binding SelectedTreasure.PayloadDetailSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+							</Grid>
+
+							<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" IsVisible="{Binding SelectedTreasure.IsGilKind}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_gil_formula_37d92917}" />
+									<TextBlock Text="{Binding SelectedTreasure.GilFormulaSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.GilSentinelSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+
+							<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" IsVisible="{Binding SelectedTreasure.IsItemKind}">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_item_type_selector_ce106cd9}" />
+									<TextBox Watermark="{x:Static res:Strings.CommonFilterItems}" Text="{Binding SelectedTreasure.ItemFilterText, Mode=TwoWay}" />
+									<ComboBox ItemsSource="{Binding SelectedTreasure.FilteredItemOptions}" SelectedItem="{Binding SelectedTreasure.SelectedItemOption, Mode=TwoWay}" MaxDropDownHeight="420">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Spacing="2">
+													<TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis" />
+													<TextBlock Classes="muted" FontSize="11" Text="{Binding Detail}" TextTrimming="CharacterEllipsis" />
+												</StackPanel>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.PayloadDetailSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+
+							<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" IsVisible="{Binding SelectedTreasure.IsKeyItemKind}">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_key_item_type_selector_4fce73bc}" />
+									<TextBox Watermark="{x:Static res:Strings.U_filter_key_items_by_name_id_or_raw_type_ae5c9ed1}" Text="{Binding SelectedTreasure.KeyItemFilterText, Mode=TwoWay}" />
+									<ComboBox ItemsSource="{Binding SelectedTreasure.FilteredKeyItemOptions}" SelectedItem="{Binding SelectedTreasure.SelectedKeyItemOption, Mode=TwoWay}" MaxDropDownHeight="420">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Spacing="2">
+													<TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis" />
+													<TextBlock Classes="muted" FontSize="11" Text="{Binding Detail}" TextTrimming="CharacterEllipsis" />
+												</StackPanel>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.PayloadDetailSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+
+							<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" IsVisible="{Binding SelectedTreasure.IsGearKind}">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_gear_pickup_buki_get_selector_95ec3cd8}" />
+									<TextBox Watermark="{x:Static res:Strings.U_filter_buki_get_rows_by_id_ability_or_raw_word_2347b8ae}" Text="{Binding SelectedTreasure.GearFilterText, Mode=TwoWay}" />
+									<ComboBox ItemsSource="{Binding SelectedTreasure.FilteredGearOptions}" SelectedItem="{Binding SelectedTreasure.SelectedGearOption, Mode=TwoWay}" MaxDropDownHeight="420">
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Spacing="2">
+													<TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis" />
+													<TextBlock Classes="muted" FontSize="11" Text="{Binding Detail}" TextTrimming="CharacterEllipsis" />
+												</StackPanel>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
+									</ComboBox>
+									<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_OpenBukiGetAtlas" AutomationProperties.Name="Open buki_get atlas">Open buki_get atlas</Button>
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.PayloadDetailSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding SelectedTreasure.GearBridgeWarning}" TextWrapping="Wrap" />
+									<common:AtlasEvidenceBadgeStrip Margin="0,4,0,0" Evidence="{Binding SelectedTreasureEvidence}" />
+								</StackPanel>
+							</Border>
+
+							<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft" IsVisible="{Binding SelectedTreasure.IsSpecialOrRawKind}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_raw_reserved_payload_87f11300}" />
+									<TextBlock Text="{Binding SelectedTreasure.PayloadDetailSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{x:Static res:Strings.U_no_selector_is_offered_for_this_kind_because_the_78ce206b}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+			</DockPanel>
+		</common:ModuleMasterDetail_Shell.Detail>
+
+	</common:ModuleMasterDetail_Shell>
+</UserControl>

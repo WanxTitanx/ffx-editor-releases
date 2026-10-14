@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:FFXProjectEditor.Modules.AutoAbilityEditor"
+             x:Class="FFXProjectEditor.Modules.AutoAbilityEditor.AbilityStatusBar_Control">
+	<Grid ColumnDefinitions="*,60" RowDefinitions="Auto,Auto">
+		<ProgressBar Grid.Row="0" Grid.Column="0" 
+		             Minimum="0" Maximum="255" 
+		             Value="{Binding $parent[local:AbilityStatusBar_Control].Value}"
+		             Foreground="{Binding $parent[local:AbilityStatusBar_Control].Value, Converter={x:Static local:SeverityColorConverter.Instance}}"
+		             Height="8" CornerRadius="4" VerticalAlignment="Center" 
+		             Background="#15212C" />
+		<TextBox Grid.Row="0" Grid.Column="1" 
+		         Text="{Binding $parent[local:AbilityStatusBar_Control].Value, Mode=TwoWay}" 
+		         Margin="8,0,0,0" Padding="4" Height="24" FontSize="11" 
+		         VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+	</Grid>
+</UserControl>

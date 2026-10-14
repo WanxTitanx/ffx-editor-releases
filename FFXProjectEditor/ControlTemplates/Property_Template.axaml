@@ -1,0 +1,47 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:converters="clr-namespace:FFXProjectEditor.Converters"
+        xmlns:controls="using:FFXProjectEditor">
+  
+  <Design.PreviewWith>
+    <StackPanel Width="400" Spacing="10">      
+        <StackPanel Background="{DynamicResource SystemRegionBrush}">
+			<controls:Property_Template />
+		</StackPanel>
+	</StackPanel>
+</Design.PreviewWith>
+
+<ControlTheme x:Key="{x:Type controls:Property_Template}" TargetType="controls:Property_Template">
+    <Setter Property="Template">
+      <ControlTemplate>
+
+		  <Border Width="{TemplateBinding BorderWidth}" Margin="5" Padding="0" BorderThickness="1" BorderBrush="#22FFFFFF" Background="#08FFFFFF" CornerRadius="6" ClipToBounds="True">
+			  <Border.Styles>
+				  <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+					  <Setter Property="Background" Value="Transparent" />
+					  <Setter Property="BorderThickness" Value="0" />
+				  </Style>
+				  <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+					  <Setter Property="Background" Value="Transparent" />
+					  <Setter Property="BorderThickness" Value="0" />
+				  </Style>
+			  </Border.Styles>
+			  <Grid>
+				  <ProgressBar IsVisible="{TemplateBinding ShowProgressBar}" 
+							   Maximum="{TemplateBinding ProgressBarMaximum}" 
+							   Value="{Binding Property_Value, RelativeSource={RelativeSource TemplatedParent}}" 
+							   VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+							   Foreground="{DynamicResource AccentBrush}" Background="Transparent" CornerRadius="0" Opacity="0.15"/>
+				  <DockPanel Margin="10,5">
+					  <Label DockPanel.Dock="Left" VerticalAlignment="Center" Foreground="#CCFFFFFF" Content="{TemplateBinding Property_Label}"/>
+					  <TextBox DockPanel.Dock="Right" Width="{TemplateBinding ValueBorderWidth}" HorizontalAlignment="Right" 
+							   Text="{Binding Property_Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" 
+							   Background="#11FFFFFF" BorderThickness="0" CornerRadius="4" VerticalAlignment="Center" TextAlignment="Right"/>
+				  </DockPanel>
+			  </Grid>
+		  </Border>
+
+	  </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

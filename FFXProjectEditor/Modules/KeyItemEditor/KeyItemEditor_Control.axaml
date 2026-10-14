@@ -1,0 +1,217 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1380"
+             d:DesignHeight="820"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.KeyItemEditor_Control">
+
+	<!-- Jarvis-UI Fase E §E5: hand-rolled 2*,5* grid → ModuleMasterDetail_Shell (Auto,*). -->
+
+	<UserControl.Styles>
+		<Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+			<Setter Property="IsMasterExpanded" Value="False" />
+		</Style>
+	
+		<!-- Aroma Premium Styles -->
+		<Style Selector="TextBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="ComboBox:pointerover /template/ Border#Background">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox:focus /template/ Border#Background">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="CheckBox.flag">
+			<Setter Property="Width" Value="140" />
+			<Setter Property="Margin" Value="0,0,8,4" />
+		</Style>
+
+    
+		<!-- NumericUpDown Fix for global TextBox styles -->
+		<Style Selector="NumericUpDown">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="MinHeight" Value="20" />
+			<Setter Property="Margin" Value="0" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+
+    </UserControl.Styles>
+
+	<common:ModuleMasterDetail_Shell MasterHeaderLabel="Key Items">
+
+		<common:ModuleMasterDetail_Shell.MasterHeader>
+			<StackPanel Spacing="4" Margin="2,0,2,2">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_localized_important_bin_eba44007}" />
+				<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+				           Text="{x:Static res:Strings.U_inspect_the_0x14_important_bin_entry_shape_pt21__b043079c}" />
+			</StackPanel>
+		</common:ModuleMasterDetail_Shell.MasterHeader>
+
+		<common:ModuleMasterDetail_Shell.MasterList>
+			<Grid RowDefinitions="Auto,*">
+				<StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+					<Grid ColumnDefinitions="*,Auto">
+						<TextBox Watermark="{x:Static res:Strings.U_filter_by_name_description_or_ordering_72a27591}" Text="{Binding FilterText, Mode=TwoWay}" />
+						<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh" AutomationProperties.Name="Refresh">Refresh</Button>
+					</Grid>
+					<TextBlock Classes="muted" FontSize="11" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+					<ListBox ItemsSource="{Binding DisplayedItems}"
+					         SelectedItem="{Binding SelectedItem, Mode=TwoWay}">
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<Border Margin="0,0,0,6" Padding="10" Classes="cardSoft">
+									<StackPanel Spacing="4">
+										<TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding Label}" />
+										<TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding IndexLabel}" />
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding PayloadSummary}" TextWrapping="Wrap" />
+										<TextBlock Classes="muted" FontSize="11" Text="{Binding DescriptionText}" TextWrapping="Wrap" MaxLines="3" />
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
+				</ScrollViewer>
+			</Grid>
+		</common:ModuleMasterDetail_Shell.MasterList>
+
+		<common:ModuleMasterDetail_Shell.Detail>
+			<DockPanel>
+				<!-- SESSION CONTROLS (Pinned to Top) -->
+				<Border DockPanel.Dock="Top" Margin="0,0,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+						<Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+							<StackPanel Spacing="2" VerticalAlignment="Center">
+								<TextBlock Text="{Binding EditSession.SessionSummary}" FontWeight="SemiBold" />
+								<TextBlock Text="{Binding EditSession.BehaviorSummary}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+							</StackPanel>
+							<core:AutoSaveIndicator_Control Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Session="{Binding EditSession}" />
+							<CheckBox Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+							<Button Grid.Column="3" Margin="12,0,0,0" VerticalAlignment="Center" Classes="secondaryAction" IsEnabled="{Binding EditSession.CanUndo}" Click="Button_Undo">Undo</Button>
+							<Button Grid.Column="4" Margin="12,0,0,0" VerticalAlignment="Center" IsEnabled="{Binding EditSession.HasPendingChanges}" Click="Button_Save">Save</Button>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<!-- SCROLLABLE CONTENT -->
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Spacing="14" Margin="10,0,10,10">
+						<Border Padding="{DynamicResource SpacingXl}" Classes="card heroBrown">
+							<StackPanel Spacing="8">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_key_item_surface_3a43966d}" />
+								<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedItem.Label}" />
+								<TextBlock Classes="muted" Text="{Binding SelectedItemSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+							<StackPanel Spacing="12">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_mutation_status_10c4ea3f}" />
+							<Grid ColumnDefinitions="*">
+								<StackPanel Spacing="4">
+									<TextBlock Text="{Binding MutationSurfaceSummary}" FontWeight="SemiBold" />
+									<TextBlock Text="{Binding MutationSurfaceDetail}" Classes="muted" TextWrapping="Wrap" />
+								</StackPanel>
+							</Grid>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_localized_text_5eaa6b4b}" />
+							<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_read_only_slots_3006a9b1}" />
+							<TextBlock Classes="muted" Text="{x:Static res:Strings.U_the_localized_text_block_is_display_only_here_pt_fc68f0df}" TextWrapping="Wrap" />
+
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonName}" /><TextBox Text="{Binding SelectedItem.NameText}" IsReadOnly="True" /></StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_dash_slot_ac78b513}" /><TextBox Text="{Binding SelectedItem.DashText}" IsReadOnly="True" /></StackPanel>
+							</Grid>
+							<Grid ColumnDefinitions="*,*">
+								<StackPanel Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonDescription}" /><TextBox Text="{Binding SelectedItem.DescriptionText}" IsReadOnly="True" AcceptsReturn="True" MinHeight="84" TextWrapping="Wrap" /></StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_other_text_slot_48fdc468}" /><TextBox Text="{Binding SelectedItem.OtherText}" IsReadOnly="True" AcceptsReturn="True" MinHeight="84" TextWrapping="Wrap" /></StackPanel>
+							</Grid>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+						<StackPanel Spacing="12">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_payload_bytes_eee5f194}" />
+							<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_fixed_4_byte_tail_2dba08e7}" />
+							<TextBlock Classes="muted" Text="{x:Static res:Strings.U_pt22_measured_candidate_mutation_ranges_here_but_3aab7eef}" TextWrapping="Wrap" />
+
+							<Grid ColumnDefinitions="*,*" IsEnabled="{Binding MutationSurfaceEnabled}">
+								<StackPanel Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_item_type_10h_al_bhed_primer_84bcfb16}" /><TextBox Text="{Binding SelectedItem.ItemType, Mode=TwoWay}" /></StackPanel>
+								<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_number_13h_0ebf7c3f}" /><TextBox Text="{Binding SelectedItem.Number, Mode=TwoWay}" /></StackPanel>
+							</Grid>
+
+							<Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="6">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_raw_tail_bytes_139a53af}" />
+									<TextBlock Classes="muted" Text="{Binding SelectedItem.RawTailSummary}" />
+									<Grid ColumnDefinitions="*,*">
+										<StackPanel Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_item_value_11h_21c49531}" /><TextBox Text="{Binding SelectedItem.ItemValue}" IsReadOnly="True" /></StackPanel>
+										<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="6"><TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_icon_12h_a19202e9}" /><TextBox Text="{Binding SelectedItem.Icon}" IsReadOnly="True" /></StackPanel>
+									</Grid>
+								</StackPanel>
+							</Border>
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+			</DockPanel>
+		</common:ModuleMasterDetail_Shell.Detail>
+
+	</common:ModuleMasterDetail_Shell>
+</UserControl>

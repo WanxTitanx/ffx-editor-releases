@@ -1,0 +1,240 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1420"
+             d:DesignHeight="780"
+             x:Class="FFXProjectEditor.EncounterTableExplorer_Control">
+
+	<Grid ColumnDefinitions="2*,3*,5*">
+		<Border Grid.Column="0" MinWidth="260" Margin="18,18,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_routing_domains_dc67abcc}" />
+					<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_encounter_table_explorer_a1092cf8}" />
+					<TextBlock Classes="muted"
+					           Text="READ_ENCOUNTER_TABLE + WRITE for battle/kernel/btl.bin. Edit Danger/Weight per group and formation, then save."
+					           TextWrapping="Wrap" />
+				</StackPanel>
+
+				<StackPanel Grid.Row="1" Margin="0,14,0,14" Spacing="10">
+					<Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+					<TextBlock Classes="muted" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding LoadedMaps}"
+						 SelectedItem="{Binding SelectedMap, Mode=TwoWay}">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+									<TextBlock Classes="sectionLabel" Text="{Binding Summary}" />
+									<TextBlock Classes="muted" Text="{Binding DetailSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<Border Grid.Column="1" MinWidth="320" Margin="18" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid RowDefinitions="Auto,Auto,*">
+				<StackPanel Spacing="8">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_decoded_tables_a1ce1ea2}" />
+					<TextBlock Classes="cardTitle" Text="{Binding SelectedMap.DisplayName}" />
+					<TextBlock Classes="muted" Text="{Binding SelectedMapSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+
+				<TextBox Grid.Row="1"
+						 Margin="0,14,0,14"
+						 Watermark="{x:Static res:Strings.U_filter_by_table_id_map_battle_id_battlefield_or__4322a358}"
+						 Text="{Binding FilterText, Mode=TwoWay}" />
+
+				<ListBox Grid.Row="2"
+						 ItemsSource="{Binding DisplayedTables}"
+						 SelectedItem="{Binding SelectedTable, Mode=TwoWay}"
+						 DoubleTapped="Tables_DoubleTapped">
+					<ListBox.ItemTemplate>
+						<DataTemplate>
+							<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+									<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+			</Grid>
+		</Border>
+
+		<ScrollViewer Grid.Column="2" Margin="0,18,18,18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_table_73112ef2}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedTableIndexLabel}" />
+						<TextBlock Classes="muted" Text="{Binding SelectedTableSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<!-- Save + Global Danger card -->
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_editar_e_salvar_92680a93}" />
+						<WrapPanel>
+							<Button Classes="primaryAction" Margin="0,0,8,8" Command="{Binding SaveEncounterTableCommand}">
+								<StackPanel Orientation="Horizontal" Spacing="6">
+									<PathIcon Data="{DynamicResource IconSave}" Width="14" Height="14" />
+									<TextBlock Text="{x:Static res:Strings.U_salvar_btl_bin_4b7afa44}" />
+								</StackPanel>
+							</Button>
+							<Button Classes="secondaryAction" Margin="0,0,8,8" Command="{Binding RestoreFromBackupCommand}">↩ Restaurar vanilla</Button>
+						</WrapPanel>
+						<TextBlock Classes="muted" Text="{Binding SaveStatus}" TextWrapping="Wrap" />
+						<Separator Margin="0,4,0,4" />
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_danger_global_aplicar_a_todos_os_grupos_f3e1dc9e}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_define_o_danger_de_todos_os_grupos_de_todos_os_m_39003643}"
+						           TextWrapping="Wrap" />
+						<WrapPanel Margin="0,2,0,0">
+							<Button Classes="secondaryAction" Margin="0,0,6,6" Command="{Binding ApplyDangerNoneCommand}">Sem encontros (0)</Button>
+							<Button Classes="secondaryAction" Margin="0,0,6,6" Command="{Binding ApplyDangerNormalCommand}">Normal (50)</Button>
+							<Button Classes="secondaryAction" Margin="0,0,6,6" Command="{Binding ApplyDangerIntenseCommand}">Intenso (128)</Button>
+							<Button Classes="secondaryAction" Margin="0,0,6,6" Command="{Binding ApplyDangerMaxCommand}">Máximo (255)</Button>
+						</WrapPanel>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_routing_overview_e74afa53}" />
+						<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding SelectedTableTitle}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding SelectedTableOverview}" TextWrapping="Wrap" />
+						<Grid ColumnDefinitions="*,*">
+							<Border Grid.Column="0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_offsets_20daff2f}" />
+									<TextBlock Text="{Binding SelectedTableOffsetSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Column="1" Margin="12,0,0,0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_unknown_header_01f010a5}" />
+									<TextBlock Text="{Binding SelectedTableUnknownSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</Grid>
+						<Grid ColumnDefinitions="*,*">
+							<Border Grid.Column="0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_battlefields_790dbcfb}" />
+									<TextBlock Text="{Binding SelectedTableBattlefieldSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Column="1" Margin="12,0,0,0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonDanger}" />
+									<TextBlock Text="{Binding SelectedTableDangerSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</Grid>
+						<Grid ColumnDefinitions="*,*">
+							<Border Grid.Column="0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_weight_footprint_67b3bd5a}" />
+									<TextBlock Text="{Binding SelectedTableWeightSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Column="1" Margin="12,0,0,0" Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_battle_id_footprint_922f5993}" />
+									<TextBlock Text="{Binding SelectedTableBattleIdsSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_group_breakdown_28fa7bf7}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_edite_o_danger_de_cada_grupo_use_os_presets_ou_a_65b86f3b}"
+						           TextWrapping="Wrap" />
+						<ItemsControl ItemsSource="{Binding SelectedGroups}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+										<StackPanel Spacing="6">
+											<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+											<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding BattleIdsSummary}" TextWrapping="Wrap" />
+											<!-- Danger editor -->
+											<StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+												<TextBlock VerticalAlignment="Center" Classes="sectionLabel" Text="{x:Static res:Strings.U_danger_ae37978e}" />
+												<Slider Value="{Binding Danger, Mode=TwoWay}"
+												        Minimum="0" Maximum="255"
+												        Width="150"
+												        IsSnapToTickEnabled="True"
+												        TickFrequency="1" />
+												<TextBlock VerticalAlignment="Center" Width="30" Text="{Binding Danger}" />
+												<TextBlock VerticalAlignment="Center" Classes="muted" Text="{Binding DangerLabel}" />
+											</StackPanel>
+											<WrapPanel>
+												<Button Classes="secondaryAction" FontSize="11" Padding="8,4" Margin="0,0,4,4" Command="{Binding SetDangerNoneCommand}">Sem encontros</Button>
+												<Button Classes="secondaryAction" FontSize="11" Padding="8,4" Margin="0,0,4,4" Command="{Binding SetDangerNormalCommand}">Normal</Button>
+												<Button Classes="secondaryAction" FontSize="11" Padding="8,4" Margin="0,0,4,4" Command="{Binding SetDangerIntenseCommand}">Intenso</Button>
+												<Button Classes="secondaryAction" FontSize="11" Padding="8,4" Margin="0,0,4,4" Command="{Binding SetDangerMaxCommand}">Máximo</Button>
+											</WrapPanel>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Padding="{DynamicResource SpacingLg}" Classes="card">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_flattened_formation_footprint_d7f4cbfb}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_edite_o_weight_de_cada_formacao_o_totalweight_do_495d1c31}"
+						           TextWrapping="Wrap" />
+						<ItemsControl ItemsSource="{Binding SelectedFormations}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+										<StackPanel Spacing="4">
+											<TextBlock Classes="sectionLabel" Text="{Binding IndexLabel}" />
+											<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding Title}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding Summary}" TextWrapping="Wrap" />
+											<!-- Weight editor -->
+											<StackPanel Orientation="Horizontal" Spacing="8" Margin="0,4,0,0">
+												<TextBlock VerticalAlignment="Center" Classes="sectionLabel" Text="{x:Static res:Strings.U_weight_d53879f4}" />
+												<Slider Value="{Binding Weight, Mode=TwoWay}"
+												        Minimum="0" Maximum="255"
+												        Width="120"
+												        IsSnapToTickEnabled="True"
+												        TickFrequency="1" />
+												<TextBlock VerticalAlignment="Center" Width="30" Text="{Binding Weight}" />
+											</StackPanel>
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

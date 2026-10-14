@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FFX Magic Viewer v1</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <aside class="sidebar" aria-label="Magic catalog">
+        <div class="brand">
+          <div>
+            <h1>FFX Magic Viewer v1</h1>
+            <p id="catalogSummary">Loading catalog</p>
+          </div>
+          <button class="iconButton" id="reloadCatalog" type="button" title="Reload catalog" aria-label="Reload catalog">R</button>
+        </div>
+
+        <div class="searchRow">
+          <input id="searchBox" type="search" placeholder="Search magic id" autocomplete="off" />
+        </div>
+
+        <fieldset class="filters">
+          <legend>Coverage</legend>
+          <label><input type="checkbox" value="multi_lane_candidate" checked /> Multi lane</label>
+          <label><input type="checkbox" value="ps2_package_candidate" checked /> PS2 package</label>
+          <label><input type="checkbox" value="hd_runtime_candidate" checked /> HD runtime</label>
+          <label><input type="checkbox" value="overlay_only_candidate" checked /> Overlay only</label>
+        </fieldset>
+
+        <div class="assetList" id="assetList" role="listbox" aria-label="Magic entries"></div>
+      </aside>
+
+      <section class="viewportPanel" aria-label="Runtime reader and synthetic inspection stage">
+        <div class="toolbar">
+          <div class="selectedTitle">
+            <span id="selectedMagic">No magic selected</span>
+            <span id="selectedBand" class="band">blocked</span>
+          </div>
+          <div class="toolButtons">
+            <button id="toggleRuntimeMap" type="button" title="Read runtime DLL map" aria-pressed="true">Runtime Map</button>
+            <button id="toggleSimulation" type="button" title="Run structural runtime simulation" aria-pressed="false">Simulate</button>
+            <button id="fitCamera" type="button" title="Fit surface preview">Fit</button>
+            <button id="toggleGrid" type="button" title="Toggle grid" aria-pressed="true">Grid</button>
+            <button id="toggleComposite" type="button" title="Stack surface previews only" aria-pressed="false">Stack Surface</button>
+            <button id="toggleCycle" type="button" title="Cycle surface previews only" aria-pressed="false">Cycle Surface</button>
+          </div>
+        </div>
+        <div class="viewportStack">
+          <div id="viewport" class="viewport"></div>
+          <div id="runtimeMap" class="runtimeMap" aria-label="Runtime DLL map"></div>
+          <div class="stageInstrument" aria-hidden="true">
+            <div class="stageReticle"></div>
+            <div class="stageAxis stageAxisX"></div>
+            <div class="stageAxis stageAxisY"></div>
+            <div class="stageSweep"></div>
+          </div>
+          <div class="stageHud" aria-hidden="true">
+            <div class="stageHudRow top">
+              <div class="stagePill" id="stageModeBadge">Runtime Map</div>
+              <div class="stagePill" id="stagePs2Badge">PS2 missing</div>
+              <div class="stagePill" id="stageHdBadge">HD missing</div>
+              <div class="stagePill" id="stageOverlayBadge">Overlay missing</div>
+            </div>
+            <div class="stageHudRow bottom">
+              <div class="stageCallout">
+                <strong id="stageHeadline">Awaiting preview mesh</strong>
+                <span id="stageSubline">Runtime reading comes from the DLL/overlay/Phyre evidence. This pane is only a surface preview fallback.</span>
+              </div>
+              <div class="stageLayerList" id="stageLayerList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="stageNote" id="stageNote">Runtime reader first. Cycle/Stack only inspect copied surfaces; they do not assert engine timing, sequencing, or proved playback.</div>
+        <div id="statusText" class="statusText">Waiting for catalog</div>
+      </section>
+
+      <aside class="details" aria-label="Magic details">
+        <div class="detailTabs" role="tablist" aria-label="Details">
+          <button type="button" class="detailTab" data-tab="overview">Overview</button>
+          <button type="button" class="detailTab" data-tab="package">Package</button>
+          <button type="button" class="detailTab" data-tab="textures">Textures</button>
+          <button type="button" class="detailTab active" data-tab="runtime">Runtime</button>
+          <button type="button" class="detailTab" data-tab="crosswalk">Crosswalk</button>
+        </div>
+
+        <section class="tabPanel" id="panel-overview">
+          <h2>Decision</h2>
+          <dl>
+            <div><dt>Band</dt><dd id="decisionBand">-</dd></div>
+            <div><dt>Tags</dt><dd id="laneTags">-</dd></div>
+            <div><dt>PS2 package</dt><dd id="ps2State">-</dd></div>
+            <div><dt>PS3 magic</dt><dd id="ps3State">-</dd></div>
+            <div><dt>Runtime DLL</dt><dd id="runtimeDllState">-</dd></div>
+            <div><dt>Overlay</dt><dd id="overlayState">-</dd></div>
+          </dl>
+
+          <h2>Sources</h2>
+          <div class="pathBox" id="sourcePaths"></div>
+
+          <h2>Global Runtime Evidence</h2>
+          <div class="graphSummary" id="runtimeSummary"></div>
+        </section>
+
+        <section class="tabPanel" id="panel-package">
+          <h2>Package Graph</h2>
+          <div id="packagePanel" class="structurePanel"></div>
+        </section>
+
+        <section class="tabPanel" id="panel-textures">
+          <h2>Texture Stack</h2>
+          <div id="textureSummary" class="graphSummary"></div>
+          <div id="textureThumbs" class="thumbGrid"></div>
+          <div class="textureInspectorShell">
+            <div class="textureInspectorToolbar">
+              <label class="inspectorField">
+                <span>Source</span>
+                <select id="textureSourceSelect"></select>
+              </label>
+              <label class="inspectorField">
+                <span>Mip</span>
+                <select id="textureMipSelect"></select>
+              </label>
+              <label class="inspectorField rangeField">
+                <span>Alpha Cut</span>
+                <input id="textureAlphaThreshold" type="range" min="1" max="255" value="24" />
+                <strong id="textureAlphaThresholdValue">24</strong>
+              </label>
+              <label class="inspectorToggle">
+                <input id="textureShowBoxes" type="checkbox" checked />
+                <span>Show boxes</span>
+              </label>
+            </div>
+            <div class="textureChannelRow" id="textureChannelRow">
+              <button type="button" class="channelButton active" data-channel="rgba" aria-pressed="true">RGBA</button>
+              <button type="button" class="channelButton" data-channel="rgb" aria-pressed="false">RGB</button>
+              <button type="button" class="channelButton" data-channel="a" aria-pressed="false">A</button>
+              <button type="button" class="channelButton" data-channel="r" aria-pressed="false">R</button>
+              <button type="button" class="channelButton" data-channel="g" aria-pressed="false">G</button>
+              <button type="button" class="channelButton" data-channel="b" aria-pressed="false">B</button>
+            </div>
+            <div class="textureInspectorStage">
+              <div class="textureCanvasWrap">
+                <canvas id="textureInspectorCanvas"></canvas>
+              </div>
+              <div id="textureInspectorFacts" class="textureInspectorFacts"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="tabPanel active" id="panel-runtime">
+          <h2>Runtime Reader / EXE Surface</h2>
+          <div id="runtimePanel" class="structurePanel"></div>
+        </section>
+
+        <section class="tabPanel" id="panel-crosswalk">
+          <h2>Crosswalk</h2>
+          <div id="crosswalkPanel" class="structurePanel"></div>
+        </section>
+      </aside>
+    </main>
+
+    <script>
+      (function () {
+        function showBootError(message) {
+          var text = "Boot error: " + message;
+          var status = document.getElementById("statusText");
+          var summary = document.getElementById("catalogSummary");
+          if (status) status.textContent = text;
+          if (summary) summary.textContent = text;
+        }
+
+        window.addEventListener("error", function (event) {
+          var location = event.filename ? " @ " + event.filename + ":" + event.lineno + ":" + event.colno : "";
+          showBootError((event.message || "unknown script error") + location);
+        });
+        window.addEventListener("unhandledrejection", function (event) {
+          showBootError((event.reason && event.reason.message) || String(event.reason || "unknown promise rejection"));
+        });
+      })();
+    </script>
+    <script type="module" src="./app.js?v=20260613-runtime-simulation-v1"></script>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:converters="clr-namespace:FFXProjectEditor.Converters"
+        xmlns:controls="using:FFXProjectEditor">
+  
+  <Design.PreviewWith>
+    <StackPanel Width="600" Spacing="10">      
+        <StackPanel Background="{DynamicResource SystemRegionBrush}">
+          <controls:GameIndex_Template />
+        </StackPanel>
+    </StackPanel>
+  </Design.PreviewWith>
+ 
+  <ControlTheme x:Key="{x:Type controls:GameIndex_Template}" TargetType="controls:GameIndex_Template">
+    <Setter Property="Template">
+		<ControlTemplate>
+
+			<Border HorizontalAlignment="Stretch" MinWidth="260" Margin="4" Padding="8" BorderThickness="1" BorderBrush="#22FFFFFF" Background="#08FFFFFF" CornerRadius="6">
+				<Border.Styles>
+					<Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement, TextBox:focus /template/ Border#PART_BorderElement">
+						<Setter Property="Background" Value="Transparent" />
+					</Style>
+					<Style Selector="ComboBox:pointerover /template/ Border#Background, ComboBox:pointerover /template/ Border#PART_BorderElement, ComboBox:focus /template/ Border#Background, ComboBox:focus /template/ Border#PART_BorderElement">
+						<Setter Property="Background" Value="Transparent" />
+					</Style>
+				</Border.Styles>
+				<Border.Resources>
+					<converters:GameCategory_Converter x:Key="GameCategoryConverter"/>
+				</Border.Resources>
+				<StackPanel Spacing="4">
+					<TextBlock Text="{TemplateBinding GameIndex_Label}" Foreground="#CCFFFFFF" FontSize="12" FontWeight="SemiBold" IsVisible="{TemplateBinding IsLabelVisible}" Margin="2,0,0,4"/>
+					
+					<DockPanel>
+						<TextBox DockPanel.Dock="Left" x:Name="PART_IndexTextBox" Width="50" TextAlignment="Center" Text="{Binding GameIndex_Object.Index, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Background="#11FFFFFF" BorderThickness="0" CornerRadius="4,0,0,4"/>
+						<ComboBox DockPanel.Dock="Right" x:Name="PART_CategoryComboBox" HorizontalAlignment="Stretch" ItemsSource="{TemplateBinding CategOptions}" SelectedItem="{Binding GameIndex_Object.Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GameCategoryConverter}, Mode=TwoWay}" BorderThickness="0" CornerRadius="0,4,4,0" Background="#0CFFFFFF"/>
+					</DockPanel>
+
+					<TextBox x:Name="PART_FilterTextBox" Watermark="Search..." Text="{Binding GameIndex_Object.OptionFilterText, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" Background="Transparent" BorderThickness="0,0,0,1" BorderBrush="#22FFFFFF" CornerRadius="0" Margin="0,4,0,4" FontSize="12" Padding="4"/>
+					
+					<ComboBox x:Name="PART_OptionComboBox" HorizontalAlignment="Stretch" ItemsSource="{Binding GameIndex_Object.FilteredOptions, RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding GameIndex_Object.SelectedOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" BorderThickness="0" Background="#11FFFFFF" CornerRadius="4">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding Display}" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+				</StackPanel>
+			</Border>
+
+		</ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>

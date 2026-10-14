@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="180"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             x:Class="FFXProjectEditor.Controls.EmptyState">
+	<Border Background="#0A1118" BorderBrush="#264052" BorderThickness="1" CornerRadius="8" Padding="24">
+		<StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+			<TextBlock Name="IconText" Text="🔍" FontSize="28" HorizontalAlignment="Center" />
+			<TextBlock Name="TitleText" Text="{x:Static res:Strings.EmptyState_NoItems}" Foreground="#F1F5F9" FontWeight="Bold" FontSize="14" HorizontalAlignment="Center" />
+			<TextBlock Name="DescriptionText" Text="{x:Static res:Strings.EmptyState_TryAdjustFilters}" Foreground="#8BA3B5" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center" TextAlignment="Center" MaxWidth="320" />
+			<Button Name="ActionButton" Content="{x:Static res:Strings.EmptyState_ClearFilters}" Background="#15212C" Foreground="#F1F5F9" BorderBrush="#264052" BorderThickness="1" CornerRadius="4" Padding="12,6" FontSize="11" HorizontalAlignment="Center" Margin="0,8,0,0" IsVisible="False" />
+		</StackPanel>
+	</Border>
+</UserControl>

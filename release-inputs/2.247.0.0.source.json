@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "developmentSourceCommit": "58b26c0d70a4aa767eeb5180dde623b2067be26a",
+  "sourceAsset": {
+    "name": "Spira-Reforge-Studio-v2.247.0.0-source.zip",
+    "bytes": 10151461,
+    "sha256": "ac0f5fddfba643aef4a260dc9b780ba2573cedcfffa40f79d0ac79bc1dcb778f",
+    "files": 2150
+  },
+  "privateHistoryIncluded": false,
+  "sourceBinariesExcluded": true,
+  "nativeFixturesExcluded": true,
+  "sourceGitTextEolNormalizationDocumented": true,
+  "independentReleaseReview": "ACCEPT_PUBLIC_OFFICIAL_RELEASE_2.247.0.0",
+  "limitsPreserved": [
+    "Windows10 not run",
+    "Existing Windows11 VM, not a clean OS",
+    "No native battle/model rendering or gameRT2 claim",
+    "Four optional private Hook corpus cases not validated",
+    "Canonical offline consumer proof is legacy revision dda5cb45"
+  ]
+}

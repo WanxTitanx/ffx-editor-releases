@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1280"
+             d:DesignHeight="720"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.CelestialWeaponEditor_Control">
+
+    <UserControl.Styles>
+        <Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+            <Setter Property="IsMasterExpanded" Value="False" />
+        </Style>
+    </UserControl.Styles>
+
+    <common:ModuleMasterDetail_Shell>
+        <common:ModuleMasterDetail_Shell.MasterHeader>
+            <StackPanel Spacing="8">
+                <Grid ColumnDefinitions="*,Auto">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_celestial_weapons_0753e6ad}" />
+                        <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_seven_ultimate_arms_82665bf4}" />
+                    </StackPanel>
+                    <Button Grid.Column="1"
+                            Classes="secondaryAction"
+                            FontSize="11"
+                            Padding="8,4"
+                            Click="Button_Refresh">⟳ Refresh</Button>
+                </Grid>
+                <TextBlock Classes="muted" FontSize="10" Text="{x:Static res:Strings.U_canonical_save_identities_crests_and_sigils_8a175fc9}" TextWrapping="Wrap" />
+                <TextBlock Classes="muted" FontSize="10" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+            </StackPanel>
+        </common:ModuleMasterDetail_Shell.MasterHeader>
+
+        <common:ModuleMasterDetail_Shell.MasterList>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <ListBox ItemsSource="{Binding CelestialWeapons}"
+                         SelectedItem="{Binding SelectedWeapon, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Margin="0,0,0,6" Padding="8" Classes="cardSoft">
+                                <Grid ColumnDefinitions="32,*,Auto" RowDefinitions="Auto,Auto">
+                                    <Border Width="28" Height="28" CornerRadius="14" VerticalAlignment="Center" Background="{DynamicResource AccentBrush}">
+                                        <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="Bold" FontSize="11" Text="{Binding CharacterBadge}" />
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="1">
+                                        <TextBlock FontWeight="SemiBold" FontSize="12" Text="{Binding Weapon}" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Classes="muted" FontSize="10" Text="{Binding Character}" />
+                                    </StackPanel>
+                                    <TextBlock Grid.Column="2" Classes="sectionLabel" FontSize="9" VerticalAlignment="Center" Text="{Binding SaveIdentity}" />
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Classes="muted" FontSize="9" MaxLines="1" Text="{Binding AcquisitionSummary}" TextTrimming="CharacterEllipsis" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </ScrollViewer>
+        </common:ModuleMasterDetail_Shell.MasterList>
+
+        <common:ModuleMasterDetail_Shell.Detail>
+            <ScrollViewer Margin="0" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel Spacing="12" Margin="16">
+                    <Border Padding="20" Classes="card heroGradient">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                            <StackPanel Spacing="4">
+                                <TextBlock Classes="sectionLabel" Text="{Binding SelectedWeapon.Character}" />
+                                <TextBlock FontSize="28" FontWeight="Bold" Text="{Binding SelectedWeapon.Weapon}" />
+                                <TextBlock Classes="muted" Text="{Binding SelectedWeapon.Theme, StringFormat='Celestial affinity · {0}'}" />
+                            </StackPanel>
+                            <Border Grid.Column="1" Padding="10,6" CornerRadius="8" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" VerticalAlignment="Top">
+                                <StackPanel Spacing="2">
+                                    <TextBlock Classes="sectionLabel" FontSize="9" Text="{x:Static res:Strings.U_save_identity_596fd8b4}" />
+                                    <TextBlock FontFamily="Cascadia Mono,Consolas,Monospace" FontWeight="SemiBold" Text="{Binding SelectedWeapon.SaveIdentity}" />
+                                </StackPanel>
+                            </Border>
+                            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,0" Classes="muted" Text="{Binding SelectedWeapon.SaveIdentityDetail}" TextWrapping="Wrap" />
+                            <TextBlock Grid.Row="2" Grid.ColumnSpan="2" Margin="0,8,0,0" Foreground="{DynamicResource AccentBrush}" FontSize="11" Text="{x:Static res:Strings.U_the_actual_stats_auto_abilities_and_equipped_ins_9f1d2384}" TextWrapping="Wrap" />
+                        </Grid>
+                    </Border>
+
+                    <Grid ColumnDefinitions="*,12,*">
+                        <Border Grid.Column="0" Padding="16" Classes="card">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_unlock_path_7be65640}" />
+                                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,8,Auto">
+                                    <TextBlock Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.U_crest_0a1cebec}" />
+                                    <TextBlock Grid.Column="1" Margin="12,0,0,0" FontWeight="SemiBold" Text="{Binding SelectedWeapon.Crest}" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Row="2" Classes="muted" FontSize="11" VerticalAlignment="Center" Text="{x:Static res:Strings.U_sigil_82843874}" />
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Margin="12,0,0,0" FontWeight="SemiBold" Text="{Binding SelectedWeapon.Sigil}" TextWrapping="Wrap" />
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <Border Grid.Column="2" Padding="16" Classes="card">
+                            <StackPanel Spacing="8">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_editor_boundary_dc69ddba}" />
+                                <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap">
+                                    This panel identifies the seven canonical weapon IDs. It intentionally does not overwrite weapon.bin templates: that catalog is shared by 153 gear templates and is not the authoritative per-save celestial loadout.
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                    <Border Padding="16" Classes="cardSoft">
+                        <StackPanel Spacing="6">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_what_this_means_18a9e86f}" />
+                            <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap">
+                                Select a save, open Equipment in Save Editor, then choose this weapon identity for its owner. Edit that save instance there; use Gear Templates only when intentionally changing a shared catalog template.
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </common:ModuleMasterDetail_Shell.Detail>
+    </common:ModuleMasterDetail_Shell>
+</UserControl>

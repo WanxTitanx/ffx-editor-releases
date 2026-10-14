@@ -1,0 +1,48 @@
+# Audio assets are local-only (gitignored) — LFS filter removed 2026-08-03.
+# They are no longer tracked/uploaded. See .gitignore: /FFXProjectEditor/Assets/Audio/
+
+# Release prerequisite: the offline WebView2 bootstrap is the only LFS payload.
+ExternalLibs/WindowsPrerequisites/WebView2/MicrosoftEdgeWebView2RuntimeInstallerX64.exe filter=lfs diff=lfs merge=lfs -text
+
+# Agent Skill mirrors are compared byte-for-byte on Linux and Windows.
+.agents/skills/**/SKILL.md text eol=lf
+.claude-plugin/ffx-skills/skills/**/SKILL.md text eol=lf
+.opencode/skills/**/SKILL.md text eol=lf
+.verboo/skills/*.md text eol=lf
+.agents/skills/**/implementer-prompt.md text eol=lf
+.agents/skills/**/task-reviewer-prompt.md text eol=lf
+.agents/skills/**/code-reviewer.md text eol=lf
+.opencode/skills/**/implementer-prompt.md text eol=lf
+.opencode/skills/**/task-reviewer-prompt.md text eol=lf
+.opencode/skills/**/code-reviewer.md text eol=lf
+
+# Historical snapshots retain their original bytes, including mixed/CRLF endings.
+docs/ai/history/SESSION_HANDOFF_BEFORE_AGENT_POLICY_2026-09-19.md -text
+docs/ai/history/SHARED_CONTEXT_BEFORE_AGENT_POLICY_2026-09-19.md -text
+docs/governance/history/VERSIONING_BEFORE_AGENT_POLICY_2026-09-19.md -text
+# Release payloads are hash-pinned byte-for-byte. Disable text normalization on
+# only the approved third-party/runtime closure so the Git blob matches the
+# reviewed source bytes on Windows and in independent clones.
+ExternalLibs/FFXED/** -text -whitespace
+ExternalLibs/NoclipViewer/LICENSE -text -whitespace
+ExternalLibs/NoclipViewer/PROVENANCE.md -text -whitespace
+ExternalLibs/NoclipViewer/dist-ffxstudio/** -text -whitespace
+ExternalLibs/Tools/PhyreMapExportLab/win-x64/** -text -whitespace
+ExternalLibs/WindowsPrerequisites/VC2013/vcredist_x64.exe -text -whitespace
+RuntimeTools/FFXMagicViewerWeb/app.js -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXMagicViewerWeb/vendor/three/LICENSE -text -whitespace
+RuntimeTools/FFXMapViewerWeb/app.js -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXMapViewerWeb/aurora-overlay.js -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXMapViewerWeb/field-explorer-overlay.js -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXMapViewerWeb/index.html -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXMapViewerWeb/vendor/spector/LICENSE.txt -text -whitespace
+RuntimeTools/FFXMapViewerWeb/vendor/spector/spector.bundle.js -text -whitespace
+RuntimeTools/FFXModelViewerWeb/index.html -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXModelViewerWeb/model-preview.html -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXModelViewerWeb/modelviewer-catalog.json -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+RuntimeTools/FFXModelViewerWeb/vendor/three/jsm/controls/OrbitControls.js -text -whitespace
+RuntimeTools/FFXModelViewerWeb/vendor/three/jsm/loaders/GLTFLoader.js -text -whitespace
+RuntimeTools/FFXModelViewerWeb/vendor/three/LICENSE -text -whitespace
+RuntimeTools/FFXModelViewerWeb/vendor/three/three.module.js -text -whitespace
+
+ExternalLibs/WindowsPrerequisites/WebView2/MicrosoftEdgeWebView2RuntimeInstallerX64.exe filter=lfs diff=lfs merge=lfs -text -whitespace

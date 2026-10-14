@@ -1,0 +1,150 @@
+<Window RequestedThemeVariant="Dark" xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+        d:DesignWidth="900"
+        d:DesignHeight="720"
+        x:Class="FFXProjectEditor.MonsterAiAdvancedFluxThreshold_Window"
+        Title="Editor raw do Flux"
+        Width="900"
+        Height="720"
+        MinWidth="760"
+        MinHeight="560">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Modules/MonsterAiEditor/MonsterAiColors.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+
+	<Grid Margin="14" RowDefinitions="Auto,*,Auto">
+		<Border Grid.Row="0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Spacing="4">
+					<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_ai_flux_raw_threshold_f5a2fb18}" />
+					<TextBlock Classes="cardTitle" Text="{Binding VariableName}" />
+					<TextBlock Classes="muted" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+					<TextBlock Classes="muted" Text="{Binding SiteSummary}" TextWrapping="Wrap" />
+				</StackPanel>
+				<Button Grid.Column="1"
+				        MinWidth="42"
+				        Classes="secondaryAction"
+				        Click="Button_Close"
+				        ToolTip.Tip="{x:Static res:Strings.CommonClose}">X</Button>
+			</Grid>
+		</Border>
+
+		<Border Grid.Row="1" Margin="0,14,0,0" Padding="{DynamicResource SpacingLg}" Classes="card">
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="12">
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentExperimentalFillBrush}"
+					        BorderBrush="{DynamicResource AccentExperimentalBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_leitura_estrutural_1dca8bbb}"
+							           Foreground="{DynamicResource AccentExperimentalBorderBrush}" />
+							<TextBlock FontWeight="SemiBold"
+							           Text="{Binding CurrentThresholdSummary}"
+							           TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding WriterSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentShellFillBrush}"
+					        BorderBrush="{DynamicResource AccentShellBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="6">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.CommonRawFormulaIr}"
+							           Foreground="{DynamicResource AccentExperimentalBorderBrush}" />
+							<TextBlock FontFamily="Cascadia Mono,Consolas,Monospace"
+							           Text="{Binding RawFormulaSummary}"
+							           TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding ComparisonSummary}" TextWrapping="Wrap" />
+							<TextBlock Classes="muted" Text="{Binding FollowUpSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentGoldFillBrush}"
+					        BorderBrush="{DynamicResource AccentGoldBorderBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7"
+					        IsVisible="{Binding CanEditRawThreshold}">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_editor_raw_desta_chain_ad30ebd8}"
+							           Foreground="{DynamicResource AccentGoldForegroundBrush}" />
+							<TextBlock Classes="muted"
+							           Text="{x:Static res:Strings.U_este_popup_reescreve_apenas_os_immediates_provad_4751331d}"
+							           TextWrapping="Wrap" />
+							<Grid ColumnDefinitions="Auto,92,Auto,92,*">
+								<TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.U_maxhp_183d383b}" />
+								<TextBox Grid.Column="1"
+								         Margin="8,0,0,0"
+								         Text="{Binding DenominatorText, Mode=TwoWay}"
+								         FontFamily="Cascadia Mono,Consolas,Monospace"
+								         Watermark="2" />
+								<TextBlock Grid.Column="2"
+								           Margin="10,0,0,0"
+								           VerticalAlignment="Center"
+								           Text="x"
+								           IsVisible="{Binding HasNumeratorEditor}" />
+								<TextBox Grid.Column="3"
+								         Margin="8,0,0,0"
+								         Text="{Binding NumeratorText, Mode=TwoWay}"
+								         FontFamily="Cascadia Mono,Consolas,Monospace"
+								         Watermark="1"
+								         IsVisible="{Binding HasNumeratorEditor}" />
+								<TextBlock Grid.Column="4"
+								           Classes="muted"
+								           Margin="10,0,0,0"
+								           VerticalAlignment="Center"
+								           Text="{x:Static res:Strings.U_edite_apenas_a_fracao_raw_provada_desta_chain_54aa3b76}"
+								           TextWrapping="Wrap" />
+							</Grid>
+						</StackPanel>
+					</Border>
+
+					<Border Padding="{DynamicResource SpacingMd}"
+					        Background="{DynamicResource AccentShellFillBrush}"
+					        BorderBrush="{DynamicResource AccentRegenForegroundBrush}"
+					        BorderThickness="1"
+					        CornerRadius="7">
+						<StackPanel Spacing="7">
+							<TextBlock Classes="sectionLabel"
+							           Text="{x:Static res:Strings.U_resultado_do_apply_1d74f229}"
+							           Foreground="{DynamicResource AccentRegenForegroundBrush}" />
+							<TextBlock Text="{Binding AdvancedFluxThresholdApplySummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+		<Grid Grid.Row="2" Margin="0,14,0,0" ColumnDefinitions="*,Auto,Auto">
+			<TextBlock Classes="muted"
+			           VerticalAlignment="Center"
+			           Text="{x:Static res:Strings.U_abrir_por_card_deixa_o_flux_com_o_mesmo_contrato_4174a83a}" />
+			<Button Grid.Column="1"
+			        Margin="12,0,8,0"
+			        Classes="secondaryAction accentProtect"
+			        Click="Button_Apply"
+			        IsVisible="{Binding CanEditRawThreshold}"
+			        Content="{x:Static res:Strings.U_aplicar_raw_44a5e579}" />
+			<Button Grid.Column="2"
+			        Classes="secondaryAction"
+			        Click="Button_Close"
+			        Content="{x:Static res:Strings.CommonClose}" />
+		</Grid>
+	</Grid>
+</Window>

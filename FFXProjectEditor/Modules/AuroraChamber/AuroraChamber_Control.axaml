@@ -1,0 +1,411 @@
+<UserControl xmlns="https://github.com/avaloniaui" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" mc:Ignorable="d" d:DesignWidth="1480" d:DesignHeight="850" x:Class="FFXProjectEditor.Modules.AuroraChamber.AuroraChamber_Control" xmlns:res="clr-namespace:FFXProjectEditor.Resources">
+    <UserControl.Styles>
+        <Style Selector="Border.auroraHero">
+            <Setter Property="Background">
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Color="{DynamicResource HeroPurpleAColor}" Offset="0" />
+                    <GradientStop Color="{DynamicResource HeroPurpleBColor}" Offset="0.58" />
+                    <GradientStop Color="{DynamicResource HeroPurpleCColor}" Offset="1" />
+                </LinearGradientBrush>
+            </Setter>
+        </Style>
+        <Style Selector="ListBox.auroraNavigation ListBoxItem">
+            <Setter Property="Padding" Value="8,4" />
+            <Setter Property="MinHeight" Value="30" />
+        </Style>
+        <Style Selector="ListBox.auroraNavigation">
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="ListBox.auroraNavigation:focus-within">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+        </Style>
+        <Style Selector="ListBox.auroraNavigation.auroraEntries ListBoxItem">
+            <Setter Property="Padding" Value="0,1" />
+        </Style>
+        <Style Selector="ListBox.auroraEntries ListBoxItem:selected Border.auroraEntry">
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}" />
+        </Style>
+        <Style Selector="ListBox.auroraNavigation.auroraRows ListBoxItem">
+            <Setter Property="Padding" Value="0,2" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Border.auroraGroup">
+            <Setter Property="Padding" Value="16" />
+            <Setter Property="Margin" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="MaxWidth" Value="840" />
+        </Style>
+    </UserControl.Styles>
+    <Grid ColumnDefinitions="195,205,*" Margin="{DynamicResource SpacingLg}">
+        <Border Grid.Column="0" Classes="card" Margin="0,0,10,0" Padding="12">
+            <Grid RowDefinitions="Auto,Auto,*">
+                <TextBlock Classes="cardTitle" Margin="0,0,0,10" Text="{x:Static res:Strings.U_Au_WorkspaceScenes}" />
+                <TextBox x:Name="LocationFilter" Grid.Row="1" Margin="0,0,0,10" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceFilter}" IsEnabled="{Binding !IsRendering}" Watermark="{x:Static res:Strings.U_Au_WorkspaceFilter}" Text="{Binding FilterText, Mode=TwoWay}" />
+                <ListBox x:Name="SceneList" Grid.Row="2" Classes="auroraNavigation auroraEntries" IsEnabled="{Binding !IsRendering}" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceScenes}" ItemsSource="{Binding Scenes}" SelectedItem="{Binding SelectedScene, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Classes="cardSoft auroraEntry" Padding="8,5">
+                                <Grid ColumnDefinitions="16,*" Margin="0" ToolTip.Tip="{Binding DetailSummary}">
+                                    <Path Width="11" Height="11" Data="{StaticResource IconCheck}" Stroke="{DynamicResource AccentBrush}" StrokeThickness="2" Stretch="Uniform" IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+                                    <TextBlock Grid.Column="1" FontWeight="SemiBold" Text="{Binding DisplayName}" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+        <Border Grid.Column="1" Classes="card" Margin="0,0,10,0" Padding="12">
+            <Grid RowDefinitions="Auto,Auto,*">
+                <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,8">
+                    <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_Au_WorkspaceEncounters}" />
+                    <TextBlock Grid.Column="1" Classes="muted" VerticalAlignment="Center" Text="{Binding Battles.Count}" />
+                </Grid>
+                <TextBlock Grid.Row="1" Classes="muted" Margin="0,0,0,8" Text="{Binding SceneHeader}" TextWrapping="Wrap" />
+                <TextBlock Grid.Row="2" Classes="muted" Margin="0,8" Text="{Binding BattleSummary}" TextWrapping="Wrap" IsVisible="{Binding !HasEncounters}" />
+                <ListBox x:Name="EncounterPicker" Grid.Row="2" Classes="auroraNavigation auroraEntries" IsEnabled="{Binding CanSelectEncounter}" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceEncounters}" ItemsSource="{Binding Battles}" SelectedItem="{Binding SelectedBattle, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Classes="cardSoft auroraEntry" Padding="8,5">
+                                <Grid ColumnDefinitions="16,*" Margin="0">
+                                    <Path Width="11" Height="11" Data="{StaticResource IconCheck}" Stroke="{DynamicResource AccentBrush}" StrokeThickness="2" Stretch="Uniform" IsVisible="{Binding $parent[ListBoxItem].IsSelected}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding}" FontFamily="Consolas,Menlo,monospace" />
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+        <Grid Grid.Column="2" RowDefinitions="Auto,*">
+            <Border Classes="heroPurple auroraHero" Padding="16" Margin="0,0,0,12">
+                <StackPanel Spacing="8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <StackPanel Spacing="4" Margin="0,0,12,0">
+                            <TextBlock Classes="h1" Text="{Binding SelectedBattle, TargetNullValue={x:Static res:Strings.U_Au_SelectBattle}}" />
+                            <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{Binding PositionDetailsSummary}" />
+                        </StackPanel>
+                        <WrapPanel Grid.Column="1" VerticalAlignment="Center">
+                            <Button x:Name="OpenBattlePreview" Classes="primaryAction" Margin="0,0,8,4" Click="Button_OpenBattle3D" IsEnabled="{Binding CanOpenBattlePreview}" Content="{x:Static res:Strings.U_Au_WorkspaceOpenBattle}" />
+                            <Button Classes="secondaryAction" Margin="0,0,0,4" Click="Button_ReloadBattle" IsEnabled="{Binding CanOpenBattlePreview}" Content="{x:Static res:Strings.U_Au_WorkspaceReload}" />
+                        </WrapPanel>
+                    </Grid>
+                    <TextBlock Classes="muted" Foreground="{DynamicResource TextPrimaryBrush}" Text="{x:Static res:Strings.U_Au_WorkspacePreviewHint}" TextWrapping="Wrap" />
+                    <TextBlock IsVisible="{Binding HasPreviewStatus}" Text="{Binding PreviewStatus}" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Row="1" Classes="card" Padding="10">
+                <TabControl x:Name="WorkspaceTools" SelectedIndex="0">
+                    <TabItem x:Name="PositionDetails" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspacePositionsTab}">
+                        <TabItem.Header>
+                            <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspacePositionsTab}" />
+                        </TabItem.Header>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                            <Border Classes="cardSoft auroraGroup" MaxWidth="720">
+                                <StackPanel Spacing="10" Grid.IsSharedSizeScope="True">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <TextBlock Classes="h2" Text="{x:Static res:Strings.U_Au_WorkspacePositionTitle}" />
+                                        <CheckBox Grid.Column="1" Content="{x:Static res:Strings.U_Au_WorkspaceAllAnchors}" IsChecked="{Binding ShowTechnicalAnchors, Mode=TwoWay}" />
+                                    </Grid>
+                                    <WrapPanel>
+                                        <Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_AddMonster" IsEnabled="{Binding CanDuplicateMonster}" Content="{x:Static res:Strings.U_Au_WorkspaceDuplicate}" />
+                                        <Button Margin="0,0,8,4" Classes="dangerAction" Foreground="{DynamicResource TextPrimaryBrush}" Click="Button_RemoveMonster" IsEnabled="{Binding CanRemoveMonster}" Content="{x:Static res:Strings.U_Au_WorkspaceRemoveLast}" />
+                                        <Button Margin="0,0,0,4" Classes="secondaryAction" Click="Button_ExportAnchors" IsEnabled="{Binding HasSelectedBattle}" Content="{x:Static res:Strings.U_export_anchors_fb527012}" />
+                                    </WrapPanel>
+                                    <TextBlock IsVisible="{Binding HasAuthorStatus}" Text="{Binding AuthorStatus}" TextWrapping="Wrap" />
+                                    <Grid HorizontalAlignment="Left" Margin="12,0,12,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" SharedSizeGroup="ActorName" />
+                                            <ColumnDefinition Width="34" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                            <ColumnDefinition Width="80" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_Noclip_Actor}" />
+                                        <TextBlock Grid.Column="1" Classes="muted" Text="#" />
+                                        <TextBlock Grid.Column="2" Classes="muted" Text="X" HorizontalAlignment="Right" />
+                                        <TextBlock Grid.Column="3" Classes="muted" Text="Y" HorizontalAlignment="Right" />
+                                        <TextBlock Grid.Column="4" Classes="muted" Text="Z" HorizontalAlignment="Right" />
+                                    </Grid>
+                                    <ListBox x:Name="FormationPositions" Classes="auroraNavigation auroraRows" HorizontalAlignment="Left" ItemsSource="{Binding VisibleAnchors}" MaxHeight="460" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspacePositionTitle}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <Border Classes="card" Padding="8,6">
+                                                    <Grid Margin="0">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" SharedSizeGroup="ActorName" />
+                                                            <ColumnDefinition Width="34" />
+                                                            <ColumnDefinition Width="80" />
+                                                            <ColumnDefinition Width="80" />
+                                                            <ColumnDefinition Width="80" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <Grid ColumnDefinitions="16,*" MaxWidth="240" Margin="0,0,16,0">
+                                                            <Ellipse Width="8" Height="8" Fill="{DynamicResource DangerBrush}" IsVisible="{Binding IsMonsterLive}" />
+                                                            <Ellipse Width="8" Height="8" Fill="{DynamicResource AccentBrush}" IsVisible="{Binding !IsMonsterLive}" />
+                                                            <TextBlock Grid.Column="1" Text="{Binding RoleLabel}" TextWrapping="Wrap" />
+                                                        </Grid>
+                                                        <TextBlock Grid.Column="1" Classes="muted" Text="{Binding Anchor.Index}" />
+                                                        <TextBlock Grid.Column="2" FontFamily="Consolas,Menlo,monospace" HorizontalAlignment="Right" Text="{Binding Anchor.X, StringFormat='0.00'}" />
+                                                        <TextBlock Grid.Column="3" FontFamily="Consolas,Menlo,monospace" HorizontalAlignment="Right" Text="{Binding Anchor.Y, StringFormat='0.00'}" />
+                                                        <TextBlock Grid.Column="4" FontFamily="Consolas,Menlo,monospace" HorizontalAlignment="Right" Text="{Binding Anchor.Z, StringFormat='0.00'}" />
+                                                    </Grid>
+                                                </Border>
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                    <TextBlock Classes="muted" Text="{Binding CoordExportStatus}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="CameraDetails" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceCameraTab}">
+                        <TabItem.Header>
+                            <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceCameraTab}" />
+                        </TabItem.Header>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                            <Border Classes="cardSoft auroraGroup">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_Au_WorkspaceCameraHint}" TextWrapping="Wrap" />
+                                    <TabControl x:Name="CameraSubtabs">
+                                        <TabItem AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceCameraCuts}">
+                                            <TabItem.Header>
+                                                <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceCameraCuts}" />
+                                            </TabItem.Header>
+                                            <StackPanel Spacing="10" Margin="0,10,0,0">
+                                                <TextBlock Classes="muted" Text="{Binding CameraSummary}" TextWrapping="Wrap" />
+                                                <ListBox MaxHeight="280" ItemsSource="{Binding CameraShots}" Classes="auroraNavigation auroraRows">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Classes="card" Padding="10,8">
+                                                                <StackPanel Spacing="8" Margin="0">
+                                                                    <TextBlock FontFamily="Consolas,Menlo,monospace" Text="{Binding Header}" />
+                                                                    <Grid ColumnDefinitions="*,*">
+                                                                        <StackPanel Spacing="4" Margin="0,0,12,0">
+                                                                            <TextBlock Classes="muted" Text="{x:Static res:Strings.U_shot_bfe6177c}" />
+                                                                            <TextBox AutomationProperties.Name="{x:Static res:Strings.U_shot_bfe6177c}" AutomationProperties.HelpText="{Binding Header}" Text="{Binding ShotText, Mode=TwoWay}" IsEnabled="{Binding Editable}" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Grid.Column="1" Spacing="4">
+                                                                            <TextBlock Classes="muted" Text="{x:Static res:Strings.CommonTarget}" />
+                                                                            <TextBox AutomationProperties.Name="{x:Static res:Strings.CommonTarget}" AutomationProperties.HelpText="{Binding Header}" Text="{Binding TargetText, Mode=TwoWay}" IsEnabled="{Binding Editable}" />
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                                <Button HorizontalAlignment="Left" Classes="primaryAction" Click="Button_SaveCamera" IsEnabled="{Binding CanSaveCameraShots}" Content="{x:Static res:Strings.U_save_camera_717dbfa4}" />
+                                                <TextBlock Text="{Binding CameraStatus}" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </TabItem>
+                                        <TabItem AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceCameraParameters}">
+                                            <TabItem.Header>
+                                                <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceCameraParameters}" />
+                                            </TabItem.Header>
+                                            <StackPanel Spacing="10" Margin="0,10,0,0">
+                                                <TextBlock Classes="muted" Text="{Binding CameraParamsSummary}" TextWrapping="Wrap" />
+                                                <Grid ColumnDefinitions="*,*">
+                                                    <StackPanel Spacing="4" Margin="0,0,12,0">
+                                                        <TextBlock Classes="muted" Text="{x:Static res:Strings.U_Au_WorkspaceCameraRole}" />
+                                                        <ComboBox AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceCameraRole}" PlaceholderText="{x:Static res:Strings.U_Au_All}" HorizontalAlignment="Stretch" ItemsSource="{Binding CameraRoleFilters}" SelectedItem="{Binding CameraRoleFilter, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="1" Spacing="4">
+                                                        <TextBlock Classes="muted" Text="{x:Static res:Strings.U_Au_WorkspaceCameraSearch}" />
+                                                        <TextBox AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceCameraSearch}" Watermark="{x:Static res:Strings.U_Au_WorkspaceCameraSearch}" Text="{Binding CameraKnobSearch, Mode=TwoWay}" />
+                                                    </StackPanel>
+                                                </Grid>
+                                                <ListBox Classes="auroraNavigation auroraRows" HorizontalAlignment="Left" Grid.IsSharedSizeScope="True" MaxHeight="340" ItemsSource="{Binding CameraKnobs}">
+                                                    <ListBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Classes="card" Padding="10,8">
+                                                                <Grid Margin="0">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="Auto" SharedSizeGroup="CameraParameter" />
+                                                                        <ColumnDefinition Width="130" />
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock MaxWidth="280" Margin="0,0,12,0" FontFamily="Consolas,Menlo,monospace" VerticalAlignment="Center" Text="{Binding Header}" TextWrapping="Wrap" />
+                                                                    <TextBox Grid.Column="1" AutomationProperties.Name="{Binding Header}" Text="{Binding ValueText, Mode=TwoWay}" />
+                                                                </Grid>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ListBox.ItemTemplate>
+                                                </ListBox>
+                                                <Button HorizontalAlignment="Left" Classes="primaryAction" Click="Button_SaveCameraFloats" IsEnabled="{Binding CanSaveCameraParameters}" Content="{x:Static res:Strings.U_save_camera_params_cfac02c7}" />
+                                                <TextBlock Text="{Binding CameraParamsStatus}" TextWrapping="Wrap" />
+                                            </StackPanel>
+                                        </TabItem>
+                                    </TabControl>
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="OpeningTools" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceOpeningTab}">
+                        <TabItem.Header>
+                            <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceOpeningTab}" />
+                        </TabItem.Header>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                            <Border Classes="cardSoft auroraGroup">
+                                <TabControl x:Name="OpeningSubtabs">
+                                    <TabItem x:Name="OpenerDetails" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceOpeningTab}">
+                                        <TabItem.Header>
+                                            <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceOpeningTab}" />
+                                        </TabItem.Header>
+                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                                            <Border Padding="12">
+                                                <StackPanel Spacing="12">
+                                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_Au_OpeningEditHint}" TextWrapping="Wrap" />
+                                                    <WrapPanel>
+                                                        <Button Margin="0,0,8,4" Classes="secondaryAction" Click="Button_PrepareOpening" IsVisible="{Binding !HasOpeningEditorRows}" IsEnabled="{Binding CanCreateOpening}" Content="{x:Static res:Strings.U_Au_OpeningPreset}" />
+                                                        <Button Margin="0,0,0,4" Classes="primaryAction" Click="Button_SaveEncounterEdits" IsEnabled="{Binding CanSaveEncounterEdits}" Content="{x:Static res:Strings.U_Au_SaveEncounterEdits}" />
+                                                    </WrapPanel>
+                                                    <TextBlock Text="{Binding OpeningEditStatus}" IsVisible="{Binding HasOpeningEditStatus}" TextWrapping="Wrap" />
+                                                    <TextBlock Text="{Binding EncounterEditStatus}" IsVisible="{Binding HasEncounterEditStatus}" TextWrapping="Wrap" />
+                                                    <ItemsControl x:Name="OpeningEditor" ItemsSource="{Binding OpeningEditorRows}" Grid.IsSharedSizeScope="True">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Classes="card" Padding="12,8" Margin="0,0,0,6">
+                                                                    <Grid ColumnDefinitions="*,110" HorizontalAlignment="Left">
+                                                                        <StackPanel Spacing="3" Margin="0,0,16,0" MinWidth="270" MaxWidth="330">
+                                                                            <TextBlock FontWeight="SemiBold" Text="{Binding TargetLabel}" TextWrapping="Wrap" />
+                                                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                                                <TextBlock Text="{Binding FieldLabel}" />
+                                                                                <TextBlock Classes="muted" Text="{Binding OperationLabel}" />
+                                                                            </StackPanel>
+                                                                        </StackPanel>
+                                                                        <NumericUpDown Grid.Column="1" VerticalAlignment="Center" FormatString="0" Increment="1" Minimum="{Binding Minimum}" Maximum="{Binding Maximum}" Value="{Binding Value, Mode=TwoWay}" AutomationProperties.Name="{Binding AccessibleLabel}" />
+                                                                    </Grid>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                    <TextBlock Classes="muted" IsVisible="{Binding HasOpeningEditorRows}" Text="{x:Static res:Strings.U_Au_OpeningValueHint}" TextWrapping="Wrap" />
+                                                    <TextBlock Classes="muted" Text="{Binding OpenerFormationMapping}" TextWrapping="Wrap" />
+                                                    <Expander Header="{x:Static res:Strings.U_Au_OpeningDecoded}" HorizontalAlignment="Stretch">
+                                                        <TextBox IsReadOnly="True" AcceptsReturn="True" FontFamily="Consolas,Menlo,monospace" MaxHeight="300" Text="{Binding OpeningScriptText}" AutomationProperties.Name="{x:Static res:Strings.U_Au_OpeningDecoded}" />
+                                                    </Expander>
+                                                </StackPanel>
+                                            </Border>
+                                        </ScrollViewer>
+                                    </TabItem>
+                                    <TabItem x:Name="CompanionDetails" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceCompanionsTab}">
+                                        <TabItem.Header>
+                                            <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceCompanionsTab}" />
+                                        </TabItem.Header>
+                                        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                                            <Border Padding="12">
+                                                <StackPanel Spacing="12">
+                                                    <TextBlock Classes="h2" Text="{x:Static res:Strings.U_Au_CompanionRosterTitle}" />
+                                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_Au_CompanionRosterHint}" TextWrapping="Wrap" />
+                                                    <Button HorizontalAlignment="Left" Classes="primaryAction" Click="Button_SaveEncounterEdits" IsEnabled="{Binding CanSaveEncounterEdits}" Content="{x:Static res:Strings.U_Au_SaveEncounterEdits}" />
+                                                    <TextBlock Text="{Binding EncounterEditStatus}" IsVisible="{Binding HasEncounterEditStatus}" TextWrapping="Wrap" />
+                                                    <ItemsControl ItemsSource="{Binding CompanionEditorRows}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Border Classes="card" Padding="12,8" Margin="0,0,0,6">
+                                                                    <Grid ColumnDefinitions="*,110,Auto" HorizontalAlignment="Left">
+                                                                        <StackPanel Margin="0,0,16,0" Spacing="3" MinWidth="270" MaxWidth="330">
+                                                                            <TextBlock Classes="muted" Text="{Binding SlotLabel}" />
+                                                                            <TextBlock FontWeight="SemiBold" Text="{Binding MonsterName}" TextWrapping="Wrap" />
+                                                                        </StackPanel>
+                                                                        <NumericUpDown Grid.Column="1" VerticalAlignment="Center" FormatString="0" Increment="1" Minimum="0" Maximum="{Binding Maximum}" Value="{Binding MonsterId, Mode=TwoWay}" AutomationProperties.Name="{Binding SlotLabel}" />
+                                                            <Button Grid.Column="2" Margin="10,0,0,0" Classes="secondaryAction" VerticalAlignment="Center" Content="{x:Static res:Strings.U_Au_CompanionEditAi}" Click="Button_EditCompanionAi" AutomationProperties.Name="{Binding AiAccessibleLabel}" IsEnabled="{Binding $parent[UserControl].DataContext.CanOpenCompanionAi}" ToolTip.Tip="{x:Static res:Strings.U_Au_CompanionAiShared}" />
+                                                                    </Grid>
+                                                                </Border>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_Au_CompanionActivationHint}" TextWrapping="Wrap" />
+                                                    <Expander Header="{x:Static res:Strings.U_Au_CompanionActivationDetails}" HorizontalAlignment="Stretch">
+                                                        <StackPanel Spacing="10">
+                                                            <TextBlock Text="{Binding CompanionActivationSummary}" TextWrapping="Wrap" />
+                                                            <TextBlock Classes="muted" Text="{Binding CompanionActivationBattleToken}" TextWrapping="Wrap" />
+                                                            <TextBlock Classes="muted" Text="{Binding CompanionActivationCoverage}" TextWrapping="Wrap" />
+                                                            <ItemsControl ItemsSource="{Binding CompanionActivationRows}">
+                                                                <ItemsControl.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border Classes="card" Padding="12" Margin="0,0,0,8">
+                                                                            <StackPanel Spacing="6">
+                                                                                <TextBlock FontWeight="SemiBold" Text="{Binding SlotLabel}" />
+                                                                                <TextBlock Text="{Binding MonsterLabel}" TextWrapping="Wrap" />
+                                                                                <TextBlock Text="{Binding HostActionLabel}" TextWrapping="Wrap" />
+                                                                                <TextBlock Classes="muted" Text="{Binding HostActionOffsetHex}" />
+                                                                                <TextBlock Text="{Binding HiddenStatusLabel}" TextWrapping="Wrap" />
+                                                                                <TextBlock Classes="muted" Text="{Binding HiddenBattleIdsLabel}" TextWrapping="Wrap" />
+                                                                                <TextBlock Classes="muted" Text="{Binding EvidenceLabel}" TextWrapping="Wrap" />
+                                                                            </StackPanel>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </ItemsControl.ItemTemplate>
+                                                            </ItemsControl>
+                                                            <TextBlock Classes="muted" Text="{Binding CompanionActivationGuardrail}" TextWrapping="Wrap" />
+                                                        </StackPanel>
+                                                    </Expander>
+                                                </StackPanel>
+                                            </Border>
+                                        </ScrollViewer>
+                                    </TabItem>
+                                </TabControl>
+                            </Border>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="HdMapTools" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceHdTab}">
+                        <TabItem.Header>
+                            <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceHdTab}" />
+                        </TabItem.Header>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                            <Border Classes="cardSoft auroraGroup">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="{Binding HdMapAvailability}" TextWrapping="Wrap" />
+                                    <WrapPanel>
+                                        <Button x:Name="OpenHdMapEditor" Margin="0,0,12,8" Classes="primaryAction" Click="Button_Render" IsEnabled="{Binding CanOpenHdMapEditor}" Content="{x:Static res:Strings.U_Au_WorkspaceOpenHd}" />
+                                        <Button Margin="0,0,12,8" Classes="secondaryAction" Click="Button_ReloadScene" IsEnabled="{Binding CanRemountScene}" Content="{x:Static res:Strings.U_re_export_and_open_6d89033e}" />
+                                        <Button Margin="0,0,12,8" Classes="secondaryAction" Click="Button_RemountScene" IsEnabled="{Binding CanRemountScene}" Content="{x:Static res:Strings.U_remount_scene_a1eedb97}" />
+                                        <Button Margin="0,0,12,8" Classes="secondaryAction" Click="Button_OpenSceneFolder" IsEnabled="{Binding CanOpenHdMapEditor}" Content="{x:Static res:Strings.U_export_folder_914f0f5c}" />
+                                    </WrapPanel>
+                                    <Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_SaveDraggedPositions" IsEnabled="{Binding CanOpenHdMapEditor}" Content="{x:Static res:Strings.U_Au_WorkspaceImportHdPositions}" />
+                                    <TextBlock Text="{Binding RenderStatus}" TextWrapping="Wrap" />
+                                    <TextBlock IsVisible="{Binding CanOpenHdMapEditor}" Text="{Binding DragSaveStatus}" TextWrapping="Wrap" />
+                                    <TextBlock Classes="sectionLabel" Margin="0,12,0,0" Text="{x:Static res:Strings.U_Au_WorkspaceCatalogTools}" />
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Classes="muted" Text="{Binding CatalogSummary}" TextWrapping="Wrap" />
+                                        <WrapPanel>
+                                            <Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_Refresh" IsEnabled="{Binding !IsRendering}" Content="{x:Static res:Strings.U_re_scan_b0ba4a7b}" />
+                                            <Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_MountAll" IsEnabled="{Binding CanMountScenes}" Content="{x:Static res:Strings.U_mount_missing_6d7d85c9}" />
+                                            <Button Margin="0,0,8,8" Classes="secondaryAction" Click="Button_RemountAll" IsEnabled="{Binding CanMountScenes}" Content="{x:Static res:Strings.U_remount_all_19334d1d}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem x:Name="DiagnosticsDetails" AutomationProperties.Name="{x:Static res:Strings.U_Au_WorkspaceDiagnosticsTab}">
+                        <TabItem.Header>
+                            <TextBlock Classes="h3" Text="{x:Static res:Strings.U_Au_WorkspaceDiagnosticsTab}" />
+                        </TabItem.Header>
+                        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+                            <Border Classes="cardSoft auroraGroup">
+                                <StackPanel Spacing="12">
+                                    <TextBlock Classes="muted" Text="{Binding HonestyBanner}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding SceneDetail}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Battle3DStatus}" TextWrapping="Wrap" />
+                                    <Button HorizontalAlignment="Left" Classes="secondaryAction" Click="Button_RestoreBattle3D" Content="{x:Static res:Strings.U_restore_realgame_572d0208}" />
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_fronteira_rt2_in_game_nao_promovido_70aa8a7c}" />
+                                    <TextBlock Classes="muted" Text="{Binding Rt2PendingSummary}" TextWrapping="Wrap" />
+                                    <ListBox MaxHeight="220" ItemsSource="{Binding Rt2Checklist}">
+                                        <ListBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Classes="muted" Text="{Binding}" TextWrapping="Wrap" />
+                                            </DataTemplate>
+                                        </ListBox.ItemTemplate>
+                                    </ListBox>
+                                </StackPanel>
+                            </Border>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

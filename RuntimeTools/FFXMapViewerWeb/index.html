@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FFX MapViewer Lab</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <!--
+      three.js is VENDORED locally (three@0.165.0, MIT) under ./vendor/three/ so this
+      tool runs fully offline with no node_modules and no internet at runtime.
+      Re-vendor with: npm install three@0.165.0 && npm run vendor:three
+    -->
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three/three.module.js",
+          "three/addons/": "./vendor/three/jsm/"
+        }
+      }
+    </script>
+    <script type="application/json" id="ffxThreeVendorInfo">
+      {"three":"0.165.0","license":"MIT","source":"npm","vendoredAt":"./vendor/three/"}
+    </script>
+  </head>
+  <body>
+    <main class="appShell">
+      <aside class="sidePanel" aria-label="Map assets">
+        <header class="brand">
+          <h1>FFX MapViewer Lab</h1>
+          <p id="assetSummary">Loading selected map</p>
+        </header>
+
+        <section class="panelBlock">
+          <h2>Maps</h2>
+          <input id="mapSearch" class="mapSearch" type="search" placeholder="Filter maps" autocomplete="off" />
+          <div class="filterRow">
+            <label>
+              <span>Layer</span>
+              <select id="layerFilter" class="mapSelect">
+                <option value="all">All layers</option>
+                <option value="root_3d">root_3d</option>
+                <option value="2d_prerendered">2d_prerendered</option>
+                <option value="unknown">unknown</option>
+              </select>
+            </label>
+            <label>
+              <span>Status</span>
+              <select id="statusFilter" class="mapSelect">
+                <option value="all">All status</option>
+                <option value="success">success</option>
+                <option value="blocked">blocked</option>
+                <option value="texture_not_requested">texture_not_requested</option>
+              </select>
+            </label>
+          </div>
+          <div id="mapList" class="mapList">
+            <button class="mapButton active" type="button">
+              <span>Selected map</span>
+              <strong>loading catalog</strong>
+            </button>
+          </div>
+        </section>
+
+        <section class="panelBlock">
+          <h2>Mode</h2>
+          <div class="segmented">
+            <button id="orbitMode" type="button" aria-pressed="true">Orbit</button>
+            <button id="walkMode" type="button" aria-pressed="false">Walk</button>
+          </div>
+          <button id="lockPointer" type="button" class="wideButton">Enter Walk</button>
+        </section>
+
+        <section class="panelBlock">
+          <h2>Camera</h2>
+          <div class="gridButtons">
+            <button id="fitCamera" type="button">Fit</button>
+            <button id="insideCamera" type="button">Inside</button>
+            <button id="topCamera" type="button">Top</button>
+            <button id="resetCamera" type="button">Reset</button>
+          </div>
+        </section>
+
+        <section class="panelBlock">
+          <h2>Display</h2>
+          <label class="toggleRow"><input id="toggleGrid" type="checkbox" checked /> Grid</label>
+          <label class="toggleRow"><input id="toggleWire" type="checkbox" /> Wireframe</label>
+          <label class="toggleRow"><input id="toggleAxes" type="checkbox" checked /> Axes</label>
+          <label class="rangeRow">
+            <span>Speed</span>
+            <input id="speedSlider" type="range" min="0.1" max="4" step="0.1" value="0.8" />
+            <output id="speedValue">0.8</output>
+          </label>
+        </section>
+
+        <section class="panelBlock">
+          <h2>Debug</h2>
+          <div class="stackButtons">
+            <button id="openSpector" type="button" class="wideButton">Open Spector</button>
+            <button id="captureSpectorFrame" type="button" class="wideButton">Capture Next Frame</button>
+            <button id="exportSpectorCapture" type="button" class="wideButton">Export Last Capture</button>
+          </div>
+          <p id="debugStatus" class="infoText">GPU capture UI off</p>
+        </section>
+
+        <section class="panelBlock" id="ffx-selected-panel" data-has-selection="0">
+          <h2>Selected</h2>
+          <p class="infoText">Click a submesh in the scene (orbit mode) to identify it.</p>
+          <dl class="statusGrid">
+            <div><dt>Key</dt><dd id="ffx-selected-key">-</dd></div>
+            <div><dt>Submesh</dt><dd id="ffx-selected-submesh">-</dd></div>
+            <div><dt>Mesh</dt><dd id="ffx-selected-mesh">-</dd></div>
+            <div><dt>File material</dt><dd id="ffx-selected-filematerial">-</dd></div>
+            <div><dt>Material</dt><dd id="ffx-selected-material">-</dd></div>
+          </dl>
+        </section>
+
+        <section class="panelBlock">
+          <h2>Material / Light</h2>
+          <div id="ffx-material-light-panel" class="mlPanel" data-has-selection="0">
+            <p class="mlNote">Select a submesh (orbit mode) to edit its material.</p>
+          </div>
+        </section>
+
+        <section class="panelBlock">
+          <h2>Edits</h2>
+          <p class="infoText">Edits persist to a map-edits.json sidecar (and localStorage), replayed over the immutable glTF on load.</p>
+          <div class="gridButtons">
+            <button id="ffx-save-edits" type="button">Save</button>
+            <button id="ffx-load-edits" type="button">Load</button>
+          </div>
+          <p id="ffx-edits-status" class="infoText">no map loaded</p>
+        </section>
+
+        <section class="panelBlock">
+          <h2>Status</h2>
+          <dl class="statusGrid">
+            <div><dt>Export</dt><dd id="exportStatus">-</dd></div>
+            <div><dt>Texture</dt><dd id="textureStatus">-</dd></div>
+            <div><dt>Layer</dt><dd id="layerStatus">-</dd></div>
+            <div><dt>Slot bind</dt><dd id="slotStatus">-</dd></div>
+            <div><dt>Coverage</dt><dd id="coverageStatus">-</dd></div>
+            <div><dt>Reason</dt><dd id="reasonStatus">-</dd></div>
+            <div><dt>Validator</dt><dd id="validatorStatus">-</dd></div>
+            <div><dt>F3D</dt><dd id="f3dStatus">-</dd></div>
+            <div><dt>Triangles</dt><dd id="triangleCount">-</dd></div>
+          </dl>
+        </section>
+      </aside>
+
+      <section class="viewerColumn" aria-label="Map viewport">
+        <div class="topBar">
+          <div>
+            <strong id="currentAsset">Selected map</strong>
+            <span id="currentBadge" class="badge">Loading</span>
+          </div>
+          <div class="keyHints">
+            <span>WASD</span>
+            <span>Q/E</span>
+            <span>Mouse</span>
+          </div>
+        </div>
+        <div id="viewport" class="viewport" tabindex="0"></div>
+        <div id="toast" class="toast">Loading map</div>
+      </section>
+
+      <aside class="detailPanel" aria-label="Map details">
+        <section>
+          <h2>Geometry</h2>
+          <dl class="metricGrid">
+            <div><dt>Meshes</dt><dd id="meshCount">-</dd></div>
+            <div><dt>Textures</dt><dd id="textureCount">-</dd></div>
+            <div><dt>Vertices</dt><dd id="vertexCount">-</dd></div>
+            <div><dt>Primitives</dt><dd id="primitiveCount">-</dd></div>
+            <div><dt>Bounds</dt><dd id="boundsText">-</dd></div>
+          </dl>
+        </section>
+
+        <section>
+          <h2>Material Debug</h2>
+          <label class="debugSelectLabel">
+            <span>Selected material</span>
+            <select id="materialSelect" class="mapSelect">
+              <option value="">No material loaded</option>
+            </select>
+          </label>
+          <p id="materialDebugStatus" class="infoText">Load a map to inspect the selected material surface.</p>
+          <div id="materialFacts" class="debugFacts"></div>
+          <div id="debugTexturePanels" class="debugTexturePanels"></div>
+        </section>
+
+        <section>
+          <h2>Coverage Why</h2>
+          <p id="coverageExplain" class="infoText">-</p>
+          <div id="coverageBreakdown" class="breakdownList"></div>
+        </section>
+
+        <section>
+          <h2>Files</h2>
+          <div id="fileList" class="fileList"></div>
+        </section>
+
+        <section>
+          <h2>Limits</h2>
+          <ul class="limitList">
+            <li>Material-id texture binding candidate</li>
+            <li>No collision or walkmesh</li>
+            <li>No AGS texture animation</li>
+            <li>No engine-exact camera yet</li>
+          </ul>
+        </section>
+      </aside>
+    </main>
+
+    <script type="module" src="./app.js?v=20260606-material-light-panel-1"></script>
+    <!-- 🌅 Aurora Chamber overlay (additive; no-ops unless ?actors= / pick mode is used; never touches app.js) -->
+    <script type="module" src="./aurora-overlay.js?v=20260817-parse-10"></script>
+    <script type="module" src="./field-explorer-overlay.js?v=20260623-field-explorer-v3"></script>
+  </body>
+</html>

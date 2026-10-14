@@ -1,0 +1,149 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="860"
+             x:Class="FFXProjectEditor.Modules.Extras.PhyrePackageIo_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+		<StackPanel Spacing="6">
+			<Grid ColumnDefinitions="*,Auto">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_phyre_package_i_o_76fc23fa}" VerticalAlignment="Center" />
+				<ctrl:CapabilityBadge Grid.Column="1" Name="PhyreCapabilityBadge" VerticalAlignment="Center" />
+			</Grid>
+			<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_native_dds_phyre_dae_phyre_import_repack_7d136d47}" />
+			<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+			<TextBlock FontWeight="SemiBold" Text="{Binding StatusText}" TextWrapping="Wrap" />
+		</StackPanel>
+		</Border>
+
+		<Grid Grid.Row="1" ColumnDefinitions="430,*">
+			<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Spacing="12">
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_source_phyre_02139529}" />
+							<TextBox Text="{Binding SourcePath, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto,Auto">
+								<TextBlock Classes="muted" Text="{Binding SourceExists, StringFormat='Exists: {0}'}" />
+								<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_BrowseSource">Browse</Button>
+								<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanInspect}" Click="Button_Inspect">Inspect</Button>
+							</Grid>
+						</StackPanel>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_detected_kind_b8cb7994}" />
+								<TextBlock Text="{Binding KindLabel}" />
+								<TextBlock Classes="muted" Text="{Binding InspectionSummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_payload_replacement_ddc3fb1f}" />
+							<TextBox Text="{Binding ReplacementPath, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Classes="muted" Text="{Binding ReplacementExists, StringFormat='Exists: {0}'}" />
+								<Button Grid.Column="1" Classes="secondaryAction" Click="Button_BrowseReplacement">Browse</Button>
+							</Grid>
+						</StackPanel>
+
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_output_file_02b774af}" />
+							<TextBox Text="{Binding OutputPath, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_use_source_path_here_for_in_place_import_with_au_f5da3cf5}" />
+								<Button Grid.Column="1" Classes="secondaryAction" Click="Button_BrowseOutputFile">Save As</Button>
+							</Grid>
+						</StackPanel>
+
+						<StackPanel Spacing="4">
+							<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extract_folder_47abace5}" />
+							<TextBox Text="{Binding OutputFolder, Mode=TwoWay}" />
+							<Grid ColumnDefinitions="*,Auto">
+								<TextBlock Classes="muted" Text="{x:Static res:Strings.U_manifest_strings_source_copy_and_dds_export_when_111bc29d}" />
+								<Button Grid.Column="1" Classes="secondaryAction" Click="Button_BrowseOutputFolder">Browse</Button>
+							</Grid>
+						</StackPanel>
+
+						<Grid ColumnDefinitions="*,*">
+							<Button Classes="secondaryAction" IsEnabled="{Binding CanInspect}" Click="Button_ExtractPackage">Extract Package</Button>
+							<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanExtractDds}" Click="Button_ExtractDds">Extract DDS</Button>
+						</Grid>
+
+						<Grid ColumnDefinitions="*,*">
+							<Button IsEnabled="{Binding CanImportDds}" Click="Button_ImportDds">Import DDS/raw mip0</Button>
+							<Button Grid.Column="1" Margin="8,0,0,0" IsEnabled="{Binding CanImportCompiledPackage}" Click="Button_ImportCompiled">Import compiled .phyre</Button>
+						</Grid>
+
+						<Grid ColumnDefinitions="*,*">
+							<Button Classes="secondaryAction" Click="Button_OpenOutputFolder">Open Extract Folder</Button>
+							<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Name="Button_ReviewDiff" Click="Button_ReviewDiff_Click" AutomationProperties.Name="Review Diff">🔍 Diff</Button>
+						</Grid>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+
+			<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+				<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+					<StackPanel Spacing="12">
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_boundary_0a5e7a05}" />
+								<TextBlock Text="{Binding BoundarySummary}" TextWrapping="Wrap" />
+							</StackPanel>
+						</Border>
+
+						<Grid ColumnDefinitions="*,*">
+							<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}" Margin="0,0,8,0">
+								<Grid RowDefinitions="Auto,*">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_phyre_markers_a2dec1e9}" />
+									<ListBox Grid.Row="1" ItemsSource="{Binding MarkerCounts}">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+													<TextBlock Text="{Binding Marker}" />
+													<TextBlock Grid.Column="1" Classes="muted" Text="{Binding Count}" />
+												</Grid>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+								</Grid>
+							</Border>
+
+							<Border Grid.Column="1" Classes="cardSoft" Padding="{DynamicResource SpacingMd}" Margin="8,0,0,0">
+								<Grid RowDefinitions="Auto,*">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_interesting_strings_51e71fa1}" />
+									<ListBox Grid.Row="1" ItemsSource="{Binding InterestingStrings}">
+										<ListBox.ItemTemplate>
+											<DataTemplate>
+												<StackPanel Spacing="2" Margin="0,0,0,8">
+													<TextBlock FontWeight="SemiBold" Text="{Binding Value}" TextWrapping="Wrap" />
+													<TextBlock Classes="muted" Text="{Binding Role}" />
+													<TextBlock Classes="muted" Text="{Binding OffsetDisplay}" />
+												</StackPanel>
+											</DataTemplate>
+										</ListBox.ItemTemplate>
+									</ListBox>
+								</Grid>
+							</Border>
+						</Grid>
+
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="4">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_import_rules_da026db7}" />
+								<TextBlock Classes="muted" TextWrapping="Wrap"
+								           Text="{x:Static res:Strings.U_dds_import_accepts_dds_or_raw_mip0_and_validates_419a7b76}" />
+							</StackPanel>
+						</Border>
+					</StackPanel>
+				</ScrollViewer>
+			</Border>
+		</Grid>
+	</Grid>
+</UserControl>

@@ -1,0 +1,187 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="clr-namespace:FFXProjectEditor.Modules.Common.ViewerShell"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Common.ViewerShell.ViewerShell_Control">
+
+    <!-- 🐉 VIEWER SHELL — MENU UNIVERSAL (padrão v4, 2026-08-02)
+         Identidade própria (Spira Reforge Studio): SEM URL visível, marca + título + pill + Reload,
+         e o PAINEL DE TOOLS por modo (F3 — Aurora: battle/actors/override/cenas FFX) colapsável. -->
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Margin="16">
+        <Border Classes="cardSoft" Padding="14,10" Margin="0,0,0,10">
+            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto">
+                <!-- Marca + título + pills de execução -->
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_spira_reforge_studio_0d979000}" VerticalAlignment="Center" />
+                    <TextBlock Classes="muted" Text="{Binding Title}" VerticalAlignment="Center" />
+                    <Border Classes="pillReadonly" IsVisible="{Binding IsStarting}">
+                        <TextBlock Text="{x:Static res:Strings.U_iniciando_f5ac8178}" />
+                    </Border>
+                    <Border Classes="pillReadonly" IsVisible="{Binding IsRunning}">
+                        <TextBlock Text="{x:Static res:Strings.U_servidor_in_process_38dccb84}" />
+                    </Border>
+                </StackPanel>
+
+                <!-- Ações universais -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Button Classes="secondaryAction"
+                            Click="Button_ConfigureNoclipData"
+                            IsVisible="{Binding CanConfigureNoclip}"
+                            Content="{x:Static res:Strings.U_Vh_ChooseNoclipDataFolder}" />
+                    <Button Classes="secondaryAction"
+                            Click="Button_Reload"
+                            Content="{x:Static res:Strings.U_Vh_ReloadViewer}" />
+                </StackPanel>
+
+                <!-- Actionable errors need the full card width so long localized paths never
+                     compete with the title or recovery buttons on common 1280px displays. -->
+                <Border Grid.Row="1"
+                        Grid.ColumnSpan="3"
+                        Classes="pillDanger"
+                        Margin="0,8,0,0"
+                        IsVisible="{Binding IsError}">
+                    <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Embedded-viewer recovery. Windows runtime failures can reveal the offline installer;
+             unsupported platforms expose only truthful capability copy plus reload. -->
+        <Border Grid.Row="1"
+                Classes="cardSoft"
+                Padding="14,12"
+                Margin="0,0,0,10"
+                IsVisible="{Binding HasWebView2InitializationFailure}">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <StackPanel Spacing="4">
+                    <TextBlock Classes="sectionLabel"
+                               Text="{Binding EmbeddedViewerFailureTitle}" />
+                    <TextBlock Classes="muted"
+                               Text="{Binding WebView2RecoveryMessage}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Classes="secondaryAction"
+                        Margin="10,0,0,0"
+                        Click="Button_ShowWebView2Installer"
+                        IsVisible="{Binding HasWebView2InstallerAction}"
+                        IsEnabled="{Binding CanShowWebView2Installer}"
+                        Content="{x:Static res:Strings.U_Vh_ShowWebView2Installer}" />
+                <Button Grid.Column="2"
+                        Classes="secondaryAction"
+                        Margin="10,0,0,0"
+                        Click="Button_Reload"
+                        Content="{x:Static res:Strings.U_Vh_ReloadViewer}" />
+            </Grid>
+        </Border>
+
+        <!-- WebView2 native initialization recovery. The CTA reveals the offline installer in
+             Explorer; it never executes the installer without an explicit human action. -->
+        <Border Grid.Row="1"
+                Classes="cardSoft"
+                Padding="14,12"
+                Margin="0,0,0,10"
+                IsVisible="{Binding HasWebView2InitializationFailure}">
+            <Grid ColumnDefinitions="*,Auto,Auto">
+                <StackPanel Spacing="4">
+                    <TextBlock Classes="sectionLabel"
+                               Text="{x:Static res:Strings.U_Vh_WebView2InitializationFailedTitle}" />
+                    <TextBlock Classes="muted"
+                               Text="{Binding WebView2RecoveryMessage}"
+                               TextWrapping="Wrap" />
+                </StackPanel>
+                <Button Grid.Column="1"
+                        Classes="secondaryAction"
+                        Margin="10,0,0,0"
+                        Click="Button_ShowWebView2Installer"
+                        IsEnabled="{Binding CanShowWebView2Installer}"
+                        Content="{x:Static res:Strings.U_Vh_ShowWebView2Installer}" />
+                <Button Grid.Column="2"
+                        Classes="secondaryAction"
+                        Margin="10,0,0,0"
+                        Click="Button_Reload"
+                        Content="{x:Static res:Strings.U_Vh_ReloadViewer}" />
+            </Grid>
+        </Border>
+
+        <!-- Painel de tools por modo (F3 — Aurora) -->
+        <Expander Grid.Row="2" IsVisible="{Binding HasTools}" Header="{x:Static res:Strings.U_ferramentas_aurora_71a1f2bd}" Margin="0,0,0,10">
+            <StackPanel Spacing="8">
+                <Grid ColumnDefinitions="Auto,*,Auto,Auto" Margin="0,4,0,0">
+                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_battle_fa146201}" VerticalAlignment="Center" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding Battles}" SelectedItem="{Binding SelectedBattle}" MinWidth="240" Margin="8,0" />
+                    <CheckBox Grid.Column="2" Content="{x:Static res:Strings.U_actors_d887f5d3}" IsChecked="{Binding ActorsEnabled}" VerticalAlignment="Center" Margin="8,0" />
+                    <CheckBox Grid.Column="3" Content="{x:Static res:Strings.U_override_0e_c3c09086}" IsChecked="{Binding OverrideEnabled}" VerticalAlignment="Center" />
+                </Grid>
+                <Button Classes="secondaryAction" Click="Button_OpenBattle" HorizontalAlignment="Left">{x:Static res:Strings.U_abrir_battle_no_aurora_2db2b52c}</Button>
+                <Separator Margin="0,4" />
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_cenas_ffx_5a224df0}" VerticalAlignment="Center" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding SceneRegions}" SelectedItem="{Binding SelectedRegion}" MinWidth="180" Margin="8,0" />
+                    <ComboBox Grid.Column="2" ItemsSource="{Binding Scenes}" SelectedItem="{Binding SelectedScene}" MinWidth="260" />
+                </Grid>
+                <Button Classes="secondaryAction" Click="Button_OpenScene" HorizontalAlignment="Left" IsVisible="{Binding HasScenes}">{x:Static res:Strings.U_abrir_cena_3153f71e}</Button>
+                <Separator Margin="0,4" />
+                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_modo_edi_o_sidecar_f4232f58}" />
+                <TextBlock Classes="muted" Text="{x:Static res:Strings.U_deltas_por_slot_aplicados_sobre_as_posi_es_vanilla_3de8aa9c}" TextWrapping="Wrap" />
+                <CheckBox IsChecked="{Binding EditGizmo}" Content="{x:Static res:Strings.U_gizmo_3d_drag_on_canvas_1aa7857f}" />
+                <TextBlock Classes="muted" Text="{x:Static res:Strings.U_click_monster_to_select_drag_hint_fe907a09}" TextWrapping="Wrap" />
+
+                <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_slot_06b5e3e0}" VerticalAlignment="Center" />
+                    <ComboBox Grid.Column="1" ItemsSource="{Binding EditSlots}" SelectedIndex="{Binding EditSlot}" MinWidth="60" Margin="6,0" />
+                    <TextBlock Grid.Column="2" Classes="muted" Text="{x:Static res:Strings.U_x_f9a258eb}" VerticalAlignment="Center" />
+                    <TextBox Grid.Column="3" Text="{Binding EditDx}" Width="60" Margin="4,0" />
+                    <TextBlock Grid.Column="4" Classes="muted" Text="{x:Static res:Strings.U_y_e0b969aa}" VerticalAlignment="Center" />
+                    <TextBox Grid.Column="5" Text="{Binding EditDy}" Width="60" Margin="4,0" />
+                    <TextBlock Grid.Column="6" Classes="muted" Text="{x:Static res:Strings.U_z_cb943a69}" VerticalAlignment="Center" />
+                </Grid>
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_heading_rad_86c68db5}" VerticalAlignment="Center" />
+                    <TextBox Text="{Binding EditHeading}" Width="80" />
+                    <TextBlock Classes="muted" Text="{x:Static res:Strings.U_scale_f33d44b9}" VerticalAlignment="Center" />
+                    <TextBox Text="{Binding EditScale}" Width="60" />
+                    <Button Classes="secondaryAction" Click="Button_ApplyEdits" IsVisible="{Binding HasEditor}">{x:Static res:Strings.U_aplicar_edi_o_ao_battle_d135cacf}</Button>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+
+        <Border Grid.Row="3" Classes="card" Padding="2" ClipToBounds="True">
+            <Grid>
+                <views:WebView2Host x:Name="ViewerHost"
+                                    ShowBuiltInRecoveryDialog="False"
+                                    IsVisible="{Binding IsEmbedSupported}"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch" />
+                <!-- Non-Windows fallback: the embed is WebView2-only; the in-process server +
+                     data layer still work, so the viewer opens in the system browser. -->
+                <Border Classes="cardSoft"
+                        Padding="24"
+                        Margin="32"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        MaxWidth="520"
+                        IsVisible="{Binding IsExternalBrowserFallback}">
+                    <StackPanel Spacing="10" HorizontalAlignment="Center">
+                        <TextBlock Classes="sectionLabel"
+                                   Text="{x:Static res:Strings.U_Vh_ExternalViewerTitle}"
+                                   HorizontalAlignment="Center" />
+                        <TextBlock Classes="muted"
+                                   Text="{x:Static res:Strings.U_Vh_ExternalViewerMessage}"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center" />
+                        <Button Classes="secondaryAction"
+                                Click="Button_OpenInBrowser"
+                                Content="{x:Static res:Strings.U_Vh_OpenInBrowser}"
+                                HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

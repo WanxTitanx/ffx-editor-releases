@@ -1,0 +1,184 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 xmlns:local="clr-namespace:FFXProjectEditor.Modules.BattleTracker"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="FFXProjectEditor.BattleTracker_Control">
+
+	<UserControl.Resources>
+		<local:BattleTrackerAliveColor_Converter x:Key="BattleTrackerAliveColorConverter"/>
+	</UserControl.Resources>
+	
+	<DockPanel>
+		<DockPanel Height="50" DockPanel.Dock="Top">
+			<StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+				<Button Click="Button_Read" IsEnabled="{Binding AutoRefreshDisabled}">Refresh</Button>
+				<Label Margin="10,0,0,0" VerticalAlignment="Center">Auto-Refresh</Label>
+				<CheckBox IsChecked="{Binding AutoRefreshEnabled}" />
+			</StackPanel>
+			<WrapPanel Orientation="Horizontal" Margin="10,0,0,0">
+				<CheckBox Margin="0,0,8,0" IsChecked="{Binding InBattle}" IsEnabled="False" />
+				<Label Margin="0,0,8,0" VerticalAlignment="Center">Battle</Label>
+				<TextBox Margin="0,0,8,0" Height="30" Text="{Binding BattleIndex}" MinWidth="40" IsEnabled="False" VerticalContentAlignment="Center" />
+				<Label Margin="0,0,8,0" VerticalAlignment="Center">File</Label>
+				<TextBox Height="30" Text="{Binding BattleName}" MinWidth="120" MaxWidth="280" IsEnabled="False" VerticalContentAlignment="Center" />
+			</WrapPanel>
+		</DockPanel>
+
+		<Border DockPanel.Dock="Top" Background="#22000000" Padding="10,4">
+			<TextBlock Text="{Binding StatusText}" VerticalAlignment="Center" TextWrapping="Wrap" />
+		</Border>
+
+		<DockPanel Height="50" DockPanel.Dock="Bottom">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+				<CheckBox VerticalAlignment="Center" IsChecked="{Binding AllowWrite}"
+						  ToolTip.Tip="{x:Static res:Strings.U_escreve_os_valores_editados_de_volta_na_ram_viva_fd76d873}">⚠ Permitir escrita (RT2)</CheckBox>
+				<Button Margin="10,0,10,0" IsEnabled="{Binding LoadEnabled}" Click="Button_LoadIngame"
+						ToolTip.Tip="{x:Static res:Strings.U_grava_hp_mp_stats_status_editados_no_jogo_vivo_96759b0d}">⚠ Gravar no jogo</Button>
+			</StackPanel>
+		</DockPanel>
+
+		<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+			<StackPanel Spacing="12" Margin="8,0,8,8">
+
+				<Border Classes="cardSoft" Padding="12" IsVisible="{Binding InBattle}">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBattleSnapshot}" />
+						<TextBlock Classes="cardTitle" Text="{Binding BattleName}" />
+						<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto">
+							<Border Grid.Row="0" Grid.Column="0" Classes="cardSoft" Padding="10" Margin="0,0,6,6">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEncounter}" />
+									<TextBlock Text="{Binding EncounterIndexLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="0" Grid.Column="1" Classes="cardSoft" Padding="10" Margin="6,0,0,6">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonTrigger}" />
+									<TextBlock Text="{Binding TriggerLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="1" Grid.Column="0" Classes="cardSoft" Padding="10" Margin="0,0,6,6">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonField}" />
+									<TextBlock Text="{Binding FieldLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="1" Grid.Column="1" Classes="cardSoft" Padding="10" Margin="6,0,0,6">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBattlefield}" />
+									<TextBlock Text="{Binding BattlefieldLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="2" Grid.Column="0" Classes="cardSoft" Padding="10" Margin="0,0,6,6">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonGroupFormation}" />
+									<TextBlock Text="{Binding GroupLabel}" />
+									<TextBlock Text="{Binding FormationLabel}" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="2" Grid.Column="1" Classes="cardSoft" Padding="10" Margin="6,0,0,6">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonFrontline}" />
+									<TextBlock Text="{Binding FrontlineLabel}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding BacklineLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="3" Grid.ColumnSpan="2" Classes="cardSoft" Padding="10" Margin="0,0,0,6">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBtlRouteCursors}" />
+									<TextBlock Text="{Binding RoutingCursorSummary}" TextWrapping="Wrap"
+									           FontFamily="Cascadia Mono,Consolas,Monospace" FontSize="11" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="4" Grid.Column="0" Classes="cardSoft" Padding="10" Margin="0,0,6,0">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonStateAmbush}" />
+									<TextBlock Text="{Binding BattleStateLabel}" />
+									<TextBlock Classes="muted" Text="{Binding AmbushStateLabel, StringFormat='Ambush {0}'}" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="4" Grid.Column="1" Classes="cardSoft" Padding="10" Margin="6,0,0,0">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEncounterType}" />
+									<TextBlock Text="{Binding EncounterTypeLabel}" />
+									<TextBlock Classes="muted" Text="{Binding ScreenTransitionLabel, StringFormat='Screen {0}'}" />
+								</StackPanel>
+							</Border>
+						</Grid>
+						<WrapPanel Orientation="Horizontal">
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,10,0">
+								<StackPanel Spacing="4" MinWidth="140">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonLastCommand}" />
+									<TextBlock Text="{Binding LastCommandLabel}" TextWrapping="Wrap"
+									           FontFamily="Cascadia Mono,Consolas,Monospace" FontSize="11" />
+								</StackPanel>
+							</Border>
+							<Border Classes="cardSoft" Padding="10">
+								<StackPanel Spacing="4" MinWidth="140">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBattleTypeEnd}" />
+									<TextBlock Text="{Binding BattleTypeLabel}" />
+									<TextBlock Classes="muted" Text="{Binding BattleEndTypeLabel, StringFormat='End {0}'}" />
+								</StackPanel>
+							</Border>
+						</WrapPanel>
+					</StackPanel>
+				</Border>
+
+				<TabControl MinHeight="360">
+					<TabItem Header="{x:Static res:Strings.U_aliados_65b30391}">
+						<Grid ColumnDefinitions="Auto,*" MinHeight="320">
+							<ListBox Grid.Column="0"
+							         Name="ListBox_Ally"
+							         MinWidth="140"
+							         MaxWidth="220"
+							         Margin="0,0,8,0"
+							         ItemsSource="{Binding DisplayAllyList}"
+							         SelectedItem="{Binding SelectedAlly, Mode=TwoWay}"
+							         SelectionMode="Single">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding DisplayName}"
+										           Foreground="{Binding InBattle, Converter={StaticResource BattleTrackerAliveColorConverter}}" />
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+							<ScrollViewer Grid.Column="1"
+							              HorizontalScrollBarVisibility="Auto"
+							              VerticalScrollBarVisibility="Auto">
+								<ContentControl Name="FrameAlly" IsEnabled="{Binding AutoRefreshDisabled}" />
+							</ScrollViewer>
+						</Grid>
+					</TabItem>
+					<TabItem Header="{x:Static res:Strings.U_inimigos_eb22b710}">
+						<Grid ColumnDefinitions="Auto,*" MinHeight="320">
+							<ListBox Grid.Column="0"
+							         Name="ListBox_Enemy"
+							         MinWidth="140"
+							         MaxWidth="220"
+							         Margin="0,0,8,0"
+							         ItemsSource="{Binding DisplayEnemyList}"
+							         SelectedItem="{Binding SelectedEnemy, Mode=TwoWay}"
+							         SelectionMode="Single">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<TextBlock Text="{Binding DisplayName}"
+										           Foreground="{Binding InBattle, Converter={StaticResource BattleTrackerAliveColorConverter}}" />
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+							<ScrollViewer Grid.Column="1"
+							              HorizontalScrollBarVisibility="Auto"
+							              VerticalScrollBarVisibility="Auto">
+								<ContentControl Name="FrameEnemy" IsEnabled="{Binding AutoRefreshDisabled}" />
+							</ScrollViewer>
+						</Grid>
+					</TabItem>
+				</TabControl>
+
+			</StackPanel>
+		</ScrollViewer>
+	</DockPanel>
+</UserControl>

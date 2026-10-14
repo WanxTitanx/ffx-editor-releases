@@ -1,0 +1,133 @@
+{
+  "$comment": "FFX Mod Studio win-x64 runtime contract. Candidate/Release is intentionally fail-closed until every selected payload or installed capability has an exact version pin, architecture evidence and SHA-256 evidence. Null hashes are explicit blockers, never wildcards.",
+  "schemaVersion": 1,
+  "target": {
+    "rid": "win-x64",
+    "architecture": "x64"
+  },
+  "strictModes": [
+    "Candidate",
+    "Release"
+  ],
+  "components": {
+    "dotnetSelfContained": {
+      "kind": "DOTNET_SELF_CONTAINED",
+      "required": true,
+      "delivery": "self-contained-payload",
+      "architecture": "x64",
+      "versionPin": "8.0.30",
+      "runtimeConfigPath": "FFXProjectEditor.runtimeconfig.json",
+      "depsPath": "FFXProjectEditor.deps.json",
+      "forbiddenDependencies": [
+        "Tmds.DBus.Protocol",
+        "Avalonia.X11",
+        "Avalonia.FreeDesktop"
+      ],
+      "payloadFiles": [
+        {
+          "path": "coreclr.dll",
+          "architecture": "x64",
+          "peMachine": "x64",
+          "sha256": "fc2909e16b3f70edfeac96d69d3f1d444705b1e4ad922dc760bb396338a7b1de"
+        },
+        {
+          "path": "hostfxr.dll",
+          "architecture": "x64",
+          "peMachine": "x64",
+          "sha256": "751ccef66f160ca66ca9ac5bde2e781c360d9706f9aaba0a6f180557f80798c2"
+        },
+        {
+          "path": "hostpolicy.dll",
+          "architecture": "x64",
+          "peMachine": "x64",
+          "sha256": "1b629e243366c8db82a55d0d8b0562d924e6681e81afc100e79526053451971a"
+        },
+        {
+          "path": "System.Private.CoreLib.dll",
+          "architecture": "managed-any",
+          "peMachine": "managed",
+          "sha256": "cc2cc43d28e3770d7cdeb80dc74eab265a1f5dd2f5547ccb236983b48d47d914"
+        }
+      ]
+    },
+    "webView2Evergreen": {
+      "kind": "WEBVIEW2_EVERGREEN",
+      "required": true,
+      "delivery": "offline-installer",
+      "architecture": "x64",
+      "sdkVersionPin": "1.0.4129.50",
+      "minimumRuntimeVersionPin": "151.0.4129.93",
+      "loader": {
+        "path": "WebView2Loader.dll",
+        "architecture": "x64",
+        "peMachine": "x64",
+        "sha256": "a9a09232c25805323d4cfb3fc8f545a190a9c8a99c93262ea99d0b88df99ec90"
+      },
+      "installedCapability": {
+        "registryClientId": "{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}",
+        "binaryName": "msedgewebview2.exe",
+        "architecture": "x64",
+        "hashPolicy": "sha256-runtime-evidence",
+        "publisherPattern": "Microsoft"
+      },
+      "offlineInstaller": {
+        "enabled": true,
+        "path": "prerequisites/webview2/MicrosoftEdgeWebView2RuntimeInstallerX64.exe",
+        "architecture": "x64",
+        "versionPin": "151.0.4129.93",
+        "installerFileVersionPin": "1.3.257.13",
+        "sha256": "82b2d8a7013e0c0ea15d48ff4742ee3778ba16bd8b7b4a47876645b3e48d4016",
+        "requireAuthenticode": true,
+        "publisherPattern": "Microsoft"
+      }
+    },
+    "javaPrivateRuntime": {
+      "kind": "JAVA_PRIVATE_RUNTIME_FOR_FFXED",
+      "required": true,
+      "delivery": "private-payload",
+      "architecture": "x64",
+      "versionPin": "21.0.12.1",
+      "runtimeVersionFile": "runtime/java/release",
+      "javaExecutable": {
+        "path": "runtime/java/bin/javaw.exe",
+        "architecture": "x64",
+        "peMachine": "x64",
+        "sha256": "cace5e7c5896bfa344d1d16de7f4ffb4e12e4cbdcc703d37d77a7c404d055293"
+      },
+      "ffxedJar": {
+        "path": "ExternalLibs/FFXED/FFXED.jar",
+        "architecture": "managed-java",
+        "sha256": "f68ce3d9999631a214f51e72a9fc3786a40b3b35d909ceea549bf04c4e358d2e"
+      }
+    },
+    "vcpp2013X64": {
+      "kind": "VCPLUSPLUS_2013_X64_FOR_KEYSTONE",
+      "required": true,
+      "delivery": "offline-installer",
+      "architecture": "x64",
+      "versionPin": "12.0.40664.0",
+      "installer": {
+        "path": "prerequisites/vc2013/vcredist_x64.exe",
+        "architecture": "x64",
+        "installerFileVersionPin": "12.0.40664.0",
+        "sha256": "a4bba7701e355ae29c403431f871a537897c363e215cafe706615e270984f17c",
+        "requireAuthenticode": true,
+        "publisherPattern": "Microsoft"
+      },
+      "keystoneConsumer": {
+        "path": "x64/keystone.dll",
+        "architecture": "x64",
+        "peMachine": "x64",
+        "sha256": "144508decba543d3a1d0ba5036d3205eb32f9d9ae738ba27ef3dd5fc501723db",
+        "requiredImports": [
+          "MSVCP120.dll",
+          "MSVCR120.dll"
+        ]
+      },
+      "forbiddenPayloadPaths": [
+        "keystone.dll",
+        "x86/keystone.dll"
+      ]
+    }
+  }
+}

@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>FFX HD Model Viewer</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "./vendor/three/three.module.js",
+          "three/addons/": "./vendor/three/jsm/"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <main class="shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <h1>FFX HD Model Viewer 🐉</h1>
+          <p id="catalogSummary">Loading catalog…</p>
+        </div>
+        <input id="searchBox" type="search" placeholder="Search id (c001, m086, s013…)" autocomplete="off" />
+        <div class="chips" id="categoryChips"></div>
+        <div class="chips verdicts" id="verdictChips"></div>
+        <div class="assetList" id="assetList" role="listbox"></div>
+      </aside>
+
+      <section class="viewportPanel">
+        <div class="toolbar">
+          <div class="selectedTitle">
+            <span id="selectedId">No model</span>
+            <span id="selectedBand" class="band">—</span>
+          </div>
+          <div class="toolButtons">
+            <label class="clipLabel">Clip <select id="clipSelect"></select></label>
+            <button id="playPause" type="button" title="Play / pause" aria-pressed="true">⏸</button>
+            <button id="fitCamera" type="button" title="Fit camera">Fit</button>
+            <button id="toggleGrid" type="button" title="Toggle grid" aria-pressed="true">Grid</button>
+            <button id="toggleWire" type="button" title="Toggle wireframe" aria-pressed="false">Wire</button>
+            <button id="toggleSpin" type="button" title="Auto-rotate" aria-pressed="false">Spin</button>
+          </div>
+        </div>
+        <div id="viewport" class="viewport"></div>
+        <div id="statusText" class="statusText">Waiting for catalog…</div>
+      </section>
+
+      <aside class="details">
+        <h2>Model</h2>
+        <dl>
+          <div><dt>ID</dt><dd id="dId">—</dd></div>
+          <div><dt>Category</dt><dd id="dCat">—</dd></div>
+          <div><dt>Verdict</dt><dd id="dVerdict">—</dd></div>
+          <div><dt>Bake</dt><dd id="dBake">—</dd></div>
+          <div><dt>Clips</dt><dd id="dClips">—</dd></div>
+          <div><dt>Meshes</dt><dd id="dMeshes">—</dd></div>
+          <div><dt>Verts</dt><dd id="dVerts">—</dd></div>
+        </dl>
+        <h2>Thumbnail</h2>
+        <img id="dThumb" class="thumb" alt="thumbnail" />
+        <h2>glTF</h2>
+        <div class="pathBox" id="dPath">—</div>
+      </aside>
+    </main>
+    <script type="module" src="./app.js?v=20260606-hd-gallery"></script>
+  </body>
+</html>

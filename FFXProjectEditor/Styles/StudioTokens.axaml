@@ -1,0 +1,274 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=System.Runtime">
+	<SolidColorBrush x:Key="AppBgBrush" Color="#071017" />
+	<SolidColorBrush x:Key="PanelBrush" Color="#101922" />
+	<SolidColorBrush x:Key="PanelAltBrush" Color="#15212C" />
+	<SolidColorBrush x:Key="PanelStrokeBrush" Color="#264052" />
+
+	<!-- ===== Camada 10 (overhaul de UI): cores literais elevadas a tokens.
+	     Cada uma antes vivia solta no Main_Window.axaml e em outros locais. ===== -->
+	<!-- Cores de gradiente do header (consumidas como Color, não Brush, para entrar num LinearGradientBrush). -->
+	<Color x:Key="PanelDeepColor">#122130</Color>
+	<Color x:Key="PanelDeeperColor">#0A1118</Color>
+	<Color x:Key="HeroAccentColor">#163648</Color>
+	<!-- Pincéis derivados (consumidos por Background/BorderBrush). -->
+	<SolidColorBrush x:Key="PanelDeepBrush" Color="#122130" />
+	<SolidColorBrush x:Key="PanelDeeperBrush" Color="#0A1118" />
+	<SolidColorBrush x:Key="HeroAccentBrush" Color="#163648" />
+	<!-- Cores de estado do header/footer (hover/pressed do railIcon). -->
+	<SolidColorBrush x:Key="RailHoverBrush" Color="#15323B" />
+	<SolidColorBrush x:Key="NavHoverBrush" Color="#1B2B39" />
+	<!-- Cores quentes usadas pelos pills de modo (já existentes em literais, agora tokenizadas). -->
+	<SolidColorBrush x:Key="WriterFillBrush" Color="#241A10" />
+	<SolidColorBrush x:Key="ReadonlyFillBrush" Color="#0E2024" />
+
+	<!-- ===== Hero gradient variants (Jarvis-UI, audit 2026-06-19, P0-1):
+	     Cada trio = cores canônicas de um módulo que tem identidade cromática própria.
+	     Consumidas como Color (não Brush) para entrar num LinearGradientBrush. Preserva a
+	     identidade visual de cada família (roxo Aurora, verde AutoAbility/Formation/CtbBase,
+	     marrom KeyItem, teal AlBhed/PlayerGrowth, azul MixTable) ao invés de forçar o heroGradient
+	     canônico azul-petróleo. ===== -->
+	<!-- Main / Canonical / Workspace Ready -->
+	<Color x:Key="HeroMainAColor">#163245</Color>
+	<Color x:Key="HeroMainBColor">#0F1821</Color>
+	<Color x:Key="HeroMainCColor">#214F69</Color>
+	<!-- Purple (AuroraChamber) -->
+	<Color x:Key="HeroPurpleAColor">#2A1B45</Color>
+	<Color x:Key="HeroPurpleBColor">#0F1821</Color>
+	<Color x:Key="HeroPurpleCColor">#5A3A7A</Color>
+	<!-- Green (AutoAbility / Formation / Customization) -->
+	<Color x:Key="HeroGreenAColor">#1B2D16</Color>
+	<Color x:Key="HeroGreenBColor">#0F1821</Color>
+	<Color x:Key="HeroGreenCColor">#2A4F21</Color>
+	<!-- Brown (KeyItem) -->
+	<Color x:Key="HeroBrownAColor">#3B2B1D</Color>
+	<Color x:Key="HeroBrownBColor">#18120E</Color>
+	<Color x:Key="HeroBrownCColor">#6E5236</Color>
+	<!-- Teal (AlBhed / CtbBase / PlayerGrowth) -->
+	<Color x:Key="HeroTealAColor">#173344</Color>
+	<Color x:Key="HeroTealBColor">#101820</Color>
+	<Color x:Key="HeroTealCColor">#22556F</Color>
+	<!-- Blue (MixTable) -->
+	<Color x:Key="HeroBlueAColor">#1A3444</Color>
+	<Color x:Key="HeroBlueBColor">#10171F</Color>
+	<Color x:Key="HeroBlueCColor">#25566D</Color>
+
+	<SolidColorBrush x:Key="AccentBrush" Color="#2A9D8F" />
+	<SolidColorBrush x:Key="AccentWarmBrush" Color="#E8943A" />
+	<SolidColorBrush x:Key="AccentCoolBrush" Color="#4A90D9" />
+	<SolidColorBrush x:Key="TextPrimaryBrush" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="TextMutedBrush" Color="#8BA3B5" />
+	<SolidColorBrush x:Key="SuccessBrush" Color="#4CAF8A" />
+	<SolidColorBrush x:Key="WarningBrush" Color="#D4A84A" />
+	<SolidColorBrush x:Key="DangerBrush" Color="#D95A6A" />
+
+	<!-- Auto-Ability Design Tokens -->
+	<Color x:Key="AbilityElementFire">#E25822</Color>
+	<Color x:Key="AbilityElementIce">#4FC3F7</Color>
+	<Color x:Key="AbilityElementLightning">#FFD54F</Color>
+	<Color x:Key="AbilityElementWater">#29B6F6</Color>
+	<Color x:Key="AbilityElementHoly">#FFE082</Color>
+	<Color x:Key="AbilityElementDark">#CE93D8</Color>
+	<Color x:Key="AbilityStatusInflict">#EF5350</Color>
+	<Color x:Key="AbilityStatusResist">#66BB6A</Color>
+	<Color x:Key="AbilityStatBoost">#FFA726</Color>
+	<Color x:Key="AbilityAutoStatus">#42A5F5</Color>
+	<Color x:Key="AbilitySpecial">#FFD54F</Color>
+	<Color x:Key="AbilityEconomy">#AB47BC</Color>
+	<Color x:Key="AbilityCustomization">#78909C</Color>
+	<Color x:Key="AbilitySOS">#D32F2F</Color>
+
+	<SolidColorBrush x:Key="AbilityElementFireBrush" Color="#E25822" />
+	<SolidColorBrush x:Key="AbilityElementIceBrush" Color="#4FC3F7" />
+	<SolidColorBrush x:Key="AbilityElementLightningBrush" Color="#FFD54F" />
+	<SolidColorBrush x:Key="AbilityElementWaterBrush" Color="#29B6F6" />
+	<SolidColorBrush x:Key="AbilityElementHolyBrush" Color="#FFE082" />
+	<SolidColorBrush x:Key="AbilityElementDarkBrush" Color="#CE93D8" />
+	<SolidColorBrush x:Key="AbilityStatusInflictBrush" Color="#EF5350" />
+	<SolidColorBrush x:Key="AbilityStatusResistBrush" Color="#66BB6A" />
+	<SolidColorBrush x:Key="AbilityStatBoostBrush" Color="#FFA726" />
+	<SolidColorBrush x:Key="AbilityAutoStatusBrush" Color="#42A5F5" />
+	<SolidColorBrush x:Key="AbilitySpecialBrush" Color="#FFD54F" />
+	<SolidColorBrush x:Key="AbilityEconomyBrush" Color="#AB47BC" />
+	<SolidColorBrush x:Key="AbilityCustomizationBrush" Color="#78909C" />
+	<SolidColorBrush x:Key="AbilitySOSBrush" Color="#D32F2F" />
+
+
+	<!-- ===== Accent fill+border pairs (Jarvis-UI, audit 2026-06-19;
+	     restaurado para tons mais saturados/vivos em v2.162.5.0 a pedido do Halyson —
+	     "prefiro as cores mais neon antigas e mais suaves". Cada par = fill saturado + border
+	     neon clara, prontos pra styles Button.accentXxx. ===== -->
+	<!-- Haste (cyan) -->
+	<SolidColorBrush x:Key="AccentHasteFillBrush"   Color="#1A5E78" />
+	<SolidColorBrush x:Key="AccentHasteBorderBrush" Color="#4AB8D8" />
+	<!-- Protect (green) -->
+	<SolidColorBrush x:Key="AccentProtectFillBrush"   Color="#1A5A3A" />
+	<SolidColorBrush x:Key="AccentProtectBorderBrush" Color="#4AAF7A" />
+	<!-- Shell (cyan-blue, mesmo tom de Haste) -->
+	<SolidColorBrush x:Key="AccentShellFillBrush"   Color="#1A5E78" />
+	<SolidColorBrush x:Key="AccentShellBorderBrush" Color="#4AB8D8" />
+	<!-- Reflect (indigo) -->
+	<SolidColorBrush x:Key="AccentReflectFillBrush"   Color="#2A4A8A" />
+	<SolidColorBrush x:Key="AccentReflectBorderBrush" Color="#6A8AE0" />
+	<!-- Regen (teal-green) -->
+	<SolidColorBrush x:Key="AccentRegenFillBrush"   Color="#1A5A50" />
+	<SolidColorBrush x:Key="AccentRegenBorderBrush" Color="#4AAF9A" />
+	<!-- NulAll (light-cyan) -->
+	<SolidColorBrush x:Key="AccentNulAllFillBrush"   Color="#1A5A6E" />
+	<SolidColorBrush x:Key="AccentNulAllBorderBrush" Color="#5AAAD0" />
+	<!-- Defensive / Highlight / Gold (amber, usado também como "Highlight" do YUNALESCA/AEON) -->
+	<SolidColorBrush x:Key="AccentGoldFillBrush"   Color="#5A4A1A" />
+	<SolidColorBrush x:Key="AccentGoldBorderBrush" Color="#D4A040" />
+	<SolidColorBrush x:Key="AccentGoldForegroundBrush" Color="#E8B85A" />
+	<!-- Condition/builder / "Montar condição" / Canary -->
+	<SolidColorBrush x:Key="AccentBuilderFillBrush"   Color="#1A5A68" />
+	<SolidColorBrush x:Key="AccentBuilderBorderBrush" Color="#4AB8D8" />
+	<!-- Reaction / OnHit / qualquergolpe (rose) -->
+	<SolidColorBrush x:Key="AccentReactionFillBrush"   Color="#7A3A4A" />
+	<SolidColorBrush x:Key="AccentReactionBorderBrush" Color="#D06A8A" />
+	<!-- Cycle / roleta (indigo-bright) -->
+	<SolidColorBrush x:Key="AccentCycleFillBrush"   Color="#3A5AA0" />
+	<SolidColorBrush x:Key="AccentCycleBorderBrush" Color="#8AA0E0" />
+	<!-- Forbidden / SIN / Danger-crimson -->
+	<SolidColorBrush x:Key="AccentCrimsonFillBrush"   Color="#6A2A38" />
+	<SolidColorBrush x:Key="AccentCrimsonBorderBrush" Color="#C05A6A" />
+	<SolidColorBrush x:Key="AccentForbiddenFillBrush"   Color="#6A1A30" />
+	<SolidColorBrush x:Key="AccentForbiddenBorderBrush" Color="#E04A6A" />
+	<!-- Experimental / honest note / warning (violet) -->
+	<SolidColorBrush x:Key="AccentExperimentalFillBrush"   Color="#31204F" />
+	<SolidColorBrush x:Key="AccentExperimentalBorderBrush" Color="#A884F2" />
+	<!-- Undo / restore (lavender) -->
+	<SolidColorBrush x:Key="AccentUndoFillBrush"   Color="#4A3F8A" />
+	<SolidColorBrush x:Key="AccentUndoBorderBrush" Color="#9A90D0" />
+	<!-- Refresh / "Atualizar" (deep-cyan) -->
+	<SolidColorBrush x:Key="AccentRefreshFillBrush"   Color="#1A5068" />
+	<SolidColorBrush x:Key="AccentRefreshBorderBrush" Color="#3A90B8" />
+	<!-- Move / order up-down (light-cyan) -->
+	<SolidColorBrush x:Key="AccentMoveFillBrush"   Color="#1A5A70" />
+	<SolidColorBrush x:Key="AccentMoveBorderBrush" Color="#6AAAD0" />
+
+	<!-- ===== Accent foreground brushes (Jarvis-UI, audit 2026-06-19, P0-2):
+	     Paralelo aos fill/border acima — cada accent ganha um Foreground claro para o texto
+	     dentro de Borders/cards temáticos (Protect/Shell/Reflect/Regen/Crimson/etc).
+	     Antes só Gold tinha Foreground próprio; os demais forçavam hex literais (#6FE3B7,
+	     #68D8C7, #8FD7FF, #AAB4FF, #F05F7B...). Espelham o BorderBrush da mesma família
+	     (texto que combina com a borda temática). ===== -->
+	<SolidColorBrush x:Key="AccentHasteForegroundBrush"     Color="#4AB8D8" />
+	<SolidColorBrush x:Key="AccentProtectForegroundBrush"   Color="#4AAF7A" />
+	<SolidColorBrush x:Key="AccentShellForegroundBrush"     Color="#4AB8D8" />
+	<SolidColorBrush x:Key="AccentReflectForegroundBrush"   Color="#6A8AE0" />
+	<SolidColorBrush x:Key="AccentRegenForegroundBrush"     Color="#4AAF9A" />
+	<SolidColorBrush x:Key="AccentNulAllForegroundBrush"    Color="#5AAAD0" />
+	<SolidColorBrush x:Key="AccentBuilderForegroundBrush"   Color="#4AB8D8" />
+	<SolidColorBrush x:Key="AccentReactionForegroundBrush"  Color="#D06A8A" />
+	<SolidColorBrush x:Key="AccentCycleForegroundBrush"     Color="#8AA0E0" />
+	<SolidColorBrush x:Key="AccentCrimsonForegroundBrush"   Color="#C05A6A" />
+	<SolidColorBrush x:Key="AccentForbiddenForegroundBrush" Color="#E04A6A" />
+	<SolidColorBrush x:Key="AccentExperimentalForegroundBrush" Color="#C8AEFF" />
+	<SolidColorBrush x:Key="AccentUndoForegroundBrush"      Color="#9A90D0" />
+	<SolidColorBrush x:Key="AccentRefreshForegroundBrush"   Color="#3A90B8" />
+	<SolidColorBrush x:Key="AccentMoveForegroundBrush"      Color="#6AAAD0" />
+
+	<!-- Status bar / footer: cores de "on/off" do status de project e hook. -->
+	<SolidColorBrush x:Key="StatusOnBrush" Color="#73E2AE" />
+	<SolidColorBrush x:Key="StatusOffBrush" Color="#9EB0C2" />
+
+	<!-- ===== RuntimeDll toggle pill tokens (Jarvis-UI, Sprint E 2026-06-20, OPT-E3;
+	     v2.166.0.10: neon verde/vermelho restaurado — Halyson pediu "tudo neon", não branco azedo).
+	     Estados: On (ligado), Off (desligado), Install (disponível p/ instalar), Missing (ausente). -->
+	<SolidColorBrush x:Key="RuntimeToggleOnFillBrush"        Color="#00E87A" />
+	<SolidColorBrush x:Key="RuntimeToggleOnBorderBrush"      Color="#7DFFB8" />
+	<SolidColorBrush x:Key="RuntimeToggleOnForegroundBrush"  Color="#FFFFFF" />
+	<SolidColorBrush x:Key="RuntimeToggleOffFillBrush"       Color="#FF2A4D" />
+	<SolidColorBrush x:Key="RuntimeToggleOffBorderBrush"     Color="#FF8A9E" />
+	<SolidColorBrush x:Key="RuntimeToggleOffForegroundBrush" Color="#FFFFFF" />
+	<SolidColorBrush x:Key="RuntimeToggleInstallFillBrush"        Color="#FFD24A" />
+	<SolidColorBrush x:Key="RuntimeToggleInstallBorderBrush"      Color="#FFE8A0" />
+	<SolidColorBrush x:Key="RuntimeToggleInstallForegroundBrush"  Color="#1A1200" />
+	<SolidColorBrush x:Key="RuntimeToggleMissingFillBrush"        Color="#22303B" />
+	<SolidColorBrush x:Key="RuntimeToggleMissingBorderBrush"      Color="#304656" />
+	<SolidColorBrush x:Key="RuntimeToggleMissingForegroundBrush"  Color="#9EB0C2" />
+	<SolidColorBrush x:Key="RuntimeRuntimeActiveBrush"   Color="#00FF88" />
+	<SolidColorBrush x:Key="RuntimeRuntimeInactiveBrush" Color="#9EB0C2" />
+
+	<!-- ===== Design tokens estruturais (Jarvis-UI, audit 2026-06-19, P1-7):
+	     Spacing / Radius / Motion como recursos reutilizáveis. Antes destes, todo
+	     Padding/Margin/CornerRadius/Duration era literal espalhado em centenas de XAML.
+	     Valores de referência batem com os literais mais comuns do app (radius 10/12,
+	     padding 8/12/16, duração 120ms). Adoção gradual módulo-a-módulo. ===== -->
+
+	<!-- Spacing: Thickness para Padding/Margin. -->
+	<Thickness x:Key="SpacingXs">4</Thickness>
+	<Thickness x:Key="SpacingSm">8</Thickness>
+	<Thickness x:Key="SpacingMd">12</Thickness>
+	<Thickness x:Key="SpacingLg">16</Thickness>
+	<Thickness x:Key="SpacingXl">20</Thickness>
+
+	<!-- StackGap: doubles para StackPanel.Spacing / gaps horizontais. -->
+	<x:Double x:Key="StackGapSm">8</x:Double>
+	<x:Double x:Key="StackGapMd">12</x:Double>
+	<x:Double x:Key="StackGapLg">16</x:Double>
+
+	<!-- Radius: CornerRadius. Sm=8 (action buttons/inputs), Md=10 (cardSoft/buttons), Lg=12 (cards hero), Pill=999. -->
+	<CornerRadius x:Key="RadiusSm">8</CornerRadius>
+	<CornerRadius x:Key="RadiusMd">10</CornerRadius>
+	<CornerRadius x:Key="RadiusLg">12</CornerRadius>
+	<CornerRadius x:Key="RadiusPill">999</CornerRadius>
+
+	<!-- Motion: TimeSpan para transitions. Fast=100ms, Normal=120ms, Slow=200ms. -->
+	<sys:TimeSpan x:Key="DurationFast">0:0:0.10</sys:TimeSpan>
+	<sys:TimeSpan x:Key="DurationNormal">0:0:0.12</sys:TimeSpan>
+	<sys:TimeSpan x:Key="DurationSlow">0:0:0.20</sys:TimeSpan>
+
+	<!-- Override the Fluent Expander chrome so headers read as the studio cool-blue panel instead of the
+	     default neutral grey (which looks warm/brownish next to the blue theme). Applies app-wide. -->
+	<SolidColorBrush x:Key="ExpanderHeaderBackground" Color="#15212C" />
+	<SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver" Color="#1B2B39" />
+	<SolidColorBrush x:Key="ExpanderHeaderBackgroundPressed" Color="#1B2B39" />
+	<SolidColorBrush x:Key="ExpanderHeaderBackgroundDisabled" Color="#101922" />
+	<SolidColorBrush x:Key="ExpanderHeaderForeground" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="ExpanderHeaderForegroundPointerOver" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="ExpanderHeaderForegroundPressed" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="ExpanderHeaderBorderBrush" Color="#264052" />
+	<SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver" Color="#7EC8FF" />
+	<SolidColorBrush x:Key="ExpanderHeaderBorderBrushPressed" Color="#7EC8FF" />
+	<SolidColorBrush x:Key="ExpanderContentBackground" Color="Transparent" />
+	<SolidColorBrush x:Key="ExpanderContentBorderBrush" Color="#264052" />
+	<SolidColorBrush x:Key="ExpanderChevronForeground" Color="#7EC8FF" />
+	<SolidColorBrush x:Key="ExpanderChevronForegroundPointerOver" Color="#7EC8FF" />
+	<SolidColorBrush x:Key="ExpanderChevronForegroundPressed" Color="#7EC8FF" />
+
+	<!-- ListBox items: container transparent so our cardSoft tiles show through; cool hover/selection
+	     instead of the warm/grey Fluent default that read as 'brown' behind the monster cards. App-wide.
+	     v2.186: tons mais profundos + borda neon para seleção visível em qualquer background de card. -->
+	<SolidColorBrush x:Key="ListBoxItemBackground" Color="Transparent" />
+	<SolidColorBrush x:Key="ListBoxItemBackgroundPointerOver" Color="#1B2B39" />
+	<SolidColorBrush x:Key="ListBoxItemBackgroundPressed" Color="#1B2B39" />
+	<SolidColorBrush x:Key="ListBoxItemBackgroundSelected" Color="#1A3040" />
+	<SolidColorBrush x:Key="ListBoxItemBackgroundSelectedPointerOver" Color="#1E3A4A" />
+	<SolidColorBrush x:Key="ListBoxItemBackgroundSelectedPressed" Color="#1A3040" />
+	<SolidColorBrush x:Key="ListBoxItemForeground" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="ListBoxItemForegroundPointerOver" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="ListBoxItemForegroundPressed" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="ListBoxItemForegroundSelected" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="ListBoxItemForegroundSelectedPointerOver" Color="#F1F5F9" />
+	<!-- Borda de seleção (v2.186): tom suave, visível sem ser agressivo. -->
+	<SolidColorBrush x:Key="ListBoxItemSelectionBorderBrush" Color="#2A9D8F" />
+
+	<!-- TabItem (Status/Loot, Customization, etc.): studio cool chrome + teal selected accent, echoing the
+	     tabPill sub-tab strip. Kills the warm Fluent default tab chrome. App-wide. -->
+	<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselected" Color="Transparent" />
+	<SolidColorBrush x:Key="TabItemHeaderBackgroundSelected" Color="#15212C" />
+	<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver" Color="#1B2B39" />
+	<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPressed" Color="#1B2B39" />
+	<SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver" Color="#1B2B39" />
+	<SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPressed" Color="Transparent" />
+	<SolidColorBrush x:Key="TabItemHeaderBackgroundDisabled" Color="Transparent" />
+	<SolidColorBrush x:Key="TabItemHeaderForegroundUnselected" Color="#9EB0C2" />
+	<SolidColorBrush x:Key="TabItemHeaderForegroundSelected" Color="#2A9D8F" />
+	<SolidColorBrush x:Key="TabItemHeaderForegroundUnselectedPointerOver" Color="#F1F5F9" />
+	<SolidColorBrush x:Key="TabItemHeaderForegroundSelectedPointerOver" Color="#2A9D8F" />
+	<SolidColorBrush x:Key="TabItemHeaderForegroundDisabled" Color="#5A6B7A" />
+	<SolidColorBrush x:Key="TabItemHeaderSelectedPipeFill" Color="#2A9D8F" />
+</ResourceDictionary>

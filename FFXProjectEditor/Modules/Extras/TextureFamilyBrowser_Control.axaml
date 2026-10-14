@@ -1,0 +1,258 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1450"
+             d:DesignHeight="920"
+             x:Class="FFXProjectEditor.Modules.Extras.TextureFamilyBrowser_Control">
+
+	<Grid RowDefinitions="Auto,*" Margin="16">
+		<Border Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,0,12">
+			<StackPanel Spacing="6">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extras_textures_dd7450e5}" />
+				<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_tm2_txc_clt_fmt_support_browser_719dfa21}" />
+				<TextBlock Classes="muted" Text="{Binding HeaderSummary}" TextWrapping="Wrap" />
+			</StackPanel>
+		</Border>
+
+		<TabControl Grid.Row="1">
+			<TabItem Header="{x:Static res:Strings.U_tm2_preview_inspector_2cd7a1ca}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="2*" MinWidth="320" MaxWidth="520" />
+						<ColumnDefinition Width="5*" />
+					</Grid.ColumnDefinitions>
+					<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+						<Grid RowDefinitions="Auto,Auto,Auto,Auto,*">
+							<Grid ColumnDefinitions="*,Auto,Auto">
+								<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_tm2_assets_be1a1b35}" />
+								<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_Refresh">Refresh</Button>
+								<Button Grid.Column="2" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenRoot">Open Root</Button>
+							</Grid>
+
+							<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonSourceRoot}" />
+									<TextBlock Text="{Binding SourceRootSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding AssetCountSummary}" />
+								</StackPanel>
+							</Border>
+
+							<TextBox Grid.Row="2" Margin="0,0,0,10" Watermark="{x:Static res:Strings.U_search_name_path_or_bundle_a7ee04dd}"
+							         Text="{Binding SearchText, Mode=TwoWay}" />
+
+							<Grid Grid.Row="3" ColumnDefinitions="*,*" Margin="0,0,0,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPreviewState}" />
+									<ComboBox ItemsSource="{Binding PreviewStateOptions}"
+									          SelectedItem="{Binding SelectedPreviewStateFilter, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonDomain}" />
+									<ComboBox ItemsSource="{Binding DomainOptions}"
+									          SelectedItem="{Binding SelectedDomainFilter, Mode=TwoWay}" />
+								</StackPanel>
+							</Grid>
+
+							<ListBox Grid.Row="4"
+							         ItemsSource="{Binding Assets}"
+							         SelectedItem="{Binding SelectedAsset, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+											<StackPanel Spacing="4">
+												<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+												<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+												<TextBlock Text="{Binding PreviewState}" />
+												<TextBlock Classes="muted" Text="{Binding Evidence}" />
+												<TextBlock Classes="muted" Text="{Binding Dimensions}" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</Border>
+
+					<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+						<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+							<StackPanel Spacing="12">
+								<Grid ColumnDefinitions="*,Auto">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_asset_15a25f27}" />
+										<TextBlock Classes="cardTitle" Text="{Binding SelectedName}" />
+										<TextBlock Classes="muted" Text="{Binding SelectedRelativePath}" TextWrapping="Wrap" />
+									</StackPanel>
+									<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenFile">Open File</Button>
+								</Grid>
+
+								<Grid ColumnDefinitions="Auto,*">
+									<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+										<StackPanel Spacing="8">
+											<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPreviewSurface}" />
+											<Image Source="{Binding SelectedPreviewBitmap}"
+											       Width="256"
+											       Height="256"
+											       Stretch="Uniform" />
+											<TextBlock Text="{Binding SelectedPreviewStatusSummary}" TextWrapping="Wrap" />
+										</StackPanel>
+									</Border>
+
+									<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="10">
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="4">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_state_evidence_0a885ba5}" />
+												<TextBlock Text="{Binding SelectedPreviewState}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedEvidence}" />
+											</StackPanel>
+										</Border>
+
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="4">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_domain_bundle_6853a5c5}" />
+												<TextBlock Text="{Binding SelectedDomain}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedBundle}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedProvenance}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="4">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_dimensions_palette_size_cd1bd64e}" />
+												<TextBlock Text="{Binding SelectedDimensions}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedPaletteSummary}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedFileSize}" />
+												<TextBlock Classes="muted" Text="{Binding SelectedVariant}" />
+											</StackPanel>
+										</Border>
+									</StackPanel>
+								</Grid>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_header_facts_6ab4b430}" />
+										<TextBlock Text="{Binding SelectedHeaderSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWarnings}" />
+										<TextBlock Text="{Binding SelectedWarnings}" TextWrapping="Wrap" />
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBlockedReason}" Margin="0,8,0,0" />
+										<TextBlock Text="{Binding SelectedBlockedReason}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+							</StackPanel>
+						</ScrollViewer>
+					</Border>
+				</Grid>
+			</TabItem>
+
+			<TabItem Header="{x:Static res:Strings.CommonTxcCltFmtSps2}">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="2*" MinWidth="320" MaxWidth="520" />
+						<ColumnDefinition Width="5*" />
+					</Grid.ColumnDefinitions>
+					<Border Grid.Column="0" Classes="card" Padding="{DynamicResource SpacingLg}" Margin="0,0,12,0">
+						<Grid RowDefinitions="Auto,Auto,Auto,*">
+							<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.CommonTxcCltFmtSps2}" />
+
+							<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_support_family_count_88c2a7b4}" />
+									<TextBlock Text="{Binding SupportAssetCountSummary}" />
+								</StackPanel>
+							</Border>
+
+							<TextBox Grid.Row="2" Watermark="{x:Static res:Strings.U_search_name_path_cohort_or_bundle_19519908}"
+							         Text="{Binding SupportSearchText, Mode=TwoWay}" />
+
+							<Grid Grid.Row="2" ColumnDefinitions="*,*" Margin="0,42,0,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonExtension}" />
+									<ComboBox ItemsSource="{Binding SupportExtensionOptions}"
+									          SelectedItem="{Binding SelectedSupportExtensionFilter, Mode=TwoWay}" />
+								</StackPanel>
+								<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonDomain}" />
+									<ComboBox ItemsSource="{Binding SupportDomainOptions}"
+									          SelectedItem="{Binding SelectedSupportDomainFilter, Mode=TwoWay}" />
+								</StackPanel>
+							</Grid>
+
+							<ListBox Grid.Row="3"
+							         ItemsSource="{Binding SupportAssets}"
+							         SelectedItem="{Binding SelectedSupportAsset, Mode=TwoWay}">
+								<ListBox.ItemTemplate>
+									<DataTemplate>
+										<Border Classes="cardSoft" Padding="10" Margin="0,0,0,8">
+											<StackPanel Spacing="4">
+												<TextBlock FontWeight="SemiBold" Text="{Binding Name}" />
+												<TextBlock Classes="muted" Text="{Binding RelativePath}" TextWrapping="Wrap" />
+												<TextBlock Text="{Binding Cohort}" />
+												<TextBlock Classes="muted" Text="{Binding PairSummary}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+									</DataTemplate>
+								</ListBox.ItemTemplate>
+							</ListBox>
+						</Grid>
+					</Border>
+
+					<Border Grid.Column="1" Classes="card" Padding="{DynamicResource SpacingLg}">
+						<ScrollViewer HorizontalScrollBarVisibility="Disabled">
+							<StackPanel Spacing="12">
+								<Grid ColumnDefinitions="*,Auto">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_selected_support_asset_9bd33662}" />
+										<TextBlock Classes="cardTitle" Text="{Binding SelectedSupportName}" />
+										<TextBlock Classes="muted" Text="{Binding SelectedSupportRelativePath}" TextWrapping="Wrap" />
+									</StackPanel>
+									<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction" Click="Button_OpenSupportFile">Open File</Button>
+								</Grid>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_extension_domain_e09349aa}" />
+										<TextBlock Text="{Binding SelectedSupportExtension}" />
+										<TextBlock Classes="muted" Text="{Binding SelectedSupportDomain}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_cohort_pairing_ee054518}" />
+										<TextBlock Text="{Binding SelectedSupportCohort}" />
+										<TextBlock Classes="muted" Text="{Binding SelectedSupportPairSummary}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonHeadHex}" />
+										<TextBlock Text="{Binding SelectedSupportHeadHex}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+
+								<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+									<StackPanel Spacing="6">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEvidenceGuardrail}" />
+										<TextBlock Text="{Binding SelectedSupportEvidence}" TextWrapping="Wrap" />
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonWarnings}" Margin="0,8,0,0" />
+										<TextBlock Text="{Binding SelectedSupportWarnings}" TextWrapping="Wrap" />
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBlockedReason}" Margin="0,8,0,0" />
+										<TextBlock Text="{Binding SelectedSupportBlockedReason}" TextWrapping="Wrap" />
+									</StackPanel>
+								</Border>
+							</StackPanel>
+						</ScrollViewer>
+					</Border>
+				</Grid>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</UserControl>

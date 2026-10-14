@@ -1,0 +1,303 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1420"
+             d:DesignHeight="780"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.RuntimeDllManager_Control">
+
+	<!-- Jarvis-UI (Runtime DLL Manager audit 2026-06-20):
+	     P0 — hero: LinearGradientBrush inline (#183444/#111C24/#3B4B2D) -> Classes="heroGradient"
+	          (padrão compartilhado do StudioTheme); badge #20303B/#355064 -> RailHoverBrush/PanelStrokeBrush.
+	     P1 — piloto do ModuleMasterDetail_Shell: 1º consumidor do repo. Master = 3 cards de status
+	          (Switchboard/Target/MMF); Detail = hero + banners + lista de DLLs.
+	          rsp:Responsive.Breakpoints no root; em narrow (<760px) o master colapsa por default via
+	          style (não briga com a preferência manual do usuário — valor local TwoWay vence).
+	     P2 — banner offline (!GameOpen) + banner detached (game aberto, hooks off); EmptyState quando
+	          !GameRootReady; AutomationProperties.Name nos checkboxes de status e botões de ação.
+	     Escopo respeitado: lógica de DLL/hook/MMF/process no DataModel/code-behind intocada — só o
+	     container visual mudou. -->
+
+	<UserControl.Styles>
+		<!-- Responsividade: em telas estreitas o painel master recolhe por default (o Expander do shell
+		     ainda permite reabrir manualmente; o TwoWay interno persiste a escolha enquanto o controle vive). -->
+		<Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+			<Setter Property="IsMasterExpanded" Value="False" />
+		</Style>
+	</UserControl.Styles>
+
+	<common:ModuleMasterDetail_Shell MasterHeaderLabel="Runtime">
+
+		<!-- ===== MASTER: cabeçalho + 3 cards de status ===== -->
+		<common:ModuleMasterDetail_Shell.MasterHeader>
+			<StackPanel Spacing="4" Margin="2,0,2,2">
+				<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_runtime_switchboard_926d0810}" />
+				<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+				           Text="{x:Static res:Strings.U_liga_desliga_por_arquivo_no_game_root_e_modules_8895eb1b}" />
+			</StackPanel>
+		</common:ModuleMasterDetail_Shell.MasterHeader>
+
+		<common:ModuleMasterDetail_Shell.MasterList>
+			<ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+				<StackPanel Spacing="10">
+
+					<Border Classes="cardSoft" Padding="10">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="cardTitle" FontSize="13" Text="{x:Static res:Strings.U_injected_dlls_24a88221}" />
+							<Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+								<TextBlock Text="{x:Static res:Strings.CommonFfxExe}" VerticalAlignment="Center" />
+								<CheckBox Grid.Column="1" Classes="statusCheck" IsChecked="{Binding GameOpen}"
+								          AutomationProperties.Name="FFX.exe está aberto" />
+								<TextBlock Grid.Row="1" Text="{x:Static res:Strings.U_ffx_probe_e6728ee3}" VerticalAlignment="Center" />
+								<CheckBox Grid.Row="1" Grid.Column="1" Classes="statusCheck" IsChecked="{Binding ProbeHooked}"
+								          AutomationProperties.Name="ffx-probe está hookado" />
+								<TextBlock Grid.Row="2" Text="{x:Static res:Strings.U_ffx_hooks_39c670aa}" VerticalAlignment="Center" />
+								<CheckBox Grid.Row="2" Grid.Column="1" Classes="statusCheck" IsChecked="{Binding HooksAttached}"
+								          AutomationProperties.Name="ffx-hooks está attachado" />
+								<TextBlock Grid.Row="3" Text="{x:Static res:Strings.U_module_list_39a76992}" VerticalAlignment="Center" />
+								<CheckBox Grid.Row="3" Grid.Column="1" Classes="statusCheck" IsChecked="{Binding ModuleListAvailable}"
+								          AutomationProperties.Name="{x:Static res:Strings.F2_list_of_available_process_modules_a686aa15}" />
+							</Grid>
+							<TextBlock Classes="muted" FontSize="11" Text="{Binding RuntimeSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="10">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="cardTitle" FontSize="13" Text="{x:Static res:Strings.CommonGameDirectory}" />
+							<TextBox Text="{Binding GameRoot, Mode=TwoWay}" Watermark="{x:Static res:Strings.U_pasta_com_ffx_exe_e_modules_9459d361}" />
+							<WrapPanel Orientation="Horizontal" ItemHeight="38">
+								<Button Classes="secondaryAction" Click="Button_DetectGameRoot"
+								        AutomationProperties.Name="Detectar diretório do jogo">Detect</Button>
+								<Button Classes="secondaryAction" Margin="8,0,0,0" Click="Button_BrowseGameRoot"
+								        AutomationProperties.Name="{x:Static res:Strings.U_GameFolderPickerTitle}"
+								        Content="{x:Static res:Strings.CommonBrowse}" />
+								<Button Classes="secondaryAction" Margin="8,0,0,0" Click="Button_OpenTargetFolder"
+								        AutomationProperties.Name="{x:Static res:Strings.F2_open_game_folder_in_explorer_3c150e6c}">Open folder</Button>
+								<Button Classes="secondaryAction" Margin="8,0,0,0" Click="Button_LaunchGame"
+								        AutomationProperties.Name="Iniciar FFX via Steam">Launch via Steam</Button>
+							</WrapPanel>
+							<TextBlock Classes="muted" FontSize="11" Text="{Binding FileSummary}" TextWrapping="Wrap" />
+						</StackPanel>
+					</Border>
+
+					<Border Classes="cardSoft" Padding="10">
+						<StackPanel Spacing="8">
+							<TextBlock Classes="cardTitle" FontSize="13" Text="{x:Static res:Strings.U_mmf_bridges_02f031bf}" />
+							<Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+								<TextBlock Text="{x:Static res:Strings.U_ffxprobeblock_v1_cf8cb9f6}" VerticalAlignment="Center" />
+								<CheckBox Grid.Column="1" Classes="statusCheck" IsChecked="{Binding ProbeAttached}"
+								          AutomationProperties.Name="MMF FFXProbeBlock_v1 attached" />
+								<TextBlock Grid.Row="1" Text="{x:Static res:Strings.U_probe_hook_d8c158b0}" VerticalAlignment="Center" />
+								<CheckBox Grid.Row="1" Grid.Column="1" Classes="statusCheck" IsChecked="{Binding ProbeHooked}"
+								          AutomationProperties.Name="Probe hook ativo" />
+								<TextBlock Grid.Row="2" Text="{x:Static res:Strings.U_ffxhooksblock_v1_6871f92d}" VerticalAlignment="Center" />
+								<CheckBox Grid.Row="2" Grid.Column="1" Classes="statusCheck" IsChecked="{Binding HooksAttached}"
+								          AutomationProperties.Name="MMF FFXHooksBlock_v1 ativa" />
+							</Grid>
+						</StackPanel>
+					</Border>
+
+				</StackPanel>
+			</ScrollViewer>
+		</common:ModuleMasterDetail_Shell.MasterList>
+
+		<!-- ===== DETAIL: banners + hero + lista de DLLs (ou EmptyState) ===== -->
+		<common:ModuleMasterDetail_Shell.Detail>
+			<Panel>
+				<!-- Estado normal: alvo válido -->
+				<ScrollViewer Margin="14,0,0,0" HorizontalScrollBarVisibility="Disabled"
+				              IsVisible="{Binding GameRootReady}">
+					<StackPanel Spacing="12">
+
+						<!-- Banner: jogo fechado — mudanças só valem no próximo boot.
+						     Jarvis-UI (Sprint E 2026-06-20, OPT-E2): botão Refresh no banner pra re-verificar se o
+						     FFX abriu, sem precisar rolar até o hero. Reusa o mesmo handler Button_Refresh do hero. -->
+						<Border Padding="14,10" CornerRadius="{DynamicResource RadiusMd}" BorderThickness="1"
+						        Background="{DynamicResource PanelAltBrush}"
+						        BorderBrush="{DynamicResource WarningBrush}"
+						        IsVisible="{Binding IsGameClosed}">
+							<Grid ColumnDefinitions="*,Auto">
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<PathIcon Data="{DynamicResource IconBolt}" Width="18" Height="18"
+									          VerticalAlignment="Center"
+									          Foreground="{DynamicResource WarningBrush}" />
+									<StackPanel Spacing="2" VerticalAlignment="Center">
+										<TextBlock Classes="h3" Foreground="{DynamicResource WarningBrush}"
+										           Text="{x:Static res:Strings.U_jogo_fechado_toggles_so_armam_o_disco_f0d5b83f}" />
+										<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+										           Text="{x:Static res:Strings.U_dll_ja_carregada_continua_viva_ate_reiniciar_o_f_d731943e}" />
+									</StackPanel>
+								</StackPanel>
+								<Button Grid.Column="1" Classes="secondaryAction" VerticalAlignment="Center"
+								        Click="Button_Refresh"
+								        AutomationProperties.Name="{x:Static res:Strings.F2_re_verify_if_ffx_is_already_open_a4523baa}">Refresh</Button>
+							</Grid>
+						</Border>
+
+						<!-- Banner: FFX aberto mas nenhum hook ativo — estado ao vivo não reflete -->
+						<Border Padding="14,10" CornerRadius="{DynamicResource RadiusMd}" BorderThickness="1"
+						        Background="{DynamicResource PanelAltBrush}"
+						        BorderBrush="{DynamicResource DangerBrush}"
+						        IsVisible="{Binding IsRuntimeDetached}">
+							<Grid ColumnDefinitions="*,Auto">
+								<StackPanel Orientation="Horizontal" Spacing="10">
+									<PathIcon Data="{DynamicResource IconBolt}" Width="18" Height="18"
+									          VerticalAlignment="Center"
+									          Foreground="{DynamicResource DangerBrush}" />
+									<StackPanel Spacing="2" VerticalAlignment="Center">
+										<TextBlock Classes="h3" Foreground="{DynamicResource DangerBrush}"
+										           Text="{x:Static res:Strings.U_ffx_exe_detectado_mas_sem_hooks_ativos_aecffede}" />
+										<TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+										           Text="{x:Static res:Strings.U_runtime_ao_vivo_nao_esta_sendo_lido_o_status_das_d0974559}" />
+									</StackPanel>
+								</StackPanel>
+								<Button Grid.Column="1" Classes="secondaryAction" VerticalAlignment="Center"
+								        Click="Button_Refresh"
+								        AutomationProperties.Name="Re-verificar runtime e hooks">Reconectar</Button>
+							</Grid>
+						</Border>
+
+						<!-- Hero (Classes="heroGradient" — padrão compartilhado, sem gradient inline) -->
+						<Border Padding="{DynamicResource SpacingXl}" Classes="heroGradient">
+							<Grid ColumnDefinitions="*,Auto">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_dll_injection_control_ffc3c0a6}" />
+									<TextBlock FontSize="26" FontWeight="Bold" Text="{x:Static res:Strings.U_o_que_carrega_no_ffx_controlado_daqui_b94dac8f}" />
+									<TextBlock Classes="muted" Text="{Binding StatusSummary}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding LastActionSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+								<Button Grid.Column="1"
+								        Classes="primaryAction"
+								        VerticalAlignment="Top"
+								        Click="Button_Refresh"
+								        AutomationProperties.Name="Atualizar status do runtime">Refresh</Button>
+							</Grid>
+						</Border>
+
+						<ItemsControl ItemsSource="{Binding Dlls}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Classes="cardSoft" Padding="14" Margin="0,0,0,10">
+										<Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+											<StackPanel Spacing="4">
+												<StackPanel Orientation="Horizontal" Spacing="8">
+													<TextBlock Classes="cardTitle" Text="{Binding DisplayName}" />
+													<Border Padding="8,3"
+													        CornerRadius="{DynamicResource RadiusPill}"
+													        Background="{DynamicResource RailHoverBrush}"
+													        BorderBrush="{DynamicResource PanelStrokeBrush}"
+													        BorderThickness="1">
+														<TextBlock Classes="sectionLabel" FontSize="11" Text="{Binding BadgeText}" />
+													</Border>
+												</StackPanel>
+												<TextBlock Classes="muted" Text="{Binding Description}" TextWrapping="Wrap" />
+												<TextBlock Classes="sectionLabel"
+												           FontSize="11"
+												           Text="{Binding MetadataSummary}"
+												           TextWrapping="Wrap" />
+											</StackPanel>
+
+											<Border Grid.Column="1"
+											        Width="112"
+											        Height="44"
+											        HorizontalAlignment="Right"
+											        VerticalAlignment="Top"
+											        Background="{Binding ToggleBrush}"
+											        BorderBrush="{Binding ToggleBorderBrush}"
+											        BorderThickness="1"
+											        CornerRadius="22"
+											        BoxShadow="{Binding ToggleGlow}">
+												<Button Width="112"
+												        Height="44"
+												        Padding="0"
+												        HorizontalAlignment="Stretch"
+												        VerticalAlignment="Stretch"
+												        HorizontalContentAlignment="Center"
+												        VerticalContentAlignment="Center"
+												        Content="{Binding ToggleLabel}"
+												        Background="Transparent"
+												        Foreground="{Binding ToggleForeground}"
+												        BorderThickness="0"
+												        CornerRadius="22"
+												        FontWeight="SemiBold"
+												        IsEnabled="{Binding CanToggle}"
+												        Tag="{Binding}"
+												        Click="Button_ToggleDll"
+												        AutomationProperties.Name="{Binding ToggleA11yName}" />
+											</Border>
+
+											<Grid Grid.Row="1"
+											      Grid.ColumnSpan="2"
+											      Margin="0,12,0,0"
+											      RowDefinitions="Auto,Auto">
+												<Grid.ColumnDefinitions>
+													<ColumnDefinition Width="3*" MinWidth="120" />
+													<ColumnDefinition Width="4*" MinWidth="120" />
+													<ColumnDefinition Width="3*" MinWidth="120" />
+												</Grid.ColumnDefinitions>
+												<StackPanel Spacing="2">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonType}" />
+													<TextBlock Text="{Binding Kind}" TextWrapping="Wrap" />
+												</StackPanel>
+												<StackPanel Grid.Column="1" Spacing="2">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_disk_ef995260}" />
+													<TextBlock Text="{Binding DiskStatusText}" TextWrapping="Wrap" />
+												</StackPanel>
+												<StackPanel Grid.Column="2" Spacing="2">
+													<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_runtime_c4740e4c}" />
+													<TextBlock Text="{Binding RuntimeStatusText}"
+													           Foreground="{Binding RuntimeBrush}"
+													           TextWrapping="Wrap" />
+												</StackPanel>
+											</Grid>
+
+											<TextBlock Grid.Row="2"
+											           Grid.ColumnSpan="2"
+											           Margin="0,10,0,0"
+											           Classes="muted"
+											           FontFamily="Cascadia Mono,Consolas,Monospace"
+											           FontSize="11"
+											           Text="{Binding PathSummary}"
+											           TextWrapping="Wrap" />
+										</Grid>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+
+					</StackPanel>
+				</ScrollViewer>
+
+				<!-- Empty state: nenhum game root válido -->
+				<Border x:Name="EmptyState"
+				        IsVisible="{Binding !GameRootReady}"
+				        Margin="14,0,0,0">
+					<StackPanel Spacing="14" MaxWidth="560" HorizontalAlignment="Center">
+						<PathIcon Data="{DynamicResource IconBolt}" Width="40" Height="40"
+						          HorizontalAlignment="Center"
+						          Foreground="{DynamicResource TextMutedBrush}" />
+						<StackPanel Spacing="4" HorizontalAlignment="Center">
+							<TextBlock Classes="h2" HorizontalAlignment="Center" Text="{x:Static res:Strings.U_nenhum_alvo_detectado_aadcea4a}" />
+							<TextBlock Classes="muted" TextAlignment="Center" TextWrapping="Wrap"
+							           Text="{x:Static res:Strings.U_informe_a_pasta_que_contem_ffx_exe_e_modules_os__e1ac133a}" />
+						</StackPanel>
+						<Button Classes="primaryAction" Click="Button_DetectGameRoot"
+						        HorizontalAlignment="Center"
+						        AutomationProperties.Name="Detectar diretório do jogo">
+							<StackPanel Orientation="Horizontal" Spacing="6">
+								<PathIcon Data="{DynamicResource IconFolder}" Width="14" Height="14" />
+								<TextBlock Text="{x:Static res:Strings.U_detect_80628bd7}" />
+							</StackPanel>
+						</Button>
+					</StackPanel>
+				</Border>
+			</Panel>
+		</common:ModuleMasterDetail_Shell.Detail>
+	</common:ModuleMasterDetail_Shell>
+</UserControl>

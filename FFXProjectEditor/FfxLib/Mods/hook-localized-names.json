@@ -1,0 +1,2423 @@
+{
+  "schema": 1,
+  "font_tables": {
+    "jp": {
+      "sha256": "40a4369a11fdf0584797522f7a635933418f4b20908b2d7b9b35a8a2ae12c2d5",
+      "chars": 1002
+    },
+    "us": {
+      "sha256": "9f96e3b904c0ed332bb6859ec74f36b5a440c9c10c00fad24099afd42bd39af8",
+      "chars": 192
+    },
+    "ch": {
+      "sha256": "33fc00ffa5bd80b5a8d08b614c0f1527e4095db160e187b1e945bbe6ebfa4488",
+      "chars": 1945
+    },
+    "kr": {
+      "sha256": "cb3c63318e4791a15d64eca1ea197fee929dbc244159349a63ec8948fe363235",
+      "chars": 1408
+    }
+  },
+  "aliases": [
+    {
+      "id": 135,
+      "locale": "jppc",
+      "name": "ヒーローブレイブ",
+      "hex": "e03cfb3ce4fab2e4"
+    },
+    {
+      "id": 136,
+      "locale": "jppc",
+      "name": "エナジーブースト",
+      "hex": "b6d8c63ce43cc7d6"
+    },
+    {
+      "id": 137,
+      "locale": "jppc",
+      "name": "エナジーバースト",
+      "hex": "b6d8c63cde3cc7d6"
+    },
+    {
+      "id": 138,
+      "locale": "jppc",
+      "name": "エフィシェンシー",
+      "hex": "b6e3b1c5b5fec53c"
+    },
+    {
+      "id": 139,
+      "locale": "jppc",
+      "name": "バンパイア",
+      "hex": "defedfb2b0"
+    },
+    {
+      "id": 140,
+      "locale": "jppc",
+      "name": "フォローアップ",
+      "hex": "e3b7fb3cb0d1e5"
+    },
+    {
+      "id": 141,
+      "locale": "jppc",
+      "name": "ピートレード",
+      "hex": "e23cd6fa3cd7"
+    },
+    {
+      "id": 142,
+      "locale": "jppc",
+      "name": "エムトレード",
+      "hex": "b6eed6fa3cd7"
+    },
+    {
+      "id": 143,
+      "locale": "jppc",
+      "name": "ヒーローコーション",
+      "hex": "e03cfb3cc13cc5f5fe"
+    },
+    {
+      "id": 144,
+      "locale": "jppc",
+      "name": "MPリジェネ",
+      "hex": "2c3c2c3ff8c6b5db"
+    },
+    {
+      "id": 145,
+      "locale": "jppc",
+      "name": "エルード",
+      "hex": "b6f93cd7"
+    },
+    {
+      "id": 146,
+      "locale": "jppc",
+      "name": "エナジーウォール",
+      "hex": "b6d8c63cb4b73cf9"
+    },
+    {
+      "id": 147,
+      "locale": "jppc",
+      "name": "エナジーバリア",
+      "hex": "b6d8c63cdef8b0"
+    },
+    {
+      "id": 148,
+      "locale": "jppc",
+      "name": "召喚獣HP/MP限界",
+      "hex": "2d3f2c8f2d382c372c3f492c3c2c3f2e992c87"
+    },
+    {
+      "id": 149,
+      "locale": "jppc",
+      "name": "召喚獣ダメージ限界",
+      "hex": "2d3f2c8f2d38ceef3cc62e992c87"
+    },
+    {
+      "id": 150,
+      "locale": "jppc",
+      "name": "マナスプリング",
+      "hex": "ecd8c7e5f8febe"
+    },
+    {
+      "id": 151,
+      "locale": "jppc",
+      "name": "ブレイクリミット",
+      "hex": "e4fab2bdf8edd1d6"
+    },
+    {
+      "id": 152,
+      "locale": "jppc",
+      "name": "デビルズバーゲン",
+      "hex": "d5e1f9c8de3cc0fe"
+    },
+    {
+      "id": 153,
+      "locale": "jppc",
+      "name": "ウォーデンズオース",
+      "hex": "b4b73cd5fec8b83cc7"
+    },
+    {
+      "id": 154,
+      "locale": "jppc",
+      "name": "アルケインフォーカス",
+      "hex": "b0f9bfb2fee3b73cb9c7"
+    },
+    {
+      "id": 155,
+      "locale": "jppc",
+      "name": "ドロップ2倍",
+      "hex": "d7fbd1e5322dc7"
+    },
+    {
+      "id": 156,
+      "locale": "jppc",
+      "name": "ドロップ3倍",
+      "hex": "d7fbd1e5332dc7"
+    },
+    {
+      "id": 157,
+      "locale": "jppc",
+      "name": "エレメントイーター",
+      "hex": "b6faeffed6b23ccd3c"
+    },
+    {
+      "id": 158,
+      "locale": "jppc",
+      "name": "HPMP +10%",
+      "hex": "2c372c3f2c3c2c3f3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "jppc",
+      "name": "HPMP +20%",
+      "hex": "2c372c3f2c3c2c3f3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "jppc",
+      "name": "HPMP +40%",
+      "hex": "2c372c3f2c3c2c3f3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "jppc",
+      "name": "HPMP +60%",
+      "hex": "2c372c3f2c3c2c3f3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "jppc",
+      "name": "全能力 +3%",
+      "hex": "2d6b2dc32e4d3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "jppc",
+      "name": "全能力 +6%",
+      "hex": "2d6b2dc32e4d3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "jppc",
+      "name": "全能力 +9%",
+      "hex": "2d6b2dc32e4d3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "jppc",
+      "name": "全能力 +12%",
+      "hex": "2d6b2dc32e4d3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "jppc",
+      "name": "攻撃力と魔力 +10%",
+      "hex": "2cc92cb02e4d862df82e4d3a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "jppc",
+      "name": "攻撃力と魔力 +20%",
+      "hex": "2cc92cb02e4d862df82e4d3a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "jppc",
+      "name": "物理防御と魔法防御 +10%",
+      "hex": "2de62e442df42cbf862df82df22df42cbf3a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "jppc",
+      "name": "物理防御と魔法防御 +20%",
+      "hex": "2de62e442df42cbf862df82df22df42cbf3a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "jppc",
+      "name": "フールストライク",
+      "hex": "e33cf9c7d6f7b2bd"
+    },
+    {
+      "id": 171,
+      "locale": "jppc",
+      "name": "フールタッチ",
+      "hex": "e33cf9cdd1cf"
+    },
+    {
+      "id": 172,
+      "locale": "jppc",
+      "name": "フォーストライク",
+      "hex": "e3b73cc7d6f7b2bd"
+    },
+    {
+      "id": 173,
+      "locale": "jppc",
+      "name": "フォータッチ",
+      "hex": "e3b73ccdd1cf"
+    },
+    {
+      "id": 174,
+      "locale": "jppc",
+      "name": "スペルスプリング",
+      "hex": "c7e8f9c7e5f8febe"
+    },
+    {
+      "id": 135,
+      "locale": "inpc",
+      "name": "Hero’s Bravery",
+      "hex": "5774817e41823a51817085748188"
+    },
+    {
+      "id": 136,
+      "locale": "inpc",
+      "name": "Energy Boost",
+      "hex": "547d748176883a517e7e8283"
+    },
+    {
+      "id": 137,
+      "locale": "inpc",
+      "name": "Energy Burst",
+      "hex": "547d748176883a5184818283"
+    },
+    {
+      "id": 138,
+      "locale": "inpc",
+      "name": "Efficiency",
+      "hex": "547575787278747d7288"
+    },
+    {
+      "id": 139,
+      "locale": "inpc",
+      "name": "Vampirism",
+      "hex": "65707c7f788178827c"
+    },
+    {
+      "id": 140,
+      "locale": "inpc",
+      "name": "Follow Up",
+      "hex": "557e7b7b7e863a647f"
+    },
+    {
+      "id": 141,
+      "locale": "inpc",
+      "name": "P-Trade",
+      "hex": "5f476381707374"
+    },
+    {
+      "id": 142,
+      "locale": "inpc",
+      "name": "M-Trade",
+      "hex": "5c476381707374"
+    },
+    {
+      "id": 143,
+      "locale": "inpc",
+      "name": "Hero’s Caution",
+      "hex": "5774817e41823a52708483787e7d"
+    },
+    {
+      "id": 144,
+      "locale": "inpc",
+      "name": "MP Regen",
+      "hex": "5c5f3a617476747d"
+    },
+    {
+      "id": 145,
+      "locale": "inpc",
+      "name": "Elude",
+      "hex": "547b847374"
+    },
+    {
+      "id": 146,
+      "locale": "inpc",
+      "name": "Energy Wall",
+      "hex": "547d748176883a66707b7b"
+    },
+    {
+      "id": 147,
+      "locale": "inpc",
+      "name": "Energy Barrier",
+      "hex": "547d748176883a51708181787481"
+    },
+    {
+      "id": 148,
+      "locale": "inpc",
+      "name": "Aeon Break HP/MP Limit",
+      "hex": "50747e7d3a518174707a3a575f495c5f3a5b787c7883"
+    },
+    {
+      "id": 149,
+      "locale": "inpc",
+      "name": "Aeon Break Damage Limit",
+      "hex": "50747e7d3a518174707a3a53707c7076743a5b787c7883"
+    },
+    {
+      "id": 150,
+      "locale": "inpc",
+      "name": "Mana Spring",
+      "hex": "5c707d703a627f81787d76"
+    },
+    {
+      "id": 151,
+      "locale": "inpc",
+      "name": "Break Limits",
+      "hex": "518174707a3a5b787c788382"
+    },
+    {
+      "id": 152,
+      "locale": "inpc",
+      "name": "Devil’s Bargain",
+      "hex": "537485787b41823a5170817670787d"
+    },
+    {
+      "id": 153,
+      "locale": "inpc",
+      "name": "Warden’s Oath",
+      "hex": "66708173747d41823a5e708377"
+    },
+    {
+      "id": 154,
+      "locale": "inpc",
+      "name": "Arcane Focus",
+      "hex": "508172707d743a557e728482"
+    },
+    {
+      "id": 155,
+      "locale": "inpc",
+      "name": "Double Drop",
+      "hex": "537e84717b743a53817e7f"
+    },
+    {
+      "id": 156,
+      "locale": "inpc",
+      "name": "Triple Drop",
+      "hex": "6381787f7b743a53817e7f"
+    },
+    {
+      "id": 157,
+      "locale": "inpc",
+      "name": "Element Eater",
+      "hex": "547b747c747d833a5470837481"
+    },
+    {
+      "id": 158,
+      "locale": "inpc",
+      "name": "HPMP +10%",
+      "hex": "575f5c5f3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "inpc",
+      "name": "HPMP +20%",
+      "hex": "575f5c5f3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "inpc",
+      "name": "HPMP +40%",
+      "hex": "575f5c5f3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "inpc",
+      "name": "HPMP +60%",
+      "hex": "575f5c5f3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "inpc",
+      "name": "AIO +3%",
+      "hex": "50585e3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "inpc",
+      "name": "AIO +6%",
+      "hex": "50585e3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "inpc",
+      "name": "AIO +9%",
+      "hex": "50585e3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "inpc",
+      "name": "AIO +12%",
+      "hex": "50585e3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "inpc",
+      "name": "STR and MAG +10%",
+      "hex": "6263613a707d733a5c50563a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "inpc",
+      "name": "STR and MAG +20%",
+      "hex": "6263613a707d733a5c50563a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "inpc",
+      "name": "DEF and MDEF +10%",
+      "hex": "5354553a707d733a5c5354553a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "inpc",
+      "name": "DEF and MDEF +20%",
+      "hex": "5354553a707d733a5c5354553a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "inpc",
+      "name": "Foolstrike",
+      "hex": "557e7e7b828381787a74"
+    },
+    {
+      "id": 171,
+      "locale": "inpc",
+      "name": "Fooltouch",
+      "hex": "557e7e7b837e847277"
+    },
+    {
+      "id": 172,
+      "locale": "inpc",
+      "name": "Fourstrike",
+      "hex": "557e8481828381787a74"
+    },
+    {
+      "id": 173,
+      "locale": "inpc",
+      "name": "Fourtouch",
+      "hex": "557e8481837e847277"
+    },
+    {
+      "id": 174,
+      "locale": "inpc",
+      "name": "Spell Spring",
+      "hex": "627f747b7b3a627f81787d76"
+    },
+    {
+      "id": 135,
+      "locale": "new_uspc",
+      "name": "Hero’s Bravery",
+      "hex": "5774817e41823a51817085748188"
+    },
+    {
+      "id": 136,
+      "locale": "new_uspc",
+      "name": "Energy Boost",
+      "hex": "547d748176883a517e7e8283"
+    },
+    {
+      "id": 137,
+      "locale": "new_uspc",
+      "name": "Energy Burst",
+      "hex": "547d748176883a5184818283"
+    },
+    {
+      "id": 138,
+      "locale": "new_uspc",
+      "name": "Efficiency",
+      "hex": "547575787278747d7288"
+    },
+    {
+      "id": 139,
+      "locale": "new_uspc",
+      "name": "Vampirism",
+      "hex": "65707c7f788178827c"
+    },
+    {
+      "id": 140,
+      "locale": "new_uspc",
+      "name": "Follow Up",
+      "hex": "557e7b7b7e863a647f"
+    },
+    {
+      "id": 141,
+      "locale": "new_uspc",
+      "name": "P-Trade",
+      "hex": "5f476381707374"
+    },
+    {
+      "id": 142,
+      "locale": "new_uspc",
+      "name": "M-Trade",
+      "hex": "5c476381707374"
+    },
+    {
+      "id": 143,
+      "locale": "new_uspc",
+      "name": "Hero’s Caution",
+      "hex": "5774817e41823a52708483787e7d"
+    },
+    {
+      "id": 144,
+      "locale": "new_uspc",
+      "name": "MP Regen",
+      "hex": "5c5f3a617476747d"
+    },
+    {
+      "id": 145,
+      "locale": "new_uspc",
+      "name": "Elude",
+      "hex": "547b847374"
+    },
+    {
+      "id": 146,
+      "locale": "new_uspc",
+      "name": "Energy Wall",
+      "hex": "547d748176883a66707b7b"
+    },
+    {
+      "id": 147,
+      "locale": "new_uspc",
+      "name": "Energy Barrier",
+      "hex": "547d748176883a51708181787481"
+    },
+    {
+      "id": 148,
+      "locale": "new_uspc",
+      "name": "Aeon Break HP/MP Limit",
+      "hex": "50747e7d3a518174707a3a575f495c5f3a5b787c7883"
+    },
+    {
+      "id": 149,
+      "locale": "new_uspc",
+      "name": "Aeon Break Damage Limit",
+      "hex": "50747e7d3a518174707a3a53707c7076743a5b787c7883"
+    },
+    {
+      "id": 150,
+      "locale": "new_uspc",
+      "name": "Mana Spring",
+      "hex": "5c707d703a627f81787d76"
+    },
+    {
+      "id": 151,
+      "locale": "new_uspc",
+      "name": "Break Limits",
+      "hex": "518174707a3a5b787c788382"
+    },
+    {
+      "id": 152,
+      "locale": "new_uspc",
+      "name": "Devil’s Bargain",
+      "hex": "537485787b41823a5170817670787d"
+    },
+    {
+      "id": 153,
+      "locale": "new_uspc",
+      "name": "Warden’s Oath",
+      "hex": "66708173747d41823a5e708377"
+    },
+    {
+      "id": 154,
+      "locale": "new_uspc",
+      "name": "Arcane Focus",
+      "hex": "508172707d743a557e728482"
+    },
+    {
+      "id": 155,
+      "locale": "new_uspc",
+      "name": "Double Drop",
+      "hex": "537e84717b743a53817e7f"
+    },
+    {
+      "id": 156,
+      "locale": "new_uspc",
+      "name": "Triple Drop",
+      "hex": "6381787f7b743a53817e7f"
+    },
+    {
+      "id": 157,
+      "locale": "new_uspc",
+      "name": "Element Eater",
+      "hex": "547b747c747d833a5470837481"
+    },
+    {
+      "id": 158,
+      "locale": "new_uspc",
+      "name": "HPMP +10%",
+      "hex": "575f5c5f3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_uspc",
+      "name": "HPMP +20%",
+      "hex": "575f5c5f3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_uspc",
+      "name": "HPMP +40%",
+      "hex": "575f5c5f3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_uspc",
+      "name": "HPMP +60%",
+      "hex": "575f5c5f3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_uspc",
+      "name": "AIO +3%",
+      "hex": "50585e3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_uspc",
+      "name": "AIO +6%",
+      "hex": "50585e3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_uspc",
+      "name": "AIO +9%",
+      "hex": "50585e3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_uspc",
+      "name": "AIO +12%",
+      "hex": "50585e3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_uspc",
+      "name": "STR and MAG +10%",
+      "hex": "6263613a707d733a5c50563a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_uspc",
+      "name": "STR and MAG +20%",
+      "hex": "6263613a707d733a5c50563a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_uspc",
+      "name": "DEF and MDEF +10%",
+      "hex": "5354553a707d733a5c5354553a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_uspc",
+      "name": "DEF and MDEF +20%",
+      "hex": "5354553a707d733a5c5354553a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_uspc",
+      "name": "Foolstrike",
+      "hex": "557e7e7b828381787a74"
+    },
+    {
+      "id": 171,
+      "locale": "new_uspc",
+      "name": "Fooltouch",
+      "hex": "557e7e7b837e847277"
+    },
+    {
+      "id": 172,
+      "locale": "new_uspc",
+      "name": "Fourstrike",
+      "hex": "557e8481828381787a74"
+    },
+    {
+      "id": 173,
+      "locale": "new_uspc",
+      "name": "Fourtouch",
+      "hex": "557e8481837e847277"
+    },
+    {
+      "id": 174,
+      "locale": "new_uspc",
+      "name": "Spell Spring",
+      "hex": "627f747b7b3a627f81787d76"
+    },
+    {
+      "id": 135,
+      "locale": "new_depc",
+      "name": "Heldenmut",
+      "hex": "57747b73747d7c8483"
+    },
+    {
+      "id": 136,
+      "locale": "new_depc",
+      "name": "Energieschub",
+      "hex": "547d74817678748272778471"
+    },
+    {
+      "id": 137,
+      "locale": "new_depc",
+      "name": "Energieausbruch",
+      "hex": "547d74817678747084827181847277"
+    },
+    {
+      "id": 138,
+      "locale": "new_depc",
+      "name": "Effizienz",
+      "hex": "547575788978747d89"
+    },
+    {
+      "id": 139,
+      "locale": "new_depc",
+      "name": "Vampirismus",
+      "hex": "65707c7f788178827c8482"
+    },
+    {
+      "id": 140,
+      "locale": "new_depc",
+      "name": "Nachsetzen",
+      "hex": "5d70727782748389747d"
+    },
+    {
+      "id": 141,
+      "locale": "new_depc",
+      "name": "P-Tausch",
+      "hex": "5f47637084827277"
+    },
+    {
+      "id": 142,
+      "locale": "new_depc",
+      "name": "M-Tausch",
+      "hex": "5c47637084827277"
+    },
+    {
+      "id": 143,
+      "locale": "new_depc",
+      "name": "Heldenvorsicht",
+      "hex": "57747b73747d857e818278727783"
+    },
+    {
+      "id": 144,
+      "locale": "new_depc",
+      "name": "MP-Regeneration",
+      "hex": "5c5f47617476747d74817083787e7d"
+    },
+    {
+      "id": 145,
+      "locale": "new_depc",
+      "name": "Ausweichen",
+      "hex": "5084828674787277747d"
+    },
+    {
+      "id": 146,
+      "locale": "new_depc",
+      "name": "Energiewall",
+      "hex": "547d748176787486707b7b"
+    },
+    {
+      "id": 147,
+      "locale": "new_depc",
+      "name": "Energiebarriere",
+      "hex": "547d74817678747170818178748174"
+    },
+    {
+      "id": 148,
+      "locale": "new_depc",
+      "name": "Bestia HP/MP-Limit",
+      "hex": "5174828378703a575f495c5f475b787c7883"
+    },
+    {
+      "id": 149,
+      "locale": "new_depc",
+      "name": "Bestia Schadenslimit",
+      "hex": "5174828378703a6272777073747d827b787c7883"
+    },
+    {
+      "id": 150,
+      "locale": "new_depc",
+      "name": "Manaquelle",
+      "hex": "5c707d708084747b7b74"
+    },
+    {
+      "id": 151,
+      "locale": "new_depc",
+      "name": "Grenzenbruch",
+      "hex": "5681747d89747d7181847277"
+    },
+    {
+      "id": 152,
+      "locale": "new_depc",
+      "name": "Teufelspakt",
+      "hex": "63748475747b827f707a83"
+    },
+    {
+      "id": 153,
+      "locale": "new_depc",
+      "name": "Wächterschwur",
+      "hex": "66bd7277837481827277868481"
+    },
+    {
+      "id": 154,
+      "locale": "new_depc",
+      "name": "Arkaner Fokus",
+      "hex": "50817a707d74813a557e7a8482"
+    },
+    {
+      "id": 155,
+      "locale": "new_depc",
+      "name": "Doppelte Beute",
+      "hex": "537e7f7f747b83743a5174848374"
+    },
+    {
+      "id": 156,
+      "locale": "new_depc",
+      "name": "Dreifache Beute",
+      "hex": "5381747875707277743a5174848374"
+    },
+    {
+      "id": 157,
+      "locale": "new_depc",
+      "name": "Elementabsorber",
+      "hex": "547b747c747d837071827e81717481"
+    },
+    {
+      "id": 158,
+      "locale": "new_depc",
+      "name": "HPMP +10%",
+      "hex": "575f5c5f3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_depc",
+      "name": "HPMP +20%",
+      "hex": "575f5c5f3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_depc",
+      "name": "HPMP +40%",
+      "hex": "575f5c5f3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_depc",
+      "name": "HPMP +60%",
+      "hex": "575f5c5f3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_depc",
+      "name": "AIO +3%",
+      "hex": "50585e3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_depc",
+      "name": "AIO +6%",
+      "hex": "50585e3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_depc",
+      "name": "AIO +9%",
+      "hex": "50585e3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_depc",
+      "name": "AIO +12%",
+      "hex": "50585e3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_depc",
+      "name": "Stärke und Magie +10%",
+      "hex": "6283bd817a743a847d733a5c707678743a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_depc",
+      "name": "Stärke und Magie +20%",
+      "hex": "6283bd817a743a847d733a5c707678743a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_depc",
+      "name": "Abwehr und Zauberabwehr +10%",
+      "hex": "5071867477813a847d733a6970847174817071867477813a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_depc",
+      "name": "Abwehr und Zauberabwehr +20%",
+      "hex": "5071867477813a847d733a6970847174817071867477813a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_depc",
+      "name": "Narrenschlag",
+      "hex": "5d708181747d8272777b7076"
+    },
+    {
+      "id": 171,
+      "locale": "new_depc",
+      "name": "Narrenhieb",
+      "hex": "5d708181747d77787471"
+    },
+    {
+      "id": 172,
+      "locale": "new_depc",
+      "name": "Vierfachschlag",
+      "hex": "65787481757072778272777b7076"
+    },
+    {
+      "id": 173,
+      "locale": "new_depc",
+      "name": "Vierfachhieb",
+      "hex": "657874817570727777787471"
+    },
+    {
+      "id": 174,
+      "locale": "new_depc",
+      "name": "Zauberquelle",
+      "hex": "6970847174818084747b7b74"
+    },
+    {
+      "id": 135,
+      "locale": "new_frpc",
+      "name": "Bravoure héroïque",
+      "hex": "518170857e8481743a77c0817ec6808474"
+    },
+    {
+      "id": 136,
+      "locale": "new_frpc",
+      "name": "Surcroît d'énergie",
+      "hex": "62848172817ec5833a7341c07d7481767874"
+    },
+    {
+      "id": 137,
+      "locale": "new_frpc",
+      "name": "Éclat d'énergie",
+      "hex": "a9727b70833a7341c07d7481767874"
+    },
+    {
+      "id": 138,
+      "locale": "new_frpc",
+      "name": "Efficacité",
+      "hex": "547575787270727883c0"
+    },
+    {
+      "id": 139,
+      "locale": "new_frpc",
+      "name": "Vampirisme",
+      "hex": "65707c7f788178827c74"
+    },
+    {
+      "id": 140,
+      "locale": "new_frpc",
+      "name": "Poursuite",
+      "hex": "5f7e84818284788374"
+    },
+    {
+      "id": 141,
+      "locale": "new_frpc",
+      "name": "Échange P",
+      "hex": "a97277707d76743a5f"
+    },
+    {
+      "id": 142,
+      "locale": "new_frpc",
+      "name": "Échange M",
+      "hex": "a97277707d76743a5c"
+    },
+    {
+      "id": 143,
+      "locale": "new_frpc",
+      "name": "Prudence héroïque",
+      "hex": "5f818473747d72743a77c0817ec6808474"
+    },
+    {
+      "id": 144,
+      "locale": "new_frpc",
+      "name": "Régénération MP",
+      "hex": "61c076c07dc0817083787e7d3a5c5f"
+    },
+    {
+      "id": 145,
+      "locale": "new_frpc",
+      "name": "Esquive",
+      "hex": "54828084788574"
+    },
+    {
+      "id": 146,
+      "locale": "new_frpc",
+      "name": "Mur d'énergie",
+      "hex": "5c84813a7341c07d7481767874"
+    },
+    {
+      "id": 147,
+      "locale": "new_frpc",
+      "name": "Barrière d'énergie",
+      "hex": "5170818178bf81743a7341c07d7481767874"
+    },
+    {
+      "id": 148,
+      "locale": "new_frpc",
+      "name": "Chimère HP/MP max",
+      "hex": "5277787cbf81743a575f495c5f3a7c7087"
+    },
+    {
+      "id": 149,
+      "locale": "new_frpc",
+      "name": "Chimère dégâts max",
+      "hex": "5277787cbf81743a73c076bc83823a7c7087"
+    },
+    {
+      "id": 150,
+      "locale": "new_frpc",
+      "name": "Source de mana",
+      "hex": "627e848172743a73743a7c707d70"
+    },
+    {
+      "id": 151,
+      "locale": "new_frpc",
+      "name": "Brise-limites",
+      "hex": "5181788274477b787c78837482"
+    },
+    {
+      "id": 152,
+      "locale": "new_frpc",
+      "name": "Pacte diabolique",
+      "hex": "5f707283743a737870717e7b78808474"
+    },
+    {
+      "id": 153,
+      "locale": "new_frpc",
+      "name": "Serment du gardien",
+      "hex": "6274817c747d833a73843a7670817378747d"
+    },
+    {
+      "id": 154,
+      "locale": "new_frpc",
+      "name": "Concentration arcanique",
+      "hex": "527e7d72747d83817083787e7d3a708172707d78808474"
+    },
+    {
+      "id": 155,
+      "locale": "new_frpc",
+      "name": "Butin double",
+      "hex": "518483787d3a737e84717b74"
+    },
+    {
+      "id": 156,
+      "locale": "new_frpc",
+      "name": "Butin triple",
+      "hex": "518483787d3a8381787f7b74"
+    },
+    {
+      "id": 157,
+      "locale": "new_frpc",
+      "name": "Absorption élémentaire",
+      "hex": "5071827e817f83787e7d3ac07bc07c747d8370788174"
+    },
+    {
+      "id": 158,
+      "locale": "new_frpc",
+      "name": "HPMP +10%",
+      "hex": "575f5c5f3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_frpc",
+      "name": "HPMP +20%",
+      "hex": "575f5c5f3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_frpc",
+      "name": "HPMP +40%",
+      "hex": "575f5c5f3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_frpc",
+      "name": "HPMP +60%",
+      "hex": "575f5c5f3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_frpc",
+      "name": "AIO +3%",
+      "hex": "50585e3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_frpc",
+      "name": "AIO +6%",
+      "hex": "50585e3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_frpc",
+      "name": "AIO +9%",
+      "hex": "50585e3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_frpc",
+      "name": "AIO +12%",
+      "hex": "50585e3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_frpc",
+      "name": "Force et Magie +10%",
+      "hex": "557e8172743a74833a5c707678743a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_frpc",
+      "name": "Force et Magie +20%",
+      "hex": "557e8172743a74833a5c707678743a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_frpc",
+      "name": "Défense et Défense magique +10%",
+      "hex": "53c075747d82743a74833a53c075747d82743a7c7076788084743a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_frpc",
+      "name": "Défense et Défense magique +20%",
+      "hex": "53c075747d82743a74833a53c075747d82743a7c7076788084743a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_frpc",
+      "name": "Frappe du fou",
+      "hex": "5581707f7f743a73843a757e84"
+    },
+    {
+      "id": 171,
+      "locale": "new_frpc",
+      "name": "Toucher du fou",
+      "hex": "637e84727774813a73843a757e84"
+    },
+    {
+      "id": 172,
+      "locale": "new_frpc",
+      "name": "Frappe quadruple",
+      "hex": "5581707f7f743a8084707381847f7b74"
+    },
+    {
+      "id": 173,
+      "locale": "new_frpc",
+      "name": "Toucher quadruple",
+      "hex": "637e84727774813a8084707381847f7b74"
+    },
+    {
+      "id": 174,
+      "locale": "new_frpc",
+      "name": "Source magique",
+      "hex": "627e848172743a7c707678808474"
+    },
+    {
+      "id": 135,
+      "locale": "new_itpc",
+      "name": "Coraggio eroico",
+      "hex": "527e81707676787e3a74817e78727e"
+    },
+    {
+      "id": 136,
+      "locale": "new_itpc",
+      "name": "Spinta energetica",
+      "hex": "627f787d83703a747d7481767483787270"
+    },
+    {
+      "id": 137,
+      "locale": "new_itpc",
+      "name": "Esplosione energetica",
+      "hex": "54827f7b7e82787e7d743a747d7481767483787270"
+    },
+    {
+      "id": 138,
+      "locale": "new_itpc",
+      "name": "Efficienza",
+      "hex": "547575787278747d8970"
+    },
+    {
+      "id": 139,
+      "locale": "new_itpc",
+      "name": "Vampirismo",
+      "hex": "65707c7f788178827c7e"
+    },
+    {
+      "id": 140,
+      "locale": "new_itpc",
+      "name": "Attacco seguente",
+      "hex": "5083837072727e3a82747684747d8374"
+    },
+    {
+      "id": 141,
+      "locale": "new_itpc",
+      "name": "Scambio P",
+      "hex": "6272707c71787e3a5f"
+    },
+    {
+      "id": 142,
+      "locale": "new_itpc",
+      "name": "Scambio M",
+      "hex": "6272707c71787e3a5c"
+    },
+    {
+      "id": 143,
+      "locale": "new_itpc",
+      "name": "Prudenza eroica",
+      "hex": "5f818473747d89703a74817e787270"
+    },
+    {
+      "id": 144,
+      "locale": "new_itpc",
+      "name": "Rigene MP",
+      "hex": "617876747d743a5c5f"
+    },
+    {
+      "id": 145,
+      "locale": "new_itpc",
+      "name": "Elusione",
+      "hex": "547b8482787e7d74"
+    },
+    {
+      "id": 146,
+      "locale": "new_itpc",
+      "name": "Muro energetico",
+      "hex": "5c84817e3a747d748176748378727e"
+    },
+    {
+      "id": 147,
+      "locale": "new_itpc",
+      "name": "Barriera energetica",
+      "hex": "51708181787481703a747d7481767483787270"
+    },
+    {
+      "id": 148,
+      "locale": "new_itpc",
+      "name": "Eone limite HP/MP",
+      "hex": "547e7d743a7b787c7883743a575f495c5f"
+    },
+    {
+      "id": 149,
+      "locale": "new_itpc",
+      "name": "Eone danni massimi",
+      "hex": "547e7d743a73707d7d783a7c708282787c78"
+    },
+    {
+      "id": 150,
+      "locale": "new_itpc",
+      "name": "Sorgente di mana",
+      "hex": "627e8176747d83743a73783a7c707d70"
+    },
+    {
+      "id": 151,
+      "locale": "new_itpc",
+      "name": "Oltre i limiti",
+      "hex": "5e7b8381743a783a7b787c788378"
+    },
+    {
+      "id": 152,
+      "locale": "new_itpc",
+      "name": "Patto diabolico",
+      "hex": "5f7083837e3a737870717e7b78727e"
+    },
+    {
+      "id": 153,
+      "locale": "new_itpc",
+      "name": "Giuramento del guardiano",
+      "hex": "56788481707c747d837e3a73747b3a768470817378707d7e"
+    },
+    {
+      "id": 154,
+      "locale": "new_itpc",
+      "name": "Concentrazione arcana",
+      "hex": "527e7d72747d83817089787e7d743a708172707d70"
+    },
+    {
+      "id": 155,
+      "locale": "new_itpc",
+      "name": "Bottino doppio",
+      "hex": "517e8383787d7e3a737e7f7f787e"
+    },
+    {
+      "id": 156,
+      "locale": "new_itpc",
+      "name": "Bottino triplo",
+      "hex": "517e8383787d7e3a8381787f7b7e"
+    },
+    {
+      "id": 157,
+      "locale": "new_itpc",
+      "name": "Assorbielementi",
+      "hex": "5082827e817178747b747c747d8378"
+    },
+    {
+      "id": 158,
+      "locale": "new_itpc",
+      "name": "HPMP +10%",
+      "hex": "575f5c5f3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_itpc",
+      "name": "HPMP +20%",
+      "hex": "575f5c5f3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_itpc",
+      "name": "HPMP +40%",
+      "hex": "575f5c5f3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_itpc",
+      "name": "HPMP +60%",
+      "hex": "575f5c5f3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_itpc",
+      "name": "AIO +3%",
+      "hex": "50585e3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_itpc",
+      "name": "AIO +6%",
+      "hex": "50585e3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_itpc",
+      "name": "AIO +9%",
+      "hex": "50585e3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_itpc",
+      "name": "AIO +12%",
+      "hex": "50585e3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_itpc",
+      "name": "POT fisica e POT magica +10%",
+      "hex": "5f5e633a7578827872703a743a5f5e633a7c70767872703a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_itpc",
+      "name": "POT fisica e POT magica +20%",
+      "hex": "5f5e633a7578827872703a743a5f5e633a7c70767872703a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_itpc",
+      "name": "DIF fisica e DIF magica +10%",
+      "hex": "5358553a7578827872703a743a5358553a7c70767872703a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_itpc",
+      "name": "DIF fisica e DIF magica +20%",
+      "hex": "5358553a7578827872703a743a5358553a7c70767872703a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_itpc",
+      "name": "Colpo del folle",
+      "hex": "527e7b7f7e3a73747b3a757e7b7b74"
+    },
+    {
+      "id": 171,
+      "locale": "new_itpc",
+      "name": "Tocco del folle",
+      "hex": "637e72727e3a73747b3a757e7b7b74"
+    },
+    {
+      "id": 172,
+      "locale": "new_itpc",
+      "name": "Colpo quadruplo",
+      "hex": "527e7b7f7e3a8084707381847f7b7e"
+    },
+    {
+      "id": 173,
+      "locale": "new_itpc",
+      "name": "Tocco quadruplo",
+      "hex": "637e72727e3a8084707381847f7b7e"
+    },
+    {
+      "id": 174,
+      "locale": "new_itpc",
+      "name": "Sorgente magica",
+      "hex": "627e8176747d83743a7c7076787270"
+    },
+    {
+      "id": 135,
+      "locale": "new_sppc",
+      "name": "Valor heroico",
+      "hex": "65707b7e813a7774817e78727e"
+    },
+    {
+      "id": 136,
+      "locale": "new_sppc",
+      "name": "Impulso de energía",
+      "hex": "587c7f847b827e3a73743a747d748176c470"
+    },
+    {
+      "id": 137,
+      "locale": "new_sppc",
+      "name": "Estallido de energía",
+      "hex": "548283707b7b78737e3a73743a747d748176c470"
+    },
+    {
+      "id": 138,
+      "locale": "new_sppc",
+      "name": "Eficiencia",
+      "hex": "5475787278747d727870"
+    },
+    {
+      "id": 139,
+      "locale": "new_sppc",
+      "name": "Vampirismo",
+      "hex": "65707c7f788178827c7e"
+    },
+    {
+      "id": 140,
+      "locale": "new_sppc",
+      "name": "Ataque adicional",
+      "hex": "5083708084743a70737872787e7d707b"
+    },
+    {
+      "id": 141,
+      "locale": "new_sppc",
+      "name": "Intercambio P",
+      "hex": "587d83748172707c71787e3a5f"
+    },
+    {
+      "id": 142,
+      "locale": "new_sppc",
+      "name": "Intercambio M",
+      "hex": "587d83748172707c71787e3a5c"
+    },
+    {
+      "id": 143,
+      "locale": "new_sppc",
+      "name": "Cautela heroica",
+      "hex": "52708483747b703a7774817e787270"
+    },
+    {
+      "id": 144,
+      "locale": "new_sppc",
+      "name": "Regeneración PM",
+      "hex": "617476747d7481707278c97d3a5f5c"
+    },
+    {
+      "id": 145,
+      "locale": "new_sppc",
+      "name": "Evasión",
+      "hex": "5485708278c97d"
+    },
+    {
+      "id": 146,
+      "locale": "new_sppc",
+      "name": "Muro de energía",
+      "hex": "5c84817e3a73743a747d748176c470"
+    },
+    {
+      "id": 147,
+      "locale": "new_sppc",
+      "name": "Barrera de energía",
+      "hex": "517081817481703a73743a747d748176c470"
+    },
+    {
+      "id": 148,
+      "locale": "new_sppc",
+      "name": "Eón límite VIT/PM",
+      "hex": "54c97d3a7bc47c7883743a655863495f5c"
+    },
+    {
+      "id": 149,
+      "locale": "new_sppc",
+      "name": "Eón daño máximo",
+      "hex": "54c97d3a7370c77e3a7cbb87787c7e"
+    },
+    {
+      "id": 150,
+      "locale": "new_sppc",
+      "name": "Fuente de maná",
+      "hex": "5584747d83743a73743a7c707dbb"
+    },
+    {
+      "id": 151,
+      "locale": "new_sppc",
+      "name": "Límites rotos",
+      "hex": "5bc47c788374823a817e837e82"
+    },
+    {
+      "id": 152,
+      "locale": "new_sppc",
+      "name": "Pacto diabólico",
+      "hex": "5f7072837e3a73787071c97b78727e"
+    },
+    {
+      "id": 153,
+      "locale": "new_sppc",
+      "name": "Juramento del guardián",
+      "hex": "598481707c747d837e3a73747b3a768470817378bb7d"
+    },
+    {
+      "id": 154,
+      "locale": "new_sppc",
+      "name": "Enfoque arcano",
+      "hex": "547d757e8084743a708172707d7e"
+    },
+    {
+      "id": 155,
+      "locale": "new_sppc",
+      "name": "Botín doble",
+      "hex": "517e83c47d3a737e717b74"
+    },
+    {
+      "id": 156,
+      "locale": "new_sppc",
+      "name": "Botín triple",
+      "hex": "517e83c47d3a8381787f7b74"
+    },
+    {
+      "id": 157,
+      "locale": "new_sppc",
+      "name": "Absorbeelementos",
+      "hex": "5071827e817174747b747c747d837e82"
+    },
+    {
+      "id": 158,
+      "locale": "new_sppc",
+      "name": "VIT/PM +10%",
+      "hex": "655863495f5c3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_sppc",
+      "name": "VIT/PM +20%",
+      "hex": "655863495f5c3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_sppc",
+      "name": "VIT/PM +40%",
+      "hex": "655863495f5c3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_sppc",
+      "name": "VIT/PM +60%",
+      "hex": "655863495f5c3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_sppc",
+      "name": "AIO +3%",
+      "hex": "50585e3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_sppc",
+      "name": "AIO +6%",
+      "hex": "50585e3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_sppc",
+      "name": "AIO +9%",
+      "hex": "50585e3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_sppc",
+      "name": "AIO +12%",
+      "hex": "50585e3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_sppc",
+      "name": "Fuerza y Magia +10%",
+      "hex": "5584748189703a883a5c707678703a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_sppc",
+      "name": "Fuerza y Magia +20%",
+      "hex": "5584748189703a883a5c707678703a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_sppc",
+      "name": "Defensa y Defensa mágica +10%",
+      "hex": "537475747d82703a883a537475747d82703a7cbb767872703a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_sppc",
+      "name": "Defensa y Defensa mágica +20%",
+      "hex": "537475747d82703a883a537475747d82703a7cbb767872703a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_sppc",
+      "name": "Golpe del necio",
+      "hex": "567e7b7f743a73747b3a7d7472787e"
+    },
+    {
+      "id": 171,
+      "locale": "new_sppc",
+      "name": "Toque del necio",
+      "hex": "637e8084743a73747b3a7d7472787e"
+    },
+    {
+      "id": 172,
+      "locale": "new_sppc",
+      "name": "Golpe cuádruple",
+      "hex": "567e7b7f743a7284bb7381847f7b74"
+    },
+    {
+      "id": 173,
+      "locale": "new_sppc",
+      "name": "Toque cuádruple",
+      "hex": "637e8084743a7284bb7381847f7b74"
+    },
+    {
+      "id": 174,
+      "locale": "new_sppc",
+      "name": "Fuente de magia",
+      "hex": "5584747d83743a73743a7c70767870"
+    },
+    {
+      "id": 135,
+      "locale": "new_jppc",
+      "name": "ヒーローブレイブ",
+      "hex": "e03cfb3ce4fab2e4"
+    },
+    {
+      "id": 136,
+      "locale": "new_jppc",
+      "name": "エナジーブースト",
+      "hex": "b6d8c63ce43cc7d6"
+    },
+    {
+      "id": 137,
+      "locale": "new_jppc",
+      "name": "エナジーバースト",
+      "hex": "b6d8c63cde3cc7d6"
+    },
+    {
+      "id": 138,
+      "locale": "new_jppc",
+      "name": "エフィシェンシー",
+      "hex": "b6e3b1c5b5fec53c"
+    },
+    {
+      "id": 139,
+      "locale": "new_jppc",
+      "name": "バンパイア",
+      "hex": "defedfb2b0"
+    },
+    {
+      "id": 140,
+      "locale": "new_jppc",
+      "name": "フォローアップ",
+      "hex": "e3b7fb3cb0d1e5"
+    },
+    {
+      "id": 141,
+      "locale": "new_jppc",
+      "name": "ピートレード",
+      "hex": "e23cd6fa3cd7"
+    },
+    {
+      "id": 142,
+      "locale": "new_jppc",
+      "name": "エムトレード",
+      "hex": "b6eed6fa3cd7"
+    },
+    {
+      "id": 143,
+      "locale": "new_jppc",
+      "name": "ヒーローコーション",
+      "hex": "e03cfb3cc13cc5f5fe"
+    },
+    {
+      "id": 144,
+      "locale": "new_jppc",
+      "name": "MPリジェネ",
+      "hex": "2c3c2c3ff8c6b5db"
+    },
+    {
+      "id": 145,
+      "locale": "new_jppc",
+      "name": "エルード",
+      "hex": "b6f93cd7"
+    },
+    {
+      "id": 146,
+      "locale": "new_jppc",
+      "name": "エナジーウォール",
+      "hex": "b6d8c63cb4b73cf9"
+    },
+    {
+      "id": 147,
+      "locale": "new_jppc",
+      "name": "エナジーバリア",
+      "hex": "b6d8c63cdef8b0"
+    },
+    {
+      "id": 148,
+      "locale": "new_jppc",
+      "name": "召喚獣HP/MP限界",
+      "hex": "2d3f2c8f2d382c372c3f492c3c2c3f2e992c87"
+    },
+    {
+      "id": 149,
+      "locale": "new_jppc",
+      "name": "召喚獣ダメージ限界",
+      "hex": "2d3f2c8f2d38ceef3cc62e992c87"
+    },
+    {
+      "id": 150,
+      "locale": "new_jppc",
+      "name": "マナスプリング",
+      "hex": "ecd8c7e5f8febe"
+    },
+    {
+      "id": 151,
+      "locale": "new_jppc",
+      "name": "ブレイクリミット",
+      "hex": "e4fab2bdf8edd1d6"
+    },
+    {
+      "id": 152,
+      "locale": "new_jppc",
+      "name": "デビルズバーゲン",
+      "hex": "d5e1f9c8de3cc0fe"
+    },
+    {
+      "id": 153,
+      "locale": "new_jppc",
+      "name": "ウォーデンズオース",
+      "hex": "b4b73cd5fec8b83cc7"
+    },
+    {
+      "id": 154,
+      "locale": "new_jppc",
+      "name": "アルケインフォーカス",
+      "hex": "b0f9bfb2fee3b73cb9c7"
+    },
+    {
+      "id": 155,
+      "locale": "new_jppc",
+      "name": "ドロップ2倍",
+      "hex": "d7fbd1e5322dc7"
+    },
+    {
+      "id": 156,
+      "locale": "new_jppc",
+      "name": "ドロップ3倍",
+      "hex": "d7fbd1e5332dc7"
+    },
+    {
+      "id": 157,
+      "locale": "new_jppc",
+      "name": "エレメントイーター",
+      "hex": "b6faeffed6b23ccd3c"
+    },
+    {
+      "id": 158,
+      "locale": "new_jppc",
+      "name": "HPMP +10%",
+      "hex": "2c372c3f2c3c2c3f3a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_jppc",
+      "name": "HPMP +20%",
+      "hex": "2c372c3f2c3c2c3f3a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_jppc",
+      "name": "HPMP +40%",
+      "hex": "2c372c3f2c3c2c3f3a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_jppc",
+      "name": "HPMP +60%",
+      "hex": "2c372c3f2c3c2c3f3a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_jppc",
+      "name": "全能力 +3%",
+      "hex": "2d6b2dc32e4d3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_jppc",
+      "name": "全能力 +6%",
+      "hex": "2d6b2dc32e4d3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_jppc",
+      "name": "全能力 +9%",
+      "hex": "2d6b2dc32e4d3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_jppc",
+      "name": "全能力 +12%",
+      "hex": "2d6b2dc32e4d3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_jppc",
+      "name": "攻撃力と魔力 +10%",
+      "hex": "2cc92cb02e4d862df82e4d3a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_jppc",
+      "name": "攻撃力と魔力 +20%",
+      "hex": "2cc92cb02e4d862df82e4d3a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_jppc",
+      "name": "物理防御と魔法防御 +10%",
+      "hex": "2de62e442df42cbf862df82df22df42cbf3a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_jppc",
+      "name": "物理防御と魔法防御 +20%",
+      "hex": "2de62e442df42cbf862df82df22df42cbf3a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_jppc",
+      "name": "フールストライク",
+      "hex": "e33cf9c7d6f7b2bd"
+    },
+    {
+      "id": 171,
+      "locale": "new_jppc",
+      "name": "フールタッチ",
+      "hex": "e33cf9cdd1cf"
+    },
+    {
+      "id": 172,
+      "locale": "new_jppc",
+      "name": "フォーストライク",
+      "hex": "e3b73cc7d6f7b2bd"
+    },
+    {
+      "id": 173,
+      "locale": "new_jppc",
+      "name": "フォータッチ",
+      "hex": "e3b73ccdd1cf"
+    },
+    {
+      "id": 174,
+      "locale": "new_jppc",
+      "name": "スペルスプリング",
+      "hex": "c7e8f9c7e5f8febe"
+    },
+    {
+      "id": 135,
+      "locale": "new_chpc",
+      "name": "英雄勇氣",
+      "hex": "04bb0458049c2ce4"
+    },
+    {
+      "id": 136,
+      "locale": "new_chpc",
+      "name": "能量強化",
+      "hex": "a22c742cdefc"
+    },
+    {
+      "id": 137,
+      "locale": "new_chpc",
+      "name": "能量爆發",
+      "hex": "a22c742ce82c3e"
+    },
+    {
+      "id": 138,
+      "locale": "new_chpc",
+      "name": "效率",
+      "hex": "9f2f4e"
+    },
+    {
+      "id": 139,
+      "locale": "new_chpc",
+      "name": "吸血",
+      "hex": "2c422d9f"
+    },
+    {
+      "id": 140,
+      "locale": "new_chpc",
+      "name": "追擊",
+      "hex": "2e6e8f"
+    },
+    {
+      "id": 141,
+      "locale": "new_chpc",
+      "name": "物理交換",
+      "hex": "b2df2d552ee6"
+    },
+    {
+      "id": 142,
+      "locale": "new_chpc",
+      "name": "魔法交換",
+      "hex": "96912d552ee6"
+    },
+    {
+      "id": 143,
+      "locale": "new_chpc",
+      "name": "英雄慎重",
+      "hex": "04bb0458042de82c4b"
+    },
+    {
+      "id": 144,
+      "locale": "new_chpc",
+      "name": "MP再生",
+      "hex": "66692d922d4a"
+    },
+    {
+      "id": 145,
+      "locale": "new_chpc",
+      "name": "迴避",
+      "hex": "2e652cd1"
+    },
+    {
+      "id": 146,
+      "locale": "new_chpc",
+      "name": "能量之牆",
+      "hex": "a22c749e042ed9"
+    },
+    {
+      "id": 147,
+      "locale": "new_chpc",
+      "name": "能量之壁",
+      "hex": "a22c749e2f94"
+    },
+    {
+      "id": 148,
+      "locale": "new_chpc",
+      "name": "召喚獸HP/MP極限",
+      "hex": "2c362c392c4861694966692ced2da2"
+    },
+    {
+      "id": 149,
+      "locale": "new_chpc",
+      "name": "召喚獸傷害極限",
+      "hex": "2c362c392c48a404912ced2da2"
+    },
+    {
+      "id": 150,
+      "locale": "new_chpc",
+      "name": "魔力之泉",
+      "hex": "96ab9e2f4d"
+    },
+    {
+      "id": 151,
+      "locale": "new_chpc",
+      "name": "突破極限",
+      "hex": "2db2da2ced2da2"
+    },
+    {
+      "id": 152,
+      "locale": "new_chpc",
+      "name": "惡魔交易",
+      "hex": "2deb962d552c53"
+    },
+    {
+      "id": 153,
+      "locale": "new_chpc",
+      "name": "守衛誓言",
+      "hex": "2ce72e32042e392f35"
+    },
+    {
+      "id": 154,
+      "locale": "new_chpc",
+      "name": "奧術專注",
+      "hex": "2eb62d792f912c46"
+    },
+    {
+      "id": 155,
+      "locale": "new_chpc",
+      "name": "掉落二倍",
+      "hex": "2eec2d8a04722d5b"
+    },
+    {
+      "id": 156,
+      "locale": "new_chpc",
+      "name": "掉落三倍",
+      "hex": "2eec2d8a2d642d5b"
+    },
+    {
+      "id": 157,
+      "locale": "new_chpc",
+      "name": "元素吸收",
+      "hex": "2dd92df22c422c7a"
+    },
+    {
+      "id": 158,
+      "locale": "new_chpc",
+      "name": "HPMP +10%",
+      "hex": "616966693a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_chpc",
+      "name": "HPMP +20%",
+      "hex": "616966693a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_chpc",
+      "name": "HPMP +40%",
+      "hex": "616966693a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_chpc",
+      "name": "HPMP +60%",
+      "hex": "616966693a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_chpc",
+      "name": "全能力 +3%",
+      "hex": "fba2ab3a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_chpc",
+      "name": "全能力 +6%",
+      "hex": "fba2ab3a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_chpc",
+      "name": "全能力 +9%",
+      "hex": "fba2ab3a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_chpc",
+      "name": "全能力 +12%",
+      "hex": "fba2ab3a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_chpc",
+      "name": "力量與魔力 +10%",
+      "hex": "ab2c742c7096ab3a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_chpc",
+      "name": "力量與魔力 +20%",
+      "hex": "ab2c742c7096ab3a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_chpc",
+      "name": "防禦與魔法防禦 +10%",
+      "hex": "99b02c70969199b03a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_chpc",
+      "name": "防禦與魔法防禦 +20%",
+      "hex": "99b02c70969199b03a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_chpc",
+      "name": "狂人攻擊",
+      "hex": "2dc59d928f"
+    },
+    {
+      "id": 171,
+      "locale": "new_chpc",
+      "name": "狂人觸擊",
+      "hex": "2dc59d2d898f"
+    },
+    {
+      "id": 172,
+      "locale": "new_chpc",
+      "name": "四屬性攻擊",
+      "hex": "2dfb9a98928f"
+    },
+    {
+      "id": 173,
+      "locale": "new_chpc",
+      "name": "四屬性觸擊",
+      "hex": "2dfb9a982d898f"
+    },
+    {
+      "id": 174,
+      "locale": "new_chpc",
+      "name": "法術之泉",
+      "hex": "912d799e2f4d"
+    },
+    {
+      "id": 135,
+      "locale": "new_krpc",
+      "name": "영웅의 용기",
+      "hex": "2cc42e8e993a2c439c"
+    },
+    {
+      "id": 136,
+      "locale": "new_krpc",
+      "name": "에너지 강화",
+      "hex": "96e2903a2cad2ce1"
+    },
+    {
+      "id": 137,
+      "locale": "new_krpc",
+      "name": "에너지 폭발",
+      "hex": "96e2903a2e462c86"
+    },
+    {
+      "id": 138,
+      "locale": "new_krpc",
+      "name": "효율",
+      "hex": "2e532e9b"
+    },
+    {
+      "id": 139,
+      "locale": "new_krpc",
+      "name": "흡혈",
+      "hex": "2ef42f70"
+    },
+    {
+      "id": 140,
+      "locale": "new_krpc",
+      "name": "추가 공격",
+      "hex": "2cd2042c6b3a2c5b2c71"
+    },
+    {
+      "id": 141,
+      "locale": "new_krpc",
+      "name": "물리 교환",
+      "hex": "cfa43a2d96df"
+    },
+    {
+      "id": 142,
+      "locale": "new_krpc",
+      "name": "마법 교환",
+      "hex": "af2c783a2d96df"
+    },
+    {
+      "id": 143,
+      "locale": "new_krpc",
+      "name": "영웅의 신중함",
+      "hex": "2cc42e8e993af62c632cb9"
+    },
+    {
+      "id": 144,
+      "locale": "new_krpc",
+      "name": "MP 재생",
+      "hex": "66693a2cb5e6"
+    },
+    {
+      "id": 145,
+      "locale": "new_krpc",
+      "name": "회피",
+      "hex": "2c3ffe"
+    },
+    {
+      "id": 146,
+      "locale": "new_krpc",
+      "name": "에너지 벽",
+      "hex": "96e2903a2e5b"
+    },
+    {
+      "id": 147,
+      "locale": "new_krpc",
+      "name": "에너지 장벽",
+      "hex": "96e2903a2c302e5b"
+    },
+    {
+      "id": 148,
+      "locale": "new_krpc",
+      "name": "소환수 HP/MP 한계",
+      "hex": "b7dfae3a61694966693aaaeb"
+    },
+    {
+      "id": 149,
+      "locale": "new_krpc",
+      "name": "소환수 대미지 한계",
+      "hex": "b7dfae3ab3f7903aaaeb"
+    },
+    {
+      "id": 150,
+      "locale": "new_krpc",
+      "name": "마나 샘",
+      "hex": "af9e3a2f7a"
+    },
+    {
+      "id": 151,
+      "locale": "new_krpc",
+      "name": "한계 돌파",
+      "hex": "aaeb3a2c372c31"
+    },
+    {
+      "id": 152,
+      "locale": "new_krpc",
+      "name": "악마의 거래",
+      "hex": "2d92af993ab0d7"
+    },
+    {
+      "id": 153,
+      "locale": "new_krpc",
+      "name": "수호자의 맹세",
+      "hex": "ae2cebb4993a2eb62c65"
+    },
+    {
+      "id": 154,
+      "locale": "new_krpc",
+      "name": "비전 집중",
+      "hex": "dbbc3a2d4b2c63"
+    },
+    {
+      "id": 155,
+      "locale": "new_krpc",
+      "name": "아이템 드롭 2배",
+      "hex": "948e2da13ac92eaf3a32f9"
+    },
+    {
+      "id": 156,
+      "locale": "new_krpc",
+      "name": "아이템 드롭 3배",
+      "hex": "948e2da13ac92eaf3a33f9"
+    },
+    {
+      "id": 157,
+      "locale": "new_krpc",
+      "name": "속성 흡수",
+      "hex": "2c6b2c6f3a2ef4ae"
+    },
+    {
+      "id": 158,
+      "locale": "new_krpc",
+      "name": "HPMP +10%",
+      "hex": "616966693a4531303f"
+    },
+    {
+      "id": 159,
+      "locale": "new_krpc",
+      "name": "HPMP +20%",
+      "hex": "616966693a4532303f"
+    },
+    {
+      "id": 160,
+      "locale": "new_krpc",
+      "name": "HPMP +40%",
+      "hex": "616966693a4534303f"
+    },
+    {
+      "id": 161,
+      "locale": "new_krpc",
+      "name": "HPMP +60%",
+      "hex": "616966693a4536303f"
+    },
+    {
+      "id": 162,
+      "locale": "new_krpc",
+      "name": "모든 능력 +3%",
+      "hex": "c42c423a2d3c2c743a45333f"
+    },
+    {
+      "id": 163,
+      "locale": "new_krpc",
+      "name": "모든 능력 +6%",
+      "hex": "c42c423a2d3c2c743a45363f"
+    },
+    {
+      "id": 164,
+      "locale": "new_krpc",
+      "name": "모든 능력 +9%",
+      "hex": "c42c423a2d3c2c743a45393f"
+    },
+    {
+      "id": 165,
+      "locale": "new_krpc",
+      "name": "모든 능력 +12%",
+      "hex": "c42c423a2d3c2c743a4531323f"
+    },
+    {
+      "id": 166,
+      "locale": "new_krpc",
+      "name": "힘과 마력 +10%",
+      "hex": "2c532c363aaf2c743a4531303f"
+    },
+    {
+      "id": 167,
+      "locale": "new_krpc",
+      "name": "힘과 마력 +20%",
+      "hex": "2c532c363aaf2c743a4532303f"
+    },
+    {
+      "id": 168,
+      "locale": "new_krpc",
+      "name": "물리 방어와 마법 방어 +10%",
+      "hex": "cfa43a2c3392e93aaf2c783a2c33923a4531303f"
+    },
+    {
+      "id": 169,
+      "locale": "new_krpc",
+      "name": "물리 방어와 마법 방어 +20%",
+      "hex": "cfa43a2c3392e93aaf2c783a2c33923a4532303f"
+    },
+    {
+      "id": 170,
+      "locale": "new_krpc",
+      "name": "어리석은 타격",
+      "hex": "92a4ec9d3a2c6a2c71"
+    },
+    {
+      "id": 171,
+      "locale": "new_krpc",
+      "name": "어리석은 접촉",
+      "hex": "92a4ec9d3a2d6f2e36"
+    },
+    {
+      "id": 172,
+      "locale": "new_krpc",
+      "name": "네 속성 타격",
+      "hex": "d63a2c6b2c6f3a2c6a2c71"
+    },
+    {
+      "id": 173,
+      "locale": "new_krpc",
+      "name": "네 속성 접촉",
+      "hex": "d63a2c6b2c6f3a2d6f2e36"
+    },
+    {
+      "id": 174,
+      "locale": "new_krpc",
+      "name": "마법 샘",
+      "hex": "af2c783a2f7a"
+    }
+  ]
+}

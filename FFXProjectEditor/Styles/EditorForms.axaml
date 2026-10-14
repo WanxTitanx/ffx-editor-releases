@@ -1,0 +1,45 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Opt-in form styles: bound the reading width and keep editable values recognisable. -->
+    <Style Selector="StackPanel.editorContent">
+        <Setter Property="MaxWidth" Value="1240" />
+    </Style>
+    <Style Selector="TextBox.numField">
+        <Setter Property="Background" Value="{DynamicResource PanelDeepBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="MinHeight" Value="34" />
+        <Setter Property="Padding" Value="10,6" />
+    </Style>
+    <Style Selector="UniformGrid.editorFields">
+        <Setter Property="Columns" Value="4" />
+    </Style>
+    <Style Selector="UniformGrid.primaryStats">
+        <Setter Property="Columns" Value="5" />
+    </Style>
+    <Style Selector="UniformGrid.summaryFields">
+        <Setter Property="Columns" Value="3" />
+    </Style>
+    <Style Selector=":is(UserControl).medium UniformGrid.editorFields">
+        <Setter Property="Columns" Value="3" />
+    </Style>
+    <Style Selector=":is(UserControl).medium UniformGrid.pairedFields">
+        <Setter Property="Columns" Value="2" />
+    </Style>
+    <Style Selector=":is(UserControl).narrow UniformGrid.editorFields">
+        <Setter Property="Columns" Value="2" />
+    </Style>
+    <Style Selector=":is(UserControl).narrow UniformGrid.summaryFields">
+        <Setter Property="Columns" Value="1" />
+    </Style>
+    <Style Selector="UniformGrid.editorFields > StackPanel, UniformGrid.editorFields > Border">
+        <Setter Property="Margin" Value="0,0,12,12" />
+    </Style>
+    <Style Selector="UniformGrid.editorFields TextBlock">
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+    <Style Selector="ComboBox.formChoice">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    </Style>
+</Styles>

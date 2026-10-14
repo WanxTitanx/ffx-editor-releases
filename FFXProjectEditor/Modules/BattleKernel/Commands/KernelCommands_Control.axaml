@@ -1,0 +1,1134 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:FFXProjectEditor.Converters"
+             xmlns:local="clr-namespace:FFXProjectEditor.Modules.BattleKernel.Commands"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:ctrl="clr-namespace:FFXProjectEditor.Controls"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d" d:DesignWidth="1500" d:DesignHeight="860"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.KernelCommands_Control"
+             Name="ThisControl">
+
+    <!-- Jarvis-UI Fase E §E12 (v2.161.5.0): migrate the repo's largest detail (3-col + session bar) ->
+         ModuleMasterDetail_Shell. MAIOR DETAIL DO REPO, maior risco de regressao visual.
+         Decisao arquitetural (doc §3.E12):
+           - manter outer RowDefinitions="Auto,*": a TOP SESSION BAR fica ACIMA do shell (row 0);
+           - shell na row 1 com MasterList = command ListBox (era Col0), Detail = editor (era Col1);
+           - a 3a coluna "Where Used" (era Col2) vira um Expander colapsavel DENTRO do Detail
+             (default colapsado) — preserva os x:Name (CommandList/MonsterLinksList) que o code-behind
+             referencia por nome (MonsterLinksList.SelectedItem em OpenReferenceMonster).
+         Hex inline -> tokens no mesmo commit:
+           - #FF6B6B (LoadError foreground, L79) -> DangerBrush;
+           - #1A2A3A background do Spira Ward note -> PanelDeepBrush;
+           - #3A6EA5 border do Spira Ward note -> PanelStrokeBrush;
+           - #7EC8FF / #B8D4E8 foreground do Spira Ward note -> AccentCoolBrush (token EXATO existe).
+         DataContext, bindings, handlers, AutoSaveIndicator, converters, IRestorableModule (D2) e os
+         x:Name (ThisControl/CommandList/MonsterLinksList) inalterados. -->
+
+    <UserControl.Resources>
+        <converters:Character_Converter x:Key="CharacterConverter"/>
+        <converters:DamageFormula_Converter x:Key="DamageFormulaConverter"/>
+        <local:HitCalcType_Converter x:Key="HitCalcTypeConverter"/>
+		<SolidColorBrush x:Key="SystemRegionBrush" Color="Transparent"/>
+		<SolidColorBrush x:Key="SystemControlBackgroundAltHighBrush" Color="Transparent"/>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <!-- Responsividade: em telas estreitas o painel master recolhe por default. -->
+        <Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+            <Setter Property="IsMasterExpanded" Value="False" />
+        </Style>
+        <!-- Compact label + editor stack used inside the WrapPanels -->
+        <Style Selector="StackPanel.field">
+            <Setter Property="Width" Value="170" />
+            <Setter Property="Margin" Value="0,0,12,10" />
+                    </Style>
+        <Style Selector="StackPanel.field > TextBlock">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="0,0,5,0" />
+        </Style>
+        <Style Selector="CheckBox.flag">
+            <Setter Property="Width" Value="140" />
+            <Setter Property="Margin" Value="0,0,8,4" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="#08FFFFFF" />
+            <Setter Property="BorderBrush" Value="#22FFFFFF" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="3" />
+            <Setter Property="MinHeight" Value="24" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="Padding" Value="6,2" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#11FFFFFF" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Height" Value="24" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="MinHeight" Value="24" />
+        </Style>
+
+        <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#1AFFFFFF" />
+            <Setter Property="BorderBrush" Value="#44FFFFFF" />
+        </Style>
+        <Style Selector="ComboBox:pointerover /template/ Border#Background">
+            <Setter Property="Background" Value="#1AFFFFFF" />
+            <Setter Property="BorderBrush" Value="#44FFFFFF" />
+        </Style>
+        <Style Selector="ComboBox:focus /template/ Border#Background">
+            <Setter Property="Background" Value="#11FFFFFF" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid>
+
+        <!-- MAIN AREA: shell — session bar moved into Detail column to align with Identity panel,
+             freeing vertical space for the Commands list (left column). -->
+        <common:ModuleMasterDetail_Shell MasterHeaderLabel="Commands"
+                                        Margin="18,16,18,16">
+
+            <!-- ===== MASTER: command ListBox (era Col0) ===== -->
+            <common:ModuleMasterDetail_Shell.MasterHeader>
+                <StackPanel Spacing="4" Margin="2,0,2,2">
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_commands_amp_ability_editor_7657bb24}" VerticalAlignment="Center" />
+                        <ctrl:CapabilityBadge HorizontalAlignment="Left" Name="CommandCapabilityBadge" VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                               Text="{x:Static res:Strings.U_edit_battle_commands_and_abilities_ability_comma_7da52c47}" />
+                </StackPanel>
+            </common:ModuleMasterDetail_Shell.MasterHeader>
+
+            <common:ModuleMasterDetail_Shell.MasterList>
+                <Grid RowDefinitions="Auto,Auto,Auto,*">
+                    <WrapPanel Grid.Row="0"
+                               Margin="0,0,0,6"
+                               IsVisible="{Binding IsCommandListMutable}"
+                               Orientation="Horizontal">
+                        <Button Margin="0,0,8,6"
+                                Classes="secondaryAction"
+                                IsEnabled="{Binding CanCloneSelectedCommand}"
+                                Click="Button_CloneCommand" AutomationProperties.Name="Clonar">Clonar</Button>
+                        <Button Margin="0,0,8,6"
+                                Classes="secondaryAction"
+                                IsEnabled="{Binding CanDeleteSelectedCommand}"
+                                Click="Button_DeleteCommand" AutomationProperties.Name="Apagar">Apagar</Button>
+                        <Button Margin="0,0,0,6"
+                                Classes="secondaryAction"
+                                IsEnabled="{Binding CanAddCommand}"
+                                Click="Button_AddCommand" AutomationProperties.Name="Adicionar">Adicionar</Button>
+                    </WrapPanel>
+                    <TextBox Grid.Row="1"
+                             Margin="0,0,0,10"
+                             Watermark="{x:Static res:Strings.U_filter_by_index_name_or_description_94de1c73}"
+                             Text="{Binding FilterText}"
+                             TextChanged="Filter_Changed" />
+                    <TextBlock Grid.Row="2" Classes="muted" FontSize="11" Text="{Binding SelectedCommand.Name}" TextTrimming="CharacterEllipsis" />
+                    <!-- x:Name=CommandList preservado: code-behind referencia o field gerado em filtros/restore -->
+                    <ListBox Grid.Row="3"
+                             Name="CommandList"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             ItemsSource="{Binding DisplayedCommands}"
+                             SelectedItem="{Binding SelectedCommand, Mode=TwoWay}"
+                             SelectionChanged="CommandList_SelectionChanged">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,2,0,2" Padding="10,6" Classes="cardSoft" HorizontalAlignment="Stretch">
+                                    <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+                                        <TextBlock Grid.Column="0"
+                                                   Margin="0,0,10,0"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="11"
+                                                   FontFamily="Consolas,Courier New,monospace"
+                                                   Foreground="{DynamicResource TextMutedBrush}"
+                                                   Text="{Binding Index, StringFormat='#{0}'}"
+                                                   VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1"
+                                                   FontWeight="SemiBold"
+                                                   FontSize="13"
+                                                   Text="{Binding Name}"
+                                                   TextTrimming="CharacterEllipsis"
+                                                   VerticalAlignment="Center" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </common:ModuleMasterDetail_Shell.MasterList>
+
+            <!-- ===== DETAIL: editor (era Col1) + Where Used como Expander colapsavel (era Col2) ===== -->
+            <common:ModuleMasterDetail_Shell.Detail>
+                <Grid RowDefinitions="Auto,*">
+                    <!-- Session Controls (aligned with Identity panel below) -->
+                    <Border Grid.Row="0" Margin="10,0,10,8" Padding="16,12" Classes="cardSoft">
+                        <StackPanel Spacing="10">
+                            <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+                            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto,Auto">
+                                <StackPanel Spacing="2" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding EditSession.SessionSummary}" FontWeight="SemiBold" />
+                                    <TextBlock Text="{Binding EditSession.BehaviorSummary}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+                                </StackPanel>
+                                <core:AutoSaveIndicator_Control Grid.Column="1"
+                                                                Margin="12,0,0,0"
+                                                                VerticalAlignment="Center"
+                                                                Session="{Binding EditSession}" />
+                                <CheckBox Grid.Column="2"
+                                          Margin="12,0,0,0"
+                                          VerticalAlignment="Center"
+                                          IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+                                <Button Grid.Column="3"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Classes="secondaryAction"
+                                        IsEnabled="{Binding EditSession.CanUndo}"
+                                        Click="Button_Undo" AutomationProperties.Name="Undo">Undo</Button>
+                                <Button Grid.Column="4"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Classes="dangerAction"
+                                        IsEnabled="{Binding EditSession.HasPendingChanges}"
+                                        Click="Button_Discard" AutomationProperties.Name="Discard">Discard</Button>
+                                <Button Grid.Column="5"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Classes="secondaryAction accentRefresh"
+                                        IsEnabled="{Binding ProcService.IsAlive}"
+                                        Click="Button_LoadIngame" AutomationProperties.Name="Load Ingame">Load Ingame</Button>
+                                <Button Grid.Column="6"
+                                        Margin="12,0,0,0"
+                                        VerticalAlignment="Center"
+                                        Classes="primaryAction accentGold"
+                                        IsEnabled="{Binding EditSession.HasPendingChanges}"
+                                        Click="Button_Save" AutomationProperties.Name="Save">Save</Button>
+                            </Grid>
+                            <!-- Jarvis-UI §E12: hex #FF6B6B -> DangerBrush -->
+                            <TextBlock Foreground="{DynamicResource DangerBrush}"
+                                       FontWeight="SemiBold"
+                                       FontSize="11"
+                                       TextWrapping="Wrap"
+                                       Text="{Binding LoadError}" />
+                        </StackPanel>
+                    </Border>
+                    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" HorizontalAlignment="Stretch">
+                    <Grid HorizontalAlignment="Stretch">
+                        <!-- Empty state when no command selected (Jarvis-UI v2.190.2.0) -->
+                        <Border IsVisible="{Binding !HasSelectedCommand}"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                Margin="20,40"
+                                Padding="40"
+                                CornerRadius="8"
+                                Background="{DynamicResource PanelDeepBrush}"
+                                BorderBrush="{DynamicResource PanelStrokeBrush}"
+                                BorderThickness="1">
+                            <StackPanel Spacing="10" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <TextBlock Classes="sectionLabel"
+                                           FontSize="14"
+                                           HorizontalAlignment="Center"
+                                           Text="{x:Static res:Strings.U_no_command_selected_a24a3f8c}" />
+                                <TextBlock Classes="muted"
+                                           TextWrapping="Wrap"
+                                           MaxWidth="500"
+                                           HorizontalAlignment="Center"
+                                           TextAlignment="Center"
+                                           Text="{x:Static res:Strings.U_pick_a_command_on_the_left_to_start_editing_its__5d1d15c8}" />
+                            </StackPanel>
+                        </Border>
+                        <!-- Detail content (visible when a command is selected) -->
+                        <StackPanel Spacing="14" Margin="10"
+                                    IsVisible="{Binding HasSelectedCommand}"
+                                    HorizontalAlignment="Stretch">
+
+                        <!-- Identity -->
+                        <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingMd}" Classes="card heroGradient">
+                            <StackPanel Spacing="6">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_identity_7e5a975b}" />
+                                <!-- Stats chips (Jarvis-UI v2.190.2.0: hero stats pattern) -->
+                                <WrapPanel Orientation="Horizontal" Margin="0,0,0,4">
+                                    <Border Margin="0,0,6,4" Padding="8,3" CornerRadius="3"
+                                            Background="{DynamicResource PanelDeepBrush}"
+                                            BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Classes="muted" FontSize="10" Text="{x:Static res:Strings.U_scope_4651a34e}" />
+                                            <TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding CommandScope}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Margin="0,0,6,4" Padding="8,3" CornerRadius="3"
+                                            Background="{DynamicResource PanelDeepBrush}"
+                                            BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Classes="muted" FontSize="10" Text="{x:Static res:Strings.U_total_b25928c6}" />
+                                            <TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding TotalCount}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Margin="0,0,6,4" Padding="8,3" CornerRadius="3"
+                                            Background="{DynamicResource PanelDeepBrush}"
+                                            BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1">
+                                        <StackPanel Orientation="Horizontal" Spacing="6">
+                                            <TextBlock Classes="muted" FontSize="10" Text="{x:Static res:Strings.U_filtered_7b26f50a}" />
+                                            <TextBlock FontSize="11" FontWeight="SemiBold" Text="{Binding FilteredCount}" />
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Margin="0,0,6,4" Padding="8,3" CornerRadius="3"
+                                            Background="#FF8C42"
+                                            BorderBrush="#FF6B1F" BorderThickness="1"
+                                            IsVisible="{Binding IsCommandListMutable}">
+                                        <TextBlock FontSize="10" FontWeight="SemiBold" Foreground="#1A1A1A" Text="{x:Static res:Strings.U_writable_6cb10f41}" />
+                                    </Border>
+                                </WrapPanel>
+                                <StackPanel Orientation="Horizontal" Spacing="12">
+                                          <StackPanel Classes="field" Width="120">
+<TextBlock Text="{x:Static res:Strings.CommonIndex}" />
+<TextBox IsReadOnly="True" Text="{Binding SelectedCommand.Index}" />
+</StackPanel>
+                                    <TextBlock VerticalAlignment="Bottom"
+                                               FontSize="16" FontWeight="SemiBold"
+                                               Text="{Binding SelectedCommand.Name}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </StackPanel>
+                                <StackPanel Spacing="3">
+                                    <TextBlock FontSize="11"
+                                               Foreground="{DynamicResource TextMutedBrush}"
+                                               Text="{x:Static res:Strings.CommonName}" />
+                                    <TextBox Text="{Binding SelectedCommand.DisplayName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             Watermark="{x:Static res:Strings.U_nome_no_menu_de_batalha_d2722e9f}" />
+                                </StackPanel>
+                                <StackPanel Spacing="3">
+                                    <TextBlock FontSize="11"
+                                               Foreground="{DynamicResource TextMutedBrush}"
+                                               Text="{x:Static res:Strings.CommonDescription}" />
+                                    <TextBox Text="{Binding SelectedCommand.DisplayDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                             Watermark="{x:Static res:Strings.U_descricao_no_menu_de_batalha_02de36b4}"
+                                             MaxHeight="64"
+                                             TextWrapping="Wrap" />
+                                </StackPanel>
+                                <TextBlock Classes="muted"
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Text="{x:Static res:Strings.U_edite_aqui_e_de_save_grava_direto_no_text_pool_e_14bc8af9}" />
+                                <!-- Jarvis-UI §E12: hex #1A2A3A/#3A6EA5/#7EC8FF/#B8D4E8 -> tokens
+                                     PanelDeepBrush/PanelStrokeBrush/AccentCoolBrush/AccentCoolBrush -->
+                                <Border Padding="{DynamicResource SpacingMd}"
+                                        CornerRadius="6"
+                                        Background="{DynamicResource PanelDeepBrush}"
+                                        BorderBrush="{DynamicResource PanelStrokeBrush}"
+                                        BorderThickness="1"
+                                        IsVisible="{Binding SelectedCommand.IsSpiraElementWard}">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock FontWeight="SemiBold"
+                                                   Foreground="{DynamicResource AccentCoolBrush}"
+                                                   Text="{x:Static res:Strings.U_spira_reforge_element_ward_9c460d88}" />
+                                        <TextBlock Foreground="{DynamicResource AccentCoolBrush}"
+                                                   FontSize="11"
+                                                   Text="{Binding SelectedCommand.SpiraWardHookNote}"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Animations -->
+                        <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_animations_c77dcded}" />
+                                <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_anim_1_id_8802dc99}" />
+<TextBox Text="{Binding SelectedCommand.Anim1Id}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_anim_2_id_27ade6a7}" />
+<TextBox Text="{Binding SelectedCommand.Anim2Id}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_icon_id_bfd551b6}" />
+<TextBox Text="{Binding SelectedCommand.IconId}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_caster_anim_id_021a64b3}" />
+<TextBox Text="{Binding SelectedCommand.CasterAnimId}" />
+</StackPanel>
+                                </WrapPanel>
+                                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*,Auto,Auto">
+                                    <TextBlock VerticalAlignment="Center"
+                                               FontSize="11"
+                                               Text="{Binding Anim1EffectSummary}"
+                                               TextWrapping="Wrap" />
+                                    <Button Grid.Column="1"
+                                            Margin="10,0,0,0"
+                                            Classes="secondaryAction"
+                                            IsEnabled="{Binding CanViewAnim1Effect}"
+                                            Click="Button_ViewAnim1Effect" AutomationProperties.Name="View Anim 1">View Anim 1</Button>
+                                    <Button Grid.Column="2"
+                                            Margin="8,0,0,0"
+                                            Classes="secondaryAction"
+                                            IsEnabled="{Binding Anim1EffectAvailable}"
+                                            Click="Button_OpenAnim1EffectFolder" AutomationProperties.Name="Open Folder">Open Folder</Button>
+
+                                    <TextBlock Grid.Row="1"
+                                               Margin="0,8,0,0"
+                                               VerticalAlignment="Center"
+                                               FontSize="11"
+                                               Text="{Binding Anim2EffectSummary}"
+                                               TextWrapping="Wrap" />
+                                    <Button Grid.Row="1"
+                                            Grid.Column="1"
+                                            Margin="10,8,0,0"
+                                            Classes="secondaryAction"
+                                            IsEnabled="{Binding CanViewAnim2Effect}"
+                                            Click="Button_ViewAnim2Effect" AutomationProperties.Name="View Anim 2">View Anim 2</Button>
+                                    <Button Grid.Row="1"
+                                            Grid.Column="2"
+                                            Margin="8,8,0,0"
+                                            Classes="secondaryAction"
+                                            IsEnabled="{Binding Anim2EffectAvailable}"
+                                            Click="Button_OpenAnim2EffectFolder" AutomationProperties.Name="Open Folder">Open Folder</Button>
+                                </Grid>
+                                <TextBlock Classes="muted"
+                                           FontSize="11"
+                                           TextWrapping="Wrap"
+                                           Text="{x:Static res:Strings.U_preview_opens_the_selected_magic_in_ps3_magic_hd_64c0e6bc}" />
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Battle SFX — collapsible tiers -->
+                        <Expander Header="{x:Static res:Strings.U_battle_sfx_custom_audio_7b83f526}" IsExpanded="False">
+                            <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Text="{Binding BattleSfxSummary}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding BattleSfxMapStatus}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding BattleSfxRt2Status}" Classes="muted" FontSize="11" />
+                                    <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_magic_dll_4fd75e91}" />
+<TextBox IsReadOnly="True" Text="{Binding BattleSfxMagicIdDisplay}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_fmod_seid_current_6ee3f317}" />
+<TextBox IsReadOnly="True" Text="{Binding BattleSfxSeIdDisplay}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_spu_wavedataid_d2eac20a}" />
+<TextBox IsReadOnly="True" Text="{Binding BattleSfxWaveIdDisplay}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="120">
+<TextBlock Text="{x:Static res:Strings.U_fsb_sample_5fbb67fa}" />
+<TextBox IsEnabled="{Binding CanEditBattleSfx}" Text="{Binding BattleSfxFsbSampleIndex}" />
+</StackPanel>
+                                        <Button Margin="0,24,4,0" Classes="secondaryAction"
+                                                IsEnabled="{Binding CanEditBattleSfx}"
+                                                Command="{Binding NudgeBattleSfxFsbSamplePrevCommand}"
+                                                AutomationProperties.Name="Previous FSB sample">◀</Button>
+                                        <Button Margin="0,24,8,0" Classes="secondaryAction"
+                                                IsEnabled="{Binding CanEditBattleSfx}"
+                                                Command="{Binding NudgeBattleSfxFsbSampleNextCommand}"
+                                                AutomationProperties.Name="Next FSB sample">▶</Button>
+                                    </WrapPanel>
+
+                                    <Expander Header="{x:Static res:Strings.U_tier_1_donor_seid_remap_dll_only_af02525c}" IsExpanded="False">
+                                        <StackPanel Spacing="10" Margin="0,8,0,0">
+                                          <Grid Classes="fieldGrid" ColumnDefinitions="*, 50" Width="520">
+                                              <TextBlock Text="{x:Static res:Strings.U_donor_sound_magic_dll_seid_6c9aa9ae}" />
+                                              <ComboBox Grid.Column="1" HorizontalAlignment="Stretch"
+                                                          IsEnabled="{Binding CanEditBattleSfx}"
+                                                          ItemsSource="{Binding BattleSfxDonorOptions}"
+                                                          SelectedItem="{Binding SelectedBattleSfxDonor}">
+
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Display}" />
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                
+                                              </ComboBox>
+                                          </Grid>
+                                          <StackPanel Classes="field" Width="120">
+<TextBlock Text="{x:Static res:Strings.U_sesep_record_index_a13e8823}" />
+<TextBox IsEnabled="{Binding CanEditBattleSfx}" Text="{Binding BattleSfxRecordIndex}" />
+</StackPanel>
+                                            <WrapPanel Orientation="Horizontal">
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding CanEditBattleSfx}"
+                                                        Command="{Binding PreviewBattleSfxPatchCommand}" AutomationProperties.Name="Preview patch">Preview patch</Button>
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding CanEditBattleSfx}"
+                                                        Command="{Binding StageBattleSfxPackCommand}" AutomationProperties.Name="Stage pack">Stage pack</Button>
+                                                <Button Margin="0,0,8,0" Classes="primaryAction"
+                                                        IsEnabled="{Binding CanEditBattleSfx}"
+                                                        Command="{Binding DeployBattleSfxPackCommand}" AutomationProperties.Name="Deploy DLL">Deploy DLL</Button>
+                                                <Button Classes="secondaryAction"
+                                                        IsEnabled="{Binding CanEditBattleSfx}"
+                                                        Command="{Binding RestoreBattleSfxBackupCommand}" AutomationProperties.Name="Restore backup">Restore backup</Button>
+                                            </WrapPanel>
+                                            <TextBlock Text="{Binding BattleSfxActionStatus}" TextWrapping="Wrap" FontSize="11" />
+                                        </StackPanel>
+                                    </Expander>
+
+                                    <Expander Header="{x:Static res:Strings.U_tier_2a_custom_wav_replace_fsb_sample_fb30511f}" IsExpanded="False">
+                                        <StackPanel Spacing="10" Margin="0,8,0,0">
+                                            <TextBlock Text="{Binding BattleSfxCustomStatus}" TextWrapping="Wrap" FontSize="11" />
+                                            <TextBlock Text="{Binding BattleSfxAudioToolsHealth}" TextWrapping="Wrap" FontSize="11" Classes="muted" />
+                                            <TextBlock IsVisible="{Binding BattleSfxCustomToolsMissing}"
+                                                       Classes="muted"
+                                                       FontSize="11"
+                                                       TextWrapping="Wrap"
+                                                       Text="{x:Static res:Strings.U_vgmstream_fsbext_ship_with_the_editor_under_tool_b27f28d1}" />
+                                            <WrapPanel Orientation="Horizontal">
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        Command="{Binding VerifyBattleAudioToolsCommand}" AutomationProperties.Name="Verify audio tools">Verify audio tools</Button>
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Click="Button_ImportCustomWav"
+                                                        AutomationProperties.Name="Import custom WAV">Import WAV…</Button>
+                                            </WrapPanel>
+                                          <StackPanel Classes="field" Width="520">
+<TextBlock Text="{x:Static res:Strings.U_replacement_wav_9ab3a421}" />
+<TextBox IsReadOnly="True" Text="{Binding BattleSfxCustomWavPath}" />
+</StackPanel>
+                                            <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="80">
+<TextBlock Text="{x:Static res:Strings.U_locale_8970f0e6}" />
+<TextBox IsEnabled="{Binding CanEditBattleSfx}" Text="{Binding BattleSfxSfxLocale}" />
+</StackPanel>
+                                                <CheckBox Margin="8,24,0,0" Classes="flag"
+                                                          IsEnabled="{Binding CanEditBattleSfx}"
+                                                          IsChecked="{Binding BattleSfxPatchDllForCustom}"
+                                                          Content="{x:Static res:Strings.U_patch_dll_seid_beb65723}" />
+                                            </WrapPanel>
+                                            <TextBlock Text="{Binding BattleSfxCustomValidation}" TextWrapping="Wrap" FontSize="11" />
+                                            <WrapPanel Orientation="Horizontal">
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding ValidateCustomBattleSfxWavCommand}" AutomationProperties.Name="Validate format">Validate format</Button>
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding PreviewOriginalBattleSfxSampleCommand}" AutomationProperties.Name="Play original">Play original</Button>
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding PreviewReplacementBattleSfxWavCommand}" AutomationProperties.Name="Play replacement">Play replacement</Button>
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding DryRunCustomBattleSfxFsbCommand}" AutomationProperties.Name="Preview FSB rebuild">Preview FSB rebuild</Button>
+                                            </WrapPanel>
+                                            <WrapPanel Orientation="Horizontal">
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding StageCustomBattleSfxPackCommand}" AutomationProperties.Name="Stage custom pack">Stage custom pack</Button>
+                                                <Button Margin="0,0,8,0" Classes="primaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding DeployCustomBattleSfxPackCommand}" AutomationProperties.Name="Deploy FSB + DLL">Deploy FSB + DLL</Button>
+                                                <Button Classes="secondaryAction"
+                                                        Command="{Binding RestoreCustomBattleSfxBackupsCommand}" AutomationProperties.Name="Restore FSB/DLL">Restore FSB/DLL</Button>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </Expander>
+
+                                    <Expander Header="{x:Static res:Strings.U_tier_2b_new_seid_slot_no_overwrite_ad78559c}" IsExpanded="False">
+                                        <StackPanel Spacing="10" Margin="0,8,0,0">
+                                            <TextBlock Text="{Binding BattleSfxNewSeIdStatus}" TextWrapping="Wrap" FontSize="11" />
+                                            <TextBlock Text="{Binding BattleSfxNewSeIdGaps}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+                                            <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                                       Text="{x:Static res:Strings.U_adds_fev_sequence_fsb_sample_patches_only_this_s_4d885fd6}" />
+                                            <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="120">
+<TextBlock Text="{x:Static res:Strings.U_new_seid_gap_56622019}" />
+<TextBox IsEnabled="{Binding CanEditBattleSfx}" Text="{Binding BattleSfxNewSeIdGapValue}" />
+</StackPanel>
+                                                <CheckBox Margin="8,24,0,0" Classes="flag"
+                                                          IsEnabled="{Binding CanEditBattleSfx}"
+                                                          IsChecked="{Binding BattleSfxMirrorJpLocale}"
+                                                          Content="{x:Static res:Strings.U_mirror_deploy_jp_a277d266}" />
+                                            </WrapPanel>
+                                            <WrapPanel Orientation="Horizontal">
+                                                <Button Margin="0,0,8,0" Classes="secondaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding StageNewSeIdBattleSfxPackCommand}" AutomationProperties.Name="Stage FEV+FSB+DLL">Stage FEV+FSB+DLL</Button>
+                                                <Button Margin="0,0,8,0" Classes="primaryAction"
+                                                        IsEnabled="{Binding BattleSfxCustomToolsReady}"
+                                                        Command="{Binding DeployNewSeIdBattleSfxPackCommand}" AutomationProperties.Name="Deploy new seId pack">Deploy new seId pack</Button>
+                                                <Button Classes="secondaryAction"
+                                                        Command="{Binding RestoreNewSeIdBattleSfxBackupsCommand}" AutomationProperties.Name="Restore FEV/FSB/DLL">Restore FEV/FSB/DLL</Button>
+                                            </WrapPanel>
+                                        </StackPanel>
+                                    </Expander>
+
+                                    <TextBlock Classes="muted"
+                                               FontSize="11"
+                                               TextWrapping="Wrap"
+                                               Text="{x:Static res:Strings.U_tier_1_donor_seid_remap_dll_only_tier_2a_replace_b6e3a7c7}" />
+                                </StackPanel>
+                            </Border>
+                        </Expander>
+
+                        <!-- Menu -->
+                        <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_menu_57f5f5ef}" />
+                                <WrapPanel Orientation="Horizontal">
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_main_menu_758da745}" IsChecked="{Binding SelectedCommand.FlagMenuMainMenu}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_open_command_menu_9fb12454}" IsChecked="{Binding SelectedCommand.FlagMenuOpenCommandMenu}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_open_special_menu_4df1e0cf}" IsChecked="{Binding SelectedCommand.FlagMenuOpenSpecialMenu}" />
+                                </WrapPanel>
+                                <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_subsubmenu_categorization_a699f5c7}" />
+<TextBox Text="{Binding SelectedCommand.SubSubMenuCategorization}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_submenu_categorization_c48e453a}" />
+<TextBox Text="{Binding SelectedCommand.SubMenuCategorization}" />
+</StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Characters / Targeting -->
+                        <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_characters_targeting_8b9bf5fc}" />
+                                <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="220">
+<TextBlock Text="{x:Static res:Strings.U_character_user_f7f7f397}" />
+<ComboBox HorizontalAlignment="Stretch"
+                                                  ItemsSource="{Binding CharacterOptions}"
+                                                  SelectedItem="{Binding SelectedCommand.CharacterUser, Converter={StaticResource CharacterConverter}, Mode=TwoWay}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_targets_allowed_20482b9e}" />
+<TextBox Text="{Binding SelectedCommand.TargetsAllowed}" />
+</StackPanel>
+                                </WrapPanel>
+                                <WrapPanel Orientation="Horizontal">
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_enabled_d851f3c0}" IsChecked="{Binding SelectedCommand.FlagTargetEnabled}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_enemies_cfb37ab2}" IsChecked="{Binding SelectedCommand.FlagTargetEnemies}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_multi_c94a3f8e}" IsChecked="{Binding SelectedCommand.FlagTargetMulti}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_selfonly_cb90699d}" IsChecked="{Binding SelectedCommand.FlagTargetSelfOnly}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_unk10_38387334}" IsChecked="{Binding SelectedCommand.FlagTargetUnk10}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_eitherteam_780cbdcb}" IsChecked="{Binding SelectedCommand.FlagTargetEitherTeam}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_dead_84ef3d87}" IsChecked="{Binding SelectedCommand.FlagTargetDead}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_target_longrange_41a3ced5}" IsChecked="{Binding SelectedCommand.FlagTargetLongRange}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Costs -->
+                        <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_costs_799b3e5c}" />
+                                <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_move_rank_93986976}" />
+<TextBox Text="{Binding SelectedCommand.MoveRank}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_cost_mp_3da317ea}" />
+<TextBox Text="{Binding SelectedCommand.CostMp}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_cost_overdrive_fa3d3b40}" />
+<TextBox Text="{Binding SelectedCommand.CostOverdrive}" />
+</StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Attack Data -->
+                        <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_attack_data_24f30b2e}" />
+                                <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_attack_crit_bonus_074454d5}" />
+<TextBox Text="{Binding SelectedCommand.AttackCritBonus}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="220">
+<TextBlock Text="{x:Static res:Strings.U_damage_formula_d6ee83bc}" />
+<ComboBox HorizontalAlignment="Stretch"
+                                                  ItemsSource="{Binding DamageFormulaOptions}"
+                                                  SelectedItem="{Binding SelectedCommand.DamageFormula, Converter={StaticResource DamageFormulaConverter}, Mode=TwoWay}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_attack_accuracy_69d6c959}" />
+<TextBox Text="{Binding SelectedCommand.AttackAccuracy}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_attack_power_81499ee9}" />
+<TextBox Text="{Binding SelectedCommand.AttackPower}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_hit_count_87a27fc7}" />
+<TextBox Text="{Binding SelectedCommand.HitCount}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_shatter_chance_6d0d58df}" />
+<TextBox Text="{Binding SelectedCommand.ShatterChance}" />
+</StackPanel>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Element -->
+                        <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                            <StackPanel Spacing="10">
+                                <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_element_49fa9fd8}" />
+                                <WrapPanel Orientation="Horizontal">
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_fire_78baebfc}" IsChecked="{Binding SelectedCommand.FlagElementFire}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_blizzard_f6221a09}" IsChecked="{Binding SelectedCommand.FlagElementBlizzard}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_thunder_134e9305}" IsChecked="{Binding SelectedCommand.FlagElementThunder}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_water_de9b1be4}" IsChecked="{Binding SelectedCommand.FlagElementWater}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_holy_dfe1d7f7}" IsChecked="{Binding SelectedCommand.FlagElementHoly}" />
+                                    <CheckBox Classes="flag" Content="{x:Static res:Strings.U_dark_ae1ef014}" IsChecked="{Binding SelectedCommand.FlagElementDark}" />
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Properties (flag-heavy, collapsed) -->
+                        <Expander Header="{x:Static res:Strings.CommonProperties}" IsExpanded="False">
+                            <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                                <StackPanel Spacing="8">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_misc_1_7df5b6f6}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_use_outside_combat_45e61c6b}" IsChecked="{Binding SelectedCommand.FlagMisc1UseOutsideCombat}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_use_in_combat_9d58ef26}" IsChecked="{Binding SelectedCommand.FlagMisc1UseInCombat}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_display_move_name_55172594}" IsChecked="{Binding SelectedCommand.FlagMisc1DisplayMoveName}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_affected_by_darkness_0296e4da}" IsChecked="{Binding SelectedCommand.FlagMisc1AffectedByDarkness}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_affected_by_reflect_e6f19ea1}" IsChecked="{Binding SelectedCommand.FlagMisc1AffectedByReflect}" />
+                                        </WrapPanel>
+                                          <StackPanel Classes="field" Width="220">
+<TextBlock Text="{x:Static res:Strings.U_hit_calc_type_2d9fbd5d}" />
+<ComboBox HorizontalAlignment="Stretch"
+                                                      ItemsSource="{Binding HitCalcTypeOptions}"
+                                                      SelectedItem="{Binding SelectedCommand.FlagMisc1HitCalcType, Converter={StaticResource HitCalcTypeConverter}, Mode=TwoWay}" />
+</StackPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_misc_2_a6a3e6a5}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_absorb_damage_ef86c4b1}" IsChecked="{Binding SelectedCommand.FlagMisc2AbsorbDamage}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_steal_item_3e848aab}" IsChecked="{Binding SelectedCommand.FlagMisc2StealItem}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_menu_use_517f010a}" IsChecked="{Binding SelectedCommand.FlagMisc2MenuUse}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_menu_right_1a763ca4}" IsChecked="{Binding SelectedCommand.FlagMisc2MenuRight}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_menu_left_7fd51ef6}" IsChecked="{Binding SelectedCommand.FlagMisc2MenuLeft}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_delay_s_c6c5071e}" IsChecked="{Binding SelectedCommand.FlagMisc2DelayS}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_delay_l_2d369613}" IsChecked="{Binding SelectedCommand.FlagMisc2DelayL}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_random_targets_d51d7926}" IsChecked="{Binding SelectedCommand.FlagMisc2RandomTargets}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_misc_3_4e798a1e}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_piercing_f588c0d8}" IsChecked="{Binding SelectedCommand.FlagMisc3Piercing}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_affected_by_silence_4d65dc07}" IsChecked="{Binding SelectedCommand.FlagMisc3AffectedBySilence}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_use_weapon_props_1bb232d0}" IsChecked="{Binding SelectedCommand.FlagMisc3UseWeaponProps}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_trigger_command_6eb2cd9b}" IsChecked="{Binding SelectedCommand.FlagMisc3TriggerCommand}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_cast_anim_s_c1d90622}" IsChecked="{Binding SelectedCommand.FlagMisc3CastAnimS}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_cast_anim_l_43abf47c}" IsChecked="{Binding SelectedCommand.FlagMisc3CastAnimL}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_destroy_caster_42d01d00}" IsChecked="{Binding SelectedCommand.FlagMisc3DestroyCaster}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_miss_to_alive_ef9f04ac}" IsChecked="{Binding SelectedCommand.FlagMisc3MissToAlive}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_misc_4_9e4dfefc}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_charge_warrior_healer_od_7e799a07}" IsChecked="{Binding SelectedCommand.FlagMisc4ChargeWarriorHealer}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_empty_overdrive_47ecc58a}" IsChecked="{Binding SelectedCommand.FlagMisc4EmptyOverdrive}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_show_spellcast_aura_cf9eab7a}" IsChecked="{Binding SelectedCommand.FlagMisc4ShowSpellcastAura}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_run_off_screen_598e6be0}" IsChecked="{Binding SelectedCommand.FlagMisc4RunOffScreen}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_copycat_enabled_0e7a2ba6}" IsChecked="{Binding SelectedCommand.FlagMisc4CopycatEnabled}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_prop_unk20_57414a8a}" IsChecked="{Binding SelectedCommand.FlagMisc4Unk20}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_aeon_overdrive_ed0e8011}" IsChecked="{Binding SelectedCommand.FlagMisc4AeonOverdrive}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.CommonBribe}" IsChecked="{Binding SelectedCommand.FlagMisc4Bribe}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_damage_7bf6d1d3}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_damage_physical_25c8ae76}" IsChecked="{Binding SelectedCommand.FlagDamagePhysical}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_damage_magical_bea3c045}" IsChecked="{Binding SelectedCommand.FlagDamageMagical}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_can_crit_27a00e1f}" IsChecked="{Binding SelectedCommand.FlagDamageCanCrit}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_gear_crit_bonus_fbcd4e0b}" IsChecked="{Binding SelectedCommand.FlagDamageGearCritBonus}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_heals_bc6f4bc6}" IsChecked="{Binding SelectedCommand.FlagDamageHeals}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_cleanses_statuses_653cacd3}" IsChecked="{Binding SelectedCommand.FlagDamageCleansesStatuses}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_supress_break_damage_limit_de6271c0}" IsChecked="{Binding SelectedCommand.FlagDamageSupressBreakDamageLimit}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_breaks_damage_limit_7ea840da}" IsChecked="{Binding SelectedCommand.FlagDamageBreaksDamageLimit}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_steal_gil_2b0d1c08}" IsChecked="{Binding SelectedCommand.StealGil}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_damage_type_1bfd29f2}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_dmg_type_hp_984638be}" IsChecked="{Binding SelectedCommand.FlagDamageTypeHp}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_dmg_type_mp_34a78807}" IsChecked="{Binding SelectedCommand.FlagDamageTypeMp}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_dmg_type_ctb_4bda0ad2}" IsChecked="{Binding SelectedCommand.FlagDamageTypeCtb}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonPreview}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_active_09340733}" IsChecked="{Binding SelectedCommand.FlagPreviewActive}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_heal_mp_cfdcb2d8}" IsChecked="{Binding SelectedCommand.FlagPreviewHealMp}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_heal_statuses_1bb17aa0}" IsChecked="{Binding SelectedCommand.FlagPreviewHealStatuses}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_is_map_6dc1110e}" IsChecked="{Binding SelectedCommand.FlagPreviewIsMap}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_is_rename_card_df34cd34}" IsChecked="{Binding SelectedCommand.FlagPreviewIsRenameCard}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_is_sphere_0deb4b9e}" IsChecked="{Binding SelectedCommand.FlagPreviewIsSphere}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_heal_hp_3cae68df}" IsChecked="{Binding SelectedCommand.FlagPreviewHealHp}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_preview_is_rename_card_2_7103af4b}" IsChecked="{Binding SelectedCommand.FlagPreviewIsRenameCard2}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.TermOverdrive}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_overdrive_category_cc27b31e}" />
+<TextBox Text="{Binding SelectedCommand.OverdriveCategory}" />
+</StackPanel>
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Expander>
+
+                        <!-- Status (chance + duration, collapsed) -->
+                        <Expander Header="{x:Static res:Strings.TermStatus}" IsExpanded="False">
+                            <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                                <StackPanel Spacing="8">
+                                    <TextBlock Classes="muted"
+                                               FontSize="11"
+                                               Text="{x:Static res:Strings.U_each_entry_pairs_the_inflict_cure_chance_with_it_98c5c256}" />
+                                    <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_death_chance_96051103}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Death}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_zombie_chance_2ea1e8c4}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Zombie}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_petrify_chance_b1a9d2fa}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Petrify}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_poison_chance_b2c0b9c5}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Poison}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_breakpower_chance_0bb34ec7}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.BreakPower}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_breakmagic_chance_53cc20ae}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.BreakMagic}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_breakarmor_chance_f5a6eb46}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.BreakArmor}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_breakmental_chance_c4182016}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.BreakMental}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_confuse_chance_df819071}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Confuse}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_berserk_chance_2122c10e}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Berserk}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_provoke_chance_d839d994}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Provoke}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_threaten_chance_ec33ef02}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Threaten}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_sleep_chance_3fc34023}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Sleep}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_sleep_turns_fb2c2426}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Sleep}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_silence_chance_f3e72235}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Silence}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_silence_turns_903ee0a0}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Silence}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_darkness_chance_c119a973}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Darkness}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_darkness_turns_8c3bc12e}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Darkness}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_shell_chance_fc1855ed}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Shell}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_shell_turns_f8aee7c9}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Shell}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_protect_chance_8aa2dc3a}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Protect}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_protect_turns_d373f659}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Protect}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_reflect_chance_d77badfb}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Reflect}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_reflect_turns_a867f54b}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Reflect}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nultide_chance_4458545b}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.NulTide}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nultide_turns_9d20b3df}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.NulTide}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nulblaze_chance_fbc2f464}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.NulBlaze}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nulblaze_turns_9a357bc4}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.NulBlaze}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nulshock_chance_1cd856ca}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.NulShock}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nulshock_turns_543e02fe}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.NulShock}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nulfrost_chance_9f8e22ef}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.NulFrost}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_nulfrost_turns_d4996f05}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.NulFrost}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_regen_chance_40b089ee}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Regen}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_regen_turns_5b5782df}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Regen}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_haste_chance_3244563d}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Haste}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_haste_turns_8f6e9416}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Haste}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_slow_chance_5e234a24}" />
+<TextBox Text="{Binding SelectedCommand.StatusChance.Slow}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_slow_turns_c54571aa}" />
+<TextBox Text="{Binding SelectedCommand.StatusDuration.Slow}" />
+</StackPanel>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </Expander>
+
+                        <!-- Status Special / Buffs (flag-heavy, collapsed) -->
+                        <Expander Header="{x:Static res:Strings.U_status_special_buffs_d97901c9}" IsExpanded="False">
+                            <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                                <StackPanel Spacing="8">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_special_statuses_063942a1}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermScan}" IsChecked="{Binding SelectedCommand.FlagStatusScan}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermDistillPower}" IsChecked="{Binding SelectedCommand.FlagStatusDistillPower}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermDistillMana}" IsChecked="{Binding SelectedCommand.FlagStatusDistillMana}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermDistillSpeed}" IsChecked="{Binding SelectedCommand.FlagStatusDistillSpeed}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_distill_unused_5893022d}" IsChecked="{Binding SelectedCommand.FlagStatusDistillUnused}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermDistillAbility}" IsChecked="{Binding SelectedCommand.FlagStatusDistillAbility}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermShield}" IsChecked="{Binding SelectedCommand.FlagStatusShield}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermBoost}" IsChecked="{Binding SelectedCommand.FlagStatusBoost}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermEject}" IsChecked="{Binding SelectedCommand.FlagStatusEject}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_autolife_c49c1464}" IsChecked="{Binding SelectedCommand.FlagStatusAutoLife}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermCurse}" IsChecked="{Binding SelectedCommand.FlagStatusCurse}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermDefend}" IsChecked="{Binding SelectedCommand.FlagStatusDefend}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermGuard}" IsChecked="{Binding SelectedCommand.FlagStatusGuard}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermSentinel}" IsChecked="{Binding SelectedCommand.FlagStatusSentinel}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermDoom}" IsChecked="{Binding SelectedCommand.FlagStatusDoom}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_stat_buffs_8b001df8}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_cheer_8c95fa0d}" IsChecked="{Binding SelectedCommand.FlagStatBuffCheer}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_aim_cf4f1fe5}" IsChecked="{Binding SelectedCommand.FlagStatBuffAim}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.CommonFocus}" IsChecked="{Binding SelectedCommand.FlagStatBuffFocus}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_reflex_4f2a9d70}" IsChecked="{Binding SelectedCommand.FlagStatBuffReflex}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.TermLuck}" IsChecked="{Binding SelectedCommand.FlagStatBuffLuck}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_jinx_b3c74c59}" IsChecked="{Binding SelectedCommand.FlagStatBuffJinx}" />
+                                        </WrapPanel>
+                                        <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_stat_buff_value_5420d7dd}" />
+<TextBox Text="{Binding SelectedCommand.StatBuffValue}" />
+</StackPanel>
+                                        </WrapPanel>
+                                    </StackPanel>
+
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_special_buffs_57a6e58e}" />
+                                        <WrapPanel Orientation="Horizontal">
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_double_hp_5575f972}" IsChecked="{Binding SelectedCommand.FlagSpecialBuffDoubleHp}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_double_mp_23efe4f1}" IsChecked="{Binding SelectedCommand.FlagSpecialBuffDoubleMp}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_mp_cost_0_60b1829f}" IsChecked="{Binding SelectedCommand.FlagSpecialBuffMpCost0}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_quartet_7310decb}" IsChecked="{Binding SelectedCommand.FlagSpecialBuffQuartet}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_always_crit_4382fdd9}" IsChecked="{Binding SelectedCommand.FlagSpecialBuffAlwaysCrit}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_overdrive_150_b5bc7e06}" IsChecked="{Binding SelectedCommand.FlagSpecialBuffOverdrive150}" />
+                                            <CheckBox Classes="flag" Content="{x:Static res:Strings.U_overdrive_200_f31c942e}" IsChecked="{Binding SelectedCommand.FlagSpecialBuffOverdrive200}" />
+                                        </WrapPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </Expander>
+
+                        <!-- Extra (only meaningful when the file carries extra info) -->
+                        <Expander Header="{x:Static res:Strings.CommonExtra}" IsExpanded="False" IsEnabled="{Binding IsExtraEnabled}">
+                            <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                                <StackPanel Spacing="10">
+                                    <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonExtra}" />
+                                    <WrapPanel Orientation="Horizontal">
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_ordering_index_in_menu_da4a325f}" />
+<TextBox Text="{Binding SelectedCommand.ExtraInfo.OrderingIndexInMenu}" />
+</StackPanel>
+                                          <StackPanel Classes="field" Width="170">
+<TextBlock Text="{x:Static res:Strings.U_sphere_type_for_sphere_grid_d3c53da8}" />
+<TextBox Text="{Binding SelectedCommand.ExtraInfo.SphereTypeForSphereGrid}" />
+</StackPanel>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+                        </Expander>
+
+                        <!-- WHERE USED / MONSTER LINKS (era Col2): Expander colapsavel DENTRO do Detail.
+                             Default colapsado pra o editor de campos nao competir com a lista de referencias.
+                             x:Name=MonsterLinksList preservado: code-behind faz MonsterLinksList.SelectedItem
+                             em OpenReferenceMonster (field gerado pelo AvaloniaXamlLoader). -->
+                        <Expander Header="{x:Static res:Strings.U_where_used_monster_links_349049cd}" IsExpanded="False">
+                            <StackPanel Spacing="14" Margin="0,8,0,0" HorizontalAlignment="Stretch">
+                                <Border HorizontalAlignment="Stretch" Padding="18" Classes="card heroGradient">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_where_used_28f0b7d1}" />
+                                        <TextBlock FontSize="20" FontWeight="Bold" Text="{Binding SelectedCommand.Name}" />
+                                        <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedCommandSummary}" TextWrapping="Wrap" />
+                                        <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedCommandReferenceSummary}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                                    <StackPanel Spacing="10">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_reference_notes_5928d902}" />
+                                        <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedCommandReferenceNotes}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+
+                                <Border HorizontalAlignment="Stretch" Padding="{DynamicResource SpacingLg}" Classes="cardSoft">
+                                    <StackPanel Spacing="12">
+                                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_monster_links_f80ef20b}" />
+                                        <TextBlock Classes="muted"
+                                                   FontSize="11"
+                                                   Text="{x:Static res:Strings.U_jarvis_is_listing_every_currently_indexed_monste_d1ff0c7c}"
+                                                   TextWrapping="Wrap" />
+
+                                        <ListBox Name="MonsterLinksList"
+                                                 Background="Transparent"
+                                                 BorderThickness="0"
+                                                 ItemsSource="{Binding SelectedCommandReferences}"
+                                                 SelectedItem="{Binding SelectedCommandReference, Mode=TwoWay}"
+                                                 SelectionChanged="MonsterLinks_SelectionChanged">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Margin="0,0,0,6"
+                                                            Padding="10"
+                                                            Classes="cardSoft"
+                                                            DoubleTapped="MonsterLink_DoubleTapped">
+                                                        <Border.ContextMenu>
+                                                            <ContextMenu>
+                                                                <MenuItem Header="{x:Static res:Strings.U_go_to_monster_6d8ed146}"
+                                                                          Click="MenuItem_OpenReferenceMonster"
+                                                                          CommandParameter="{Binding}" />
+                                                            </ContextMenu>
+                                                        </Border.ContextMenu>
+                                                        <StackPanel Spacing="4">
+                                                            <TextBlock FontSize="14" FontWeight="SemiBold" Text="{Binding MonsterLabel}" />
+                                                            <TextBlock Classes="muted" FontSize="11" Text="{Binding Summary}" />
+                                                        </StackPanel>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+
+                                        <TextBlock Classes="muted"
+                                                   FontSize="11"
+                                                   IsVisible="{Binding HasSelectedCommandReferences}"
+                                                   Text="{x:Static res:Strings.U_cross_check_these_references_before_rebalancing__ebb26618}"
+                                                   TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Expander>
+                    </StackPanel>
+                    </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </common:ModuleMasterDetail_Shell.Detail>
+        </common:ModuleMasterDetail_Shell>
+    </Grid>
+
+</UserControl>

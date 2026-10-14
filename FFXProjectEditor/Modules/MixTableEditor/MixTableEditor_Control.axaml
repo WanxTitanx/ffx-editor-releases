@@ -1,0 +1,574 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:core="clr-namespace:FFXProjectEditor"
+             xmlns:common="clr-namespace:FFXProjectEditor.Modules.Common"
+             xmlns:rsp="clr-namespace:FFXProjectEditor.Styles"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1500"
+             d:DesignHeight="820"
+             rsp:Responsive.Breakpoints="True"
+             x:Class="FFXProjectEditor.MixTableEditor_Control">
+
+    <UserControl.Styles>
+        <Style Selector="UserControl.narrow common|ModuleMasterDetail_Shell">
+            <Setter Property="IsMasterExpanded" Value="False" />
+        </Style>
+
+        <!-- ===== Mix-specific micro-styles (escopo local, não vazam pro app) ===== -->
+
+        <!-- Rank row (origem item) — denso, hierárquico. -->
+        <Style Selector="Border.originRow">
+            <Setter Property="Background" Value="{DynamicResource PanelAltBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusMd}" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="Margin" Value="0,0,0,4" />
+        </Style>
+        <Style Selector="Border.originRow.isEmpty">
+            <Setter Property="Background" Value="#0F1620" />
+            <Setter Property="Opacity" Value="0.7" />
+        </Style>
+        <Style Selector="Border.originRow.isRich Border.originIdxBlock">
+            <Setter Property="Background" Value="#143240" />
+            <Setter Property="BorderBrush" Value="#2A9D8F" />
+        </Style>
+
+        <!-- Coluna do índice (à esquerda): bloco compacto com índice e hex. -->
+        <Style Selector="Border.originIdxBlock">
+            <Setter Property="Width" Value="56" />
+            <Setter Property="Padding" Value="6,4" />
+            <Setter Property="Background" Value="#0A1320" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+
+        <!-- Bar fill (NonEmpty progress). -->
+        <Style Selector="Border.originProgressTrack">
+            <Setter Property="Height" Value="4" />
+            <Setter Property="Background" Value="#0A1320" />
+            <Setter Property="CornerRadius" Value="2" />
+            <Setter Property="ClipToBounds" Value="True" />
+        </Style>
+        <Style Selector="Border.originProgressFill">
+            <Setter Property="Height" Value="4" />
+            <Setter Property="Background" Value="#2A9D8F" />
+            <Setter Property="CornerRadius" Value="2" />
+        </Style>
+
+        <!-- Partner rank row. -->
+        <Style Selector="Border.partnerRow">
+            <Setter Property="Background" Value="{DynamicResource PanelAltBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusMd}" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="Margin" Value="0,0,0,3" />
+        </Style>
+        <Style Selector="Border.partnerRow.hasResult">
+            <Setter Property="BorderBrush" Value="#2A5A78" />
+        </Style>
+
+        <!-- Section header dos grupos Partner (Non-empty / Empty). -->
+        <Style Selector="Border.partnerSectionHeader">
+            <Setter Property="Margin" Value="0,8,0,4" />
+            <Setter Property="Padding" Value="8,5" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+        </Style>
+
+        <!-- Mini chip "idx" usado no partner row. -->
+        <Style Selector="Border.miniIdx">
+            <Setter Property="Padding" Value="5,2" />
+            <Setter Property="Background" Value="#0A1320" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="{DynamicResource RadiusSm}" />
+            <Setter Property="MinWidth" Value="34" />
+        </Style>
+        <Style Selector="Border.miniIdx > TextBlock">
+            <Setter Property="Foreground" Value="{DynamicResource AccentCoolBrush}" />
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+        </Style>
+
+        <!-- Seta visual entre Operands e Result. -->
+        <Style Selector="TextBlock.combineArrow">
+            <Setter Property="FontSize" Value="26" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentGoldBrush}" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="6,0" />
+        </Style>
+
+        <!-- "Formula" destaque no topo do editor. -->
+        <Style Selector="TextBlock.formulaText">
+            <Setter Property="FontSize" Value="20" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+
+        <!-- Eyebrow de seção: label uppercase + tracking. -->
+        <Style Selector="TextBlock.eyebrow">
+            <Setter Property="FontSize" Value="11" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}" />
+            <Setter Property="LetterSpacing" Value="1.2" />
+        </Style>
+
+        <!-- Stat pill dentro do hero. -->
+        <Style Selector="Border.statPill">
+            <Setter Property="Padding" Value="10,5" />
+            <Setter Property="Background" Value="#0E1A26" />
+            <Setter Property="BorderBrush" Value="{DynamicResource PanelStrokeBrush}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="999" />
+        </Style>
+        <Style Selector="Border.statPill > TextBlock.statKey">
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextMutedBrush}" />
+            <Setter Property="LetterSpacing" Value="0.8" />
+        </Style>
+        <Style Selector="Border.statPill > TextBlock.statVal">
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextPrimaryBrush}" />
+        </Style>
+    
+		<!-- Aroma Premium Styles -->
+		<Style Selector="TextBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+			
+		</Style>
+		<Style Selector="ComboBox:pointerover /template/ Border#Background">
+			<Setter Property="Background" Value="#1AFFFFFF" />
+			<Setter Property="BorderBrush" Value="#44FFFFFF" />
+		</Style>
+		<Style Selector="ComboBox:focus /template/ Border#Background">
+			<Setter Property="Background" Value="#11FFFFFF" />
+			<Setter Property="BorderBrush" Value="{DynamicResource AccentCoolBrush}" />
+		</Style>
+		<Style Selector="CheckBox.flag">
+			<Setter Property="Width" Value="140" />
+			<Setter Property="Margin" Value="0,0,8,4" />
+		</Style>
+
+    
+		<!-- NumericUpDown Fix for global TextBox styles -->
+		<Style Selector="NumericUpDown">
+			<Setter Property="Background" Value="#08FFFFFF" />
+			<Setter Property="BorderBrush" Value="#22FFFFFF" />
+			<Setter Property="BorderThickness" Value="1" />
+			<Setter Property="CornerRadius" Value="3" />
+			<Setter Property="MinHeight" Value="26" />
+			<Setter Property="VerticalContentAlignment" Value="Center" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderThickness" Value="0" />
+			<Setter Property="MinHeight" Value="20" />
+			<Setter Property="Margin" Value="0" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:pointerover /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+		<Style Selector="NumericUpDown /template/ TextBox:focus /template/ Border#PART_BorderElement">
+			<Setter Property="Background" Value="Transparent" />
+			<Setter Property="BorderBrush" Value="Transparent" />
+		</Style>
+
+    </UserControl.Styles>
+
+    <common:ModuleMasterDetail_Shell MasterHeaderLabel="Mix">
+
+        <!-- ===== MASTER: origin axis (era Col0) ===== -->
+        <common:ModuleMasterDetail_Shell.MasterHeader>
+            <StackPanel Spacing="6" Margin="2,0,2,2">
+                <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.U_rikku_mix_matrix_e19abe85}" />
+                <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                           Text="{x:Static res:Strings.U_edit_prepare_bin_as_a_fixed_112_112_result_matri_7566993d}" />
+            </StackPanel>
+        </common:ModuleMasterDetail_Shell.MasterHeader>
+
+        <common:ModuleMasterDetail_Shell.MasterList>
+            <Grid RowDefinitions="Auto,*">
+                <StackPanel Grid.Row="0" Spacing="8" Margin="0,0,0,8">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBox Watermark="{x:Static res:Strings.U_filter_base_item_by_id_or_name_b656dd5f}"
+                                 Text="{Binding OriginFilterText, Mode=TwoWay}" />
+                        <Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction accentRefresh"
+                                Click="Button_Refresh" AutomationProperties.Name="Refresh">Refresh</Button>
+                    </Grid>
+                    <TextBlock Classes="muted" FontSize="11" Text="{Binding LoadSummary}" TextWrapping="Wrap" />
+                    <TextBlock Classes="muted" FontSize="11" Text="{Binding ScopeSummary}" TextWrapping="Wrap" />
+                </StackPanel>
+
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding DisplayedOrigins}"
+                         SelectedItem="{Binding SelectedOrigin, Mode=TwoWay}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Classes="originRow">
+                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                    <!-- idx block (col 0) — ocupa row 0+1 -->
+                                    <Border Grid.Row="0" Grid.RowSpan="2"
+                                            Grid.Column="0"
+                                            Classes="originIdxBlock"
+                                            VerticalAlignment="Center">
+                                        <StackPanel Spacing="0" HorizontalAlignment="Center">
+                                            <StackPanel Orientation="Horizontal" Spacing="0" HorizontalAlignment="Center">
+                                                <TextBlock Text="#" FontSize="13" FontWeight="Bold" />
+                                                <TextBlock Text="{Binding Index, StringFormat='{}{0:D3}'}"
+                                                           FontSize="13" FontWeight="Bold" />
+                                            </StackPanel>
+                                            <TextBlock Text="{Binding OriginCode}"
+                                                       Classes="muted"
+                                                       FontSize="10"
+                                                       HorizontalAlignment="Center" />
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- label (col 1, row 0) -->
+                                    <TextBlock Grid.Row="0" Grid.Column="1"
+                                               Margin="10,0,8,0"
+                                               FontSize="14" FontWeight="SemiBold"
+                                               Text="{Binding OriginLabel}"
+                                               TextTrimming="CharacterEllipsis" />
+
+                                    <!-- contador (col 2, row 0) -->
+                                    <Border Grid.Row="0" Grid.Column="2"
+                                            Padding="8,3"
+                                            CornerRadius="999"
+                                            Background="#0E1A26"
+                                            BorderBrush="{DynamicResource PanelStrokeBrush}"
+                                            BorderThickness="1"
+                                            VerticalAlignment="Center">
+                                        <TextBlock FontSize="11" FontWeight="SemiBold">
+                                            <Run Text="{Binding NonEmptyCount}" Foreground="#2A9D8F" />
+                                            <Run Text=" / 112" Foreground="{DynamicResource TextMutedBrush}" />
+                                        </TextBlock>
+                                    </Border>
+
+                                    <!-- progress bar (col 1+2, row 1) -->
+                                    <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                          Margin="10,6,0,0">
+                                        <Border Classes="originProgressTrack">
+                                            <Border Classes="originProgressFill"
+                                                    Width="{Binding NonEmptyBarWidth}">
+                                            </Border>
+                                        </Border>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </common:ModuleMasterDetail_Shell.MasterList>
+
+        <!-- ===== DETAIL: hero + session + partner selector + editor ===== -->
+        <common:ModuleMasterDetail_Shell.Detail>
+            <DockPanel>
+                <!-- SESSION CONTROLS (Pinned to Top) -->
+                <Border DockPanel.Dock="Top" Margin="0,0,0,18" Padding="{DynamicResource SpacingLg}" Classes="card">
+                    <StackPanel Spacing="10">
+                        <TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.SessionControls}" />
+                        <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto">
+                            <StackPanel Spacing="2" VerticalAlignment="Center">
+                                <TextBlock Text="{Binding EditSession.SessionSummary}" FontWeight="SemiBold" />
+                                <TextBlock Text="{Binding EditSession.BehaviorSummary}" Classes="muted" FontSize="11" TextWrapping="Wrap" />
+                            </StackPanel>
+                            <core:AutoSaveIndicator_Control Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center" Session="{Binding EditSession}" />
+                            <CheckBox Grid.Column="2" Margin="12,0,0,0" VerticalAlignment="Center" IsChecked="{Binding EditSession.AutoSaveEnabled, Mode=TwoWay}">Auto-save</CheckBox>
+                            <Button Grid.Column="3" Margin="12,0,0,0" VerticalAlignment="Center" Classes="secondaryAction" IsEnabled="{Binding EditSession.CanUndo}" Click="Button_Undo">Undo</Button>
+                            <Button Grid.Column="4" Margin="12,0,0,0" VerticalAlignment="Center" IsEnabled="{Binding EditSession.HasPendingChanges}" Click="Button_Save">Save</Button>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- SCROLLABLE CONTENT -->
+                <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                              HorizontalAlignment="Stretch"
+                              VerticalAlignment="Stretch">
+                    <StackPanel Spacing="14" Margin="10,0,10,10"
+                                HorizontalAlignment="Stretch">
+
+                        <!-- ===== HERO com identidade Mix + stats da matriz ===== -->
+                        <Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient"
+                                HorizontalAlignment="Stretch">
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                            <StackPanel Grid.Row="0" Grid.Column="0" Spacing="6">
+                                <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.U_mix_authoring_surface_26b5b21e}" />
+                                <TextBlock FontSize="26" FontWeight="Bold"
+                                           Text="{Binding SelectedResult.Formula}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                           Text="{Binding SelectedResultSummary}" />
+                            </StackPanel>
+
+                            <!-- pillWriter canto direito -->
+                            <Border Grid.Row="0" Grid.Column="1"
+                                    Classes="pillWriter"
+                                    Margin="12,0,0,0"
+                                    VerticalAlignment="Top">
+                                <TextBlock Text="{x:Static res:Strings.U_writable_dd35487a}" />
+                            </Border>
+
+                            <!-- stats row -->
+                            <StackPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                        Orientation="Horizontal" Spacing="8" Margin="0,12,0,0">
+                                <Border Classes="statPill">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <TextBlock Classes="statKey" Text="{x:Static res:Strings.U_origins_592a0c5a}" VerticalAlignment="Center" />
+                                        <TextBlock Classes="statVal" Text="{Binding OriginCount}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Classes="statPill">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <TextBlock Classes="statKey" Text="{x:Static res:Strings.U_non_empty_770af94d}" VerticalAlignment="Center" />
+                                        <TextBlock Classes="statVal" Text="{Binding TotalNonEmptyResults}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Classes="statPill">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <TextBlock Classes="statKey" Text="{x:Static res:Strings.U_coverage_2a268cd6}" VerticalAlignment="Center" />
+                                        <TextBlock Classes="statVal" Text="{Binding CoveragePercent}" />
+                                    </StackPanel>
+                                </Border>
+                                <Border Classes="statPill">
+                                    <StackPanel Orientation="Horizontal" Spacing="6">
+                                        <TextBlock Classes="statKey" Text="{x:Static res:Strings.U_slots_origin_6c0a540f}" VerticalAlignment="Center" />
+                                        <TextBlock Classes="statVal" Text="112" />
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+
+                    <!-- ===== PARTNER SELECTOR ===== -->
+                    <Expander Header="{x:Static res:Strings.CommonPartnerItem}" IsExpanded="True">
+                        <Border Padding="{DynamicResource SpacingLg}" Classes="card"
+                                HorizontalAlignment="Stretch">
+                            <Grid RowDefinitions="Auto,Auto,*">
+                                <StackPanel Grid.Row="0" Spacing="4">
+                                    <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.CommonPartnerItem}" />
+                                    <TextBlock FontWeight="SemiBold" Text="{Binding SelectedOrigin.OriginLabel}" />
+                                    <TextBlock Classes="muted" FontSize="11" Text="{Binding SelectedOriginSummary}" TextWrapping="Wrap" />
+                                </StackPanel>
+
+                                <TextBox Grid.Row="1"
+                                         Margin="0,10,0,10"
+                                         Watermark="{x:Static res:Strings.U_filter_partner_item_or_current_result_8f5cb7d9}"
+                                         Text="{Binding ResultFilterText, Mode=TwoWay}" />
+
+                                <!-- Partner rows: agrupados em Non-empty (default on) + Empty (default off).
+                                     Como ObservableCollection não suporta MultipleBindings estáticas
+                                     para partição, mostramos um único ListBox filtrado via ResultFilterText;
+                                     a seção de "Empty" fica visível como header separador com contador,
+                                     e os empty items aparecem após os Non-empty dentro da mesma lista. -->
+                                <ListBox Grid.Row="2"
+                                         ItemsSource="{Binding DisplayedResults}"
+                                         SelectedItem="{Binding SelectedResult, Mode=TwoWay}">
+                                    <ListBox.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Columns="3" />
+                                        </ItemsPanelTemplate>
+                                    </ListBox.ItemsPanel>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Classes="partnerRow">
+                                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                                    <Border Grid.Row="0" Grid.Column="0"
+                                                            Classes="miniIdx"
+                                                            VerticalAlignment="Center">
+                                                        <TextBlock>
+                                                            <Run Text="#"/>
+                                                            <Run Text="{Binding PartnerIndex}"/>
+                                                        </TextBlock>
+                                                    </Border>
+
+                                                    <TextBlock Grid.Row="0" Grid.Column="1"
+                                                               Margin="10,0,8,0"
+                                                               VerticalAlignment="Center"
+                                                               FontSize="13" FontWeight="SemiBold"
+                                                               Text="{Binding PartnerLabel}"
+                                                               TextTrimming="CharacterEllipsis" />
+
+                                                    <!-- Status chip (filled/empty) -->
+                                                    <Grid Grid.Row="0" Grid.Column="2" VerticalAlignment="Center">
+                                                        <Border Padding="8,3" CornerRadius="999"
+                                                                Background="#0E2A1F" BorderBrush="#2A9D8F" BorderThickness="1"
+                                                                IsVisible="{Binding !IsEmpty}"
+                                                                ToolTip.Tip="{x:Static res:Strings.U_result_available_this_origin_partner_produces_an_16927524}">
+                                                            <TextBlock FontSize="10" FontWeight="SemiBold"
+                                                                       Foreground="#2A9D8F" Text="{x:Static res:Strings.U_filled_c3b0c04f}" />
+                                                        </Border>
+                                                        <Border Padding="8,3" CornerRadius="999"
+                                                                Background="#0A1014" BorderBrush="#3A4A5A" BorderThickness="1"
+                                                                IsVisible="{Binding IsEmpty}"
+                                                                ToolTip.Tip="{x:Static res:Strings.U_empty_cell_this_origin_partner_combination_produ_78fd6e8f}">
+                                                            <TextBlock FontSize="10" FontWeight="SemiBold"
+                                                                       Foreground="#7A8A9A" Text="{x:Static res:Strings.U_empty_ad87109b}" />
+                                                        </Border>
+                                                    </Grid>
+
+                                                    <!-- linha 1: hex do result atual -->
+                                                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                                               Margin="10,4,0,0"
+                                                               Classes="muted" FontSize="11">
+                                                            <Run Text="{Binding ResultCode, StringFormat='result: {}{0}'}" />
+                                                        <Run Text="{x:Static res:Strings.U_partner_hex_9574874a}" />
+                                                        <Run Text="{Binding PartnerCode}" />
+                                                    </TextBlock>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </Border>
+                    </Expander>
+
+                    <!-- ===== COMBINATION EDITOR (A + B → Result) ===== -->
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card"
+                            HorizontalAlignment="Stretch">
+                        <StackPanel Spacing="12">
+
+                            <StackPanel Spacing="2">
+                                <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.U_combination_editor_e4c01263}" />
+                                <TextBlock Classes="formulaText" Text="{Binding SelectedResult.Formula}" />
+                                <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                           Text="{x:Static res:Strings.U_ffxdataparser_proves_prepare_bin_as_a_fixed_matr_37226afc}" />
+                            </StackPanel>
+
+                            <!-- A + B → Result (3 colunas com arrow) -->
+                            <Grid ColumnDefinitions="*,Auto,*" Margin="0,8,0,0">
+                                <!-- A: Base item (operand 1) -->
+                                <Border Grid.Column="0" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+                                    <StackPanel Spacing="6">
+                                        <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.U_base_item_20936230}" />
+                                        <TextBlock FontWeight="SemiBold"
+                                                   Text="{Binding SelectedOrigin.OriginLabel}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Classes="muted" FontSize="11">
+                                            <Run Text="{Binding SelectedOrigin.OriginRawGameIndex, StringFormat='hex {}{0:X4}h'}" />
+                                        </TextBlock>
+                                        <TextBlock Classes="muted" FontSize="11">
+                                            <Run Text="{Binding SelectedOrigin.NonEmptyCount, StringFormat='{}{0}'}" />
+                                            <Run Text="{x:Static res:Strings.U_112_non_empty_b7edd0e7}" />
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- Arrow -->
+                                <TextBlock Grid.Column="1" Classes="combineArrow" Text="{x:Static res:Strings.U_x_ccfba1b4}" />
+
+                                <!-- B + Result empilhados -->
+                                <StackPanel Grid.Column="2" Spacing="8">
+
+                                    <!-- B: Partner item (operand 2) -->
+                                    <Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.U_partner_item_90a6bdd1}" />
+                                            <TextBlock FontWeight="SemiBold"
+                                                       Text="{Binding SelectedResult.PartnerLabel}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Classes="muted" FontSize="11">
+                                                <Run Text="{Binding SelectedResult.PartnerCode, StringFormat='hex {}{0}'}" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Result (destaque dourado) -->
+                                    <Border Padding="{DynamicResource SpacingMd}" Classes="cardSoft accentGold">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.U_current_result_7b11bb33}" />
+                                            <TextBlock FontWeight="SemiBold" FontSize="16"
+                                                       Text="{Binding SelectedResult.ResultLabel}"
+                                                       TextTrimming="CharacterEllipsis" />
+                                            <TextBlock Classes="muted" FontSize="11">
+                                                <Run Text="{Binding SelectedResult.ResultCode, StringFormat='hex {}{0}'}" />
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- picker -->
+                            <core:GameIndex_Template GameIndex_Label="Result Command"
+                                                     CategOptions="{Binding CategoryOptions}"
+                                                     GameIndex_Object="{Binding SelectedResult.ResultRef}" />
+
+                            <!-- action row -->
+                            <Grid ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+                                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                                    <Button Classes="dangerAction"
+                                            Click="Button_ClearResult"
+                                            AutomationProperties.Name="Set Empty">
+                                        Set Empty (zero the result)
+                                    </Button>
+                                </StackPanel>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                                    <Border Classes="pillReadonly" VerticalAlignment="Center">
+                                        <TextBlock Text="{x:Static res:Strings.U_safe_scope_16_bit_result_only_35dda88e}" />
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+
+                            <common:AtlasEvidenceBadgeStrip Margin="0,8,0,0" Evidence="{Binding SelectedMixEvidence}" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- ===== SAFETY NOTES ===== -->
+                    <Border Padding="{DynamicResource SpacingLg}" Classes="card"
+        HorizontalAlignment="Stretch">
+                        <StackPanel Spacing="8">
+                            <TextBlock Classes="eyebrow" Text="{x:Static res:Strings.U_safety_notes_5b706ef2}" />
+                            <TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_what_jarvis_is_proving_de84b801}" />
+                            <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_provado_header_indexado_fixo_112_origens_112_par_5c08cff4}" />
+                            <TextBlock Classes="muted" FontSize="11" TextWrapping="Wrap"
+                                       Text="{x:Static res:Strings.U_ainda_nao_maquiado_como_provado_qualquer_semanti_699e0074}" />
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </ScrollViewer>
+            </DockPanel>
+        </common:ModuleMasterDetail_Shell.Detail>
+    </common:ModuleMasterDetail_Shell>
+</UserControl>

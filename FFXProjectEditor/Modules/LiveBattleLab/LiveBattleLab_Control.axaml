@@ -1,0 +1,500 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+             mc:Ignorable="d"
+             d:DesignWidth="1420"
+             d:DesignHeight="780"
+             x:Class="FFXProjectEditor.LiveBattleLab_Control">
+
+	<Grid ColumnDefinitions="Auto,*">
+		<ScrollViewer Grid.Column="0" Margin="18,18,0,18" MinWidth="280" MaxWidth="360" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+				<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_runtime_lab_9243fdda}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_live_battle_lab_b3ffbe2d}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_inspector_vivo_do_btl_reload_ingame_de_dominios__75641661}"
+						           TextWrapping="Wrap" />
+						<WrapPanel Orientation="Horizontal">
+							<Button Classes="secondaryAction" Click="Button_Refresh">Refresh Runtime</Button>
+							<Border Classes="cardSoft" Padding="10,8" Margin="8,0,0,0">
+								<StackPanel Orientation="Horizontal" Spacing="8">
+									<TextBlock VerticalAlignment="Center" Text="{x:Static res:Strings.U_auto_refresh_03883c6b}" />
+									<CheckBox IsChecked="{Binding AutoRefreshEnabled, Mode=TwoWay}" />
+								</StackPanel>
+							</Border>
+						</WrapPanel>
+						<TextBlock Classes="muted" Text="{Binding HookSummary}" TextWrapping="Wrap" />
+						<Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+							<TextBlock Text="{x:Static res:Strings.U_workspace_4ca0a75c}" VerticalAlignment="Center" />
+							<CheckBox Grid.Column="1" Classes="statusCheck" IsChecked="{Binding ProjectLoaded}" />
+							<TextBlock Grid.Row="1" Text="{x:Static res:Strings.U_game_open_80e71cfe}" VerticalAlignment="Center" />
+							<CheckBox Grid.Row="1" Grid.Column="1" Classes="statusCheck" IsChecked="{Binding GameOpen}" />
+							<TextBlock Grid.Row="2" Text="{x:Static res:Strings.U_memory_hook_ready_6b4686f6}" VerticalAlignment="Center" />
+							<CheckBox Grid.Row="2" Grid.Column="1" Classes="statusCheck" IsChecked="{Binding HookAvailable}" />
+						</Grid>
+					</StackPanel>
+				</Border>
+
+				<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBattleSnapshot}" />
+						<TextBlock Classes="cardTitle" Text="{Binding BattleName}" />
+						<TextBlock Classes="muted" Text="{Binding BattleSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding RoutingSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding RuntimePhaseSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding PassiveRouteSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding EncounterListProbeSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding PartySummary}" TextWrapping="Wrap" />
+						<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto">
+							<Border Classes="cardSoft" Padding="10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEncounter}" />
+									<TextBlock Text="{Binding EncounterIndexLabel}" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Column="1" Margin="10,0,0,0" Classes="cardSoft" Padding="10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonTrigger}" />
+									<TextBlock Text="{Binding TriggerLabel}" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="1" Classes="cardSoft" Padding="10" Margin="0,10,0,0">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonField}" />
+									<TextBlock Text="{Binding FieldLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="1" Grid.Column="1" Margin="10,10,0,0" Classes="cardSoft" Padding="10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBattlefield}" />
+									<TextBlock Text="{Binding BattlefieldLabel}" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="2" Classes="cardSoft" Padding="10" Margin="0,10,0,0">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonGroupFormation}" />
+									<TextBlock Text="{Binding GroupLabel}" />
+									<TextBlock Text="{Binding FormationLabel}" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="2" Grid.Column="1" Margin="10,10,0,0" Classes="cardSoft" Padding="10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonFrontline}" />
+									<TextBlock Text="{Binding FrontlineLabel}" TextWrapping="Wrap" />
+									<TextBlock Classes="muted" Text="{Binding BacklineLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Grid.Row="3" Grid.ColumnSpan="2" Margin="0,10,0,0" Classes="cardSoft" Padding="10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBtlRouteCursors}" />
+									<TextBlock Text="{Binding RoutingCursorSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+						</Grid>
+						<WrapPanel Orientation="Horizontal">
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,10,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonStateAmbush}" />
+									<TextBlock Text="{Binding BattleStateLabel}" />
+									<TextBlock Classes="muted" Text="{Binding AmbushStateLabel, StringFormat='Ambush {0}'}" />
+								</StackPanel>
+							</Border>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,10,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonEncounterType}" />
+									<TextBlock Text="{Binding EncounterTypeLabel}" />
+									<TextBlock Classes="muted" Text="{Binding ScreenTransitionLabel, StringFormat='Screen {0}'}" />
+								</StackPanel>
+							</Border>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,10,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonLastCommand}" />
+									<TextBlock Text="{Binding LastCommandLabel}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<Border Classes="cardSoft" Padding="10" Margin="0,0,10,10">
+								<StackPanel Spacing="4">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonBattleTypeEnd}" />
+									<TextBlock Text="{Binding BattleTypeLabel}" />
+									<TextBlock Classes="muted" Text="{Binding BattleEndTypeLabel, StringFormat='End {0}'}" />
+								</StackPanel>
+							</Border>
+						</WrapPanel>
+					</StackPanel>
+				</Border>
+
+				<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_experimental_pad_21afe16a}" />
+						<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_force_battle_repeat_route_unsafe_46a4e28f}" />
+						<TextBlock Classes="muted"
+						           Text="{Binding ExperimentalSummary}"
+						           TextWrapping="Wrap" />
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="8">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_manual_route_06a872ae}" />
+								<Grid ColumnDefinitions="*,*,*,2*" RowDefinitions="Auto,Auto">
+									<StackPanel Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonField}" />
+										<TextBox Text="{Binding ForceFieldInput, Mode=TwoWay}" />
+									</StackPanel>
+									<StackPanel Grid.Column="1" Margin="10,0,0,0" Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_group_171a0606}" />
+										<TextBox Text="{Binding ForceGroupInput, Mode=TwoWay}" />
+									</StackPanel>
+									<StackPanel Grid.Column="2" Margin="10,0,0,0" Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.TermFormation}" />
+										<TextBox Text="{Binding ForceFormationInput, Mode=TwoWay}" />
+									</StackPanel>
+									<StackPanel Grid.Column="3" Margin="10,0,0,0" Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_last_live_routing_e3cae804}" />
+										<TextBlock Classes="muted" Text="{Binding CapturedRoutingLabel}" TextWrapping="Wrap" />
+									</StackPanel>
+									<WrapPanel Grid.Row="1" Grid.ColumnSpan="4" Margin="0,10,0,0" Orientation="Horizontal" ItemHeight="40">
+										<Button Classes="primaryAction"
+										        IsEnabled="{Binding CanForceCurrentBattle}"
+										        Click="Button_ForceCurrent"
+										        ToolTip.Tip="{x:Static res:Strings.U_le_o_field_group_atual_do_player_ao_vivo_via_pro_a389ce9e}">Force CURRENT (clean)</Button>
+										<Button Classes="secondaryAction"
+										        Margin="10,0,0,0"
+										        IsEnabled="{Binding CanUseLiveRouting}"
+										        Click="Button_UseLiveRouting">Use Live Routing</Button>
+										<Button Classes="secondaryAction"
+										        Margin="10,0,0,0"
+										        IsEnabled="{Binding CanForceBattle}"
+										        Click="Button_ForceBattle">Force Battle (manual)</Button>
+										<Button Classes="secondaryAction"
+										        Margin="10,0,0,0"
+										        IsEnabled="{Binding CanRepeatEncounter}"
+										        Click="Button_RepeatEncounter">Repeat Route (Unsafe)</Button>
+									</WrapPanel>
+								</Grid>
+							</StackPanel>
+						</Border>
+						<TextBlock Classes="muted"
+						           Text="{Binding ForceBattleAvailabilitySummary}"
+						           TextWrapping="Wrap" />
+						<TextBlock Classes="muted"
+						           Text="{Binding ForceBattleStatus}"
+						           TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+
+		<ScrollViewer Grid.Column="1" Margin="18" HorizontalScrollBarVisibility="Disabled">
+			<StackPanel Spacing="14">
+				<TabControl>
+					<TabItem Header="{x:Static res:Strings.U_battle_sandbox_a6422be9}">
+						<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+							<StackPanel Spacing="12">
+								<Grid ColumnDefinitions="*,Auto">
+									<StackPanel Spacing="4">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_battle_sandbox_eb6aa101}" />
+										<TextBlock Classes="cardTitle" Text="{x:Static res:Strings.U_montar_testar_ajustar_771516c2}" />
+										<TextBlock Classes="muted"
+										           Text="{x:Static res:Strings.U_autoriza_ate_8_inimigos_aplica_hp_ia_rapida_nos__115ef2b6}"
+										           TextWrapping="Wrap" />
+									</StackPanel>
+									<Border Grid.Column="1" Classes="cardSoft" Padding="10,8" VerticalAlignment="Top">
+										<TextBlock Classes="muted" Text="{x:Static res:Strings.U_probe_dinput8_requerido_ff077537}" />
+									</Border>
+								</Grid>
+
+								<Grid ColumnDefinitions="2*,*" RowDefinitions="Auto">
+									<StackPanel Spacing="8">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_slots_inimigos_d7cf266c}" />
+										<ItemsControl ItemsSource="{Binding SandboxSlots}">
+											<ItemsControl.ItemsPanel>
+												<ItemsPanelTemplate>
+													<WrapPanel Orientation="Horizontal" ItemWidth="400" ItemHeight="98" />
+												</ItemsPanelTemplate>
+											</ItemsControl.ItemsPanel>
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Border Classes="cardSoft" Padding="10" Margin="0,0,10,10">
+														<Grid ColumnDefinitions="38,*,68,112" RowDefinitions="Auto,Auto">
+															<TextBlock Classes="sectionLabel" Text="{Binding HeaderLabel}" Grid.ColumnSpan="4" />
+															<TextBlock Grid.Row="1" Text="{Binding ShortLabel}" VerticalAlignment="Center" FontWeight="SemiBold" />
+															<ComboBox Grid.Row="1" Grid.Column="1" MaxDropDownHeight="360"
+															          ItemsSource="{Binding MonsterChoices}"
+															          SelectedItem="{Binding SelectedMonster, Mode=TwoWay}" />
+															<TextBox Grid.Row="1" Grid.Column="2" Margin="8,0,0,0"
+															         Text="{Binding HpText, Mode=TwoWay}"
+															         FontFamily="Cascadia Mono,Consolas,Monospace" />
+															<ComboBox Grid.Row="1" Grid.Column="3" Margin="8,0,0,0"
+															          ItemsSource="{Binding AiPresetChoices}"
+															          SelectedItem="{Binding SelectedAiPreset, Mode=TwoWay}" />
+														</Grid>
+													</Border>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+
+									<StackPanel Grid.Column="1" Margin="12,0,0,0" Spacing="10" MinWidth="300">
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_local_route_3cac9de4}" />
+												<ComboBox MaxDropDownHeight="360"
+												          ItemsSource="{Binding SandboxRouteChoices}"
+												          SelectedItem="{Binding SelectedSandboxRouteChoice, Mode=TwoWay}" />
+												<Grid ColumnDefinitions="*,*,*">
+													<StackPanel Spacing="3">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_field_2da0b68d}" />
+														<TextBox Text="{Binding ForceFieldInput, Mode=TwoWay}" />
+													</StackPanel>
+													<StackPanel Grid.Column="1" Margin="8,0,0,0" Spacing="3">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_group_64292b1c}" />
+														<TextBox Text="{Binding ForceGroupInput, Mode=TwoWay}" />
+													</StackPanel>
+													<StackPanel Grid.Column="2" Margin="8,0,0,0" Spacing="3">
+														<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_formation_776c6153}" />
+														<TextBox Text="{Binding ForceFormationInput, Mode=TwoWay}" />
+													</StackPanel>
+												</Grid>
+												<TextBlock Classes="muted" Text="{Binding SandboxRouteSummary}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" Text="{Binding CapturedRoutingLabel}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+
+										<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+											<StackPanel Spacing="8">
+												<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_spread_camera_64fa6c27}" />
+												<Grid ColumnDefinitions="*,Auto">
+													<ComboBox ItemsSource="{Binding SandboxLayoutPlanChoices}"
+													          SelectedItem="{Binding SelectedSandboxLayoutPlan, Mode=TwoWay}" />
+													<Button Grid.Column="1" Margin="8,0,0,0" Classes="secondaryAction"
+													        Click="Button_RecalculateSandboxPlan">Calcular</Button>
+												</Grid>
+												<ItemsControl ItemsSource="{Binding SandboxPreviewDots}">
+													<ItemsControl.ItemsPanel>
+														<ItemsPanelTemplate>
+															<WrapPanel Orientation="Horizontal" ItemWidth="108" ItemHeight="48" />
+														</ItemsPanelTemplate>
+													</ItemsControl.ItemsPanel>
+													<ItemsControl.ItemTemplate>
+														<DataTemplate>
+															<Border Classes="card" Padding="{DynamicResource SpacingSm}" Margin="0,0,8,8">
+																<StackPanel Spacing="2">
+																	<TextBlock FontWeight="SemiBold" Text="{Binding SlotLabel}" />
+																	<TextBlock Classes="muted" Text="{Binding MonsterLabel}" />
+																	<TextBlock Classes="muted" Text="{Binding PositionLabel}" />
+																</StackPanel>
+															</Border>
+														</DataTemplate>
+													</ItemsControl.ItemTemplate>
+												</ItemsControl>
+												<TextBlock Classes="muted" Text="{Binding SandboxPlannerSummary}" TextWrapping="Wrap" />
+												<TextBlock Classes="muted" Text="{Binding SandboxCameraRecommendation}" TextWrapping="Wrap" />
+											</StackPanel>
+										</Border>
+
+										<Grid ColumnDefinitions="*,*">
+											<Button Classes="secondaryAction"
+											        IsEnabled="{Binding SandboxCanPrepareRoute}"
+											        Click="Button_PrepareSandboxRoute">Preparar route</Button>
+											<Button Grid.Column="1" Margin="8,0,0,0" Classes="primaryAction"
+											        IsEnabled="{Binding SandboxCanForceBattle}"
+											        Click="Button_ForceSandbox">Force Battle</Button>
+										</Grid>
+										<Button Classes="secondaryAction" Click="Button_ApplySandbox">Aplicar HP/IA</Button>
+									</StackPanel>
+								</Grid>
+
+								<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SandboxStatus}" />
+								<TextBlock Classes="muted" TextWrapping="Wrap" Text="{Binding SandboxLastSession}" />
+							</StackPanel>
+						</Border>
+					</TabItem>
+				</TabControl>
+
+				<Border Padding="{DynamicResource SpacingXl}" Classes="card heroGradient">
+					<StackPanel Spacing="8">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_live_runtime_90b49b11}" />
+						<TextBlock FontSize="28" FontWeight="Bold" Text="{Binding BattleName}" />
+						<TextBlock Classes="muted" Text="{Binding BattleSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding RoutingSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding RuntimePhaseSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding PassiveRouteSummary}" TextWrapping="Wrap" />
+						<TextBlock Classes="muted" Text="{Binding EncounterListProbeSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_ai_probe_c91485c9}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_cruza_cada_inimigo_vivo_do_snapshot_com_o_corpus_6290f232}"
+						           TextWrapping="Wrap" />
+						<TextBlock Classes="muted"
+						           Text="{Binding AiProbeSummary}"
+						           TextWrapping="Wrap" />
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+							<StackPanel Spacing="6">
+								<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_turn_action_probe_38930aa2}" />
+								<TextBlock Classes="muted"
+								           Text="{Binding TurnOwnerProbeSummary}"
+								           TextWrapping="Wrap" />
+								<TextBlock Classes="muted"
+								           Text="{Binding AiEventSummary}"
+								           TextWrapping="Wrap" />
+								<ItemsControl ItemsSource="{Binding RuntimeAiEventRows}">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate>
+											<Border Margin="0,0,0,8" Padding="10" Classes="card">
+												<StackPanel Spacing="4">
+													<TextBlock Classes="sectionLabel" Text="{Binding SequenceLabel}" />
+													<TextBlock FontWeight="SemiBold" Text="{Binding EventLabel}" />
+													<TextBlock Classes="muted" Text="{Binding ActorLabel}" TextWrapping="Wrap" />
+													<TextBlock Text="{Binding DetailLabel}" TextWrapping="Wrap" />
+												</StackPanel>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</StackPanel>
+						</Border>
+						<Border Classes="cardSoft" Padding="{DynamicResource SpacingMd}">
+								<StackPanel Spacing="8">
+									<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_natural_capture_pt47_pt48_contract_0bcd5afb}" />
+									<TextBlock Classes="muted"
+									           Text="{x:Static res:Strings.U_amostra_um_tick_coerente_da_batalha_ativa_no_sch_aa95bcf8}"
+									           TextWrapping="Wrap" />
+									<Grid ColumnDefinitions="Auto,*">
+										<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.CommonCohort}" VerticalAlignment="Center" />
+										<TextBox Grid.Column="1" Margin="10,0,0,0"
+										         Watermark="{x:Static res:Strings.U_nagi00_00_m020_firaga_3049h_c2b50c55}"
+										         Text="{Binding CohortInput, Mode=TwoWay}" />
+									</Grid>
+									<WrapPanel Orientation="Horizontal" ItemHeight="40">
+										<Button Classes="primaryAction" Click="Button_CaptureNaturalSample">Capture Tick</Button>
+										<Button Classes="secondaryAction" Margin="10,0,0,0" Click="Button_ExportNaturalCapture">Export CSV</Button>
+										<Button Classes="secondaryAction" Margin="10,0,0,0" Click="Button_ClearNaturalCaptures">Clear Series</Button>
+									</WrapPanel>
+									<TextBlock Classes="muted" Text="{Binding NaturalCaptureSummary}" TextWrapping="Wrap" />
+								</StackPanel>
+							</Border>
+							<ItemsControl ItemsSource="{Binding RuntimeAiProbeRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+										<StackPanel Spacing="4">
+											<TextBlock Classes="sectionLabel" Text="{Binding SlotLabel}" />
+											<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding MonsterLabel}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding RuntimeSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding TargetSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding StatusSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding ScriptPointerSummary}" TextWrapping="Wrap" />
+											<TextBlock Text="{Binding ForcedActionSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding AbilityListSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding CommandReferenceSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding ScriptSummary}" TextWrapping="Wrap" />
+											<TextBox Text="{Binding ScriptPreview}"
+											         IsReadOnly="True"
+											         AcceptsReturn="True"
+											         TextWrapping="NoWrap"
+											         MinHeight="92"
+											         FontFamily="Cascadia Mono,Consolas,Monospace" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+
+				<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_reload_ingame_aa7a6b21}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_esses_botoes_usam_write_paths_ja_provados_no_pro_f3ab31b5}"
+						           TextWrapping="Wrap" />
+						<TextBlock Classes="muted"
+						           Text="{Binding ReloadAvailabilitySummary}"
+						           TextWrapping="Wrap" />
+						<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto">
+							<Button Classes="secondaryAction" IsEnabled="{Binding CanReloadRuntimeFiles}" Click="Button_ReloadCommands">Reload Commands</Button>
+							<Button Grid.Column="1" Margin="10,0,0,0" Classes="secondaryAction" IsEnabled="{Binding CanReloadRuntimeFiles}" Click="Button_ReloadItems">Reload Items</Button>
+							<Button Grid.Row="1" Classes="secondaryAction" IsEnabled="{Binding CanReloadRuntimeFiles}" Click="Button_ReloadMonMagic1">Reload MonMagic1</Button>
+							<Button Grid.Row="1" Grid.Column="1" Margin="10,10,0,0" Classes="secondaryAction" IsEnabled="{Binding CanReloadRuntimeFiles}" Click="Button_ReloadMonMagic2">Reload MonMagic2</Button>
+							<Button Grid.Row="2" Classes="secondaryAction" IsEnabled="{Binding CanReloadRuntimeFiles}" Click="Button_ReloadAutoAbilities">Reload Auto-Abilities</Button>
+							<Button Grid.Row="2" Grid.Column="1" Margin="10,10,0,0" Classes="secondaryAction" IsEnabled="{Binding CanReloadRuntimeFiles}" Click="Button_ReloadAeonGrow">Reload Aeon Grow</Button>
+							<Button Grid.Row="3" Classes="secondaryAction" IsEnabled="{Binding CanReloadRuntimeFiles}" Click="Button_ReloadCustomizations">Reload Customizations</Button>
+						</Grid>
+						<TextBlock Classes="muted" Text="{Binding ReloadSummary}" TextWrapping="Wrap" />
+					</StackPanel>
+				</Border>
+
+				<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+					<StackPanel Spacing="12">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_debug_flags_fc4e9b70}" />
+						<TextBlock Classes="muted"
+						           Text="{x:Static res:Strings.U_flags_reais_do_bloco_btl_debug_jarvis_esta_expon_292c6a4e}"
+						           TextWrapping="Wrap" />
+						<TextBlock Classes="muted"
+						           Text="{Binding DebugAvailabilitySummary}"
+						           TextWrapping="Wrap" />
+						<Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto,Auto">
+							<CheckBox IsChecked="{Binding DebugInvincibleMon, Mode=TwoWay}">Invincible Monsters</CheckBox>
+							<CheckBox Grid.Column="1" IsChecked="{Binding DebugInvinciblePly, Mode=TwoWay}">Invincible Players</CheckBox>
+							<CheckBox Grid.Column="2" IsChecked="{Binding DebugMonControl, Mode=TwoWay}">Monster Control</CheckBox>
+							<CheckBox Grid.Row="1" IsChecked="{Binding DebugFreeCamera, Mode=TwoWay}">Free Camera</CheckBox>
+							<CheckBox Grid.Row="1" Grid.Column="1" IsChecked="{Binding DebugNoMagicEffects, Mode=TwoWay}">No Magic FX</CheckBox>
+							<CheckBox Grid.Row="1" Grid.Column="2" IsChecked="{Binding DebugNoMpCost, Mode=TwoWay}">No MP Cost</CheckBox>
+							<CheckBox Grid.Row="2" IsChecked="{Binding DebugNoVariance, Mode=TwoWay}">No Variance</CheckBox>
+							<CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding DebugAlwaysHit, Mode=TwoWay}">Always Hit</CheckBox>
+							<CheckBox Grid.Row="2" Grid.Column="2" IsChecked="{Binding DebugAlwaysOverdrive, Mode=TwoWay}">Always Overdrive</CheckBox>
+							<CheckBox Grid.Row="3" IsChecked="{Binding DebugAlwaysRareSteal, Mode=TwoWay}">Always Rare Steal</CheckBox>
+							<CheckBox Grid.Row="3" Grid.Column="1" IsChecked="{Binding DebugAlways9999Damage, Mode=TwoWay}">Always 9999</CheckBox>
+							<CheckBox Grid.Row="3" Grid.Column="2" IsChecked="{Binding DebugAlways99999Damage, Mode=TwoWay}">Always 99999</CheckBox>
+						</Grid>
+						<WrapPanel Orientation="Horizontal" ItemWidth="150" ItemHeight="40">
+							<Button Classes="secondaryAction" IsEnabled="{Binding CanApplyDebugFlags}" Click="Button_ReadDebug">Read Current Flags</Button>
+							<Button Classes="primaryAction" IsEnabled="{Binding CanApplyDebugFlags}" Click="Button_ApplyDebug" Margin="10,0,0,0">Apply Debug Flags</Button>
+						</WrapPanel>
+					</StackPanel>
+				</Border>
+
+				<Border Classes="card" Padding="{DynamicResource SpacingLg}">
+					<StackPanel Spacing="10">
+						<TextBlock Classes="sectionLabel" Text="{x:Static res:Strings.U_enemy_snapshot_7a79188a}" />
+						<TextBlock Classes="muted"
+						           Text="{Binding EnemySummary}"
+						           TextWrapping="Wrap" />
+						<ItemsControl ItemsSource="{Binding RuntimeEnemyRows}">
+							<ItemsControl.ItemTemplate>
+								<DataTemplate>
+									<Border Margin="0,0,0,10" Padding="{DynamicResource SpacingMd}" Classes="cardSoft">
+										<StackPanel Spacing="4">
+											<TextBlock Classes="sectionLabel" Text="{Binding SlotLabel}" />
+											<TextBlock FontSize="16" FontWeight="SemiBold" Text="{Binding MonsterLabel}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding RawHex}" />
+											<TextBlock Text="{Binding HpLabel}" />
+											<TextBlock Classes="muted" Text="{Binding StateLabel}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding PlacementLabel}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding StatusSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted" Text="{Binding TargetSummary}" TextWrapping="Wrap" />
+											<TextBlock Classes="muted"
+											           Text="{Binding P1Label, StringFormat='P1 {0}'}" />
+											<TextBlock Classes="muted"
+											           Text="{Binding P2Label, StringFormat='P2 {0}'}" />
+											<TextBlock Classes="muted"
+											           Text="{Binding P3Label, StringFormat='P3 {0}'}" />
+											<TextBlock Classes="muted"
+											           Text="{Binding P4Label, StringFormat='P4 {0}'}" />
+										</StackPanel>
+									</Border>
+								</DataTemplate>
+							</ItemsControl.ItemTemplate>
+						</ItemsControl>
+					</StackPanel>
+				</Border>
+			</StackPanel>
+		</ScrollViewer>
+	</Grid>
+</UserControl>

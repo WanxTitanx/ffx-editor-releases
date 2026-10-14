@@ -1,0 +1,17 @@
+FFX MOD STUDIO - WINDOWS 10/11 FIRST RUN
+
+The editor itself includes its private .NET 8 and Java runtimes. It does not need a global .NET or
+Java installation. Web viewers require Microsoft Edge WebView2, and Keystone-based tools require
+Microsoft Visual C++ 2013 x64.
+
+On a clean/offline PC, right-click PowerShell, open the package's prerequisites folder, and run:
+
+  powershell -ExecutionPolicy Bypass -File .\install.ps1
+
+The script asks for explicit confirmation, verifies SHA-256 plus Microsoft's digital signature, and
+then starts only the two installers already contained in the package. It never downloads anything.
+Windows may display a UAC prompt for the Visual C++ prerequisite.
+
+Game data and music are intentionally not included. The NoClip viewer code is bundled for offline use,
+but it reads only a compatible FFX extraction that you explicitly select and validate. Imported/generated
+data stays under your local user profile; the selected game source remains read-only.

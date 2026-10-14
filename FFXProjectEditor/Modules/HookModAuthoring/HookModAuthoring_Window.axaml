@@ -1,0 +1,287 @@
+<?xml version="1.0" ?>
+<Window xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:res="clr-namespace:FFXProjectEditor.Resources" x:Class="FFXProjectEditor.Modules.HookModAuthoring.HookModAuthoring_Window" Title="{x:Static res:Strings.U_HookMods_Title}" Width="1180" Height="880" MinWidth="850" MinHeight="620" WindowStartupLocation="CenterOwner">
+  <Window.Styles>
+    <Style Selector="TabStrip">
+      <Setter Property="MaxWidth" Value="230"/>
+      <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+      <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+      <Setter Property="ItemsPanel">
+        <ItemsPanelTemplate>
+          <StackPanel Orientation="Vertical"/>
+        </ItemsPanelTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="TabItem">
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="MaxWidth" Value="230"/>
+      <Setter Property="HeaderTemplate">
+        <DataTemplate>
+          <TextBlock Text="{Binding}" TextWrapping="Wrap"/>
+        </DataTemplate>
+      </Setter>
+    </Style>
+  </Window.Styles>
+  <Grid RowDefinitions="Auto,*,Auto" Margin="20">
+    <StackPanel Spacing="8" Margin="0,0,0,12">
+      <TextBlock Text="{x:Static res:Strings.U_HookMods_Title}" FontSize="24" FontWeight="SemiBold"/>
+      <TextBlock Text="{x:Static res:Strings.U_HookIntegration_VanillaBoundary}" TextWrapping="Wrap"/>
+      <CheckBox Content="{x:Static res:Strings.U_HookIntegration_OnlyMod}" IsChecked="{Binding OnlyModEnabled}"/>
+      <Button Content="{x:Static res:Strings.U_HookIntegration_SaveProfile}" Command="{Binding SaveProjectProfileCommand}"/>
+      <TextBlock Text="{x:Static res:Strings.U_HookMods_SourceRoot}" TextWrapping="Wrap"/>
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBox Text="{Binding SourceRoot}"/>
+        <Button Grid.Column="1" Margin="8,0,0,0" Content="{x:Static res:Strings.CommonBrowse}" Click="BrowseSource"/>
+      </Grid>
+    </StackPanel>
+    <TabControl x:Name="Sections" Grid.Row="1" TabStripPlacement="Left">
+      <TabControl.Template>
+        <ControlTemplate>
+          <Grid ColumnDefinitions="230,*">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+              <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}" />
+            </ScrollViewer>
+            <ContentPresenter Grid.Column="1" Name="PART_SelectedContentHost" Content="{TemplateBinding SelectedContent}" ContentTemplate="{TemplateBinding SelectedContentTemplate}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" />
+          </Grid>
+        </ControlTemplate>
+      </TabControl.Template>
+      <TabControl.ItemsPanel><ItemsPanelTemplate><StackPanel Orientation="Vertical" /></ItemsPanelTemplate></TabControl.ItemsPanel>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Profile}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_ConsumerExe}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ExecutablePath}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_CheckConsumer}" Command="{Binding CheckConsumerCommand}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Validator}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ValidatorPath}"/>
+            <TextBox Text="{Binding ConsumerReport}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Abilities}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Registry}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="RegistryJson"/>
+            <TextBox Text="{Binding RegistryJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <ComboBox ItemsSource="{Binding Locales}" SelectedItem="{Binding Locale}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_GenerateAbilities}" Command="{Binding PrepareAbilitiesCommand}"/>
+            <TextBox Text="{Binding CatalogReport}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+            <Expander Header="{x:Static res:Strings.U_HookMods_Mod002}">
+              <StackPanel Spacing="8">
+                <CheckBox Content="{x:Static res:Strings.U_HookMods_Enable002}" IsChecked="{Binding Mod002Enabled}"/>
+                <TextBlock Text="{x:Static res:Strings.U_HookMods_Manifest}"/>
+                <TextBox Text="{Binding ManifestPath}"/>
+                <Button Content="{x:Static res:Strings.U_HookMods_Import}" Command="{Binding ImportMod002Command}"/>
+                <ComboBox ItemsSource="{Binding Abilities}" SelectedItem="{Binding SelectedAbility}">
+                  <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                      <TextBlock Text="{Binding Label}"/>
+                    </DataTemplate>
+                  </ComboBox.ItemTemplate>
+                </ComboBox>
+                <TextBox Text="{Binding SelectedAbility.Name}" IsReadOnly="True"/>
+                <TextBlock Text="{x:Static res:Strings.CommonDescription}"/>
+                <TextBox Text="{Binding SelectedAbility.Description}" IsEnabled="{Binding CanEditText}"/>
+                <TextBlock Text="{x:Static res:Strings.CommonGil}"/>
+                <NumericUpDown Value="{Binding SelectedAbility.Price}" Minimum="0" Maximum="2147483647"/>
+                <TextBlock Text="{x:Static res:Strings.U_HookMods_Destination}"/>
+                <TextBox Text="{Binding Destination}"/>
+                <Button Content="{x:Static res:Strings.CommonPreview}" Command="{Binding PreviewExportCommand}"/>
+                <Button Content="{x:Static res:Strings.U_HookMods_Export}" Command="{Binding ExportCommand}" IsEnabled="{Binding CanExport}"/>
+              </StackPanel>
+            </Expander>
+            <TextBox Text="{Binding PreviewText}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Preset}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_PresetHelp}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="PresetJson"/>
+            <TextBox Text="{Binding PresetJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_CommandBank}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding CommandBankPath}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_PreparePreset}" Command="{Binding PreparePresetCommand}"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Rewards}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_RewardsHelp}" TextWrapping="Wrap"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_SearchMonsters}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding Rewards.Filter}"/>
+            <ComboBox ItemsSource="{Binding Rewards.Rows}" SelectedItem="{Binding Rewards.Selected}" HorizontalAlignment="Stretch">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Label}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_ApRate}" TextWrapping="Wrap"/>
+            <Grid ColumnDefinitions="*,Auto">
+              <NumericUpDown Value="{Binding Rewards.Selected.ApRate}" Minimum="1" Maximum="1000" FormatString="0"/>
+              <Button Content="{x:Static res:Strings.U_HookIntegration_ResetAp}" Command="{Binding Rewards.ResetApCommand}" Grid.Column="1"/>
+            </Grid>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_GilRate}" TextWrapping="Wrap"/>
+            <Grid ColumnDefinitions="*,Auto">
+              <NumericUpDown Value="{Binding Rewards.Selected.GilRate}" Minimum="1" Maximum="1000" FormatString="0"/>
+              <Button Content="{x:Static res:Strings.U_HookIntegration_ResetGil}" Command="{Binding Rewards.ResetGilCommand}" Grid.Column="1"/>
+            </Grid>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_ResetMonster}" Command="{Binding Rewards.ResetMonsterCommand}"/>
+            <Grid ColumnDefinitions="*,120">
+              <CheckBox Content="{x:Static res:Strings.U_HookIntegration_GlobalAp}" IsChecked="{Binding Rewards.GlobalApEnabled}"/>
+              <NumericUpDown Grid.Column="1" Value="{Binding Rewards.GlobalAp}" Minimum="1" Maximum="100" FormatString="0"/>
+            </Grid>
+            <Grid ColumnDefinitions="*,120">
+              <CheckBox Content="{x:Static res:Strings.U_HookIntegration_GlobalGil}" IsChecked="{Binding Rewards.GlobalGilEnabled}"/>
+              <NumericUpDown Grid.Column="1" Value="{Binding Rewards.GlobalGil}" Minimum="1" Maximum="100" FormatString="0"/>
+            </Grid>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_MonsterFile}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding Rewards.MonsterPath}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_LoadBase}" Command="{Binding Rewards.LoadBaseCommand}"/>
+            <TextBox Text="{Binding Rewards.Report}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Tsv}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding Rewards.TsvPath}"/>
+            <WrapPanel>
+              <Button Content="{x:Static res:Strings.U_HookIntegration_ReloadTsv}" Command="{Binding Rewards.ReloadCommand}"/>
+              <Button Content="{x:Static res:Strings.U_HookIntegration_SaveTsv}" Command="{Binding SaveRewardRatesCommand}"/>
+              <Button Content="{x:Static res:Strings.U_HookIntegration_PrepareRewards}" Command="{Binding PrepareRewardsCommand}"/>
+            </WrapPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Elements}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_ElementHelp}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ElementRegistryReport}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="130" MaxHeight="220"/>
+            <Expander Header="{x:Static res:Strings.U_HookIntegration_AffinityPreview}">
+              <StackPanel Spacing="8">
+                <TextBox Text="{Binding AffinityPreviewJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="160" MaxHeight="300"/>
+                <Button Content="{x:Static res:Strings.CommonPreview}" Command="{Binding PreviewAffinityCommand}"/>
+                <TextBox Text="{Binding AffinityReport}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90"/>
+              </StackPanel>
+            </Expander>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="ElementalJson"/>
+            <TextBox Text="{Binding ElementalJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Inputs}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="ElementalInputsJson"/>
+            <TextBox Text="{Binding ElementalInputsJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_RefreshHashes}" Command="{Binding RefreshElementalFingerprintsCommand}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_AdmitElements}" Command="{Binding AdmitElementalCommand}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_Cancel}" Command="{Binding AdmitElementalCancelCommand}"/>
+            <TextBox Text="{Binding ConsumerReport}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Preferences}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_DesiredOnly}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ElementRegistryReport}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="130" MaxHeight="220"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_F7}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="F7Json"/>
+            <TextBox Text="{Binding F7Json}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Scan}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="ScanIni"/>
+            <TextBox Text="{Binding ScanIni}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_PreparePreferences}" Command="{Binding PreparePreferencesCommand}"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Production}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBox Text="{Binding AscensionReport}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Record}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ProductionRecordPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_NativeImage}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding NativeSaveImagePath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_NativePath}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding NativeWindowsSavePath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Receipt}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ReceiptPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_SaveIdentity}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding SaveIdentityHex}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Request}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding WorkshopRequestPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Economy}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding WorkshopEconomyPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_WorkshopPlan}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="WorkshopPlanJson"/>
+            <TextBox Text="{Binding WorkshopPlanJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="300"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_PreviewWorkshop}" Command="{Binding PreviewWorkshopPlanCommand}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_InspectProduction}" Command="{Binding InspectProductionCommand}"/>
+            <Expander Header="{x:Static res:Strings.U_HookIntegration_ExperimentalWorkshop}">
+              <StackPanel Spacing="8">
+                <CheckBox Content="{x:Static res:Strings.U_HookMods_Enable004}" IsChecked="{Binding Mod004Enabled}"/>
+                <TextBox Text="{Binding WorkshopDirectory}"/>
+                <Button Content="{x:Static res:Strings.U_HookMods_Inspect}" Command="{Binding InspectWorkshopCommand}"/>
+              </StackPanel>
+            </Expander>
+            <TextBox Text="{Binding WorkshopText}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Arcana}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_ArcanaBoundary}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ArcanaCatalogReport}" IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="140" MaxHeight="220"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_ArcanaAssets}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="ArcanaAssetsJson"/>
+            <TextBox Text="{Binding ArcanaAssetsJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="120" MaxHeight="240"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_PrepareAssets}" Command="{Binding PrepareArcanaAssetsCommand}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_ArcanaRecord}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ArcanaRecordPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_SaveHash}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ArcanaSaveHash}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_PackHash}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding ArcanaPackHash}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_InspectArcana}" Command="{Binding InspectArcanaCommand}"/>
+            <TextBox Text="{Binding WorkshopText}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookMods_Mod006}">
+        <ScrollViewer>
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_HooksSource}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding HooksSourcePath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Python}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding PythonPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Vbf}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding VbfPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_TextValidator}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding TextValidatorPath}"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_Recipe}" TextWrapping="Wrap"/>
+            <Button Content="{x:Static res:Strings.U_HookMods_Import}" Click="BrowseJson" Tag="LanguageRecipeJson"/>
+            <TextBox Text="{Binding LanguageRecipeJson}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <TextBlock Text="{x:Static res:Strings.U_HookIntegration_LanguageDestination}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding LanguageDestination}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_BuildLanguage}" Command="{Binding BuildLanguageCommand}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_Cancel}" Command="{Binding BuildLanguageCancelCommand}"/>
+            <TextBox Text="{Binding LanguageReport}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+      <TabItem Header="{x:Static res:Strings.U_HookIntegration_Package}">
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled">
+          <StackPanel Spacing="10" Margin="16" IsEnabled="{Binding OnlyModEnabled}">
+            <TextBlock Text="{x:Static res:Strings.U_HookMods_Destination}" TextWrapping="Wrap"/>
+            <TextBox Text="{Binding Destination}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_PreviewPackage}" Command="{Binding PreviewPackageCommand}"/>
+            <Button Content="{x:Static res:Strings.U_HookIntegration_ExportPackage}" Command="{Binding ExportPackageCommand}" IsEnabled="{Binding CanExportPackage}"/>
+            <TextBox Text="{Binding PackageReport}" AcceptsReturn="True" TextWrapping="Wrap" MinHeight="150" MaxHeight="340" ScrollViewer.VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+          </StackPanel>
+        </ScrollViewer>
+      </TabItem>
+    </TabControl>
+    <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,12,0,0">
+      <TextBlock Text="{Binding Status}" TextWrapping="Wrap" Margin="0,0,12,0"/>
+      <Button Grid.Column="1" Content="{x:Static res:Strings.CommonClose}" Click="CloseWindow"/>
+    </Grid>
+  </Grid>
+</Window>

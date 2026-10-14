@@ -1,0 +1,85 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:converters="clr-namespace:FFXProjectEditor.Converters"
+        xmlns:res="clr-namespace:FFXProjectEditor.Resources"
+        xmlns:controls="using:FFXProjectEditor">
+  
+  <Design.PreviewWith>
+    <StackPanel Width="800" Spacing="10">      
+        <StackPanel Background="{DynamicResource SystemRegionBrush}">
+          <controls:Loot_Template />
+        </StackPanel>
+    </StackPanel>
+  </Design.PreviewWith>
+ 
+  <ControlTheme x:Key="{x:Type controls:Loot_Template}" TargetType="controls:Loot_Template">
+    <Setter Property="Template">
+		<ControlTemplate>
+
+			<Border HorizontalAlignment="Stretch" Margin="4" Padding="6,4" BorderThickness="1" BorderBrush="#22FFFFFF" Background="#08FFFFFF" CornerRadius="6">
+				<Border.Styles>
+					<Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement, TextBox:focus /template/ Border#PART_BorderElement">
+						<Setter Property="Background" Value="Transparent" />
+					</Style>
+					<Style Selector="ComboBox:pointerover /template/ Border#Background, ComboBox:pointerover /template/ Border#PART_BorderElement, ComboBox:focus /template/ Border#Background, ComboBox:focus /template/ Border#PART_BorderElement">
+						<Setter Property="Background" Value="Transparent" />
+					</Style>
+				</Border.Styles>
+				<Border.Resources>
+					<converters:GameCategory_Converter x:Key="GameCategoryConverter"/>
+				</Border.Resources>
+
+				<DockPanel>
+					<TextBlock DockPanel.Dock="Left" Text="{TemplateBinding Loot_Label}" VerticalAlignment="Center" Foreground="#CCFFFFFF" FontSize="12" FontWeight="SemiBold" IsVisible="{TemplateBinding Loot_IsLabelVisible}" Width="100"/>
+					
+					<Grid ColumnDefinitions="46, 24, 46, 120, *">
+						<TextBox Grid.Column="0" Text="{Binding Loot_Count, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" TextAlignment="Center" Background="#11FFFFFF" BorderThickness="0" CornerRadius="4,0,0,4"/>
+						<TextBlock Grid.Column="1" Text="×" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{DynamicResource TextMutedBrush}" Background="Transparent"/>
+						
+						<TextBox Grid.Column="2" Text="{Binding Loot_Object.Index, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" TextAlignment="Center" Background="#11FFFFFF" BorderThickness="0" CornerRadius="0"/>
+						
+						<ComboBox Grid.Column="3" ItemsSource="{TemplateBinding CategOptions}" SelectedItem="{Binding Loot_Object.Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GameCategoryConverter}, Mode=TwoWay}" HorizontalAlignment="Stretch" BorderThickness="1,0,0,0" BorderBrush="#22FFFFFF" CornerRadius="0" Background="#0CFFFFFF"/>
+						
+						<ComboBox Grid.Column="4" ItemsSource="{Binding Loot_Object.AvailableOptions, RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding Loot_Object.SelectedOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" HorizontalAlignment="Stretch" BorderThickness="0" CornerRadius="0,4,4,0" Background="#11FFFFFF">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock Text="{Binding Display}" />
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+						</ComboBox>
+					</Grid>
+				</DockPanel>
+			</Border>
+
+		</ControlTemplate>
+    </Setter>
+  </ControlTheme>
+
+  <!-- The monster sheet has labelled cards; inventory keeps the compact default theme. -->
+  <ControlTheme x:Key="MonsterLootCardTheme" TargetType="controls:Loot_Template">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Padding="12" Background="{DynamicResource PanelDeepBrush}" BorderBrush="{DynamicResource PanelStrokeBrush}" BorderThickness="1" CornerRadius="8">
+          <Border.Resources><converters:GameCategory_Converter x:Key="GameCategoryConverter" /></Border.Resources>
+          <StackPanel Spacing="10">
+            <TextBlock Text="{TemplateBinding Loot_Label}" FontWeight="SemiBold" TextWrapping="Wrap" IsVisible="{TemplateBinding Loot_IsLabelVisible}" />
+            <Grid ColumnDefinitions="90,12,*" RowDefinitions="Auto,Auto">
+              <TextBlock Text="{x:Static res:Strings.CommonQuantity}" Classes="muted" FontSize="11" Margin="0,0,0,4" />
+              <TextBox Grid.Row="1" Text="{Binding Loot_Count, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.CommonQuantity}" />
+              <TextBlock Grid.Column="2" Text="{x:Static res:Strings.CommonCategory}" Classes="muted" FontSize="11" Margin="0,0,0,4" />
+              <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{TemplateBinding CategOptions}" SelectedItem="{Binding Loot_Object.Category, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource GameCategoryConverter}, Mode=TwoWay}" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static res:Strings.CommonCategory}" />
+            </Grid>
+            <Grid ColumnDefinitions="90,12,*" RowDefinitions="Auto,Auto">
+              <TextBlock Text="{x:Static res:Strings.U_Loot_EntryId}" Classes="muted" FontSize="11" Margin="0,0,0,4" />
+              <TextBox Grid.Row="1" Text="{Binding Loot_Object.Index, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" AutomationProperties.Name="{x:Static res:Strings.U_Loot_EntryId}" />
+              <TextBlock Grid.Column="2" Text="{x:Static res:Strings.U_Loot_Reward}" Classes="muted" FontSize="11" Margin="0,0,0,4" />
+              <ComboBox Grid.Row="1" Grid.Column="2" ItemsSource="{Binding Loot_Object.AvailableOptions, RelativeSource={RelativeSource TemplatedParent}}" SelectedItem="{Binding Loot_Object.SelectedOption, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" AutomationProperties.Name="{x:Static res:Strings.U_Loot_Reward}">
+                <ComboBox.ItemTemplate><DataTemplate><TextBlock Text="{Binding Display}" TextWrapping="Wrap" /></DataTemplate></ComboBox.ItemTemplate>
+              </ComboBox>
+            </Grid>
+          </StackPanel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>
