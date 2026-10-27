@@ -1,0 +1,9 @@
+{
+  "product": "Spira Reforge Studio",
+  "version": "2.248.0.0",
+  "sourceCommit": "c476f5bddcca331cde33b9823787f81039febd7f",
+  "sourceRepository": "WanxTitanx/ffx-editor-main",
+  "sourceVisibility": "private",
+  "sourceDistribution": "binary-only",
+  "prerelease": false
+}
